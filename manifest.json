@@ -1,0 +1,20 @@
+{
+  "short_name": "Masjid App",
+  "name": "Masjid Angullia App",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#f5f2e9",
+  "theme_color": "#0f382c",
+  "display": "standalone"
+}
