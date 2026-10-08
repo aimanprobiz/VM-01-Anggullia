@@ -497,22 +497,21 @@
   </script>
 
 <script>
-  async function loadDynamicCard() {
-    try {
-      const response = await fetch('/api/cards');
-      const cards = await response.json();
-      
-      // Ensure response is an array and contains a valid imageUrl
-      if (Array.isArray(cards) && cards.length > 0 && cards[0].imageUrl) {
-        document.getElementById('cardAvatar').src = cards[0].imageUrl;
-      }
-    } catch (error) {
-      console.error('Error loading card image:', error);
+async function loadDynamicCard() {
+  try {
+    // Add timestamp query parameter to bypass browser API caching
+    const response = await fetch('/api/cards?t=' + Date.now());
+    const cards = await response.json();
+    
+    if (Array.isArray(cards) && cards.length > 0 && cards[0].imageUrl) {
+      document.getElementById('cardAvatar').src = cards[0].imageUrl;
     }
+  } catch (error) {
+    console.error('Error loading card image:', error);
   }
+}
 
-  // Execute fetch when page loads
-  loadDynamicCard();
+loadDynamicCard();
 </script>
 </body>
 </html>
