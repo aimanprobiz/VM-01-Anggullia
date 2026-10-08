@@ -485,27 +485,26 @@
     startAutoScroll();
   </script>
 
-  <script>
-  async function loadCardAvatar() {
-    const avatarElement = document.getElementById('cardAvatar');
+<!-- Example avatar image tag -->
+<img id="cardAvatar" src="fallback-image.jpg" alt="Partner Avatar" />
 
+<script>
+  async function loadDynamicCard() {
     try {
-      // Call your Vercel serverless API endpoint
       const response = await fetch('/api/cards');
       const cards = await response.json();
-
-      // Check if data returned and has an image
-      if (cards.length > 0 && cards[0].imageUrl) {
-        avatarElement.src = cards[0].imageUrl;
+      
+      // Grabs row 1 image URL
+      if (cards && cards.length > 0 && cards[0].imageUrl) {
+        document.getElementById('cardAvatar').src = cards[0].imageUrl;
       }
     } catch (error) {
-      console.error('Error fetching avatar from Airtable:', error);
-      // Keeps hardcoded fallback image if API request fails
+      console.error('Error loading card image:', error);
     }
   }
 
-  // Fetch image on page load
-  document.addEventListener('DOMContentLoaded', loadCardAvatar);
+  // Execute fetch when page loads
+  loadDynamicCard();
 </script>
 </body>
 </html>
