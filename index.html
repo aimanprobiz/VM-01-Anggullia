@@ -354,15 +354,15 @@
             <div class="carousel-caption">1. Weekly Madrasah & Quran Classes</div>
           </div>
           <div class="carousel-slide">
-            <img src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&w=800&q=80" alt="Youth Gathering">
+            <img id="caro2" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Youth Gathering">
             <div class="carousel-caption">2. Youth & Community Gatherings</div>
           </div>
           <div class="carousel-slide">
-            <img src="https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=800&q=80" alt="Yasin & Tahlil">
+            <img id="caro3" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Yasin & Tahlil">
             <div class="carousel-caption">3. Thursday Night Yasin & Tahlil</div>
           </div>
           <div class="carousel-slide">
-            <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80" alt="Friday Infaq">
+            <img id="caro4" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Friday Infaq">
             <div class="carousel-caption">4. Friday Drinks & Infaq Program</div>
           </div>
           <div class="carousel-slide">
@@ -515,10 +515,20 @@ async function loadDynamicCard() {
       }
 
       if (cards.length > 1 && cards[1].imageUrl) {
-
-document.getElementById('caro1').src = cards[1].imageUrl;
-
-}
+        document.getElementById('caro1').src = cards[1].imageUrl;
+      }
+      
+      if (cards.length > 2 && cards[2].imageUrl) {
+        document.getElementById('caro2').src = cards[2].imageUrl;
+      }
+      
+      if (cards.length > 3 && cards[3].imageUrl) {
+        document.getElementById('caro3').src = cards[3].imageUrl;
+      }
+      
+      if (cards.length > 4 && cards[4].imageUrl) {
+        document.getElementById('caro4').src = cards[4].imageUrl;
+      } 
       
     } catch (error) {
       console.error('Error loading card image:', error);
