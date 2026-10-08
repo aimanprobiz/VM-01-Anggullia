@@ -484,5 +484,28 @@
 
     startAutoScroll();
   </script>
+
+  <script>
+  async function loadCardAvatar() {
+    const avatarElement = document.getElementById('cardAvatar');
+
+    try {
+      // Call your Vercel serverless API endpoint
+      const response = await fetch('/api/cards');
+      const cards = await response.json();
+
+      // Check if data returned and has an image
+      if (cards.length > 0 && cards[0].imageUrl) {
+        avatarElement.src = cards[0].imageUrl;
+      }
+    } catch (error) {
+      console.error('Error fetching avatar from Airtable:', error);
+      // Keeps hardcoded fallback image if API request fails
+    }
+  }
+
+  // Fetch image on page load
+  document.addEventListener('DOMContentLoaded', loadCardAvatar);
+</script>
 </body>
 </html>
