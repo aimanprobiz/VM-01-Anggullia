@@ -4,9 +4,12 @@ export default async function handler(req, res) {
   const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
   const BASE_ID = process.env.AIRTABLE_BASE_ID;
 
+  // Make sure this matches your table tab name (usually 'Table 1' or 'Cards')
+  const TABLE_NAME = 'Cards'; 
+
   try {
     const response = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/Cards`,
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
       {
         headers: {
           Authorization: `Bearer ${AIRTABLE_PAT}`,
@@ -17,8 +20,8 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     const cards = data.records.map((record) => {
-      // "Image" must match your exact 2nd column header name in Airtable
-      const attachments = record.fields.Image; 
+      // Updated to 'Images' (with an 's') to match your Airtable column!
+      const attachments = record.fields.Images; 
       return {
         id: record.id,
         imageUrl: attachments && attachments[0] ? attachments[0].url : '',
