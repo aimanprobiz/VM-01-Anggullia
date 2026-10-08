@@ -302,11 +302,12 @@
 </head>
 <body>
 
-  <script>
-    // Register Service Worker
+<script>
+    // Register Service Worker with forced update check
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('Service Worker Registered'));
+      navigator.serviceWorker.register('/sw.js').then((registration) => {
+        registration.update();
+      });
     }
   </script>
 
