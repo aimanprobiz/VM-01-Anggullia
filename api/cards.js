@@ -6,15 +6,16 @@ export default async function handler(req, res) {
   const TABLE_NAME = 'Cards';
 
   try {
+    // Added the sorting query parameters to the end of the URL here:
     const response = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?sort[0][field]=Order&sort[0][direction]=asc`,
       {
         headers: {
           Authorization: `Bearer ${AIRTABLE_PAT}`,
         },
       }
     );
-
+    
     const data = await response.json();
 
     // Catch Airtable API errors (401, 404, etc.)
