@@ -498,20 +498,27 @@
 
 <script>
 async function loadDynamicCard() {
-  try {
-    // Add timestamp query parameter to bypass browser API caching
-    const response = await fetch('/api/cards?t=' + Date.now());
-    const cards = await response.json();
-    
-    if (Array.isArray(cards) && cards.length > 0 && cards[0].imageUrl) {
-      document.getElementById('cardAvatar').src = cards[0].imageUrl;
-    }
-  } catch (error) {
-    console.error('Error loading card image:', error);
-  }
-}
+    try {
+      // Fetch with cache-busting timestamp
+      const response = await fetch('/api/cards?t=' + Date.now());
+      
+      if (!response.ok) {
+        console.error('API response error:', response.status);
+        return;
+      }
 
-loadDynamicCard();
+      const cards = await response.json();
+      
+      // Ensure cards is an array and has a valid imageUrl
+      if (Array.isArray(cards) && cards.length > 0 && cards[0].imageUrl) {
+        document.getElementById('cardAvatar').src = cards[0].imageUrl;
+      }
+    } catch (error) {
+      console.error('Error loading card image:', error);
+    }
+  }
+
+  loadDynamicCard();
 </script>
 </body>
 </html>
