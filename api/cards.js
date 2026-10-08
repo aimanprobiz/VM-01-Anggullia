@@ -1,10 +1,9 @@
 export default async function handler(req, res) {
-  // Caches response on Vercel CDN for 1 hour to stay within free tier limits
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
 
   const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
   const BASE_ID = process.env.AIRTABLE_BASE_ID;
-  const TABLE_NAME = 'Cards'; 
+  const TABLE_NAME = 'Cards';
 
   try {
     const response = await fetch(
@@ -18,8 +17,14 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    // If Airtable responds with an error (e.g., 401 Unauthorized or 404 NOT_FOUND)
+    if (!response.ok) {
+      return res.status(response.status).json({ 
+        airtableError: data 
+      });
+    }
+
     const cards = data.records.map((record) => {
-      // Column name matches your Airtable 'Images' attachment field
       const attachments = record.fields.Images; 
       return {
         id: record.id,
@@ -29,6 +34,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json(cards);
   } catch (error) {
-    return res.status(500).json({ error: 'Failed to fetch cards' });
+    return res.status(500).json({ error: error.message });
   }
 }
