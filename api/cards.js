@@ -1,10 +1,9 @@
 export default async function handler(req, res) {
+  // Caches response on Vercel CDN for 1 hour to stay within free tier limits
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
 
   const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
   const BASE_ID = process.env.AIRTABLE_BASE_ID;
-
-  // Make sure this matches your table tab name (usually 'Table 1' or 'Cards')
   const TABLE_NAME = 'Cards'; 
 
   try {
@@ -20,7 +19,7 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     const cards = data.records.map((record) => {
-      // Updated to 'Images' (with an 's') to match your Airtable column!
+      // Column name matches your Airtable 'Images' attachment field
       const attachments = record.fields.Images; 
       return {
         id: record.id,
