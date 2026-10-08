@@ -491,8 +491,8 @@
       const response = await fetch('/api/cards');
       const cards = await response.json();
       
-      // Grabs row 1 image URL
-      if (cards && cards.length > 0 && cards[0].imageUrl) {
+      // Ensure response is an array and contains a valid imageUrl
+      if (Array.isArray(cards) && cards.length > 0 && cards[0].imageUrl) {
         document.getElementById('cardAvatar').src = cards[0].imageUrl;
       }
     } catch (error) {
