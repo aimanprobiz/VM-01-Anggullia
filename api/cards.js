@@ -17,15 +17,13 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // If Airtable responds with an error (e.g., 401 Unauthorized or 404 NOT_FOUND)
+    // Catch Airtable API errors (401, 404, etc.)
     if (!response.ok) {
-      return res.status(response.status).json({ 
-        airtableError: data 
-      });
+      return res.status(response.status).json({ airtableError: data });
     }
 
     const cards = data.records.map((record) => {
-      const attachments = record.fields.Images; 
+      const attachments = record.fields.Images;
       return {
         id: record.id,
         imageUrl: attachments && attachments[0] ? attachments[0].url : '',
@@ -34,6 +32,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json(cards);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ caughtError: error.message });
   }
 }
