@@ -350,7 +350,7 @@
       <div class="carousel-wrapper">
         <div class="carousel-track" id="carouselTrack">
           <div class="carousel-slide">
-         <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=800&q=80" alt="Quran Class">
+         <img id="caro1" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Quran Class">
             <div class="carousel-caption">1. Weekly Madrasah & Quran Classes</div>
           </div>
           <div class="carousel-slide">
@@ -513,6 +513,13 @@ async function loadDynamicCard() {
       if (Array.isArray(cards) && cards.length > 0 && cards[0].imageUrl) {
         document.getElementById('card-avatar').src = cards[0].imageUrl;
       }
+
+      if (cards.length > 1 && cards[1].imageUrl) {
+
+document.getElementById('caro1').src = cards[1].imageUrl;
+
+}
+      
     } catch (error) {
       console.error('Error loading card image:', error);
     }
