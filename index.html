@@ -350,7 +350,7 @@
       <div class="carousel-wrapper">
         <div class="carousel-track" id="carouselTrack">
           <div class="carousel-slide">
-         <img id="Caro1" class="Caro1" src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=800&q=80" alt="Quran Class">
+         <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=800&q=80" alt="Quran Class">
             <div class="carousel-caption">1. Weekly Madrasah & Quran Classes</div>
           </div>
           <div class="carousel-slide">
@@ -511,7 +511,7 @@ async function loadDynamicCard() {
       
       // Ensure cards is an array and has a valid imageUrl
       if (Array.isArray(cards) && cards.length > 0 && cards[0].imageUrl) {
-        document.getElementById('Caro1').src = cards[0].imageUrl;
+        document.getElementById('card-avatar').src = cards[0].imageUrl;
       }
     } catch (error) {
       console.error('Error loading card image:', error);
