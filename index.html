@@ -518,55 +518,55 @@ async function loadDynamicCard() {
         // if (cards[0].Title) { document.getElementById('avatar-title').textContent = cards[0].Title; }
       }
 
-      // 2. Carousel Slide 1
-      if (cards.length > 1) {
-        if (cards[1].imageUrl) {
-          document.getElementById('caro1').src = cards[1].imageUrl;
-        }
-        if (cards[1].Title) {
-          document.getElementById('title1').textContent = cards[1].Title;
-        }
-      }
-      
-      // 3. Carousel Slide 2
-      if (cards.length > 2) {
-        if (cards[2].imageUrl) {
-          document.getElementById('caro2').src = cards[2].imageUrl;
-        }
-        if (cards[2].Title) {
-          document.getElementById('title2').textContent = cards[2].Title;
-        }
-      }
-      
-      // 4. Carousel Slide 3
-      if (cards.length > 3) {
-        if (cards[3].imageUrl) {
-          document.getElementById('caro3').src = cards[3].imageUrl;
-        }
-        if (cards[3].Title) {
-          document.getElementById('title3').textContent = cards[3].Title;
-        }
-      }
-      
-      // 5. Carousel Slide 4
-      if (cards.length > 4) {
-        if (cards[4].imageUrl) {
-          document.getElementById('caro4').src = cards[4].imageUrl;
-        }
-        if (cards[4].Title) {
-          document.getElementById('title4').textContent = cards[4].Title;
-        }
-      }  
-      
-      // 6. Carousel Slide 5
-      if (cards.length > 5) {
-        if (cards[5].imageUrl) {
-          document.getElementById('caro5').src = cards[5].imageUrl;
-        }
-        if (cards[5].Title) {
-          document.getElementById('title5').textContent = cards[5].Title;
-        }
-      }     
+     // 2. Carousel Slide 1
+if (cards.length > 1) {
+  if (cards[1].imageUrl) {
+    document.getElementById('caro1').src = cards[1].imageUrl;
+  }
+  if (cards[1].Title) {
+    document.getElementById('title1').textContent = `1. ${cards[1].Title}`;
+  }
+}
+
+// 3. Carousel Slide 2
+if (cards.length > 2) {
+  if (cards[2].imageUrl) {
+    document.getElementById('caro2').src = cards[2].imageUrl;
+  }
+  if (cards[2].Title) {
+    document.getElementById('title2').textContent = `2. ${cards[2].Title}`;
+  }
+}
+
+// 4. Carousel Slide 3
+if (cards.length > 3) {
+  if (cards[3].imageUrl) {
+    document.getElementById('caro3').src = cards[3].imageUrl;
+  }
+  if (cards[3].Title) {
+    document.getElementById('title3').textContent = `3. ${cards[3].Title}`;
+  }
+}
+
+// 5. Carousel Slide 4
+if (cards.length > 4) {
+  if (cards[4].imageUrl) {
+    document.getElementById('caro4').src = cards[4].imageUrl;
+  }
+  if (cards[4].Title) {
+    document.getElementById('title4').textContent = `4. ${cards[4].Title}`;
+  }
+}  
+
+// 6. Carousel Slide 5
+if (cards.length > 5) {
+  if (cards[5].imageUrl) {
+    document.getElementById('caro5').src = cards[5].imageUrl;
+  }
+  if (cards[5].Title) {
+    document.getElementById('title5').textContent = `5. ${cards[5].Title}`;
+  }
+}
       
     } catch (error) {
       console.error('Error loading card data:', error);
