@@ -23,11 +23,12 @@ export default async function handler(req, res) {
       return res.status(response.status).json({ airtableError: data });
     }
 
-    const cards = data.records.map((record) => {
+const cards = data.records.map((record) => {
       const attachments = record.fields.Images;
       return {
         id: record.id,
         imageUrl: attachments && attachments[0] ? attachments[0].url : '',
+        Title: record.fields.Title || '', // <-- Add this line here
       };
     });
 
