@@ -351,23 +351,23 @@
         <div class="carousel-track" id="carouselTrack">
           <div class="carousel-slide">
          <img id="caro1" src="https://lh3.googleusercontent.com/d/1LsZN6Xl6MLbSeYrZw5us8L-Uj7c2w0ow" alt="Quran Class">
-            <div class="carousel-caption">1. Weekly Madrasah & Quran Classes</div>
+            <div id="title1" class="carousel-caption">1. Test default title one</div>
           </div>
           <div class="carousel-slide">
             <img id="caro2" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Youth Gathering">
-            <div class="carousel-caption">2. Youth & Community Gatherings</div>
+            <div id="title2" class="carousel-caption">2. Test default title two</div>
           </div>
           <div class="carousel-slide">
             <img id="caro3" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Yasin & Tahlil">
-            <div class="carousel-caption">3. Thursday Night Yasin & Tahlil</div>
+            <div id="title3" class="carousel-caption">3. Test default title three</div>
           </div>
           <div class="carousel-slide">
             <img id="caro4" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Friday Infaq">
-            <div class="carousel-caption">4. Friday Drinks & Infaq Program</div>
+            <div id="title4" class="carousel-caption">4. Test default title four</div>
           </div>
           <div class="carousel-slide">
             <img id="caro5" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Nikah Event">
-            <div class="carousel-caption">5. Solemnisation & Nikah Services</div>
+            <div id="title5" class="carousel-caption">5. Test default title five</div>
           </div>
         </div>
       </div>
@@ -509,37 +509,71 @@ async function loadDynamicCard() {
 
       const cards = await response.json();
       
-      // Ensure cards is an array and has a valid imageUrl
-      if (Array.isArray(cards) && cards.length > 0 && cards[0].imageUrl) {
-        document.getElementById('card-avatar').src = cards[0].imageUrl;
+      // 1. Avatar Card
+      if (Array.isArray(cards) && cards.length > 0) {
+        if (cards[0].imageUrl) {
+          document.getElementById('card-avatar').src = cards[0].imageUrl;
+        }
+        // If your avatar card has a title element, you can update it here too:
+        // if (cards[0].Title) { document.getElementById('avatar-title').textContent = cards[0].Title; }
       }
 
-      if (cards.length > 1 && cards[1].imageUrl) {
-        document.getElementById('caro1').src = cards[1].imageUrl;
+      // 2. Carousel Slide 1
+      if (cards.length > 1) {
+        if (cards[1].imageUrl) {
+          document.getElementById('caro1').src = cards[1].imageUrl;
+        }
+        if (cards[1].Title) {
+          document.getElementById('title1').textContent = cards[1].Title;
+        }
       }
       
-      if (cards.length > 2 && cards[2].imageUrl) {
-        document.getElementById('caro2').src = cards[2].imageUrl;
+      // 3. Carousel Slide 2
+      if (cards.length > 2) {
+        if (cards[2].imageUrl) {
+          document.getElementById('caro2').src = cards[2].imageUrl;
+        }
+        if (cards[2].Title) {
+          document.getElementById('title2').textContent = cards[2].Title;
+        }
       }
       
-      if (cards.length > 3 && cards[3].imageUrl) {
-        document.getElementById('caro3').src = cards[3].imageUrl;
+      // 4. Carousel Slide 3
+      if (cards.length > 3) {
+        if (cards[3].imageUrl) {
+          document.getElementById('caro3').src = cards[3].imageUrl;
+        }
+        if (cards[3].Title) {
+          document.getElementById('title3').textContent = cards[3].Title;
+        }
       }
       
-      if (cards.length > 4 && cards[4].imageUrl) {
-        document.getElementById('caro4').src = cards[4].imageUrl;
-      } 
+      // 5. Carousel Slide 4
+      if (cards.length > 4) {
+        if (cards[4].imageUrl) {
+          document.getElementById('caro4').src = cards[4].imageUrl;
+        }
+        if (cards[4].Title) {
+          document.getElementById('title4').textContent = cards[4].Title;
+        }
+      }  
       
-      if (cards.length > 5 && cards[5].imageUrl) {
-        document.getElementById('caro5').src = cards[5].imageUrl;
+      // 6. Carousel Slide 5
+      if (cards.length > 5) {
+        if (cards[5].imageUrl) {
+          document.getElementById('caro5').src = cards[5].imageUrl;
+        }
+        if (cards[5].Title) {
+          document.getElementById('title5').textContent = cards[5].Title;
+        }
       }     
       
     } catch (error) {
-      console.error('Error loading card image:', error);
+      console.error('Error loading card data:', error);
     }
-  }
+}
 
-  loadDynamicCard();
+loadDynamicCard();
 </script>
 </body>
 </html>
