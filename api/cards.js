@@ -6,7 +6,6 @@ export default async function handler(req, res) {
   const TABLE_NAME = 'Cards';
 
   try {
-    // Added the sorting query parameters to the end of the URL here:
     const response = await fetch(
       `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?sort[0][field]=Order&sort[0][direction]=asc`,
       {
@@ -18,17 +17,17 @@ export default async function handler(req, res) {
     
     const data = await response.json();
 
-    // Catch Airtable API errors (401, 404, etc.)
     if (!response.ok) {
       return res.status(response.status).json({ airtableError: data });
     }
 
-const cards = data.records.map((record) => {
+    const cards = data.records.map((record) => {
       const attachments = record.fields.Images;
       return {
         id: record.id,
         imageUrl: attachments && attachments[0] ? attachments[0].url : '',
-        Title: record.fields.Title || '', // <-- Add this line here
+        Title: record.fields.Title || '',
+        url: record.fields.Links || '', // <-- Updated to match your Airtable column name 'Links'
       };
     });
 
