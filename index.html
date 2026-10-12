@@ -6,7 +6,7 @@
   <title>Mobile Component Template - Refined</title>
 
   <!-- Link to Web App Manifest -->
-  <link rel="manifest" href="/manifest.json"[cite: 1, 4]>
+  <link rel="manifest" href="/manifest.json"[cite: 1]>
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
@@ -92,19 +92,19 @@
       border-radius: 50%;
       object-fit: cover;
       border: 1.5px solid var(--accent-gold);
-      flex-shrink: 0; /* <-- ADD THIS: Prevents the image circle from ever shrinking */
+      flex-shrink: 0;
     }
 
     .card-title-group {
-      flex: 1;          /* <-- Takes up available space safely */
-      min-width: 0;     /* <-- Prevents layout breaking */
+      flex: 1;
+      min-width: 0;
     }
     
     .card-title-group h3 {
       font-size: 1rem;
       font-weight: 600;
       color: var(--text-main);
-      word-break: break-word; /* <-- ADD THIS: Ensures long names wrap cleanly */
+      word-break: break-word;
     }
 
     .card-title-group p {
@@ -289,7 +289,7 @@
     .action-btn {
       background-color: var(--primary-color);
       color: #ffffff;
-      border: 1.5px solid var(--accent-gold);
+      border: 1.5px solid var(--accent-gold); /* Fixed quotes */
       padding: 8px 16px;
       border-radius: var(--radius-sm);
       font-size: 0.8rem;
@@ -308,6 +308,22 @@
 </head>
 <body>
 
+  <!-- Hadith Reference Modal (Floating Mini Screen / Bottom Sheet) -->
+  <dialog id="hadithModal" style="background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; width: 100%; max-width: 380px; box-shadow: var(--shadow-md); position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1rem; font-weight: 600; color: var(--primary-color);">Hadith Reference</h3>
+        <button id="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+      <div id="modalHadithText" style="font-size: 0.9rem; font-style: italic; color: var(--text-main); line-height: 1.5; border-left: 3px solid var(--accent-gold); padding-left: 10px;">
+        Loading reference details...
+      </div>
+      <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; display: block; margin-top: 4px;">
+        View on Sunnah.com ↗
+      </a>
+    </div>
+  </dialog>
+    
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').then((registration) => {
@@ -340,11 +356,12 @@
         <div class="card-body" id="hadith-text">
           Loading today's Hadith...
         </div>
-<div class="card-footer">
-  <span class="card-tag" id="hadith-tag">...</span>
-  <!-- Added id="update-status" and cursor pointer -->
-  <span id="update-status" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;" title="Tap for random Hadith">Updated Today</span>
-</div>
+        <div class="card-footer">
+          <!-- Clickable reference tag to trigger modal -->
+          <span class="card-tag" id="hadith-tag" style="cursor: pointer;" title="Click to view details">...</span>
+          <!-- Secret randomizer trigger -->
+          <span id="update-status" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;" title="Tap for random Hadith">Updated Today</span>
+        </div>
       </div>
     </section>
 
@@ -460,7 +477,7 @@
   </div>
 
   <!-- ALL JAVASCRIPT LOGIC KEPT CLEAN & ORGANIZED AT THE BOTTOM -->
-<script>
+  <script>
     // 1. Carousel Touch, Scroll & Auto-Play Logic
     const track = document.getElementById('carouselTrack');
     const dots = document.querySelectorAll('.dot');
@@ -557,8 +574,11 @@
 
     // Global variable to store loaded hadiths for the secret click feature
     let globalHadithList = [];
+  
+    // Global variable to keep track of the currently displayed Hadith object
+    let currentActiveHadith = null;
 
-    // 3. Load Local JSON Hadith of the Day with Secret Randomizer
+    // 3. Load Local JSON Hadith of the Day with Secret Randomizer & Modal Trigger
     async function loadDailyHadith() {
       try {
         const response = await fetch('/hadiths.json?t=' + Date.now());
@@ -567,42 +587,74 @@
         globalHadithList = await response.json();
         if (!Array.isArray(globalHadithList) || globalHadithList.length === 0) return;
 
-        // Calculate today's default Hadith (Deterministic based on date)
         const today = new Date();
         const dayIndex = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
         const selectedHadith = globalHadithList[dayIndex % globalHadithList.length];
 
-        // Display the default daily Hadith
         displayHadith(selectedHadith);
 
-        // Setup the secret click listener on "Updated Today"
+        // Secret click listener on "Updated Today"
         const updateStatusEl = document.getElementById('update-status');
         if (updateStatusEl) {
           updateStatusEl.addEventListener('click', () => {
             if (globalHadithList.length <= 1) return;
 
-            // Pick a random Hadith from the array
             let randomIndex;
             do {
               randomIndex = Math.floor(Math.random() * globalHadithList.length);
             } while (globalHadithList[randomIndex] === selectedHadith);
 
             const randomHadith = globalHadithList[randomIndex];
-
-            // Display the random Hadith and change the text secretly
             displayHadith(randomHadith);
             updateStatusEl.textContent = "New Hadith";
-            updateStatusEl.style.color = "var(--accent-gold)";
+            updateStatusEl.style.color = "var(--accent-gold)"; // Fixed quotes here
           });
         }
+
+        // Modal Setup & Click Listener on the Hadith Tag
+        const hadithTagEl = document.getElementById('hadith-tag');
+        const hadithModal = document.getElementById('hadithModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalHadithText = document.getElementById('modalHadithText');
+        const modalExternalLink = document.getElementById('modalExternalLink');
+
+        if (hadithTagEl && hadithModal) {
+          hadithTagEl.addEventListener('click', () => {
+            if (currentActiveHadith) {
+              modalHadithText.textContent = currentActiveHadith.text;
+              modalExternalLink.href = currentActiveHadith.url || "https://sunnah.com";
+            }
+            hadithModal.showModal(); // Opens the native dialog overlay
+          });
+        }
+
+        if (closeModalBtn && hadithModal) {
+          closeModalBtn.addEventListener('click', () => {
+            hadithModal.close();
+          });
+        }
+
+        // Close modal if clicking outside the dialog box area
+        hadithModal.addEventListener('click', (event) => {
+          const rect = hadithModal.getBoundingClientRect();
+          if (
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom
+          ) {
+            hadithModal.close();
+          }
+        });
 
       } catch (error) {
         console.error('Error loading Daily Hadith:', error);
       }
     }
 
-    // Helper function to inject Hadith details into HTML elements (keeping avatar locked to Airtable)
+    // Helper function to inject Hadith details into HTML elements & track active state
     function displayHadith(hadith) {
+      currentActiveHadith = hadith; // Store it so the modal can read it
       document.getElementById('hadith-text').textContent = hadith.text;
       document.getElementById('hadith-narrator').textContent = hadith.narrator;
       document.getElementById('hadith-tag').textContent = hadith.tag;
