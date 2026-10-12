@@ -324,25 +324,29 @@
   <div class="mobile-container">
 
     <!-- 1. HADITH OF THE DAY CARD -->
-    <section>
-      <h2 class="section-title">Hadith of the Day</h2>
-      <div class="card">
-        <div class="card-header">
-          <img id="card-avatar" class="card-avatar" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt">
-          <div class="card-title-group">
-            <h3>Daily Prophetic Wisdom</h3>
-            <p>Narrated by Abdullah ibn Amr (R.A.)</p>
-          </div>
-        </div>
-        <div class="card-body">
-          "The Messenger of Allah ﷺ said: 'The best among you are those who have the best manners and character.'"
-        </div>
-        <div class="card-footer">
-          <span class="card-tag">Sahih al-Bukhari #6029</span>
-          <span style="font-size: 0.75rem; color: var(--text-muted);">Updated Today</span>
-        </div>
+<section>
+  <h2 class="section-title">Hadith of the Day</h2>
+  <div class="card">
+    <div class="card-header">
+      <!-- Added id="hadith-avatar" -->
+      <img id="hadith-avatar" class="card-avatar" src="">
+      <div class="card-title-group">
+        <!-- Added id="hadith-narrator" -->
+        <h3 id="hadith-narrator">Loading wisdom...</h3>
+        <p>Daily Prophetic Wisdom</p>
       </div>
-    </section>
+    </div>
+    <!-- Added id="hadith-text" -->
+    <div class="card-body" id="hadith-text">
+      Loading today's Hadith...
+    </div>
+    <div class="card-footer">
+      <!-- Added id="hadith-tag" -->
+      <span class="card-tag" id="hadith-tag">...</span>
+      <span style="font-size: 0.75rem; color: var(--text-muted);">Updated Today</span>
+    </div>
+  </div>
+</section>
 
 <!-- 2. MASJID ANGULLIA ACTIVITIES CAROUSEL -->
 <section class="carousel-section">
@@ -610,5 +614,46 @@ async function loadDynamicCard() {
 
 loadDynamicCard();
 </script>
+
+async function loadDailyHadith() {
+  try {
+    // Fetch your JSON file with a timestamp query parameter to prevent browser caching issues
+    const response = await fetch('/hadiths.json?t=' + Date.now());
+    
+    if (!response.ok) {
+      throw new Error('Failed to load hadiths.json');
+    }
+
+    const hadithList = await response.json();
+    
+    if (!Array.isArray(hadithList) || hadithList.length === 0) {
+      console.error('Hadith list is empty or invalid.');
+      return;
+    }
+
+    // Calculate total days passed since epoch (Jan 1, 1970)
+    const today = new Date();
+    const dayIndex = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
+    
+    // Pick today's Hadith using the modulo operator (%)
+    const selectedHadith = hadithList[dayIndex % hadithList.length];
+
+    // Inject data into the HTML elements
+    document.getElementById('hadith-text').textContent = selectedHadith.text;
+    document.getElementById('hadith-narrator').textContent = selectedHadith.narrator;
+    document.getElementById('hadith-tag').textContent = selectedHadith.tag;
+    
+    if (selectedHadith.avatar) {
+      document.getElementById('hadith-avatar').src = selectedHadith.avatar;
+    }
+
+  } catch (error) {
+    console.error('Error loading Daily Hadith:', error);
+  }
+}
+
+// Execute the function when the page loads
+loadDailyHadith();
+
 </body>
 </html>
