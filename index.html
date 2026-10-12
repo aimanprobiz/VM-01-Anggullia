@@ -318,10 +318,15 @@
 
   <!-- Hadith Reference Modal (Floating Mini Screen / Bottom Sheet) -->
   <!-- Hadith Reference Modal (Centered vertically & horizontally with side margins) -->
+<!-- Hadith Reference Modal with Subheader -->
   <dialog id="hadithModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; width: 90%; max-width: 380px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 1rem; font-weight: 600; color: var(--primary-color);">Hadith Reference</h3>
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h3 style="font-size: 1rem; font-weight: 600; color: var(--primary-color);">Hadith Reference</h3>
+          <!-- Subheader for the specific Hadith reference/tag -->
+          <p id="modalHadithTag" style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-top: 2px;"></p>
+        </div>
         <button id="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);">&times;</button>
       </div>
       <div id="modalHadithText" style="font-size: 0.9rem; font-style: italic; color: var(--text-main); line-height: 1.5; border-left: 3px solid var(--accent-gold); padding-left: 10px;">
@@ -620,23 +625,24 @@
           });
         }
 
-        // Modal Setup & Click Listener on the Hadith Tag
+// Modal Setup & Click Listener on the Hadith Tag
         const hadithTagEl = document.getElementById('hadith-tag');
         const hadithModal = document.getElementById('hadithModal');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const modalHadithText = document.getElementById('modalHadithText');
+        const modalHadithTag = document.getElementById('modalHadithTag'); // <-- Grab the subheader element
         const modalExternalLink = document.getElementById('modalExternalLink');
 
         if (hadithTagEl && hadithModal) {
-  hadithTagEl.addEventListener('click', () => {
-    if (currentActiveHadith) {
-      modalHadithText.textContent = currentActiveHadith.text;
-      // Dynamically set the Sunnah.com target URL from JSON
-      modalExternalLink.href = currentActiveHadith.url || "https://sunnah.com";
-    }
-    hadithModal.showModal();
-  });
-}
+          hadithTagEl.addEventListener('click', () => {
+            if (currentActiveHadith) {
+              modalHadithText.textContent = currentActiveHadith.text;
+              modalHadithTag.textContent = currentActiveHadith.tag; // <-- Populates the subheader dynamically
+              modalExternalLink.href = currentActiveHadith.url || "https://sunnah.com";
+            }
+            hadithModal.showModal();
+          });
+        }
 
         if (closeModalBtn && hadithModal) {
           closeModalBtn.addEventListener('click', () => {
