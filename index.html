@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mobile Component Template - Refined</title>
 
-<!-- Link to Web App Manifest -->
-  <link rel="manifest" href="/manifest.json">
+  <!-- Link to Web App Manifest -->
+  <link rel="manifest" href="/manifest.json"[cite: 1, 4]>
   <meta name="theme-color" content="#000000">
-  <!-- iOS specific tag for fullscreen mode -->
   <meta name="apple-mobile-web-app-capable" content="yes">
 
   <!-- Google Fonts: Inter -->
@@ -305,10 +304,7 @@
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').then((registration) => {
-      // Check for updates on page load
       registration.update();
-
-      // Detect when a new service worker takes over and reload the page automatically
       registration.addEventListener('updatefound', () => {
         const newWorker = registration.installing;
         newWorker.addEventListener('statechange', () => {
@@ -324,86 +320,82 @@
   <div class="mobile-container">
 
     <!-- 1. HADITH OF THE DAY CARD -->
-<section>
-  <h2 class="section-title">Hadith of the Day</h2>
-  <div class="card">
-    <div class="card-header">
-      <!-- Added id="hadith-avatar" -->
-      <img id="hadith-avatar" class="card-avatar" src="">
-      <div class="card-title-group">
-        <!-- Added id="hadith-narrator" -->
-        <h3 id="hadith-narrator">Loading wisdom...</h3>
-        <p>Daily Prophetic Wisdom</p>
+    <section>
+      <h2 class="section-title">Hadith of the Day</h2>
+      <div class="card">
+        <div class="card-header">
+          <img id="hadith-avatar" class="card-avatar" src="">
+          <div class="card-title-group">
+            <h3 id="hadith-narrator">Loading wisdom...</h3>
+            <p>Daily Prophetic Wisdom</p>
+          </div>
+        </div>
+        <div class="card-body" id="hadith-text">
+          Loading today's Hadith...
+        </div>
+        <div class="card-footer">
+          <span class="card-tag" id="hadith-tag">...</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Updated Today</span>
+        </div>
       </div>
-    </div>
-    <!-- Added id="hadith-text" -->
-    <div class="card-body" id="hadith-text">
-      Loading today's Hadith...
-    </div>
-    <div class="card-footer">
-      <!-- Added id="hadith-tag" -->
-      <span class="card-tag" id="hadith-tag">...</span>
-      <span style="font-size: 0.75rem; color: var(--text-muted);">Updated Today</span>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- 2. MASJID ANGULLIA ACTIVITIES CAROUSEL -->
-<section class="carousel-section">
-  <h2 class="section-title">Masjid Angullia Activities</h2>
-  <div class="carousel-wrapper">
-    <div class="carousel-track" id="carouselTrack">
-      
-      <!-- Slide 1 -->
-      <div class="carousel-slide">
-        <a id="link1" href="#" target="_blank">
-          <img id="caro1" src="https://lh3.googleusercontent.com/d/1LsZN6Xl6MLbSeYrZw5us8L-Uj7c2w0ow" alt="Quran Class">
-        </a>
-        <div id="title1" class="carousel-caption">1. Gathering masjid info...</div>
+    <!-- 2. MASJID ANGULLIA ACTIVITIES CAROUSEL -->
+    <section class="carousel-section">
+      <h2 class="section-title">Masjid Angullia Activities</h2>
+      <div class="carousel-wrapper">
+        <div class="carousel-track" id="carouselTrack">
+          
+          <!-- Slide 1 -->
+          <div class="carousel-slide">
+            <a id="link1" href="#" target="_blank">
+              <img id="caro1" src="https://lh3.googleusercontent.com/d/1LsZN6Xl6MLbSeYrZw5us8L-Uj7c2w0ow" alt="Quran Class">
+            </a>
+            <div id="title1" class="carousel-caption">1. Gathering masjid info...</div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="carousel-slide">
+            <a id="link2" href="#" target="_blank">
+              <img id="caro2" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Youth Gathering">
+            </a>
+            <div id="title2" class="carousel-caption">2. Gathering masjid info...</div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="carousel-slide">
+            <a id="link3" href="#" target="_blank">
+              <img id="caro3" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Yasin & Tahlil">
+            </a>
+            <div id="title3" class="carousel-caption">3. Gathering masjid info...</div>
+          </div>
+
+          <!-- Slide 4 -->
+          <div class="carousel-slide">
+            <a id="link4" href="#" target="_blank">
+              <img id="caro4" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Friday Infaq">
+            </a>
+            <div id="title4" class="carousel-caption">4. Gathering masjid info...</div>
+          </div>
+
+          <!-- Slide 5 -->
+          <div class="carousel-slide">
+            <a id="link5" href="#" target="_blank">
+              <img id="caro5" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Nikah Event">
+            </a>
+            <div id="title5" class="carousel-caption">5. Gathering masjid info...</div>
+          </div>
+
+        </div>
       </div>
-
-      <!-- Slide 2 -->
-      <div class="carousel-slide">
-        <a id="link2" href="#" target="_blank">
-          <img id="caro2" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Youth Gathering">
-        </a>
-        <div id="title2" class="carousel-caption">2. Gathering masjid info...</div>
+      <div class="carousel-indicators" id="carouselIndicators">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
       </div>
-
-      <!-- Slide 3 -->
-      <div class="carousel-slide">
-        <a id="link3" href="#" target="_blank">
-          <img id="caro3" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Yasin & Tahlil">
-        </a>
-        <div id="title3" class="carousel-caption">3. Gathering masjid info...</div>
-      </div>
-
-      <!-- Slide 4 -->
-      <div class="carousel-slide">
-        <a id="link4" href="#" target="_blank">
-          <img id="caro4" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Friday Infaq">
-        </a>
-        <div id="title4" class="carousel-caption">4. Gathering masjid info...</div>
-      </div>
-
-      <!-- Slide 5 -->
-      <div class="carousel-slide">
-        <a id="link5" href="#" target="_blank">
-          <img id="caro5" src="https://lh3.googleusercontent.com/d/1IF3g9fkqyHDR1olY1lYkuawayS8m0izt" alt="Nikah Event">
-        </a>
-        <div id="title5" class="carousel-caption">5. Gathering masjid info...</div>
-      </div>
-
-    </div>
-  </div>
-  <div class="carousel-indicators" id="carouselIndicators">
-    <span class="dot active"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-  </div>
-</section>
+    </section>
 
     <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES LIST -->
     <section class="vertical-list-section">
@@ -459,7 +451,9 @@
 
   </div>
 
+  <!-- ALL JAVASCRIPT LOGIC KEPT CLEAN & ORGANIZED AT THE BOTTOM -->
   <script>
+    // 1. Carousel Touch, Scroll & Auto-Play Logic
     const track = document.getElementById('carouselTrack');
     const dots = document.querySelectorAll('.dot');
     
@@ -519,143 +513,60 @@
     track.addEventListener('mouseleave', startAutoScroll);
 
     startAutoScroll();
+
+    // 2. Load Airtable Carousel Data
+    async function loadDynamicCard() {
+      try {
+        const response = await fetch('/api/cards?t=' + Date.now());
+        if (!response.ok) return;
+
+        const cards = await response.json();
+        if (!Array.isArray(cards)) return;
+
+        for (let i = 1; i <= 5; i++) {
+          if (cards[i]) {
+            const imgEl = document.getElementById(`caro${i}`);
+            const titleEl = document.getElementById(`title${i}`);
+            const linkEl = document.getElementById(`link${i}`);
+
+            if (cards[i].imageUrl && imgEl) imgEl.src = cards[i].imageUrl;
+            if (cards[i].Title && titleEl) titleEl.textContent = `${i}. ${cards[i].Title}`;
+            if (cards[i].url && linkEl) linkEl.href = cards[i].url;
+          }
+        }
+      } catch (error) {
+        console.error('Error loading Airtable card data:', error);
+      }
+    }
+
+    // 3. Load Local JSON Hadith of the Day
+    async function loadDailyHadith() {
+      try {
+        const response = await fetch('/hadiths.json?t=' + Date.now());
+        if (!response.ok) throw new Error('Failed to load hadiths.json');
+
+        const hadithList = await response.json();
+        if (!Array.isArray(hadithList) || hadithList.length === 0) return;
+
+        const today = new Date();
+        const dayIndex = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
+        const selectedHadith = hadithList[dayIndex % hadithList.length];
+
+        document.getElementById('hadith-text').textContent = selectedHadith.text;
+        document.getElementById('hadith-narrator').textContent = selectedHadith.narrator;
+        document.getElementById('hadith-tag').textContent = selectedHadith.tag;
+        
+        if (selectedHadith.avatar) {
+          document.getElementById('hadith-avatar').src = selectedHadith.avatar;
+        }
+      } catch (error) {
+        console.error('Error loading Daily Hadith:', error);
+      }
+    }
+
+    // Run both dynamic data functions on page load
+    loadDynamicCard();
+    loadDailyHadith();
   </script>
-
-<script>
-async function loadDynamicCard() {
-    try {
-      // Fetch with cache-busting timestamp
-      const response = await fetch('/api/cards?t=' + Date.now());
-      
-      if (!response.ok) {
-        console.error('API response error:', response.status);
-        return;
-      }
-
-      const cards = await response.json();
-      
-      // 1. Avatar Card
-      if (Array.isArray(cards) && cards.length > 0) {
-        if (cards[0].imageUrl) {
-          document.getElementById('card-avatar').src = cards[0].imageUrl;
-        }
-      }
-
-      // 2. Carousel Slide 1
-      if (cards.length > 1) {
-        if (cards[1].imageUrl) {
-          document.getElementById('caro1').src = cards[1].imageUrl;
-        }
-        if (cards[1].Title) {
-          document.getElementById('title1').textContent = `1. ${cards[1].Title}`;
-        }
-        // Bind the URL from Airtable (adjust property name if it's 'Link' or 'url')
-        if (cards[1].url) {
-          document.getElementById('link1').href = cards[1].url;
-        }
-      }
-
-      // 3. Carousel Slide 2
-      if (cards.length > 2) {
-        if (cards[2].imageUrl) {
-          document.getElementById('caro2').src = cards[2].imageUrl;
-        }
-        if (cards[2].Title) {
-          document.getElementById('title2').textContent = `2. ${cards[2].Title}`;
-        }
-        if (cards[2].url) {
-          document.getElementById('link2').href = cards[2].url;
-        }
-      }
-
-      // 4. Carousel Slide 3
-      if (cards.length > 3) {
-        if (cards[3].imageUrl) {
-          document.getElementById('caro3').src = cards[3].imageUrl;
-        }
-        if (cards[3].Title) {
-          document.getElementById('title3').textContent = `3. ${cards[3].Title}`;
-        }
-        if (cards[3].url) {
-          document.getElementById('link3').href = cards[3].url;
-        }
-      }
-
-      // 5. Carousel Slide 4
-      if (cards.length > 4) {
-        if (cards[4].imageUrl) {
-          document.getElementById('caro4').src = cards[4].imageUrl;
-        }
-        if (cards[4].Title) {
-          document.getElementById('title4').textContent = `4. ${cards[4].Title}`;
-        }
-        if (cards[4].url) {
-          document.getElementById('link4').href = cards[4].url;
-        }
-      }  
-
-      // 6. Carousel Slide 5
-      if (cards.length > 5) {
-        if (cards[5].imageUrl) {
-          document.getElementById('caro5').src = cards[5].imageUrl;
-        }
-        if (cards[5].Title) {
-          document.getElementById('title5').textContent = `5. ${cards[5].Title}`;
-        }
-        if (cards[5].url) {
-          document.getElementById('link5').href = cards[5].url;
-        }
-      }
-          
-    } catch (error) {
-      console.error('Error loading card data:', error);
-    }
-}
-
-loadDynamicCard();
-</script>
-
-<script>
-async function loadDailyHadith() {
-  try {
-    // Fetch your JSON file with a timestamp query parameter to prevent browser caching issues
-    const response = await fetch('/hadiths.json?t=' + Date.now());
-    
-    if (!response.ok) {
-      throw new Error('Failed to load hadiths.json');
-    }
-
-    const hadithList = await response.json();
-    
-    if (!Array.isArray(hadithList) || hadithList.length === 0) {
-      console.error('Hadith list is empty or invalid.');
-      return;
-    }
-
-    // Calculate total days passed since epoch (Jan 1, 1970)
-    const today = new Date();
-    const dayIndex = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
-    
-    // Pick today's Hadith using the modulo operator (%)
-    const selectedHadith = hadithList[dayIndex % hadithList.length];
-
-    // Inject data into the HTML elements
-    document.getElementById('hadith-text').textContent = selectedHadith.text;
-    document.getElementById('hadith-narrator').textContent = selectedHadith.narrator;
-    document.getElementById('hadith-tag').textContent = selectedHadith.tag;
-    
-    if (selectedHadith.avatar) {
-      document.getElementById('hadith-avatar').src = selectedHadith.avatar;
-    }
-
-  } catch (error) {
-    console.error('Error loading Daily Hadith:', error);
-  }
-}
-
-// Execute the function when the page loads
-loadDailyHadith();
-</script>
-  
 </body>
 </html>
