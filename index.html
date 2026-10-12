@@ -594,17 +594,6 @@
       }
     }
 
-    // Helper function to inject Hadith details into HTML elements
-    function displayHadith(hadith) {
-      document.getElementById('hadith-text').textContent = hadith.text;
-      document.getElementById('hadith-narrator').textContent = hadith.narrator;
-      document.getElementById('hadith-tag').textContent = hadith.tag;
-      
-      if (hadith.avatar) {
-        document.getElementById('hadith-avatar').src = hadith.avatar;
-      }
-    }
-
     // Run both dynamic data functions on page load
     loadDynamicCard();
     loadDailyHadith();
