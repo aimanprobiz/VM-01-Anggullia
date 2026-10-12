@@ -619,14 +619,15 @@
         const modalExternalLink = document.getElementById('modalExternalLink');
 
         if (hadithTagEl && hadithModal) {
-          hadithTagEl.addEventListener('click', () => {
-            if (currentActiveHadith) {
-              modalHadithText.textContent = currentActiveHadith.text;
-              modalExternalLink.href = currentActiveHadith.url || "https://sunnah.com";
-            }
-            hadithModal.showModal(); // Opens the native dialog overlay
-          });
-        }
+  hadithTagEl.addEventListener('click', () => {
+    if (currentActiveHadith) {
+      modalHadithText.textContent = currentActiveHadith.text;
+      // Dynamically set the Sunnah.com target URL from JSON
+      modalExternalLink.href = currentActiveHadith.url || "https://sunnah.com";
+    }
+    hadithModal.showModal();
+  });
+}
 
         if (closeModalBtn && hadithModal) {
           closeModalBtn.addEventListener('click', () => {
