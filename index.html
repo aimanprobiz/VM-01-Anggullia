@@ -92,12 +92,19 @@
       border-radius: 50%;
       object-fit: cover;
       border: 1.5px solid var(--accent-gold);
+      flex-shrink: 0; /* <-- ADD THIS: Prevents the image circle from ever shrinking */
     }
 
+    .card-title-group {
+      flex: 1;          /* <-- Takes up available space safely */
+      min-width: 0;     /* <-- Prevents layout breaking */
+    }
+    
     .card-title-group h3 {
       font-size: 1rem;
       font-weight: 600;
       color: var(--text-main);
+      word-break: break-word; /* <-- ADD THIS: Ensures long names wrap cleanly */
     }
 
     .card-title-group p {
