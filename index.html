@@ -634,6 +634,8 @@
         const modalHadithTag = document.getElementById('modalHadithTag');
         const modalExternalLink = document.getElementById('modalExternalLink');
 
+        
+
         // Reusable trigger function for opening the modal
         function triggerModal() {
           if (currentActiveHadith) {
@@ -652,6 +654,12 @@
           hadithTextEl.style.cursor = 'pointer'; // Shows pointer cursor on hover
           hadithTextEl.title = "Click to view details";
           hadithTextEl.addEventListener('click', triggerModal);
+        }
+
+        if (closeModalBtn && hadithModal) {
+          closeModalBtn.addEventListener('click', () => {
+            hadithModal.close();
+          });
         }
 
         // Close modal if clicking outside the dialog box area
