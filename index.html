@@ -333,10 +333,11 @@
         <div class="card-body" id="hadith-text">
           Loading today's Hadith...
         </div>
-        <div class="card-footer">
-          <span class="card-tag" id="hadith-tag">...</span>
-          <span style="font-size: 0.75rem; color: var(--text-muted);">Updated Today</span>
-        </div>
+<div class="card-footer">
+  <span class="card-tag" id="hadith-tag">...</span>
+  <!-- Added id="update-status" and cursor pointer -->
+  <span id="update-status" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;" title="Tap for random Hadith">Updated Today</span>
+</div>
       </div>
     </section>
 
@@ -547,28 +548,60 @@
       }
     }
 
-    // 3. Load Local JSON Hadith of the Day
+// Global variable to store loaded hadiths for the secret click feature
+    let globalHadithList = [];
+
+    // 3. Load Local JSON Hadith of the Day with Secret Randomizer
     async function loadDailyHadith() {
       try {
         const response = await fetch('/hadiths.json?t=' + Date.now());
         if (!response.ok) throw new Error('Failed to load hadiths.json');
 
-        const hadithList = await response.json();
-        if (!Array.isArray(hadithList) || hadithList.length === 0) return;
+        globalHadithList = await response.json();
+        if (!Array.isArray(globalHadithList) || globalHadithList.length === 0) return;
 
+        // Calculate today's default Hadith (Deterministic based on date)
         const today = new Date();
         const dayIndex = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
-        const selectedHadith = hadithList[dayIndex % hadithList.length];
+        const selectedHadith = globalHadithList[dayIndex % globalHadithList.length];
 
-        document.getElementById('hadith-text').textContent = selectedHadith.text;
-        document.getElementById('hadith-narrator').textContent = selectedHadith.narrator;
-        document.getElementById('hadith-tag').textContent = selectedHadith.tag;
-        
-        if (selectedHadith.avatar) {
-          document.getElementById('hadith-avatar').src = selectedHadith.avatar;
+        // Display the default daily Hadith
+        displayHadith(selectedHadith);
+
+        // Setup the secret click listener on "Updated Today"
+        const updateStatusEl = document.getElementById('update-status');
+        if (updateStatusEl) {
+          updateStatusEl.addEventListener('click', () => {
+            if (globalHadithList.length <= 1) return;
+
+            // Pick a random Hadith from the array
+            let randomIndex;
+            do {
+              randomIndex = Math.floor(Math.random() * globalHadithList.length);
+            } while (globalHadithList[randomIndex] === selectedHadith); // Try to pick a different one if possible
+
+            const randomHadith = globalHadithList[randomIndex];
+
+            // Display the random Hadith and change the text secretly
+            displayHadith(randomHadith);
+            updateStatusEl.textContent = "Next Hadith (Random)";
+            updateStatusEl.style.color = "var(--accent-gold)"; // Gives a subtle visual cue that it switched
+          });
         }
+
       } catch (error) {
         console.error('Error loading Daily Hadith:', error);
+      }
+    }
+
+    // Helper function to inject Hadith details into HTML elements
+    function displayHadith(hadith) {
+      document.getElementById('hadith-text').textContent = hadith.text;
+      document.getElementById('hadith-narrator').textContent = hadith.narrator;
+      document.getElementById('hadith-tag').textContent = hadith.tag;
+      
+      if (hadith.avatar) {
+        document.getElementById('hadith-avatar').src = hadith.avatar;
       }
     }
 
