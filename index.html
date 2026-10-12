@@ -523,6 +523,14 @@
         const cards = await response.json();
         if (!Array.isArray(cards)) return;
 
+      //  Pull the very first Airtable record image for the Hadith card avatar!
+        if (cards.length > 0 && cards[0].imageUrl) {
+          const hadithAvatar = document.getElementById('hadith-avatar');
+          if (hadithAvatar) {
+            hadithAvatar.src = cards[0].imageUrl;
+          }
+        }
+
         for (let i = 1; i <= 5; i++) {
           if (cards[i]) {
             const imgEl = document.getElementById(`caro${i}`);
