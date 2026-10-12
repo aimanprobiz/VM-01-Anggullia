@@ -453,7 +453,7 @@
   </div>
 
   <!-- ALL JAVASCRIPT LOGIC KEPT CLEAN & ORGANIZED AT THE BOTTOM -->
-  <script>
+<script>
     // 1. Carousel Touch, Scroll & Auto-Play Logic
     const track = document.getElementById('carouselTrack');
     const dots = document.querySelectorAll('.dot');
@@ -515,7 +515,7 @@
 
     startAutoScroll();
 
-    // 2. Load Airtable Carousel Data
+    // 2. Load Airtable Carousel Data & Avatar
     async function loadDynamicCard() {
       try {
         const response = await fetch('/api/cards?t=' + Date.now());
@@ -524,7 +524,7 @@
         const cards = await response.json();
         if (!Array.isArray(cards)) return;
 
-      //  Pull the very first Airtable record image for the Hadith card avatar!
+        // Pull the very first Airtable record image for the Hadith card avatar
         if (cards.length > 0 && cards[0].imageUrl) {
           const hadithAvatar = document.getElementById('hadith-avatar');
           if (hadithAvatar) {
@@ -548,7 +548,7 @@
       }
     }
 
-// Global variable to store loaded hadiths for the secret click feature
+    // Global variable to store loaded hadiths for the secret click feature
     let globalHadithList = [];
 
     // 3. Load Local JSON Hadith of the Day with Secret Randomizer
@@ -578,20 +578,27 @@
             let randomIndex;
             do {
               randomIndex = Math.floor(Math.random() * globalHadithList.length);
-            } while (globalHadithList[randomIndex] === selectedHadith); // Try to pick a different one if possible
+            } while (globalHadithList[randomIndex] === selectedHadith);
 
             const randomHadith = globalHadithList[randomIndex];
 
             // Display the random Hadith and change the text secretly
             displayHadith(randomHadith);
             updateStatusEl.textContent = "New Hadith";
-            updateStatusEl.style.color = "var(--accent-gold)"; // Gives a subtle visual cue that it switched
+            updateStatusEl.style.color = "var(--accent-gold)";
           });
         }
 
       } catch (error) {
         console.error('Error loading Daily Hadith:', error);
       }
+    }
+
+    // Helper function to inject Hadith details into HTML elements (keeping avatar locked to Airtable)
+    function displayHadith(hadith) {
+      document.getElementById('hadith-text').textContent = hadith.text;
+      document.getElementById('hadith-narrator').textContent = hadith.narrator;
+      document.getElementById('hadith-tag').textContent = hadith.tag;
     }
 
     // Run both dynamic data functions on page load
