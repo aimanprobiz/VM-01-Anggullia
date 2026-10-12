@@ -625,30 +625,33 @@
           });
         }
 
-// Modal Setup & Click Listener on the Hadith Tag
+// Modal Setup & Click Listeners on both the Tag and Hadith Text
         const hadithTagEl = document.getElementById('hadith-tag');
         const hadithTextEl = document.getElementById('hadith-text');
         const hadithModal = document.getElementById('hadithModal');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const modalHadithText = document.getElementById('modalHadithText');
-        const modalHadithTag = document.getElementById('modalHadithTag'); // <-- Grab the subheader element
+        const modalHadithTag = document.getElementById('modalHadithTag');
         const modalExternalLink = document.getElementById('modalExternalLink');
 
-        if (hadithTagEl && hadithModal) {
-          hadithTagEl.addEventListener('click', () => {
-            if (currentActiveHadith) {
-              modalHadithText.textContent = currentActiveHadith.text;
-              modalHadithTag.textContent = currentActiveHadith.tag; // <-- Populates the subheader dynamically
-              modalExternalLink.href = currentActiveHadith.url || "https://sunnah.com";
-            }
-            hadithModal.showModal();
-          });
+        // Reusable trigger function for opening the modal
+        function triggerModal() {
+          if (currentActiveHadith) {
+            modalHadithText.textContent = currentActiveHadith.text;
+            modalHadithTag.textContent = currentActiveHadith.tag;
+            modalExternalLink.href = currentActiveHadith.url || "https://sunnah.com";
+          }
+          hadithModal.showModal();
         }
 
-        if (closeModalBtn && hadithModal) {
-          closeModalBtn.addEventListener('click', () => {
-            hadithModal.close();
-          });
+        if (hadithTagEl && hadithModal) {
+          hadithTagEl.addEventListener('click', triggerModal);
+        }
+
+        if (hadithTextEl && hadithModal) {
+          hadithTextEl.style.cursor = 'pointer'; // Shows pointer cursor on hover
+          hadithTextEl.title = "Click to view details";
+          hadithTextEl.addEventListener('click', triggerModal);
         }
 
         // Close modal if clicking outside the dialog box area
