@@ -41,6 +41,16 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+@keyframes pulseEffect {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.pulsing-placeholder {
+  animation: pulseEffect 1.5s infinite ease-in-out;
+}
+    
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
@@ -361,7 +371,7 @@
       <h2 class="section-title">Hadith of the Day</h2>
       <div class="card">
         <div class="card-header">
-          <img id="hadith-avatar" class="card-avatar" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
+          <img id="hadith-avatar" class="card-avatar pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
           <div class="card-title-group">
             <h3 id="hadith-narrator">Loading wisdom...</h3>
             <p>Daily Prophetic Wisdom</p>
@@ -388,7 +398,7 @@
           <!-- Slide 1 -->
           <div class="carousel-slide">
             <a id="link1" href="#" target="_blank">
-              <img id="caro1" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
+              <img id="caro1" class="pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
             </a>
             <div id="title1" class="carousel-caption">1. Gathering masjid info...</div>
           </div>
@@ -567,6 +577,7 @@
           const hadithAvatar = document.getElementById('hadith-avatar');
           if (hadithAvatar) {
             hadithAvatar.src = cards[0].imageUrl;
+            hadithAvatar.classList.remove('pulsing-placeholder'); // Stop pulsing
           }
         }
 
@@ -576,7 +587,10 @@
             const titleEl = document.getElementById(`title${i}`);
             const linkEl = document.getElementById(`link${i}`);
 
-            if (cards[i].imageUrl && imgEl) imgEl.src = cards[i].imageUrl;
+if (cards[i].imageUrl && imgEl) {
+          imgEl.src = cards[i].imageUrl;
+          imgEl.classList.remove('pulsing-placeholder'); // Stop pulsing
+        }
             if (cards[i].Title && titleEl) titleEl.textContent = `${i}. ${cards[i].Title}`;
             if (cards[i].url && linkEl) linkEl.href = cards[i].url;
           }
