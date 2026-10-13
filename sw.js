@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'app-cache-v3'; // Bumped to v3 to purge old cached index.html
+const CACHE_NAME = 'app-cache-v4'; // Bumped to v4 to purge old cached index.html
 const ASSETS = [
   '/',
   '/index.html',
