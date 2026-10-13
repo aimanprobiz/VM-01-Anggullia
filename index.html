@@ -33,16 +33,6 @@
       --radius-sm: 8px;
     }
 
-    @keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 1; }
-}
-
-.pulsing-loader {
-  animation: pulse 1.5s infinite ease-in-out;
-}
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -371,7 +361,7 @@
       <h2 class="section-title">Hadith of the Day</h2>
       <div class="card">
         <div class="card-header">
-          <img id="hadith-avatar" class="pulsing-loader" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
+          <img id="hadith-avatar" class="card-avatar" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
           <div class="card-title-group">
             <h3 id="hadith-narrator">Loading wisdom...</h3>
             <p>Daily Prophetic Wisdom</p>
