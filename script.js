@@ -213,7 +213,7 @@ async function loadBusinesses() {
             <span class="deal-badge">${biz.Deal || ''}</span>
           </div>
 <a href="/business.html?slug=${biz.Slug}" class="action-btn" style="text-align: center; text-decoration: none;">
-            ${biz.ButtonText || (biz.ActionType && biz.ActionType.toLowerCase() === 'claim' ? 'Claim' : 'View Details')}
+            ${biz.ActionType || 'View Details'}
           </a>
         </div>
       `;
