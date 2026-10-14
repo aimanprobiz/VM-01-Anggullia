@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mobile Component Template - Refined</title>
+  <title>DailyBarakah SG - Masjid Angullia Companion</title>
 
   <!-- Link to Web App Manifest -->
-  <link rel="manifest" href="/manifest.json"[cite: 1]>
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
@@ -41,15 +41,15 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-@keyframes pulseEffect {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.98); }
-  100% { opacity: 1; transform: scale(1); }
-}
+    @keyframes pulseEffect {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1); }
+    }
 
-.pulsing-placeholder {
-  animation: pulseEffect 1.5s infinite ease-in-out;
-}
+    .pulsing-placeholder {
+      animation: pulseEffect 1.5s infinite ease-in-out;
+    }
     
     body {
       background-color: var(--bg-color);
@@ -226,115 +226,169 @@
       border-radius: 4px;
     }
 
-    /* 3. Vertical List */
-    .vertical-list-section {
+    /* 3. SUPPORT LOCAL MUSLIM BUSINESSES - 2-COLUMN GRID & STACKED PILLS */
+    .business-section {
       display: flex;
       flex-direction: column;
     }
 
-    .vertical-list {
+    /* Stacked Wrapped Categories */
+    .filter-stacked {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
+      flex-wrap: wrap;
+      gap: 8px 6px;
+      margin-bottom: 16px;
     }
 
-    .vertical-item {
-      width: 100%;
+    .filter-btn {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn.active {
+      background-color: var(--accent-gold-bg);
+      border-color: var(--accent-gold);
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    /* 2-Column Visual Grid */
+    .business-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid-card {
       background-color: var(--card-bg);
       border-radius: var(--radius-md);
-      padding: 12px 14px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
       border: 1px solid var(--border-color);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .vertical-item:active {
-      transform: scale(0.99);
-    }
-
-    .item-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      box-shadow: var(--shadow-sm);
       overflow: hidden;
-    }
-
-    .item-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: var(--radius-sm);
-      object-fit: cover;
-      flex-shrink: 0;
-    }
-
-    .item-text {
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      justify-content: space-between;
+      transition: transform 0.15s ease;
     }
 
-    .item-text h4 {
-      font-size: 0.92rem;
-      font-weight: 600;
+    .grid-card:active {
+      transform: scale(0.98);
+    }
+
+    .card-banner {
+      width: 100%;
+      height: 105px;
+      object-fit: cover;
+      background-color: var(--border-color);
+    }
+
+    .grid-card-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .vendor-details {
+      margin-bottom: 8px;
+    }
+
+    .vendor-name {
+      font-size: 0.85rem;
+      font-weight: 700;
       color: var(--text-main);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      margin-bottom: 2px;
+      line-height: 1.25;
     }
 
-    .item-text span {
-      font-size: 0.78rem;
+    .vendor-sub {
+      font-size: 0.72rem;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-bottom: 6px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    /* Action Button with Gold Trim & Click State */
+    .deal-badge {
+      display: inline-block;
+      background-color: var(--accent-gold-bg);
+      color: var(--primary-color);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(221, 186, 88, 0.4);
+      line-height: 1.2;
+    }
+
+    /* Action Button with Gold Trim & Signature Hover State */
     .action-btn {
+      width: 100%;
       background-color: var(--primary-color);
       color: #ffffff;
-      border: 1.5px solid var(--accent-gold); /* Fixed quotes */
-      padding: 8px 16px;
+      border: 1.5px solid var(--accent-gold);
+      padding: 8px 0;
       border-radius: var(--radius-sm);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
-      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
       transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      box-sizing: border-box;
+      margin-top: 6px;
     }
 
+    .action-btn:hover,
     .action-btn:active {
       background-color: var(--accent-gold);
       color: var(--primary-color);
       border-color: var(--accent-gold);
     }
 
-    /* Blurred backdrop styling for the native dialog element */
+    /* Dialog Backdrop Styling */
     dialog::backdrop {
-      background-color: rgba(12, 43, 34, 0.4); /* Dark semi-transparent tint matching your theme */
-      backdrop-filter: blur(5px);               /* Blurs everything behind the modal */
-      -webkit-backdrop-filter: blur(5px);      /* Safari compatibility */
+      background-color: rgba(12, 43, 34, 0.4);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
-    
+
+    .pin-input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1.2rem;
+      letter-spacing: 6px;
+      text-align: center;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin: 10px 0;
+      outline: none;
+    }
+
+    .pin-input:focus {
+      border-color: var(--primary-color);
+    }
   </style>
 </head>
 <body>
 
-  <!-- Hadith Reference Modal (Floating Mini Screen / Bottom Sheet) -->
-  <!-- Hadith Reference Modal (Centered vertically & horizontally with side margins) -->
-<!-- Hadith Reference Modal with Subheader -->
+  <!-- Hadith Reference Modal -->
   <dialog id="hadithModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; width: 90%; max-width: 380px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
     <div style="display: flex; flex-direction: column; gap: 14px;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
           <h3 style="font-size: 1rem; font-weight: 600; color: var(--primary-color);">Hadith Reference</h3>
-          <!-- Subheader for the specific Hadith reference/tag -->
           <p id="modalHadithTag" style="font-size: 0.78rem; font-weight: 600; color: var(--accent-gold); margin-top: 2px;"></p>
         </div>
         <button id="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 4px 8px;">&times;</button>
@@ -342,27 +396,57 @@
       <div id="modalHadithText" style="font-size: 0.9rem; font-style: italic; color: var(--text-main); line-height: 1.5; border-left: 3px solid var(--accent-gold); padding-left: 10px;">
         Loading reference details...
       </div>
-      <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; text-decoration: none; display: block; margin-top: 4px;">
+      <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; display: block; margin-top: 4px;">
         View on Sunnah.com ↗
       </a>
     </div>
   </dialog>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then((registration) => {
-      registration.update();
-      registration.addEventListener('updatefound', () => {
-        const newWorker = registration.installing;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'activated') {
-            window.location.reload();
-          }
+  <!-- Business Deal Voucher / Contact Modal -->
+  <dialog id="businessModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; width: 90%; max-width: 380px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h3 id="bizModalTitle" style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color);">Business Deal</h3>
+          <p id="bizModalSub" style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;"></p>
+        </div>
+        <button id="closeBizModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 4px 8px;">&times;</button>
+      </div>
+
+      <div style="background-color: var(--accent-gold-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid rgba(221, 186, 88, 0.4);">
+        <p style="font-size: 0.75rem; font-weight: 600; color: var(--primary-color); margin-bottom: 2px;">COMMUNITY DEAL:</p>
+        <p id="bizModalDeal" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);"></p>
+      </div>
+
+      <!-- In-store PIN redemption view -->
+      <div id="pinArea">
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">Show this screen to the cashier & enter the 4-digit PIN to redeem:</p>
+        <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input">
+        <button id="verifyPinBtn" class="action-btn">Confirm Redemption</button>
+      </div>
+
+      <!-- Service Redirect WhatsApp View -->
+      <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center;">
+        Message Vendor on WhatsApp 💬
+      </a>
+    </div>
+  </dialog>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then((registration) => {
+        registration.update();
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'activated') {
+              window.location.reload();
+            }
+          });
         });
       });
-    });
-  }
-</script>
+    }
+  </script>
 
   <div class="mobile-container">
 
@@ -381,9 +465,7 @@
           Loading today's Hadith...
         </div>
         <div class="card-footer">
-          <!-- Clickable reference tag to trigger modal -->
           <span class="card-tag" id="hadith-tag" style="cursor: pointer;" title="Click to view details">...</span>
-          <!-- Secret randomizer trigger -->
           <span id="update-status" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;" title="Tap for random Hadith">Updated Today</span>
         </div>
       </div>
@@ -446,76 +528,201 @@
       </div>
     </section>
 
-    <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES LIST -->
-    <section class="vertical-list-section">
+    <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
+    <section class="business-section">
       <h2 class="section-title">Support Local Muslim Businesses</h2>
-      <div class="vertical-list">
-        
-        <div class="vertical-item">
-          <div class="item-info">
-            <img class="item-icon" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=100&q=80" alt="The Malayan Council">
-            <div class="item-text">
-              <h4>The Malayan Council</h4>
-              <span>Gourmet Halal Fusion • Dunlop St</span>
+
+      <!-- Stacked Wrapped Categories -->
+      <div class="filter-stacked" id="filterContainer">
+        <button class="filter-btn active" data-cat="all">All Deals</button>
+        <button class="filter-btn" data-cat="tutors">Quran Tutors</button>
+        <button class="filter-btn" data-cat="photo">Photography</button>
+        <button class="filter-btn" data-cat="fb">F&B / Bakers</button>
+        <button class="filter-btn" data-cat="books">Books & Gifts</button>
+        <button class="filter-btn" data-cat="sunnah">Health & Sunnah</button>
+        <button class="filter-btn" data-cat="fashion">Modest Fashion</button>
+      </div>
+
+      <!-- 2-Column Grid -->
+      <div class="business-grid" id="businessGrid">
+
+        <!-- 1. Quran Tutor -->
+        <div class="grid-card" data-cat="tutors">
+          <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=300&q=80" alt="Al-Tarteel" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Al-Tarteel Academy</h3>
+              <p class="vendor-sub">1-on-1 Tajweed</p>
+              <span class="deal-badge">Free Trial + 50% Off Reg</span>
             </div>
+            <button class="action-btn" onclick="openBizModal('book', 'Al-Tarteel Academy', '1-on-1 Tajweed & Recitation', 'Free Trial Lesson + 50% Off Registration', '6512345678')">Book</button>
           </div>
-          <button class="action-btn">Visit</button>
         </div>
 
-        <div class="vertical-item">
-          <div class="item-info">
-            <img class="item-icon" src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=100&q=80" alt="Wardah Books">
-            <div class="item-text">
-              <h4>Wardah Books</h4>
-              <span>Islamic Literature • Bussorah St</span>
+        <!-- 2. Photography -->
+        <div class="grid-card" data-cat="photo">
+          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=300&q=80" alt="CandidNikah" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">CandidNikah Photo</h3>
+              <p class="vendor-sub">Nikah & Events</p>
+              <span class="deal-badge">Free Canvas Frame ($80)</span>
             </div>
+            <button class="action-btn" onclick="openBizModal('enquire', 'CandidNikah Photography', 'Nikah & Solemnisation Services', 'Free Canvas Frame ($80 Value) with Nikah Package', '6512345678')">Enquire</button>
           </div>
-          <button class="action-btn">Visit</button>
         </div>
 
-        <div class="vertical-item">
-          <div class="item-info">
-            <img class="item-icon" src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=100&q=80" alt="Inayah Apparel">
-            <div class="item-text">
-              <h4>Inayah Modest Apparel</h4>
-              <span>Contemporary Fashion • Arab St</span>
+        <!-- 3. F&B / Baker -->
+        <div class="grid-card" data-cat="fb">
+          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=300&q=80" alt="Sucre & Spice" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Sucre & Spice</h3>
+              <p class="vendor-sub">Home Baker • Serangoon</p>
+              <span class="deal-badge">Free Box of Kuih Raya</span>
             </div>
+            <button class="action-btn" onclick="openBizModal('claim', 'Sucre & Spice Artisanal', 'Home Baker • Serangoon', 'Free Box of Kuih Raya with $30 spend')">Claim</button>
           </div>
-          <button class="action-btn">Visit</button>
         </div>
 
-        <div class="vertical-item">
-          <div class="item-info">
-            <img class="item-icon" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=100&q=80" alt="Fluff Bakery">
-            <div class="item-text">
-              <h4>Fluff Bakery</h4>
-              <span>Artisanal Halal Bakes • Kampong Gelam</span>
+        <!-- 4. Books & Gifts -->
+        <div class="grid-card" data-cat="books">
+          <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80" alt="Wardah Books" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Wardah Books</h3>
+              <p class="vendor-sub">Bussorah Street</p>
+              <span class="deal-badge">$3 Off Seerah Titles</span>
             </div>
+            <button class="action-btn" onclick="openBizModal('claim', 'Wardah Books', 'Bussorah Street • Kampong Gelam', '$3 Off Seerah Book Titles')">Claim</button>
           </div>
-          <button class="action-btn">Visit</button>
+        </div>
+
+        <!-- 5. Books & Gifts (Kids) -->
+        <div class="grid-card" data-cat="books">
+          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=300&q=80" alt="Little Sunnah Kids" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Little Sunnah Kids</h3>
+              <p class="vendor-sub">Islamic Activity Cards</p>
+              <span class="deal-badge">15% Off Starter Bundle</span>
+            </div>
+            <button class="action-btn" onclick="openBizModal('claim', 'Little Sunnah Kids', 'Islamic Educational Flashcards', '15% Off Starter Learning Bundle')">Claim</button>
+          </div>
+        </div>
+
+        <!-- 6. Health & Sunnah -->
+        <div class="grid-card" data-cat="sunnah">
+          <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=300&q=80" alt="Al-Hijama Wellness" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Al-Hijama Wellness</h3>
+              <p class="vendor-sub">Sunnah Cupping</p>
+              <span class="deal-badge">$10 Off First Session</span>
+            </div>
+            <button class="action-btn" onclick="openBizModal('enquire', 'Al-Hijama Wellness', 'Certified Sunnah Cupping Therapy', '$10 Off First Session Package', '6592223333')">Enquire</button>
+          </div>
+        </div>
+
+        <!-- 7. Modest Fashion -->
+        <div class="grid-card" data-cat="fashion">
+          <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=300&q=80" alt="Nur Hijab Studio" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Nur Hijab Studio</h3>
+              <p class="vendor-sub">Telekung & Hijabs</p>
+              <span class="deal-badge">Free Pouch w/ Telekung</span>
+            </div>
+            <button class="action-btn" onclick="openBizModal('claim', 'Nur Hijab Studio', 'Silk Telekung & Hijabs', 'Free Premium Pouch with Telekung purchase')">Claim</button>
+          </div>
+        </div>
+
+        <!-- 8. Quran Tutors -->
+        <div class="grid-card" data-cat="tutors">
+          <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=300&q=80" alt="Ustaz Farhan" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Ustaz Farhan Tuition</h3>
+              <p class="vendor-sub">Home Quran Classes</p>
+              <span class="deal-badge">First Lesson Waiver</span>
+            </div>
+            <button class="action-btn" onclick="openBizModal('book', 'Ustaz Farhan Quran Tuition', 'Private Adult & Kids Quran Classes', 'First Lesson Registration Fee Waiver', '6594445555')">Book</button>
+          </div>
+        </div>
+
+        <!-- 9. Health & Sunnah (Oud) -->
+        <div class="grid-card" data-cat="sunnah">
+          <img src="https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=300&q=80" alt="Little Arabia Oud" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Little Arabia Oud</h3>
+              <p class="vendor-sub">Yemeni Honey & Attar</p>
+              <span class="deal-badge">Free 3ml Oud Roll-on</span>
+            </div>
+            <button class="action-btn" onclick="openBizModal('claim', 'Little Arabia Oud', 'Pure Yemeni Honey & Attar', 'Free 3ml Oud Roll-on with $25 spend')">Claim</button>
+          </div>
+        </div>
+
+        <!-- 10. F&B / Food -->
+        <div class="grid-card" data-cat="fb">
+          <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=300&q=80" alt="Kampong Gelam Biryani" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">KG Biryani Co.</h3>
+              <p class="vendor-sub">Arab St • Lunch Set</p>
+              <span class="deal-badge">Free Drink w/ Set</span>
+            </div>
+            <button class="action-btn" onclick="openBizModal('claim', 'Kampong Gelam Biryani Co.', 'Arab Street • Authentic Set', 'Free Drink with Jumuah Biryani Set')">Claim</button>
+          </div>
+        </div>
+
+        <!-- 11. Home Services -->
+        <div class="grid-card" data-cat="fashion">
+          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=300&q=80" alt="Barakah Clean" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Barakah Clean</h3>
+              <p class="vendor-sub">Deep Home Cleaning</p>
+              <span class="deal-badge">20% Off Sofa Clean</span>
+            </div>
+            <button class="action-btn" onclick="openBizModal('enquire', 'Barakah Clean Services', 'Pre-Festive Deep Cleaning', '20% Off Sofa Sanitising Session', '6596667777')">Enquire</button>
+          </div>
+        </div>
+
+        <!-- 12. Custom Tailor -->
+        <div class="grid-card" data-cat="fashion">
+          <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=300&q=80" alt="Custom Tailors" class="card-banner">
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <h3 class="vendor-name">Custom Baju Melayu</h3>
+              <p class="vendor-sub">Bespoke Kurta & Suits</p>
+              <span class="deal-badge">Free Express Alteration</span>
+            </div>
+            <button class="action-btn" onclick="openBizModal('enquire', 'Custom Baju Melayu Tailors', 'Bespoke Kurta & Suits', 'Free Express Fitting & Alteration', '6598889999')">Enquire</button>
+          </div>
         </div>
 
       </div>
     </section>
 
-
-<footer style="text-align: center; padding: 24px 16px; font-size: 0.75rem; color: #666; border-top: 1px solid rgba(0,0,0,0.08); margin-top: 35px; width: 100%;">
-  <p style="margin: 0; font-weight: 600; color: #0f382c;">DailyBarakah SG</p>
-  <p style="margin: 4px 0 0 0; line-height: 1.4;">
-    An independent community initiative powered by 
-    <a 
-      href="https://wa.me/6588469883?text=Assalaamualaikum%20CredoVend%2C%20I%20scanned%20the%20QR%20code%20at%20Masjid%20Angullia%20and%20would%20like%20to%20enquire%20about%20the%20following:" 
-      target="_blank" 
-      rel="noopener noreferrer" 
-      style="color: #0f382c; font-weight: 700; text-decoration: underline;"
-    >
-      CredoVend
-    </a>.
-  </p>
-  <p style="margin: 4px 0 0 0; line-height: 1.4; opacity: 0.85;">
-    Partnering with local masjids to spotlight activities and support Muslim-owned businesses.
-  </p>
-</footer>
+    <!-- FOOTER -->
+    <footer style="text-align: center; padding: 24px 16px; font-size: 0.75rem; color: #666; border-top: 1px solid rgba(0,0,0,0.08); margin-top: 35px; width: 100%;">
+      <p style="margin: 0; font-weight: 600; color: #0f382c;">DailyBarakah SG</p>
+      <p style="margin: 4px 0 0 0; line-height: 1.4;">
+        An independent community initiative powered by 
+        <a 
+          href="https://wa.me/6588469883?text=Assalaamualaikum%20CredoVend%2C%20I%20scanned%20the%20QR%20code%20at%20Masjid%20Angullia%20and%20would%20like%20to%20enquire%20about%20the%20following:" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style="color: #0f382c; font-weight: 700; text-decoration: underline;"
+        >
+          CredoVend
+        </a>.
+      </p>
+      <p style="margin: 4px 0 0 0; line-height: 1.4; opacity: 0.85;">
+        Partnering with local masjids to spotlight activities and support Muslim-owned businesses.
+      </p>
+    </footer>
     
   </div>
 
@@ -591,12 +798,11 @@
         const cards = await response.json();
         if (!Array.isArray(cards)) return;
 
-        // Pull the very first Airtable record image for the Hadith card avatar
         if (cards.length > 0 && cards[0].imageUrl) {
           const hadithAvatar = document.getElementById('hadith-avatar');
           if (hadithAvatar) {
             hadithAvatar.src = cards[0].imageUrl;
-            hadithAvatar.classList.remove('pulsing-placeholder'); // Stop pulsing
+            hadithAvatar.classList.remove('pulsing-placeholder');
           }
         }
 
@@ -606,10 +812,10 @@
             const titleEl = document.getElementById(`title${i}`);
             const linkEl = document.getElementById(`link${i}`);
 
-if (cards[i].imageUrl && imgEl) {
-          imgEl.src = cards[i].imageUrl;
-          imgEl.classList.remove('pulsing-placeholder'); // Stop pulsing
-        }
+            if (cards[i].imageUrl && imgEl) {
+              imgEl.src = cards[i].imageUrl;
+              imgEl.classList.remove('pulsing-placeholder');
+            }
             if (cards[i].Title && titleEl) titleEl.textContent = `${i}. ${cards[i].Title}`;
             if (cards[i].url && linkEl) linkEl.href = cards[i].url;
           }
@@ -619,13 +825,10 @@ if (cards[i].imageUrl && imgEl) {
       }
     }
 
-    // Global variable to store loaded hadiths for the secret click feature
+    // 3. Load Local JSON Hadith of the Day
     let globalHadithList = [];
-  
-    // Global variable to keep track of the currently displayed Hadith object
     let currentActiveHadith = null;
 
-    // 3. Load Local JSON Hadith of the Day with Secret Randomizer & Modal Trigger
     async function loadDailyHadith() {
       try {
         const response = await fetch('/hadiths.json?t=' + Date.now());
@@ -640,7 +843,6 @@ if (cards[i].imageUrl && imgEl) {
 
         displayHadith(selectedHadith);
 
-        // Secret click listener on "Updated Today"
         const updateStatusEl = document.getElementById('update-status');
         if (updateStatusEl) {
           updateStatusEl.addEventListener('click', () => {
@@ -654,11 +856,10 @@ if (cards[i].imageUrl && imgEl) {
             const randomHadith = globalHadithList[randomIndex];
             displayHadith(randomHadith);
             updateStatusEl.textContent = "New Hadith";
-            updateStatusEl.style.color = "var(--text-muted)"; // Fixed quotes here
+            updateStatusEl.style.color = "var(--text-muted)";
           });
         }
 
-// Modal Setup & Click Listeners on both the Tag and Hadith Text
         const hadithTagEl = document.getElementById('hadith-tag');
         const hadithTextEl = document.getElementById('hadith-text');
         const hadithModal = document.getElementById('hadithModal');
@@ -667,9 +868,6 @@ if (cards[i].imageUrl && imgEl) {
         const modalHadithTag = document.getElementById('modalHadithTag');
         const modalExternalLink = document.getElementById('modalExternalLink');
 
-        
-
-        // Reusable trigger function for opening the modal
         function triggerModal() {
           if (currentActiveHadith) {
             modalHadithText.textContent = currentActiveHadith.text;
@@ -679,23 +877,17 @@ if (cards[i].imageUrl && imgEl) {
           hadithModal.showModal();
         }
 
-        if (hadithTagEl && hadithModal) {
-          hadithTagEl.addEventListener('click', triggerModal);
-        }
-
+        if (hadithTagEl && hadithModal) hadithTagEl.addEventListener('click', triggerModal);
         if (hadithTextEl && hadithModal) {
-          hadithTextEl.style.cursor = 'pointer'; // Shows pointer cursor on hover
+          hadithTextEl.style.cursor = 'pointer';
           hadithTextEl.title = "Click to view details";
           hadithTextEl.addEventListener('click', triggerModal);
         }
 
         if (closeModalBtn && hadithModal) {
-          closeModalBtn.addEventListener('click', () => {
-            hadithModal.close();
-          });
+          closeModalBtn.addEventListener('click', () => hadithModal.close());
         }
 
-        // Close modal if clicking outside the dialog box area
         hadithModal.addEventListener('click', (event) => {
           const rect = hadithModal.getBoundingClientRect();
           if (
@@ -713,15 +905,92 @@ if (cards[i].imageUrl && imgEl) {
       }
     }
 
-    // Helper function to inject Hadith details into HTML elements & track active state
     function displayHadith(hadith) {
-      currentActiveHadith = hadith; // Store it so the modal can read it
+      currentActiveHadith = hadith;
       document.getElementById('hadith-text').textContent = hadith.text;
       document.getElementById('hadith-narrator').textContent = hadith.narrator;
       document.getElementById('hadith-tag').textContent = hadith.tag;
     }
 
-    // Run both dynamic data functions on page load
+    // 4. CATEGORY FILTER LOGIC FOR LOCAL BUSINESSES
+    const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
+    const businessCards = document.querySelectorAll('#businessGrid .grid-card');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        const selectedCat = button.getAttribute('data-cat');
+
+        businessCards.forEach(card => {
+          const cardCat = card.getAttribute('data-cat');
+          if (selectedCat === 'all' || cardCat === selectedCat) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // 5. BUSINESS MODAL ACTION LOGIC
+    const bizModal = document.getElementById('businessModal');
+    const closeBizModalBtn = document.getElementById('closeBizModalBtn');
+    const bizModalTitle = document.getElementById('bizModalTitle');
+    const bizModalSub = document.getElementById('bizModalSub');
+    const bizModalDeal = document.getElementById('bizModalDeal');
+    const pinArea = document.getElementById('pinArea');
+    const whatsappBtn = document.getElementById('whatsappBtn');
+    const cashierPinInput = document.getElementById('cashierPin');
+    const verifyPinBtn = document.getElementById('verifyPinBtn');
+
+    function openBizModal(actionType, name, sub, deal, phone = '') {
+      bizModalTitle.textContent = name;
+      bizModalSub.textContent = sub;
+      bizModalDeal.textContent = deal;
+      cashierPinInput.value = '';
+
+      if (actionType === 'claim') {
+        pinArea.style.display = 'block';
+        whatsappBtn.style.display = 'none';
+      } else {
+        pinArea.style.display = 'none';
+        whatsappBtn.style.display = 'block';
+        
+        const encodedText = encodeURIComponent(`Assalaamualaikum! I saw your offer "${deal}" on the Masjid Angullia Companion App and would like to find out more.`);
+        whatsappBtn.href = `https://wa.me/${phone}?text=${encodedText}`;
+      }
+
+      bizModal.showModal();
+    }
+
+    verifyPinBtn.addEventListener('click', () => {
+      if (cashierPinInput.value.length === 4) {
+        alert('Voucher successfully validated! Show this confirmation to the cashier.');
+        bizModal.close();
+      } else {
+        alert('Please enter a valid 4-digit cashier PIN.');
+      }
+    });
+
+    if (closeBizModalBtn) {
+      closeBizModalBtn.addEventListener('click', () => bizModal.close());
+    }
+
+    bizModal.addEventListener('click', (event) => {
+      const rect = bizModal.getBoundingClientRect();
+      if (
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom
+      ) {
+        bizModal.close();
+      }
+    });
+
+    // Run dynamic data functions on page load
     loadDynamicCard();
     loadDailyHadith();
   </script>
