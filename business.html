@@ -12,26 +12,33 @@
     <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600;">← Back to Directory</a>
 
     <div class="card" id="detailContainer" style="margin-top: 10px;">
-      <h2 id="bizName" style="color: var(--primary-color);">Loading business...</h2>
-      <p id="bizSub" style="color: var(--text-muted); font-size: 0.85rem;"></p>
+      <!-- 1. Header: Name & Subtitle -->
+      <h2 id="bizName" style="color: var(--primary-color); margin-bottom: 4px;">Loading business...</h2>
+      <p id="bizSub" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;"></p>
       
-      <div style="background-color: var(--accent-gold-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid rgba(221, 186, 88, 0.4); margin-top: 10px;">
+      <!-- 2. Image below Subtitle -->
+      <img id="bizBanner" src="" alt="Business Banner" style="width: 100%; border-radius: var(--radius-sm, 8px); display: none; margin-bottom: 15px; object-fit: cover; max-height: 220px;">
+
+      <!-- 3. Description -->
+      <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-bottom: 15px; white-space: pre-line;"></p>
+
+      <!-- 4. Community Deal (placed right above redemption) -->
+      <div id="dealBox" style="background-color: var(--accent-gold-bg, #fdf8ec); padding: 12px; border-radius: var(--radius-sm, 8px); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 15px;">
         <p style="font-size: 0.75rem; font-weight: 600; color: var(--primary-color);">COMMUNITY DEAL:</p>
-        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"></p>
+        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-top: 2px;"></p>
       </div>
 
-      <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-top: 10px; white-space: pre-line;"></p>
-
-      <div id="redemptionArea" style="margin-top: 15px;">
+      <!-- 5. Redemption / Contact Area -->
+      <div id="redemptionArea">
         <!-- In-store PIN redemption view -->
         <div id="pinArea" style="display: none;">
-          <p style="font-size: 0.78rem; color: var(--text-muted);">Show this screen to the cashier & enter the 4-digit PIN to redeem:</p>
-          <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input">
-          <button id="verifyPinBtn" class="action-btn">Confirm Redemption</button>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">Show this screen to the cashier & enter the 4-digit PIN to redeem:</p>
+          <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input" style="width: 100%; padding: 10px; font-size: 1.2rem; text-align: center; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc;">
+          <button id="verifyPinBtn" class="action-btn" style="width: 100%;">Confirm Redemption</button>
         </div>
 
         <!-- WhatsApp Redirect View -->
-        <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center; text-decoration: none;">
+        <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center; text-decoration: none; width: 100%;">
           Message Vendor on WhatsApp 💬
         </a>
       </div>
@@ -59,26 +66,33 @@
           return;
         }
 
+        // Set page text content
         document.title = `${biz.Name} - DailyBarakah SG`;
         document.getElementById('bizName').textContent = biz.Name;
         document.getElementById('bizSub').textContent = biz.SubTitle || '';
-        document.getElementById('bizDeal').textContent = biz.Deal || '';
+        document.getElementById('bizDeal').textContent = biz.Deal || 'No special deal specified.';
         document.getElementById('bizDescription').textContent = biz.Description || '';
 
+        // Handle Image URL
+        const bannerImg = document.getElementById('bizBanner');
+        const defaultImg = 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
+        bannerImg.src = biz.ImageURL || defaultImg;
+        bannerImg.style.display = 'block';
+
+        // Action Type & Redemption Setup
         const pinArea = document.getElementById('pinArea');
         const whatsappBtn = document.getElementById('whatsappBtn');
-
-        // Check ActionType string from Airtable (case-insensitive check)
         const actionType = (biz.ActionType || '').toLowerCase();
 
         if (actionType === 'claim') {
           pinArea.style.display = 'block';
         } else {
           whatsappBtn.style.display = 'block';
-          const encodedText = encodeURIComponent(`Assalaamualaikum! I saw your offer "${biz.Deal}" on the Masjid Angullia Companion App and would like to find out more.`);
+          const encodedText = encodeURIComponent(`Assalaamualaikum! I saw your offer "${biz.Deal || ''}" on the DailyBarakah SG App and would like to find out more.`);
           whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodedText}`;
         }
 
+        // PIN Verification
         document.getElementById('verifyPinBtn').addEventListener('click', () => {
           const pin = document.getElementById('cashierPin').value;
           if (pin.length === 4) {
