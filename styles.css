@@ -1,4 +1,3 @@
-  <style>
     :root {
       --bg-color: #f5f2e9;
       --card-bg: #ffffff;
@@ -362,4 +361,3 @@
     .pin-input:focus {
       border-color: var(--primary-color);
     }
-  </style>
