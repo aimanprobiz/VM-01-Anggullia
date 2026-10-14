@@ -205,7 +205,7 @@ async function loadBusinesses() {
       card.setAttribute('data-cat', biz.Category || 'all');
 
       card.innerHTML = `
-        <img src="${biz.ImageURL || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80'}" alt="${biz.Name}" class="card-banner">
+        <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
         <div class="grid-card-body">
           <div class="vendor-details">
             <h3 class="vendor-name">${biz.Name}</h3>
