@@ -204,6 +204,12 @@ async function loadBusinesses() {
       // Store category value for filtering
       card.setAttribute('data-cat', biz.Category || 'all');
 
+        // Make clicking anywhere on the card navigate to business.html
+      card.style.cursor = 'pointer';
+      card.onclick = function() {
+        window.location.href = `/business.html?slug=${biz.Slug}`;
+      };
+
       card.innerHTML = `
         <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
         <div class="grid-card-body">
