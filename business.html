@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Details - DailyBarakah SG</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <div class="mobile-container">
+    <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600;">← Back to Directory</a>
+
+    <div class="card" id="detailContainer" style="margin-top: 10px;">
+      <h2 id="bizName" style="color: var(--primary-color);">Loading business...</h2>
+      <p id="bizSub" style="color: var(--text-muted); font-size: 0.85rem;"></p>
+      
+      <div style="background-color: var(--accent-gold-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid rgba(221, 186, 88, 0.4); margin-top: 10px;">
+        <p style="font-size: 0.75rem; font-weight: 600; color: var(--primary-color);">COMMUNITY DEAL:</p>
+        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"></p>
+      </div>
+
+      <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-top: 10px; white-space: pre-line;"></p>
+
+      <div id="redemptionArea" style="margin-top: 15px;">
+        <!-- In-store PIN redemption view -->
+        <div id="pinArea" style="display: none;">
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Show this screen to the cashier & enter the 4-digit PIN to redeem:</p>
+          <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input">
+          <button id="verifyPinBtn" class="action-btn">Confirm Redemption</button>
+        </div>
+
+        <!-- WhatsApp Redirect View -->
+        <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center; text-decoration: none;">
+          Message Vendor on WhatsApp 💬
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadBusinessDetail() {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+
+      if (!slug) {
+        document.getElementById('bizName').textContent = "Business not found.";
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/businesses');
+        const businesses = await response.json();
+
+        const biz = businesses.find(b => b.Slug === slug);
+
+        if (!biz) {
+          document.getElementById('bizName').textContent = "Business listing not found.";
+          return;
+        }
+
+        document.title = `${biz.Name} - DailyBarakah SG`;
+        document.getElementById('bizName').textContent = biz.Name;
+        document.getElementById('bizSub').textContent = biz.SubTitle || '';
+        document.getElementById('bizDeal').textContent = biz.Deal || '';
+        document.getElementById('bizDescription').textContent = biz.Description || '';
+
+        const pinArea = document.getElementById('pinArea');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+
+        // Check ActionType string from Airtable (case-insensitive check)
+        const actionType = (biz.ActionType || '').toLowerCase();
+
+        if (actionType === 'claim') {
+          pinArea.style.display = 'block';
+        } else {
+          whatsappBtn.style.display = 'block';
+          const encodedText = encodeURIComponent(`Assalaamualaikum! I saw your offer "${biz.Deal}" on the Masjid Angullia Companion App and would like to find out more.`);
+          whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodedText}`;
+        }
+
+        document.getElementById('verifyPinBtn').addEventListener('click', () => {
+          const pin = document.getElementById('cashierPin').value;
+          if (pin.length === 4) {
+            alert('Voucher successfully validated! Show this confirmation to the cashier.');
+          } else {
+            alert('Please enter a valid 4-digit cashier PIN.');
+          }
+        });
+
+      } catch (error) {
+        console.error('Error loading business details:', error);
+      }
+    }
+
+    loadBusinessDetail();
+  </script>
+</body>
+</html>
