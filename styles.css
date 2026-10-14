@@ -1,0 +1,365 @@
+  <style>
+    :root {
+      --bg-color: #f5f2e9;
+      --card-bg: #ffffff;
+      --text-main: #0c2b22;
+      --text-muted: #485952;
+      --primary-color: #0f382c;
+      --primary-hover: #08241c;
+      --accent-gold: #ddba58;
+      --accent-gold-bg: rgba(221, 186, 88, 0.15);
+      --border-color: #e2dbc9;
+      --shadow-sm: 0 1px 3px rgba(12, 43, 34, 0.06);
+      --shadow-md: 0 6px 16px -2px rgba(12, 43, 34, 0.08);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @keyframes pulseEffect {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .pulsing-placeholder {
+      animation: pulseEffect 1.5s infinite ease-in-out;
+    }
+    
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      padding: 20px 0;
+      min-height: 100vh;
+    }
+
+    .mobile-container {
+      width: 100%;
+      max-width: 414px;
+      background-color: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      padding: 16px;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    /* 1. Hadith Card */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--accent-gold);
+      flex-shrink: 0;
+    }
+
+    .card-title-group {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .card-title-group h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      word-break: break-word;
+    }
+
+    .card-title-group p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .card-body {
+      font-size: 0.92rem;
+      color: var(--text-main);
+      line-height: 1.55;
+      font-style: italic;
+      padding-left: 12px;
+      border-left: 3px solid var(--accent-gold);
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .card-tag {
+      background-color: var(--accent-gold-bg);
+      color: var(--primary-color);
+      border: 1px solid rgba(221, 186, 88, 0.4);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    /* 2. Image Carousel */
+    .carousel-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      width: 100%;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .carousel-track {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .carousel-slide {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      position: relative;
+      aspect-ratio: 16 / 9;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .carousel-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px 16px 12px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .carousel-indicators {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #cbd5e1;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background-color: var(--accent-gold);
+      width: 22px;
+      border-radius: 4px;
+    }
+
+    /* 3. SUPPORT LOCAL MUSLIM BUSINESSES - 2-COLUMN GRID & STACKED PILLS */
+    .business-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Stacked Wrapped Categories */
+    .filter-stacked {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 6px;
+      margin-bottom: 16px;
+    }
+
+    .filter-btn {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn.active {
+      background-color: var(--accent-gold-bg);
+      border-color: var(--accent-gold);
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    /* 2-Column Visual Grid */
+    .business-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid-card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s ease;
+    }
+
+    .grid-card:active {
+      transform: scale(0.98);
+    }
+
+    .card-banner {
+      width: 100%;
+      height: 105px;
+      object-fit: cover;
+      background-color: var(--border-color);
+    }
+
+    .grid-card-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .vendor-details {
+      margin-bottom: 8px;
+    }
+
+    .vendor-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 2px;
+      line-height: 1.25;
+    }
+
+    .vendor-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .deal-badge {
+      display: inline-block;
+      background-color: var(--accent-gold-bg);
+      color: var(--primary-color);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(221, 186, 88, 0.4);
+      line-height: 1.2;
+    }
+
+    /* Action Button with Gold Trim & Signature Hover State */
+    .action-btn {
+      width: 100%;
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border: 1.5px solid var(--accent-gold);
+      padding: 8px 0;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      box-sizing: border-box;
+      margin-top: 6px;
+    }
+
+    .action-btn:hover,
+    .action-btn:active {
+      background-color: var(--accent-gold);
+      color: var(--primary-color);
+      border-color: var(--accent-gold);
+    }
+
+    /* Dialog Backdrop Styling */
+    dialog::backdrop {
+      background-color: rgba(12, 43, 34, 0.4);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .pin-input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1.2rem;
+      letter-spacing: 6px;
+      text-align: center;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin: 10px 0;
+      outline: none;
+    }
+
+    .pin-input:focus {
+      border-color: var(--primary-color);
+    }
+  </style>
