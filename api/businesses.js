@@ -1,15 +1,17 @@
 export default async function handler(req, res) {
-  const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+  // Matching your exact Vercel Environment Variable names: AIRTABLE_PAT & AIRTABLE_BASE_ID
+  const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
   const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
 
-  if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
+  if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
     return res.status(500).json({ error: 'Airtable credentials are not configured' });
   }
 
   try {
+    // Fetch directly from your "Businesses" table in Airtable
     const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Businesses`, {
       headers: {
-        Authorization: `Bearer ${AIRTABLE_API_KEY}`
+        Authorization: `Bearer ${AIRTABLE_PAT}`
       }
     });
 
