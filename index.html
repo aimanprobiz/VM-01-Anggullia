@@ -7,7 +7,7 @@
 
   <!-- Link to Web App Manifest -->
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#0B3B2C">
+  <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
   <!-- Google Fonts: Inter -->
@@ -19,18 +19,24 @@
     :root {
       --bg-color: #f5f2e9;
       --card-bg: #ffffff;
-      --text-main: #0B3B2C; /* WCAG 2.2 AAA Deep Forest Green */
-      --text-muted: #2c5243; /* High contrast muted tone */
-      --primary-color: #0B3B2C;
-      --primary-hover: #07261c;
-      --accent-gold: #c89b2b; /* Enhanced contrast gold */
-      --accent-gold-bg: rgba(200, 155, 43, 0.12);
-      --border-color: #d4ccb4;
-      --shadow-sm: 0 1px 3px rgba(11, 59, 44, 0.08);
-      --shadow-md: 0 6px 16px -2px rgba(11, 59, 44, 0.12);
+      --text-main: #0c2b22;
+      --text-muted: #485952;
+      --primary-color: #0f382c;
+      --primary-hover: #08241c;
+      --accent-gold: #ddba58;
+      --accent-gold-bg: rgba(221, 186, 88, 0.15);
+      --border-color: #e2dbc9;
+      --shadow-sm: 0 1px 3px rgba(12, 43, 34, 0.06);
+      --shadow-md: 0 6px 16px -2px rgba(12, 43, 34, 0.08);
       --radius-lg: 16px;
       --radius-md: 12px;
       --radius-sm: 8px;
+
+      /* High-contrast WCAG 2.2 AAA Deep Forest Green color variables */
+      --deep-forest-green: #0B3B2C;
+      --cream-bg: #FDFBF7;
+      --badge-gold-bg: #F4E8C1;
+      --badge-gold-border: #C8A232;
     }
 
     * {
@@ -39,12 +45,6 @@
       padding: 0;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-tap-highlight-color: transparent;
-    }
-
-    /* Focus-visible accessibility styles for keyboard navigation */
-    :focus-visible {
-      outline: 3px solid var(--accent-gold);
-      outline-offset: 3px;
     }
 
     @keyframes pulseEffect {
@@ -76,18 +76,6 @@
       padding: 16px;
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
     .section-title {
       font-size: 1.15rem;
       font-weight: 700;
@@ -100,17 +88,12 @@
     .card {
       background-color: var(--card-bg);
       border-radius: var(--radius-lg);
-      padding: 20px;
+      padding: 18px;
       box-shadow: var(--shadow-md);
       border: 1px solid var(--border-color);
       display: flex;
       flex-direction: column;
       gap: 14px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card:hover {
-      box-shadow: 0 8px 20px -2px rgba(11, 59, 44, 0.16);
     }
 
     .card-header {
@@ -120,11 +103,11 @@
     }
 
     .card-avatar {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid var(--accent-gold);
+      border: 1.5px solid var(--accent-gold);
       flex-shrink: 0;
     }
 
@@ -143,13 +126,12 @@
     .card-title-group p {
       font-size: 0.8rem;
       color: var(--text-muted);
-      font-weight: 500;
     }
 
     .card-body {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       color: var(--text-main);
-      line-height: 1.6;
+      line-height: 1.55;
       font-style: italic;
       padding-left: 12px;
       border-left: 3px solid var(--accent-gold);
@@ -159,43 +141,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 12px;
+      padding-top: 10px;
       border-top: 1px solid var(--border-color);
     }
 
-    /* Fitts's Law Target Size for Interactive Tags / Buttons */
     .card-tag {
       background-color: var(--accent-gold-bg);
       color: var(--primary-color);
-      border: 1px solid rgba(200, 155, 43, 0.5);
-      font-size: 0.78rem;
+      border: 1px solid rgba(221, 186, 88, 0.4);
+      font-size: 0.75rem;
       font-weight: 600;
-      padding: 8px 14px;
+      padding: 4px 10px;
       border-radius: 20px;
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.15s ease;
-    }
-
-    .card-tag:hover {
-      background-color: rgba(200, 155, 43, 0.25);
-    }
-
-    .card-tag:active {
-      transform: scale(0.97);
-    }
-
-    #update-status {
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
-      padding: 0 8px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      cursor: pointer;
     }
 
     /* 2. Image Carousel */
@@ -245,10 +202,10 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 24px 16px 14px;
-      background: linear-gradient(transparent, rgba(11, 59, 44, 0.9));
+      padding: 24px 16px 12px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
       color: #ffffff;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
     }
 
@@ -256,43 +213,32 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       margin-top: 12px;
     }
 
-    /* Fitts's Law Compliant Touch Target for Carousel Dots */
-    .dot-btn {
-      background: none;
-      border: none;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      padding: 0;
-    }
-
     .dot {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background-color: #b5c4bc;
+      background-color: #cbd5e1;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
     }
 
-    .dot-btn.active .dot, .dot.active {
+    .dot.active {
       background-color: var(--accent-gold);
-      width: 24px;
-      border-radius: 6px;
+      width: 22px;
+      border-radius: 4px;
     }
 
-    /* 3. SUPPORT LOCAL MUSLIM BUSINESSES - 2-COLUMN GRID & STACKED PILLS */
+    /* 3. SUPPORT LOCAL MUSLIM BUSINESSES - ACCESSIBLE & HIGH CONTRAST (WCAG 2.2 AAA & FITTS'S LAW) */
     .business-section {
       display: flex;
       flex-direction: column;
     }
 
+    /* Filter pills with Fitts's Law sizing & active/focus micro-interactions */
     .filter-stacked {
       display: flex;
       flex-wrap: wrap;
@@ -300,26 +246,33 @@
       margin-bottom: 16px;
     }
 
-    /* Fitts's Law Compliant Filter Buttons (Min-Height 48px) */
     .filter-btn {
-      background-color: var(--card-bg);
+      background-color: var(--cream-bg);
       border: 1.5px solid var(--border-color);
-      padding: 10px 16px;
+      padding: 12px 16px;
       min-height: 48px;
       border-radius: 24px;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--deep-forest-green);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      touch-action: manipulation;
     }
 
     .filter-btn:hover {
-      border-color: var(--accent-gold);
-      color: var(--primary-color);
+      background-color: var(--badge-gold-bg);
+      border-color: var(--badge-gold-border);
+      color: var(--deep-forest-green);
+      transform: translateY(-1px);
+    }
+
+    .filter-btn:focus-visible {
+      outline: 3px solid var(--deep-forest-green);
+      outline-offset: 2px;
     }
 
     .filter-btn:active {
@@ -327,13 +280,14 @@
     }
 
     .filter-btn.active {
-      background-color: var(--accent-gold-bg);
-      border-color: var(--accent-gold);
-      color: var(--primary-color);
+      background-color: var(--deep-forest-green);
+      border-color: var(--deep-forest-green);
+      color: #ffffff;
       font-weight: 700;
+      box-shadow: 0 2px 6px rgba(11, 59, 44, 0.2);
     }
 
-    /* 2-Column Visual Grid */
+    /* 2-Column Grid */
     .business-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -341,7 +295,7 @@
     }
 
     .grid-card {
-      background-color: var(--card-bg);
+      background-color: var(--cream-bg);
       border-radius: var(--radius-md);
       border: 1.5px solid var(--border-color);
       box-shadow: var(--shadow-sm);
@@ -349,17 +303,12 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .grid-card:hover {
-      border-color: var(--accent-gold);
       box-shadow: var(--shadow-md);
       transform: translateY(-2px);
-    }
-
-    .grid-card:active {
-      transform: scale(0.98);
     }
 
     .card-banner {
@@ -378,21 +327,22 @@
     }
 
     .vendor-details {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .vendor-name {
       font-size: 0.9rem;
       font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 2px;
-      line-height: 1.3;
+      color: var(--deep-forest-green);
+      margin-bottom: 4px;
+      line-height: 1.25;
     }
 
     .vendor-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
+      font-size: 0.78rem;
+      color: var(--deep-forest-green);
+      opacity: 0.88;
+      margin-bottom: 8px;
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
@@ -401,158 +351,128 @@
 
     .deal-badge {
       display: inline-block;
-      background-color: var(--accent-gold-bg);
-      color: var(--primary-color);
-      font-size: 0.7rem;
+      background-color: var(--badge-gold-bg);
+      color: var(--deep-forest-green);
+      font-size: 0.72rem;
       font-weight: 700;
       padding: 4px 8px;
       border-radius: 6px;
-      border: 1px solid rgba(200, 155, 43, 0.4);
-      line-height: 1.3;
+      border: 1px solid var(--badge-gold-border);
+      line-height: 1.25;
     }
 
-    /* Fitts's Law Compliant Action Button (Min-Height 48px) */
+    /* Action Button adhering to Fitts's Law 48px sizing & High-Contrast colors */
     .action-btn {
       width: 100%;
-      background-color: var(--primary-color);
-      color: #ffffff;
-      border: 1.5px solid var(--accent-gold);
-      padding: 12px 16px;
       min-height: 48px;
+      background-color: var(--deep-forest-green);
+      color: #ffffff;
+      border: 2px solid var(--deep-forest-green);
+      padding: 10px 16px;
       border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.88rem;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       box-sizing: border-box;
       margin-top: 8px;
+      touch-action: manipulation;
     }
 
     .action-btn:hover {
-      background-color: var(--accent-gold);
-      color: var(--primary-color);
-      border-color: var(--accent-gold);
+      background-color: var(--badge-gold-bg);
+      color: var(--deep-forest-green);
+      border-color: var(--deep-forest-green);
+      transform: translateY(-1px);
+    }
+
+    .action-btn:focus-visible {
+      outline: 3px solid var(--deep-forest-green);
+      outline-offset: 3px;
     }
 
     .action-btn:active {
       transform: scale(0.97);
     }
 
-    /* Dialog Accessibility & Micro-interactions */
-    dialog {
-      background: var(--card-bg);
-      color: var(--text-main);
-      border: 1.5px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      width: 90%;
-      max-width: 380px;
-      box-shadow: var(--shadow-md);
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      margin: 0;
-    }
-
+    /* Dialog Backdrop Styling */
     dialog::backdrop {
       background-color: rgba(11, 59, 44, 0.5);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-    }
-
-    .close-modal-btn {
-      background: none;
-      border: none;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-main);
-      border-radius: 50%;
-      transition: background-color 0.2s ease;
-    }
-
-    .close-modal-btn:hover {
-      background-color: var(--accent-gold-bg);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
 
     .pin-input {
       width: 100%;
       padding: 12px;
-      min-height: 48px;
       font-size: 1.25rem;
       letter-spacing: 6px;
       text-align: center;
-      border: 1.5px solid var(--border-color);
+      border: 2px solid var(--deep-forest-green);
+      color: var(--deep-forest-green);
+      font-weight: 700;
       border-radius: var(--radius-sm);
-      margin: 10px 0;
+      margin: 12px 0;
       outline: none;
-      background-color: #ffffff;
-      color: var(--text-main);
+      background-color: var(--cream-bg);
     }
 
-    .pin-input:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px var(--accent-gold-bg);
+    .pin-input:focus-visible {
+      outline: 3px solid var(--deep-forest-green);
+      outline-offset: 2px;
     }
   </style>
 </head>
 <body>
 
-  <h1 class="sr-only">DailyBarakah SG - Masjid Angullia Companion App</h1>
-
   <!-- Hadith Reference Modal -->
-  <dialog id="hadithModal" aria-labelledby="modalTitle" aria-describedby="modalHadithText">
-    <div style="display: flex; flex-direction: column; gap: 16px;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
+  <dialog id="hadithModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; width: 90%; max-width: 380px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
-          <h2 id="modalTitle" style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color);">Hadith Reference</h2>
-          <p id="modalHadithTag" style="font-size: 0.82rem; font-weight: 600; color: var(--accent-gold); margin-top: 2px;"></p>
+          <h3 style="font-size: 1rem; font-weight: 600; color: var(--primary-color);">Hadith Reference</h3>
+          <p id="modalHadithTag" style="font-size: 0.78rem; font-weight: 600; color: var(--accent-gold); margin-top: 2px;"></p>
         </div>
-        <button id="closeModalBtn" class="close-modal-btn" aria-label="Close Hadith Reference modal">&times;</button>
+        <button id="closeModalBtn" aria-label="Close Hadith modal" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 4px 8px;">&times;</button>
       </div>
-      <div id="modalHadithText" style="font-size: 0.95rem; font-style: italic; color: var(--text-main); line-height: 1.6; border-left: 3px solid var(--accent-gold); padding-left: 12px;">
+      <div id="modalHadithText" style="font-size: 0.9rem; font-style: italic; color: var(--text-main); line-height: 1.5; border-left: 3px solid var(--accent-gold); padding-left: 10px;">
         Loading reference details...
       </div>
-      <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; display: block; margin-top: 4px;">
+      <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; display: flex; margin-top: 4px;">
         View on Sunnah.com ↗
       </a>
     </div>
   </dialog>
 
   <!-- Business Deal Voucher / Contact Modal -->
-  <dialog id="businessModal" aria-labelledby="bizModalTitle" aria-describedby="bizModalDeal">
+  <dialog id="businessModal" aria-labelledby="bizModalTitle" aria-describedby="bizModalSub" style="background: var(--cream-bg); color: var(--deep-forest-green); border: 2px solid var(--deep-forest-green); border-radius: var(--radius-lg); padding: 24px; width: 90%; max-width: 380px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
     <div style="display: flex; flex-direction: column; gap: 14px;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
-          <h2 id="bizModalTitle" style="font-size: 1.1rem; font-weight: 700; color: var(--primary-color);">Business Deal</h2>
-          <p id="bizModalSub" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500; margin-top: 2px;"></p>
+          <h3 id="bizModalTitle" style="font-size: 1.1rem; font-weight: 700; color: var(--deep-forest-green);">Business Deal</h3>
+          <p id="bizModalSub" style="font-size: 0.82rem; color: var(--deep-forest-green); opacity: 0.85; margin-top: 2px; font-weight: 500;"></p>
         </div>
-        <button id="closeBizModalBtn" class="close-modal-btn" aria-label="Close business deal modal">&times;</button>
+        <button id="closeBizModalBtn" aria-label="Close modal" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--deep-forest-green); outline: none; padding: 6px 10px; font-weight: 700;">&times;</button>
       </div>
 
-      <div style="background-color: var(--accent-gold-bg); padding: 14px; border-radius: var(--radius-sm); border: 1px solid rgba(200, 155, 43, 0.4);">
-        <p style="font-size: 0.78rem; font-weight: 700; color: var(--primary-color); margin-bottom: 2px;">COMMUNITY DEAL:</p>
-        <p id="bizModalDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); line-height: 1.4;"></p>
+      <div style="background-color: var(--badge-gold-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--badge-gold-border);">
+        <p style="font-size: 0.75rem; font-weight: 700; color: var(--deep-forest-green); margin-bottom: 2px; letter-spacing: 0.03em;">COMMUNITY DEAL:</p>
+        <p id="bizModalDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--deep-forest-green);"></p>
       </div>
 
       <!-- In-store PIN redemption view -->
       <div id="pinArea">
-        <label for="cashierPin" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 500; display: block; margin-bottom: 4px;">Show this screen to the cashier & enter the 4-digit PIN to redeem:</label>
-        <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input" aria-label="Cashier 4-digit PIN input">
-        <button id="verifyPinBtn" class="action-btn">Confirm Redemption</button>
+        <label for="cashierPin" style="font-size: 0.82rem; color: var(--deep-forest-green); margin-top: 4px; display: block; font-weight: 500;">Show this screen to the cashier & enter the 4-digit PIN to redeem:</label>
+        <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input" aria-label="Enter 4-digit cashier PIN">
+        <button id="verifyPinBtn" class="action-btn" aria-label="Confirm voucher redemption">Confirm Redemption</button>
       </div>
 
       <!-- Service Redirect WhatsApp View -->
-      <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center;">
+      <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" aria-label="Message vendor on WhatsApp" style="display: none; text-align: center;">
         Message Vendor on WhatsApp 💬
       </a>
     </div>
@@ -574,14 +494,14 @@
     }
   </script>
 
-  <main class="mobile-container">
+  <div class="mobile-container">
 
     <!-- 1. HADITH OF THE DAY CARD -->
-    <section aria-labelledby="hadith-heading">
-      <h2 id="hadith-heading" class="section-title">Hadith of the Day</h2>
+    <section>
+      <h2 class="section-title">Hadith of the Day</h2>
       <div class="card">
         <div class="card-header">
-          <img id="hadith-avatar" class="card-avatar pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Prophetic wisdom avatar illustration">
+          <img id="hadith-avatar" class="card-avatar pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
           <div class="card-title-group">
             <h3 id="hadith-narrator">Loading wisdom...</h3>
             <p>Daily Prophetic Wisdom</p>
@@ -591,154 +511,154 @@
           Loading today's Hadith...
         </div>
         <div class="card-footer">
-          <button type="button" class="card-tag" id="hadith-tag" aria-label="View Hadith citation details">...</button>
-          <button type="button" id="update-status" style="background: none; border: none;" aria-label="Tap for random Hadith">Updated Today</button>
+          <span class="card-tag" id="hadith-tag" style="cursor: pointer;" title="Click to view details">...</span>
+          <span id="update-status" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;" title="Tap for random Hadith">Updated Today</span>
         </div>
       </div>
     </section>
 
     <!-- 2. MASJID ANGULLIA ACTIVITIES CAROUSEL -->
-    <section class="carousel-section" aria-labelledby="activities-heading">
-      <h2 id="activities-heading" class="section-title">Masjid Angullia Activities</h2>
+    <section class="carousel-section">
+      <h2 class="section-title">Masjid Angullia Activities</h2>
       <div class="carousel-wrapper">
-        <div class="carousel-track" id="carouselTrack" tabindex="0" aria-label="Activities carousel track">
+        <div class="carousel-track" id="carouselTrack">
           
           <!-- Slide 1 -->
           <div class="carousel-slide">
-            <a id="link1" href="#" target="_blank" aria-label="Activity 1 link">
-              <img id="caro1" class="pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class activity banner">
+            <a id="link1" href="#" target="_blank">
+              <img id="caro1" class="pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
             </a>
             <div id="title1" class="carousel-caption">1. Gathering masjid info...</div>
           </div>
 
           <!-- Slide 2 -->
           <div class="carousel-slide">
-            <a id="link2" href="#" target="_blank" aria-label="Activity 2 link">
-              <img id="caro2" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Youth Gathering activity banner">
+            <a id="link2" href="#" target="_blank">
+              <img id="caro2" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Youth Gathering">
             </a>
             <div id="title2" class="carousel-caption">2. Gathering masjid info...</div>
           </div>
 
           <!-- Slide 3 -->
           <div class="carousel-slide">
-            <a id="link3" href="#" target="_blank" aria-label="Activity 3 link">
-              <img id="caro3" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Yasin and Tahlil activity banner">
+            <a id="link3" href="#" target="_blank">
+              <img id="caro3" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Yasin & Tahlil">
             </a>
             <div id="title3" class="carousel-caption">3. Gathering masjid info...</div>
           </div>
 
           <!-- Slide 4 -->
           <div class="carousel-slide">
-            <a id="link4" href="#" target="_blank" aria-label="Activity 4 link">
-              <img id="caro4" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Friday Infaq activity banner">
+            <a id="link4" href="#" target="_blank">
+              <img id="caro4" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Friday Infaq">
             </a>
             <div id="title4" class="carousel-caption">4. Gathering masjid info...</div>
           </div>
 
           <!-- Slide 5 -->
           <div class="carousel-slide">
-            <a id="link5" href="#" target="_blank" aria-label="Activity 5 link">
-              <img id="caro5" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Nikah Event activity banner">
+            <a id="link5" href="#" target="_blank">
+              <img id="caro5" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Nikah Event">
             </a>
             <div id="title5" class="carousel-caption">5. Gathering masjid info...</div>
           </div>
 
         </div>
       </div>
-      <div class="carousel-indicators" id="carouselIndicators" role="tablist" aria-label="Carousel slide selectors">
-        <button type="button" class="dot-btn active" role="tab" aria-selected="true" aria-label="Slide 1"><span class="dot active"></span></button>
-        <button type="button" class="dot-btn" role="tab" aria-selected="false" aria-label="Slide 2"><span class="dot"></span></button>
-        <button type="button" class="dot-btn" role="tab" aria-selected="false" aria-label="Slide 3"><span class="dot"></span></button>
-        <button type="button" class="dot-btn" role="tab" aria-selected="false" aria-label="Slide 4"><span class="dot"></span></button>
-        <button type="button" class="dot-btn" role="tab" aria-selected="false" aria-label="Slide 5"><span class="dot"></span></button>
+      <div class="carousel-indicators" id="carouselIndicators">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
       </div>
     </section>
 
     <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
-    <section class="business-section" aria-labelledby="business-heading">
-      <h2 id="business-heading" class="section-title">Support Local Muslim Businesses</h2>
+    <section class="business-section" aria-labelledby="business-section-title">
+      <h2 id="business-section-title" class="section-title">Support Local Muslim Businesses</h2>
 
-      <!-- Stacked Wrapped Categories -->
-      <div class="filter-stacked" id="filterContainer" role="region" aria-label="Business category filters">
-        <button type="button" class="filter-btn active" data-cat="all">All Deals</button>
-        <button type="button" class="filter-btn" data-cat="tutors">Quran Tutors</button>
-        <button type="button" class="filter-btn" data-cat="photo">Photography</button>
-        <button type="button" class="filter-btn" data-cat="fb">F&B / Bakers</button>
-        <button type="button" class="filter-btn" data-cat="books">Books & Gifts</button>
-        <button type="button" class="filter-btn" data-cat="sunnah">Health & Sunnah</button>
-        <button type="button" class="filter-btn" data-cat="fashion">Modest Fashion</button>
+      <!-- Stacked Wrapped Categories with Accessible Touch Targets -->
+      <div class="filter-stacked" id="filterContainer" role="tablist" aria-label="Business Category Filter">
+        <button class="filter-btn active" data-cat="all" role="tab" aria-selected="true" aria-pressed="true">All Deals</button>
+        <button class="filter-btn" data-cat="tutors" role="tab" aria-selected="false" aria-pressed="false">Quran Tutors</button>
+        <button class="filter-btn" data-cat="photo" role="tab" aria-selected="false" aria-pressed="false">Photography</button>
+        <button class="filter-btn" data-cat="fb" role="tab" aria-selected="false" aria-pressed="false">F&B / Bakers</button>
+        <button class="filter-btn" data-cat="books" role="tab" aria-selected="false" aria-pressed="false">Books & Gifts</button>
+        <button class="filter-btn" data-cat="sunnah" role="tab" aria-selected="false" aria-pressed="false">Health & Sunnah</button>
+        <button class="filter-btn" data-cat="fashion" role="tab" aria-selected="false" aria-pressed="false">Modest Fashion</button>
       </div>
 
       <!-- 2-Column Grid -->
       <div class="business-grid" id="businessGrid">
 
         <!-- 1. Quran Tutor -->
-        <div class="grid-card" data-cat="tutors">
-          <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=300&q=80" alt="Al-Tarteel Academy learning session" class="card-banner">
+        <article class="grid-card" data-cat="tutors">
+          <img src="https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=300&q=80" alt="Al-Tarteel Academy Tajweed class banner" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">Al-Tarteel Academy</h3>
               <p class="vendor-sub">1-on-1 Tajweed</p>
               <span class="deal-badge">Free Trial + 50% Off Reg</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('book', 'Al-Tarteel Academy', '1-on-1 Tajweed & Recitation', 'Free Trial Lesson + 50% Off Registration', '6512345678')">Book</button>
+            <button class="action-btn" aria-label="Book a lesson at Al-Tarteel Academy" onclick="openBizModal('book', 'Al-Tarteel Academy', '1-on-1 Tajweed & Recitation', 'Free Trial Lesson + 50% Off Registration', '6512345678')">Book</button>
           </div>
-        </div>
+        </article>
 
         <!-- 2. Photography -->
-        <div class="grid-card" data-cat="photo">
-          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=300&q=80" alt="CandidNikah Photo event setup" class="card-banner">
+        <article class="grid-card" data-cat="photo">
+          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=300&q=80" alt="CandidNikah Photography wedding showcase" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">CandidNikah Photo</h3>
               <p class="vendor-sub">Nikah & Events</p>
               <span class="deal-badge">Free Canvas Frame ($80)</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('enquire', 'CandidNikah Photography', 'Nikah & Solemnisation Services', 'Free Canvas Frame ($80 Value) with Nikah Package', '6512345678')">Enquire</button>
+            <button class="action-btn" aria-label="Enquire about CandidNikah Photography" onclick="openBizModal('enquire', 'CandidNikah Photography', 'Nikah & Solemnisation Services', 'Free Canvas Frame ($80 Value) with Nikah Package', '6512345678')">Enquire</button>
           </div>
-        </div>
+        </article>
 
         <!-- 3. F&B / Baker -->
-        <div class="grid-card" data-cat="fb">
-          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=300&q=80" alt="Sucre & Spice baked goods" class="card-banner">
+        <article class="grid-card" data-cat="fb">
+          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=300&q=80" alt="Sucre & Spice freshly baked pastries" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">Sucre & Spice</h3>
               <p class="vendor-sub">Home Baker • Serangoon</p>
               <span class="deal-badge">Free Box of Kuih Raya</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('claim', 'Sucre & Spice Artisanal', 'Home Baker • Serangoon', 'Free Box of Kuih Raya with $30 spend')">Claim</button>
+            <button class="action-btn" aria-label="Claim deal for Sucre & Spice" onclick="openBizModal('claim', 'Sucre & Spice Artisanal', 'Home Baker • Serangoon', 'Free Box of Kuih Raya with $30 spend')">Claim</button>
           </div>
-        </div>
+        </article>
 
         <!-- 4. Books & Gifts -->
-        <div class="grid-card" data-cat="books">
-          <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80" alt="Wardah Books storefront display" class="card-banner">
+        <article class="grid-card" data-cat="books">
+          <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80" alt="Wardah Books store collection" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">Wardah Books</h3>
               <p class="vendor-sub">Bussorah Street</p>
               <span class="deal-badge">$3 Off Seerah Titles</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('claim', 'Wardah Books', 'Bussorah Street • Kampong Gelam', '$3 Off Seerah Book Titles')">Claim</button>
+            <button class="action-btn" aria-label="Claim voucher for Wardah Books" onclick="openBizModal('claim', 'Wardah Books', 'Bussorah Street • Kampong Gelam', '$3 Off Seerah Book Titles')">Claim</button>
           </div>
-        </div>
+        </article>
 
         <!-- 5. Books & Gifts (Kids) -->
-        <div class="grid-card" data-cat="books">
-          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=300&q=80" alt="Little Sunnah Kids educational flashcards" class="card-banner">
+        <article class="grid-card" data-cat="books">
+          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=300&q=80" alt="Little Sunnah Kids educational materials" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">Little Sunnah Kids</h3>
               <p class="vendor-sub">Islamic Activity Cards</p>
               <span class="deal-badge">15% Off Starter Bundle</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('claim', 'Little Sunnah Kids', 'Islamic Educational Flashcards', '15% Off Starter Learning Bundle')">Claim</button>
+            <button class="action-btn" aria-label="Claim offer for Little Sunnah Kids" onclick="openBizModal('claim', 'Little Sunnah Kids', 'Islamic Educational Flashcards', '15% Off Starter Learning Bundle')">Claim</button>
           </div>
-        </div>
+        </article>
 
         <!-- 6. Health & Sunnah -->
-        <div class="grid-card" data-cat="sunnah">
+        <article class="grid-card" data-cat="sunnah">
           <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=300&q=80" alt="Al-Hijama Wellness therapy session" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
@@ -746,121 +666,120 @@
               <p class="vendor-sub">Sunnah Cupping</p>
               <span class="deal-badge">$10 Off First Session</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('enquire', 'Al-Hijama Wellness', 'Certified Sunnah Cupping Therapy', '$10 Off First Session Package', '6592223333')">Enquire</button>
+            <button class="action-btn" aria-label="Enquire with Al-Hijama Wellness" onclick="openBizModal('enquire', 'Al-Hijama Wellness', 'Certified Sunnah Cupping Therapy', '$10 Off First Session Package', '6592223333')">Enquire</button>
           </div>
-        </div>
+        </article>
 
         <!-- 7. Modest Fashion -->
-        <div class="grid-card" data-cat="fashion">
-          <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=300&q=80" alt="Nur Hijab Studio products" class="card-banner">
+        <article class="grid-card" data-cat="fashion">
+          <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=300&q=80" alt="Nur Hijab Studio Telekung selection" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">Nur Hijab Studio</h3>
               <p class="vendor-sub">Telekung & Hijabs</p>
               <span class="deal-badge">Free Pouch w/ Telekung</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('claim', 'Nur Hijab Studio', 'Silk Telekung & Hijabs', 'Free Premium Pouch with Telekung purchase')">Claim</button>
+            <button class="action-btn" aria-label="Claim gift at Nur Hijab Studio" onclick="openBizModal('claim', 'Nur Hijab Studio', 'Silk Telekung & Hijabs', 'Free Premium Pouch with Telekung purchase')">Claim</button>
           </div>
-        </div>
+        </article>
 
         <!-- 8. Quran Tutors -->
-        <div class="grid-card" data-cat="tutors">
-          <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=300&q=80" alt="Ustaz Farhan Tuition learning session" class="card-banner">
+        <article class="grid-card" data-cat="tutors">
+          <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=300&q=80" alt="Ustaz Farhan home Quran learning" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">Ustaz Farhan Tuition</h3>
               <p class="vendor-sub">Home Quran Classes</p>
               <span class="deal-badge">First Lesson Waiver</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('book', 'Ustaz Farhan Quran Tuition', 'Private Adult & Kids Quran Classes', 'First Lesson Registration Fee Waiver', '6594445555')">Book</button>
+            <button class="action-btn" aria-label="Book Ustaz Farhan Tuition" onclick="openBizModal('book', 'Ustaz Farhan Quran Tuition', 'Private Adult & Kids Quran Classes', 'First Lesson Registration Fee Waiver', '6594445555')">Book</button>
           </div>
-        </div>
+        </article>
 
         <!-- 9. Health & Sunnah (Oud) -->
-        <div class="grid-card" data-cat="sunnah">
-          <img src="https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=300&q=80" alt="Little Arabia Oud fragrance collection" class="card-banner">
+        <article class="grid-card" data-cat="sunnah">
+          <img src="https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=300&q=80" alt="Little Arabia Oud fragrance oils" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">Little Arabia Oud</h3>
               <p class="vendor-sub">Yemeni Honey & Attar</p>
               <span class="deal-badge">Free 3ml Oud Roll-on</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('claim', 'Little Arabia Oud', 'Pure Yemeni Honey & Attar', 'Free 3ml Oud Roll-on with $25 spend')">Claim</button>
+            <button class="action-btn" aria-label="Claim free Oud roll-on at Little Arabia Oud" onclick="openBizModal('claim', 'Little Arabia Oud', 'Pure Yemeni Honey & Attar', 'Free 3ml Oud Roll-on with $25 spend')">Claim</button>
           </div>
-        </div>
+        </article>
 
         <!-- 10. F&B / Food -->
-        <div class="grid-card" data-cat="fb">
-          <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=300&q=80" alt="KG Biryani Co. signature dish" class="card-banner">
+        <article class="grid-card" data-cat="fb">
+          <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=300&q=80" alt="KG Biryani Co. authentic Biryani dish" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">KG Biryani Co.</h3>
               <p class="vendor-sub">Arab St • Lunch Set</p>
               <span class="deal-badge">Free Drink w/ Set</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('claim', 'Kampong Gelam Biryani Co.', 'Arab Street • Authentic Set', 'Free Drink with Jumuah Biryani Set')">Claim</button>
+            <button class="action-btn" aria-label="Claim free drink with KG Biryani Co." onclick="openBizModal('claim', 'Kampong Gelam Biryani Co.', 'Arab Street • Authentic Set', 'Free Drink with Jumuah Biryani Set')">Claim</button>
           </div>
-        </div>
+        </article>
 
         <!-- 11. Home Services -->
-        <div class="grid-card" data-cat="fashion">
-          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=300&q=80" alt="Barakah Clean home cleaning service" class="card-banner">
+        <article class="grid-card" data-cat="fashion">
+          <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=300&q=80" alt="Barakah Clean home sanitising services" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">Barakah Clean</h3>
               <p class="vendor-sub">Deep Home Cleaning</p>
               <span class="deal-badge">20% Off Sofa Clean</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('enquire', 'Barakah Clean Services', 'Pre-Festive Deep Cleaning', '20% Off Sofa Sanitising Session', '6596667777')">Enquire</button>
+            <button class="action-btn" aria-label="Enquire about Barakah Clean home services" onclick="openBizModal('enquire', 'Barakah Clean Services', 'Pre-Festive Deep Cleaning', '20% Off Sofa Sanitising Session', '6596667777')">Enquire</button>
           </div>
-        </div>
+        </article>
 
         <!-- 12. Custom Tailor -->
-        <div class="grid-card" data-cat="fashion">
-          <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=300&q=80" alt="Custom Baju Melayu tailoring session" class="card-banner">
+        <article class="grid-card" data-cat="fashion">
+          <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=300&q=80" alt="Custom Baju Melayu tailoring materials" class="card-banner">
           <div class="grid-card-body">
             <div class="vendor-details">
               <h3 class="vendor-name">Custom Baju Melayu</h3>
               <p class="vendor-sub">Bespoke Kurta & Suits</p>
               <span class="deal-badge">Free Express Alteration</span>
             </div>
-            <button type="button" class="action-btn" onclick="openBizModal('enquire', 'Custom Baju Melayu Tailors', 'Bespoke Kurta & Suits', 'Free Express Fitting & Alteration', '6598889999')">Enquire</button>
+            <button class="action-btn" aria-label="Enquire about Custom Baju Melayu tailoring" onclick="openBizModal('enquire', 'Custom Baju Melayu Tailors', 'Bespoke Kurta & Suits', 'Free Express Fitting & Alteration', '6598889999')">Enquire</button>
           </div>
-        </div>
+        </article>
 
       </div>
     </section>
 
     <!-- FOOTER -->
-    <footer style="text-align: center; padding: 24px 16px; font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid var(--border-color); margin-top: 35px; width: 100%;">
-      <p style="margin: 0; font-weight: 700; color: var(--primary-color);">DailyBarakah SG</p>
-      <p style="margin: 6px 0 0 0; line-height: 1.5;">
+    <footer style="text-align: center; padding: 24px 16px; font-size: 0.75rem; color: #666; border-top: 1px solid rgba(0,0,0,0.08); margin-top: 35px; width: 100%;">
+      <p style="margin: 0; font-weight: 600; color: #0f382c;">DailyBarakah SG</p>
+      <p style="margin: 4px 0 0 0; line-height: 1.4;">
         An independent community initiative powered by 
         <a 
           href="https://wa.me/6588469883?text=Assalaamualaikum%20CredoVend%2C%20I%20scanned%20the%20QR%20code%20at%20Masjid%20Angullia%20and%20would%20like%20to%20enquire%20about%20the%20following:" 
           target="_blank" 
           rel="noopener noreferrer" 
-          style="color: var(--primary-color); font-weight: 700; text-decoration: underline;"
+          style="color: #0f382c; font-weight: 700; text-decoration: underline;"
         >
           CredoVend
         </a>.
       </p>
-      <p style="margin: 6px 0 0 0; line-height: 1.5; font-weight: 500;">
+      <p style="margin: 4px 0 0 0; line-height: 1.4; opacity: 0.85;">
         Partnering with local masjids to spotlight activities and support Muslim-owned businesses.
       </p>
     </footer>
     
-  </main>
+  </div>
 
   <!-- ALL JAVASCRIPT LOGIC KEPT CLEAN & ORGANIZED AT THE BOTTOM -->
   <script>
     // 1. Carousel Touch, Scroll & Auto-Play Logic
     const track = document.getElementById('carouselTrack');
-    const dotButtons = document.querySelectorAll('.dot-btn');
     const dots = document.querySelectorAll('.dot');
     
     let currentIndex = 0;
-    const totalSlides = dotButtons.length;
+    const totalSlides = dots.length;
     const autoScrollDelay = 4500;
     let autoScrollInterval;
 
@@ -896,19 +815,13 @@
         currentIndex = activeIndex;
       }
 
-      dotButtons.forEach((btn, index) => {
-        const isActive = index === activeIndex;
-        btn.classList.toggle('active', isActive);
-        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      });
-
       dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === activeIndex);
       });
     });
 
-    dotButtons.forEach((btn, index) => {
-      btn.addEventListener('click', () => {
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
         currentIndex = index;
         scrollToSlide(index);
         startAutoScroll();
@@ -1051,8 +964,15 @@
 
     filterButtons.forEach(button => {
       button.addEventListener('click', () => {
-        filterButtons.forEach(btn => btn.classList.remove('active'));
+        filterButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-selected', 'false');
+          btn.setAttribute('aria-pressed', 'false');
+        });
+
         button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+        button.setAttribute('aria-pressed', 'true');
 
         const selectedCat = button.getAttribute('data-cat');
 
@@ -1089,7 +1009,7 @@
         whatsappBtn.style.display = 'none';
       } else {
         pinArea.style.display = 'none';
-        whatsappBtn.style.display = 'block';
+        whatsappBtn.style.display = 'flex';
         
         const encodedText = encodeURIComponent(`Assalaamualaikum! I saw your offer "${deal}" on the Masjid Angullia Companion App and would like to find out more.`);
         whatsappBtn.href = `https://wa.me/${phone}?text=${encodedText}`;
