@@ -182,27 +182,75 @@
       document.getElementById('hadith-tag').textContent = hadith.tag;
     }
 
-    // 4. CATEGORY FILTER LOGIC FOR LOCAL BUSINESSES
-    const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
-    const businessCards = document.querySelectorAll('#businessGrid .grid-card');
+    // 4. Dynamic Business Directory Loader & Category Filter
+async function loadBusinesses() {
+  try {
+    const response = await fetch('/api/businesses?t=' + Date.now());
+    if (!response.ok) return;
 
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
+    const businesses = await response.json();
+    if (!Array.isArray(businesses)) return;
 
-        const selectedCat = button.getAttribute('data-cat');
+    const gridContainer = document.getElementById('businessGrid');
+    if (!gridContainer) return;
 
-        businessCards.forEach(card => {
-          const cardCat = card.getAttribute('data-cat');
-          if (selectedCat === 'all' || cardCat === selectedCat) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
-        });
+    // Clear hardcoded static cards
+    gridContainer.innerHTML = '';
+
+    businesses.forEach(biz => {
+      const card = document.createElement('div');
+      card.className = 'grid-card';
+      
+      // Store category value for filtering
+      card.setAttribute('data-cat', biz.Category || 'all');
+
+      card.innerHTML = `
+        <img src="${biz.ImageURL || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80'}" alt="${biz.Name}" class="card-banner">
+        <div class="grid-card-body">
+          <div class="vendor-details">
+            <h3 class="vendor-name">${biz.Name}</h3>
+            <p class="vendor-sub">${biz.SubTitle || ''}</p>
+            <span class="deal-badge">${biz.Deal || ''}</span>
+          </div>
+          <a href="/business.html?slug=${biz.Slug}" class="action-btn" style="text-align: center; text-decoration: none;">
+            View Details
+          </a>
+        </div>
+      `;
+
+      gridContainer.appendChild(card);
+    });
+
+    setupCategoryFilters();
+  } catch (error) {
+    console.error('Error loading businesses from Airtable:', error);
+  }
+}
+
+function setupCategoryFilters() {
+  const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
+  const businessCards = document.querySelectorAll('#businessGrid .grid-card');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      const selectedCat = button.getAttribute('data-cat');
+
+      businessCards.forEach(card => {
+        const cardCat = card.getAttribute('data-cat');
+        
+        // Exact match or 'all' filter match
+        if (selectedCat === 'all' || cardCat === selectedCat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
       });
     });
+  });
+}
 
     // 5. BUSINESS MODAL ACTION LOGIC
     const bizModal = document.getElementById('businessModal');
@@ -263,3 +311,5 @@
     // Run dynamic data functions on page load
     loadDynamicCard();
     loadDailyHadith();
+loadBusinesses();
+
