@@ -184,6 +184,17 @@
 
     // 4. Dynamic Business Directory Loader & Category Filter
 async function loadBusinesses() {
+
+    const gridContainer = document.getElementById('businessGrid');
+  if (!gridContainer) return;
+
+  // 1. Show a loading state before fetch completes
+  gridContainer.innerHTML = `
+    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+      <p style="font-size: 0.95rem; font-weight: 500;">Loading community listings...</p>
+    </div>
+  `;
+    
   try {
     const response = await fetch('/api/businesses?t=' + Date.now());
     if (!response.ok) return;
