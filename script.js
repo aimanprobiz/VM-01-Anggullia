@@ -184,8 +184,7 @@
 
     // 4. Dynamic Business Directory Loader & Category Filter
 async function loadBusinesses() {
-
-    const gridContainer = document.getElementById('businessGrid');
+  const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
 
   // 1. Show a loading state before fetch completes
@@ -194,28 +193,33 @@ async function loadBusinesses() {
       <p style="font-size: 0.95rem; font-weight: 500;">Loading community listings...</p>
     </div>
   `;
-    
+
   try {
     const response = await fetch('/api/businesses?t=' + Date.now());
-    if (!response.ok) return;
+    if (!response.ok) throw new Error('Network response was not ok');
 
     const businesses = await response.json();
-    if (!Array.isArray(businesses)) return;
 
-    const gridContainer = document.getElementById('businessGrid');
-    if (!gridContainer) return;
+    // 2. Handle empty dataset from Airtable
+    if (!Array.isArray(businesses) || businesses.length === 0) {
+      gridContainer.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+          <p style="font-size: 1rem; font-weight: 600; color: var(--text-main);">No listings available yet</p>
+          <p style="font-size: 0.85rem; margin-top: 5px;">Check back soon for new community deals!</p>
+        </div>
+      `;
+      return;
+    }
 
-    // Clear hardcoded static cards
+    // Clear loading state
     gridContainer.innerHTML = '';
 
+    // 3. Render business cards
     businesses.forEach(biz => {
       const card = document.createElement('div');
       card.className = 'grid-card';
-      
-      // Store category value for filtering
       card.setAttribute('data-cat', biz.Category || 'all');
 
-        // Make clicking anywhere on the card navigate to business.html
       card.style.cursor = 'pointer';
       card.onclick = function() {
         window.location.href = `/business.html?slug=${biz.Slug}`;
@@ -229,7 +233,7 @@ async function loadBusinesses() {
             <p class="vendor-sub">${biz.SubTitle || ''}</p>
             <span class="deal-badge">${biz.Deal || ''}</span>
           </div>
-<a href="/business.html?slug=${biz.Slug}" class="action-btn" style="text-align: center; text-decoration: none;">
+          <a href="/business.html?slug=${biz.Slug}" class="action-btn" style="text-align: center; text-decoration: none;">
             ${biz.ActionType || 'View Details'}
           </a>
         </div>
@@ -241,12 +245,18 @@ async function loadBusinesses() {
     setupCategoryFilters();
   } catch (error) {
     console.error('Error loading businesses from Airtable:', error);
+    gridContainer.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+        <p style="font-size: 0.9rem; color: #d9534f;">Unable to load business listings. Please refresh the page.</p>
+      </div>
+    `;
   }
 }
 
 function setupCategoryFilters() {
   const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
   const businessCards = document.querySelectorAll('#businessGrid .grid-card');
+  const gridContainer = document.getElementById('businessGrid');
 
   filterButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -254,21 +264,40 @@ function setupCategoryFilters() {
       button.classList.add('active');
 
       const selectedCat = button.getAttribute('data-cat');
+      let visibleCount = 0;
 
       businessCards.forEach(card => {
         const cardCat = card.getAttribute('data-cat');
         
-        // Exact match or 'all' filter match
         if (selectedCat === 'all' || cardCat === selectedCat) {
           card.style.display = 'flex';
+          visibleCount++;
         } else {
           card.style.display = 'none';
         }
       });
+
+      // Show an empty state message if a specific filter pill has 0 results
+      let emptyMsg = document.getElementById('emptyCategoryMsg');
+      if (visibleCount === 0) {
+        if (!emptyMsg) {
+          emptyMsg = document.createElement('div');
+          emptyMsg.id = 'emptyCategoryMsg';
+          emptyMsg.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 30px 15px; color: var(--text-muted);';
+          emptyMsg.innerHTML = '<p style="font-size: 0.9rem;">No listings found in this category.</p>';
+          gridContainer.appendChild(emptyMsg);
+        } else {
+          emptyMsg.style.display = 'block';
+        }
+      } else if (emptyMsg) {
+        emptyMsg.style.display = 'none';
+      }
     });
   });
 }
 
+// Initialize on page load
+loadBusinesses();
     // 5. BUSINESS MODAL ACTION LOGIC
     const bizModal = document.getElementById('businessModal');
     const closeBizModalBtn = document.getElementById('closeBizModalBtn');
