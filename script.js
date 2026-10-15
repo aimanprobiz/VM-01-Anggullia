@@ -23,7 +23,7 @@ async function loadDynamicCard() {
       }
     }
 
-    // B. Build Carousel Slides & Dots dynamically, skipping the first item ()
+    // B. Build Carousel Slides & Dots dynamically, skipping the first item
     const carouselCards = cards.slice(1);
 
     if (carouselTrack && carouselIndicators && carouselCards.length > 0) {
@@ -74,6 +74,7 @@ async function loadDynamicCard() {
     console.error('Error loading Airtable card data:', error);
   }
 }
+
 // 2. Carousel Mechanics
 function scrollToSlide(index) {
   const track = document.getElementById('carouselTrack');
@@ -131,104 +132,101 @@ function initCarouselControls(totalSlides) {
   startAutoScroll(totalSlides);
 }
 
-    // 3. Load Local JSON Hadith of the Day
-    let globalHadithList = [];
-    let currentActiveHadith = null;
+// 3. Load Local JSON Hadith of the Day
+let globalHadithList = [];
+let currentActiveHadith = null;
 
-    async function loadDailyHadith() {
-      try {
-        const response = await fetch('/hadiths.json?t=' + Date.now());
-        if (!response.ok) throw new Error('Failed to load hadiths.json');
+async function loadDailyHadith() {
+  try {
+    const response = await fetch('/hadiths.json?t=' + Date.now());
+    if (!response.ok) throw new Error('Failed to load hadiths.json');
 
-        globalHadithList = await response.json();
-        if (!Array.isArray(globalHadithList) || globalHadithList.length === 0) return;
+    globalHadithList = await response.json();
+    if (!Array.isArray(globalHadithList) || globalHadithList.length === 0) return;
 
-        const today = new Date();
-        const dayIndex = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
-        const selectedHadith = globalHadithList[dayIndex % globalHadithList.length];
+    const today = new Date();
+    const dayIndex = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
+    const selectedHadith = globalHadithList[dayIndex % globalHadithList.length];
 
-        displayHadith(selectedHadith);
+    displayHadith(selectedHadith);
 
-        const updateStatusEl = document.getElementById('update-status');
-        if (updateStatusEl) {
-          updateStatusEl.addEventListener('click', () => {
-            if (globalHadithList.length <= 1) return;
+    const updateStatusEl = document.getElementById('update-status');
+    if (updateStatusEl) {
+      updateStatusEl.addEventListener('click', () => {
+        if (globalHadithList.length <= 1) return;
 
-            let randomIndex;
-            do {
-              randomIndex = Math.floor(Math.random() * globalHadithList.length);
-            } while (globalHadithList[randomIndex] === selectedHadith);
+        let randomIndex;
+        do {
+          randomIndex = Math.floor(Math.random() * globalHadithList.length);
+        } while (globalHadithList[randomIndex] === selectedHadith);
 
-            const randomHadith = globalHadithList[randomIndex];
-            displayHadith(randomHadith);
-            updateStatusEl.textContent = "New Hadith";
-            updateStatusEl.style.color = "var(--text-muted)";
-          });
-        }
+        const randomHadith = globalHadithList[randomIndex];
+        displayHadith(randomHadith);
+        updateStatusEl.textContent = "New Hadith";
+        updateStatusEl.style.color = "var(--text-muted)";
+      });
+    }
 
-        const hadithTagEl = document.getElementById('hadith-tag');
-        const hadithTextEl = document.getElementById('hadith-text');
-        const hadithModal = document.getElementById('hadithModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modalHadithText = document.getElementById('modalHadithText');
-        const modalHadithTag = document.getElementById('modalHadithTag');
-        const modalExternalLink = document.getElementById('modalExternalLink');
+    const hadithTagEl = document.getElementById('hadith-tag');
+    const hadithTextEl = document.getElementById('hadith-text');
+    const hadithModal = document.getElementById('hadithModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const modalHadithText = document.getElementById('modalHadithText');
+    const modalHadithTag = document.getElementById('modalHadithTag');
+    const modalExternalLink = document.getElementById('modalExternalLink');
 
-        function triggerModal() {
-          if (currentActiveHadith) {
-            modalHadithText.textContent = currentActiveHadith.text;
-            modalHadithTag.textContent = currentActiveHadith.tag;
-            modalExternalLink.href = currentActiveHadith.url || "https://sunnah.com";
-          }
-          hadithModal.showModal();
-        }
-
-        if (hadithTagEl && hadithModal) hadithTagEl.addEventListener('click', triggerModal);
-        if (hadithTextEl && hadithModal) {
-          hadithTextEl.style.cursor = 'pointer';
-          hadithTextEl.title = "Click to view details";
-          hadithTextEl.addEventListener('click', triggerModal);
-        }
-
-        if (closeModalBtn && hadithModal) {
-          closeModalBtn.addEventListener('click', () => hadithModal.close());
-        }
-
-        hadithModal.addEventListener('click', (event) => {
-          const rect = hadithModal.getBoundingClientRect();
-          if (
-            event.clientX < rect.left ||
-            event.clientX > rect.right ||
-            event.clientY < rect.top ||
-            event.clientY > rect.bottom
-          ) {
-            hadithModal.close();
-          }
-        });
-
-      } catch (error) {
-        console.error('Error loading Daily Hadith:', error);
+    function triggerModal() {
+      if (currentActiveHadith) {
+        modalHadithText.textContent = currentActiveHadith.text;
+        modalHadithTag.textContent = currentActiveHadith.tag;
+        modalExternalLink.href = currentActiveHadith.url || "https://sunnah.com";
       }
+      hadithModal.showModal();
     }
 
-    function displayHadith(hadith) {
-      currentActiveHadith = hadith;
-      document.getElementById('hadith-text').textContent = hadith.text;
-      document.getElementById('hadith-narrator').textContent = hadith.narrator;
-      document.getElementById('hadith-tag').textContent = hadith.tag;
+    if (hadithTagEl && hadithModal) hadithTagEl.addEventListener('click', triggerModal);
+    if (hadithTextEl && hadithModal) {
+      hadithTextEl.style.cursor = 'pointer';
+      hadithTextEl.title = "Click to view details";
+      hadithTextEl.addEventListener('click', triggerModal);
     }
+
+    if (closeModalBtn && hadithModal) {
+      closeModalBtn.addEventListener('click', () => hadithModal.close());
+    }
+
+    hadithModal.addEventListener('click', (event) => {
+      const rect = hadithModal.getBoundingClientRect();
+      if (
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom
+      ) {
+        hadithModal.close();
+      }
+    });
+
+  } catch (error) {
+    console.error('Error loading Daily Hadith:', error);
+  }
+}
+
+function displayHadith(hadith) {
+  currentActiveHadith = hadith;
+  document.getElementById('hadith-text').textContent = hadith.text;
+  document.getElementById('hadith-narrator').textContent = hadith.narrator;
+  document.getElementById('hadith-tag').textContent = hadith.tag;
+}
 
 // 4. Dynamic Business Directory Loader & Category Filter
-
-// Pagination state variables
 let allBusinesses = [];
-let visibleLimit = 10; // Shows 10 cards initially
+let visibleLimit = 10;
 
 async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
 
-  // 1. Show a loading state before fetch completes
   gridContainer.innerHTML = `
     <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
       <p style="font-size: 0.95rem; font-weight: 500;">Loading community listings...</p>
@@ -244,18 +242,16 @@ async function loadBusinesses() {
       allBusinesses = [];
     }
 
-    // 3. SORT: Featured listings first, then alphabetical by name
     allBusinesses.sort((a, b) => {
       const aFeatured = a.IsFeatured ? 1 : 0;
       const bFeatured = b.IsFeatured ? 1 : 0;
 
       if (aFeatured !== bFeatured) {
-        return bFeatured - aFeatured; // Featured ones come first
+        return bFeatured - aFeatured;
       }
       return (a.Name || '').localeCompare(b.Name || '');
     });
 
-    // Render the batch (handles empty states and button hiding automatically)
     renderBusinessBatch();
     setupCategoryFilters();
 
@@ -269,14 +265,12 @@ async function loadBusinesses() {
   }
 }
 
-// Helper function to render batches based on visibleLimit
 function renderBusinessBatch() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
 
   gridContainer.innerHTML = '';
 
-  // Handle empty dataset inside batch rendering so we can control the button too
   if (allBusinesses.length === 0) {
     gridContainer.innerHTML = `
       <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
@@ -285,13 +279,11 @@ function renderBusinessBatch() {
       </div>
     `;
     
-    // Hide "Load More" button if it exists
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) loadMoreBtn.style.display = 'none';
     return;
   }
 
-  // Slice the array to only show up to the current visibleLimit
   const currentBatch = allBusinesses.slice(0, visibleLimit);
 
   currentBatch.forEach(biz => {
@@ -330,7 +322,6 @@ function renderBusinessBatch() {
     gridContainer.appendChild(card);
   });
 
-// Handle "Load More" button visibility
   let loadMoreBtn = document.getElementById('loadMoreBtn');
   
   if (allBusinesses.length === 0 || visibleLimit >= allBusinesses.length) {
@@ -355,16 +346,16 @@ function renderBusinessBatch() {
       loadMoreBtn.style.display = 'block';
     }
   }
+}
+
 function setupCategoryFilters() {
   const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
   const gridContainer = document.getElementById('businessGrid');
 
   filterButtons.forEach(button => {
-    // Prevent duplicate event listeners if Load More re-runs things
     button.replaceWith(button.cloneNode(true));
   });
 
-  // Re-select fresh buttons after cloning
   const freshFilterButtons = document.querySelectorAll('#filterContainer .filter-btn');
 
   freshFilterButtons.forEach(button => {
@@ -375,7 +366,6 @@ function setupCategoryFilters() {
       const selectedCat = button.getAttribute('data-cat');
       let visibleCount = 0;
 
-      // 🔍 Dynamically grab all current cards in the grid right now
       const businessCards = gridContainer.querySelectorAll('.grid-card');
 
       businessCards.forEach(card => {
@@ -389,7 +379,6 @@ function setupCategoryFilters() {
         }
       });
 
-      // Show an empty state message if a specific filter pill has 0 results
       let emptyMsg = document.getElementById('emptyCategoryMsg');
       if (visibleCount === 0) {
         if (!emptyMsg) {
@@ -408,66 +397,63 @@ function setupCategoryFilters() {
   });
 }
 
-// Initialize on page load
+// 5. BUSINESS MODAL ACTION LOGIC
+const bizModal = document.getElementById('businessModal');
+const closeBizModalBtn = document.getElementById('closeBizModalBtn');
+const bizModalTitle = document.getElementById('bizModalTitle');
+const bizModalSub = document.getElementById('bizModalSub');
+const bizModalDeal = document.getElementById('bizModalDeal');
+const pinArea = document.getElementById('pinArea');
+const whatsappBtn = document.getElementById('whatsappBtn');
+const cashierPinInput = document.getElementById('cashierPin');
+const verifyPinBtn = document.getElementById('verifyPinBtn');
+
+function openBizModal(actionType, name, sub, deal, phone = '') {
+  bizModalTitle.textContent = name;
+  bizModalSub.textContent = sub;
+  bizModalDeal.textContent = deal;
+  cashierPinInput.value = '';
+
+  if (actionType === 'claim') {
+    pinArea.style.display = 'block';
+    whatsappBtn.style.display = 'none';
+  } else {
+    pinArea.style.display = 'none';
+    whatsappBtn.style.display = 'block';
+    
+    const encodedText = encodeURIComponent(`Assalaamualaikum! I saw your offer "${deal}" on the Masjid Angullia Companion App and would like to find out more.`);
+    whatsappBtn.href = `https://wa.me/${phone}?text=${encodedText}`;
+  }
+
+  bizModal.showModal();
+}
+
+verifyPinBtn.addEventListener('click', () => {
+  if (cashierPinInput.value.length === 4) {
+    alert('Voucher successfully validated! Show this confirmation to the cashier.');
+    bizModal.close();
+  } else {
+    alert('Please enter a valid 4-digit cashier PIN.');
+  }
+});
+
+if (closeBizModalBtn) {
+  closeBizModalBtn.addEventListener('click', () => bizModal.close());
+}
+
+bizModal.addEventListener('click', (event) => {
+  const rect = bizModal.getBoundingClientRect();
+  if (
+    event.clientX < rect.left ||
+    event.clientX > rect.right ||
+    event.clientY < rect.top ||
+    event.clientY > rect.bottom
+  ) {
+    bizModal.close();
+  }
+});
+
+// Run all dynamic data functions on page load
+loadDynamicCard();
+loadDailyHadith();
 loadBusinesses();
-    // 5. BUSINESS MODAL ACTION LOGIC
-    const bizModal = document.getElementById('businessModal');
-    const closeBizModalBtn = document.getElementById('closeBizModalBtn');
-    const bizModalTitle = document.getElementById('bizModalTitle');
-    const bizModalSub = document.getElementById('bizModalSub');
-    const bizModalDeal = document.getElementById('bizModalDeal');
-    const pinArea = document.getElementById('pinArea');
-    const whatsappBtn = document.getElementById('whatsappBtn');
-    const cashierPinInput = document.getElementById('cashierPin');
-    const verifyPinBtn = document.getElementById('verifyPinBtn');
-
-    function openBizModal(actionType, name, sub, deal, phone = '') {
-      bizModalTitle.textContent = name;
-      bizModalSub.textContent = sub;
-      bizModalDeal.textContent = deal;
-      cashierPinInput.value = '';
-
-      if (actionType === 'claim') {
-        pinArea.style.display = 'block';
-        whatsappBtn.style.display = 'none';
-      } else {
-        pinArea.style.display = 'none';
-        whatsappBtn.style.display = 'block';
-        
-        const encodedText = encodeURIComponent(`Assalaamualaikum! I saw your offer "${deal}" on the Masjid Angullia Companion App and would like to find out more.`);
-        whatsappBtn.href = `https://wa.me/${phone}?text=${encodedText}`;
-      }
-
-      bizModal.showModal();
-    }
-
-    verifyPinBtn.addEventListener('click', () => {
-      if (cashierPinInput.value.length === 4) {
-        alert('Voucher successfully validated! Show this confirmation to the cashier.');
-        bizModal.close();
-      } else {
-        alert('Please enter a valid 4-digit cashier PIN.');
-      }
-    });
-
-    if (closeBizModalBtn) {
-      closeBizModalBtn.addEventListener('click', () => bizModal.close());
-    }
-
-    bizModal.addEventListener('click', (event) => {
-      const rect = bizModal.getBoundingClientRect();
-      if (
-        event.clientX < rect.left ||
-        event.clientX > rect.right ||
-        event.clientY < rect.top ||
-        event.clientY > rect.bottom
-      ) {
-        bizModal.close();
-      }
-    });
-
-    // Run dynamic data functions on page load
-    loadDynamicCard();
-    loadDailyHadith();
-loadBusinesses();
-
