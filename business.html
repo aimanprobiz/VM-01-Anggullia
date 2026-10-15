@@ -1,4 +1,91 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Details - DailyBarakah SG</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <div class="mobile-container">
+    <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600;">← Back to Directory</a>
+
+    <div class="card" id="detailContainer" style="margin-top: 10px;">
+      <!-- 1. Header: Name & Subtitle -->
+      <h2 id="bizName" style="color: var(--primary-color); margin-bottom: 4px;">Loading business...</h2>
+      <p id="bizSub" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;"></p>
+      
+      <!-- 2. Image below Subtitle -->
+      <img id="bizBanner" src="" alt="Business Banner" style="width: 100%; border-radius: var(--radius-sm, 8px); display: none; margin-bottom: 15px; object-fit: cover; max-height: 220px;">
+
+      <!-- 3. Description -->
+      <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-bottom: 15px; white-space: pre-line;"></p>
+
+      <!-- 4. Ummah Special -->
+      <div id="dealBox" style="background-color: var(--accent-gold-bg, #fdf8ec); padding: 12px; border-radius: var(--radius-sm, 8px); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 15px;">
+        <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
+          Ummah Special:
+        </p>
+        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"></p>
+      </div>
+
+      <!-- 5. Main Action Area -->
+      <div id="redemptionArea">
+        <!-- Option 1: In-store Redemption Button (Triggers Cashier PIN Modal) -->
+        <button id="openRedeemModalBtn" class="action-btn" style="display: none; width: 100%;">
+          Redeem In-Store Voucher
+        </button>
+
+        <!-- Option 2: Unique Promo Code Button (For E-Commerce / Online Stores) -->
+        <button id="openCodeModalBtn" class="action-btn" style="display: none; width: 100%;">
+          Reveal Online Promo Code
+        </button>
+
+        <!-- Option 3: WhatsApp Redirect Button (For Enquiries / Services) -->
+        <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center; text-decoration: none; width: 100%;">
+          Message Vendor on WhatsApp 💬
+        </a>
+      </div>
+    </div>
+
+    <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
+    <dialog id="redeemModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 90%; max-width: 360px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
+      
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary-color);">Cashier Redemption</h3>
+          <button type="button" class="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 4px;">&times;</button>
+        </div>
+
+        <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
+          Please present your screen to the cashier and request the 4-digit PIN to confirm redemption:
+        </p>
+
+        <input type="password" id="cashierPin" maxlength="4" readonly placeholder="••••" class="pin-input" style="width: 100%; padding: 10px; font-size: 1.4rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1.5px solid var(--border-color); background-color: #faf9f5; outline: none;">
+
+        <!-- Custom On-Screen Number Pad Grid -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px;">
+          <button type="button" class="key-btn" data-num="1" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">1</button>
+          <button type="button" class="key-btn" data-num="2" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">2</button>
+          <button type="button" class="key-btn" data-num="3" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">3</button>
+          <button type="button" class="key-btn" data-num="4" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">4</button>
+          <button type="button" class="key-btn" data-num="5" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">5</button>
+          <button type="button" class="key-btn" data-num="6" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">6</button>
+          <button type="button" class="key-btn" data-num="7" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">7</button>
+          <button type="button" class="key-btn" data-num="8" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">8</button>
+          <button type="button" class="key-btn" data-num="9" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">9</button>
+          <button type="button" id="keyClear" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #f2dede; color: #a94442; border: 1.5px solid #ebccd1; border-radius: 6px; cursor: pointer;">Clear</button>
+          <button type="button" class="key-btn" data-num="0" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">0</button>
+          <button type="button" id="keyDelete" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #e2e8f0; color: #334155; border: 1.5px solid #cbd5e1; border-radius: 6px; cursor: pointer;">⌫</button>
+        </div>
+
+        <button id="verifyPinBtn" class="action-btn" style="width: 100%; margin-top: 4px;">Confirm PIN</button>
+      </div>
+    </dialog>
+  </div>
+
+  <script>
     async function loadBusinessDetail() {
       const params = new URLSearchParams(window.location.search);
       const rawSlug = params.get('slug');
@@ -19,10 +106,11 @@
         const response = await fetch('/api/businesses');
         const businesses = await response.json();
 
-        // Robust case-insensitive slug lookup
+        // Robust case-insensitive lookup matching actual Slug or auto-generated slug from Name
         const biz = businesses.find(b => {
           const bSlug = (b.Slug || b.slug || '').trim().toLowerCase();
-          return bSlug === slug;
+          const generatedSlug = (b.Name || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+          return bSlug === slug || generatedSlug === slug;
         });
 
         if (!biz) {
@@ -30,14 +118,15 @@
           return;
         }
 
-        // Safe property getters with fallbacks
+        // Safe property getters matching your exact Airtable schema keys[cite: 7]
         const bizName = biz.Name || biz.name || 'Business Details';
-        const bizSub = biz.SubTitle || biz.subtitle || biz.Sub_Title || '';
+        const bizSub = biz.SubTitle || biz.subtitle || '';
         const bizDealText = biz.Deal || biz.deal || 'No special deal specified.';
         const bizDesc = biz.Description || biz.description || '';
-        
         const bizImage = biz.ImageURL || biz.ImageUrl || biz.imageurl || biz.Image || biz.image || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
-        const bizSlugVal = biz.Slug || biz.slug || slug;
+        
+        const defaultSlug = bizName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        const bizSlugVal = biz.Slug || biz.slug || defaultSlug;
 
         // Set page text content safely
         document.title = `${bizName} - DailyBarakah SG`;
@@ -217,3 +306,5 @@
 
     loadBusinessDetail();
   </script>
+</body>
+</html>
