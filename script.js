@@ -280,7 +280,7 @@ function renderBusinessBatch() {
     `;
     
     const loadMoreBtn = document.getElementById('loadMoreBtn');
-    if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+    if (loadMoreBtn) loadMoreBtn.style.setProperty('display', 'none', 'important');
     return;
   }
 
@@ -326,7 +326,7 @@ function renderBusinessBatch() {
   
   if (allBusinesses.length === 0 || visibleLimit >= allBusinesses.length) {
     if (loadMoreBtn) {
-      loadMoreBtn.style.display = 'none';
+      loadMoreBtn.style.setProperty('display', 'none', 'important');
     }
   } else {
     if (!loadMoreBtn) {
@@ -343,7 +343,7 @@ function renderBusinessBatch() {
       
       gridContainer.parentNode.appendChild(loadMoreBtn);
     } else {
-      loadMoreBtn.style.display = 'block';
+      loadMoreBtn.style.setProperty('display', 'block', 'important');
     }
   }
 }
@@ -379,7 +379,10 @@ function setupCategoryFilters() {
         }
       });
 
+      // Handle empty state message and Load More button visibility for categories
       let emptyMsg = document.getElementById('emptyCategoryMsg');
+      let loadMoreBtn = document.getElementById('loadMoreBtn');
+
       if (visibleCount === 0) {
         if (!emptyMsg) {
           emptyMsg = document.createElement('div');
@@ -390,8 +393,14 @@ function setupCategoryFilters() {
         } else {
           emptyMsg.style.display = 'block';
         }
-      } else if (emptyMsg) {
-        emptyMsg.style.display = 'none';
+        // Force hide Load More when filtered view has no results
+        if (loadMoreBtn) loadMoreBtn.style.setProperty('display', 'none', 'important');
+      } else {
+        if (emptyMsg) emptyMsg.style.display = 'none';
+        // Restore Load More button if there are more items to show overall
+        if (loadMoreBtn && visibleLimit < allBusinesses.length) {
+          loadMoreBtn.style.setProperty('display', 'block', 'important');
+        }
       }
     });
   });
