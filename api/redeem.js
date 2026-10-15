@@ -36,7 +36,15 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Airtable read failed', details: queryData });
     }
 
-    // Determine which field to increment based on the action parameter
+    if (!queryData.records || queryData.records.length === 0) {
+      console.error(`No record found in Airtable for slug: ${slug}`);
+      return res.status(404).json({ error: `Business record not found for slug: ${slug}` });
+    }
+
+    const record = queryData.records[0];
+    const recordId = record.id;
+    
+    // 2. Determine which field to increment based on action
     let fieldToUpdate = "RedemptionsCount";
 
     if (action === 'whatsapp') {
@@ -47,28 +55,11 @@ export default async function handler(req, res) {
       fieldToUpdate = "CodeCopies";
     }
 
-    if (!queryData.records || queryData.records.length === 0) {
-      console.error(`No record found in Airtable for slug: ${slug}`);
-      return res.status(404).json({ error: `Business record not found for slug: ${slug}` });
-    }
-
-    const record = queryData.records[0];
-    const recordId = record.id;
-    
-    // 2. Determine which field to increment based on the action parameter
-    let fieldToUpdate = "RedemptionsCount";
-
-    if (action === 'whatsapp') {
-      fieldToUpdate = "WhatsAppClicks";
-    } else if (action === 'code') {
-      fieldToUpdate = "CodeClicks";
-    }
-
-    // Get current count for the target field (default to 0 if empty)
+    // Get current count for target field (default to 0 if empty)
     const currentCount = Number(record.fields[fieldToUpdate] || 0);
     const newCount = currentCount + 1;
 
-    // 3. Update the record with the incremented count
+    // 3. Update the record in Airtable
     const updateResponse = await fetch(
       `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${recordId}`,
       {
@@ -92,7 +83,12 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Failed to update Airtable record', details: updateData });
     }
 
-    return res.status(200).json({ success: true, action: action || 'claim', count: newCount });
+    return res.status(200).json({
+      success: true,
+      action: action || 'claim',
+      fieldUpdated: fieldToUpdate,
+      count: newCount
+    });
   } catch (error) {
     console.error('Error updating analytics count:', error);
     return res.status(500).json({ error: error.message });
