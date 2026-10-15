@@ -218,7 +218,7 @@ function initCarouselControls(totalSlides) {
       document.getElementById('hadith-tag').textContent = hadith.tag;
     }
 
-    // 4. Dynamic Business Directory Loader & Category Filter
+// 4. Dynamic Business Directory Loader & Category Filter
 async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
@@ -234,7 +234,7 @@ async function loadBusinesses() {
     const response = await fetch('/api/businesses?t=' + Date.now());
     if (!response.ok) throw new Error('Network response was not ok');
 
-    const businesses = await response.json();
+    let businesses = await response.json();
 
     // 2. Handle empty dataset from Airtable
     if (!Array.isArray(businesses) || businesses.length === 0) {
@@ -247,21 +247,42 @@ async function loadBusinesses() {
       return;
     }
 
+    // 3. SORT: Featured listings first, then alphabetical by name
+    businesses.sort((a, b) => {
+      const aFeatured = a.IsFeatured ? 1 : 0;
+      const bFeatured = b.IsFeatured ? 1 : 0;
+
+      if (aFeatured !== bFeatured) {
+        return bFeatured - aFeatured; // Featured ones come first
+      }
+      return (a.Name || '').localeCompare(b.Name || '');
+    });
+
     // Clear loading state
     gridContainer.innerHTML = '';
 
-    // 3. Render business cards
+    // 4. Render business cards
     businesses.forEach(biz => {
+      const isFeatured = biz.IsFeatured;
       const card = document.createElement('div');
-      card.className = 'grid-card';
+      
+      card.className = isFeatured ? 'grid-card featured-card' : 'grid-card';
       card.setAttribute('data-cat', biz.Category || 'all');
-
       card.style.cursor = 'pointer';
+
+      // Apply gorgeous gold border/background styling if featured
+      if (isFeatured) {
+        card.style.border = '2px solid #eab308';
+        card.style.background = 'linear-gradient(to bottom, #fffdf0, #ffffff)';
+        card.style.position = 'relative';
+      }
+
       card.onclick = function() {
         window.location.href = `/business.html?slug=${biz.Slug}`;
       };
 
       card.innerHTML = `
+        ${isFeatured ? '<span style="position: absolute; top: 10px; right: 10px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2;">⭐ Featured</span>' : ''}
         <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
         <div class="grid-card-body">
           <div class="vendor-details">
@@ -288,7 +309,6 @@ async function loadBusinesses() {
     `;
   }
 }
-
 function setupCategoryFilters() {
   const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
   const businessCards = document.querySelectorAll('#businessGrid .grid-card');
