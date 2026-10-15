@@ -22,28 +22,46 @@
       <!-- 3. Description -->
       <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-bottom: 15px; white-space: pre-line;"></p>
 
-      <!-- 4. Community Deal (placed right above redemption) -->
+      <!-- 4. Ummah Special -->
       <div id="dealBox" style="background-color: var(--accent-gold-bg, #fdf8ec); padding: 12px; border-radius: var(--radius-sm, 8px); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 15px;">
-        <p style="font-size: 0.75rem; font-weight: 600; color: var(--primary-color);">UMMAH SPECIAL:</p>
-        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-top: 2px;"></p>
+        <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
+          Ummah Special:
+        </p>
+        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"></p>
       </div>
 
-      <!-- 5. Redemption / Contact Area -->
+      <!-- 5. Main Action Area -->
       <div id="redemptionArea">
-        <!-- In-store PIN redemption view -->
-        <div id="pinArea" style="display: none;">
-          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">Show this screen to the cashier & enter the 4-digit PIN to redeem:</p>
-          <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input" style="width: 100%; padding: 10px; font-size: 1.2rem; text-align: center; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc;">
-          <button id="verifyPinBtn" class="action-btn" style="width: 100%;">Confirm Redemption</button>
-        </div>
+        <!-- In-store Redemption Button (Triggers Popup Modal) -->
+        <button id="openRedeemModalBtn" class="action-btn" style="display: none; width: 100%;">
+          Redeem In-Store Voucher 🎟️
+        </button>
 
-        <!-- WhatsApp Redirect View -->
+        <!-- WhatsApp Redirect Button -->
         <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center; text-decoration: none; width: 100%;">
           Message Vendor on WhatsApp 💬
         </a>
       </div>
     </div>
   </div>
+
+  <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
+  <dialog id="redeemModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 90%; max-width: 360px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary-color);">Cashier Redemption</h3>
+        <button id="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 4px;">&times;</button>
+      </div>
+
+      <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
+        Please present your screen to the cashier and request the 4-digit PIN to confirm redemption:
+      </p>
+
+      <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input" style="width: 100%; padding: 12px; font-size: 1.4rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1.5px solid var(--border-color); outline: none;">
+
+      <button id="verifyPinBtn" class="action-btn" style="width: 100%; margin-top: 4px;">Confirm PIN</button>
+    </div>
+  </dialog>
 
   <script>
     async function loadBusinessDetail() {
@@ -79,24 +97,51 @@
         bannerImg.src = biz.ImageURL || defaultImg;
         bannerImg.style.display = 'block';
 
-        // Action Type & Redemption Setup
-        const pinArea = document.getElementById('pinArea');
+        // Action Type Setup
+        const openRedeemModalBtn = document.getElementById('openRedeemModalBtn');
         const whatsappBtn = document.getElementById('whatsappBtn');
         const actionType = (biz.ActionType || '').toLowerCase();
 
         if (actionType === 'claim') {
-          pinArea.style.display = 'block';
+          openRedeemModalBtn.style.display = 'block';
         } else {
           whatsappBtn.style.display = 'block';
-          const encodedText = encodeURIComponent(`Assalaamualaikum! I saw your offer "${biz.Deal || ''}" on the DailyBarakah SG App and would like to find out more.`);
-          whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodedText}`;
+          const refCode = `DB-${biz.Slug.toUpperCase()}`;
+          const rawMessage = `Assalaamualaikum! I found ${biz.Name} on DailyBarakah SG [${refCode}] and would like to claim/enquire about the Ummah Special: "${biz.Deal || ''}".`;
+          whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodeURIComponent(rawMessage)}`;
         }
 
-        // PIN Verification
-        document.getElementById('verifyPinBtn').addEventListener('click', () => {
-          const pin = document.getElementById('cashierPin').value;
-          if (pin.length === 4) {
+        // Dialog Modal Logic
+        const redeemModal = document.getElementById('redeemModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const verifyPinBtn = document.getElementById('verifyPinBtn');
+        const cashierPinInput = document.getElementById('cashierPin');
+
+        openRedeemModalBtn.addEventListener('click', () => {
+          cashierPinInput.value = '';
+          redeemModal.showModal();
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+          redeemModal.close();
+        });
+
+        redeemModal.addEventListener('click', (event) => {
+          const rect = redeemModal.getBoundingClientRect();
+          if (
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom
+          ) {
+            redeemModal.close();
+          }
+        });
+
+        verifyPinBtn.addEventListener('click', () => {
+          if (cashierPinInput.value.length === 4) {
             alert('Voucher successfully validated! Show this confirmation to the cashier.');
+            redeemModal.close();
           } else {
             alert('Please enter a valid 4-digit cashier PIN.');
           }
