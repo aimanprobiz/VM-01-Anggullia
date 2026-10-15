@@ -240,16 +240,8 @@ async function loadBusinesses() {
     if (!response.ok) throw new Error('Network response was not ok');
 
     allBusinesses = await response.json();
-
-    // 2. Handle empty dataset from Airtable
-    if (!Array.isArray(allBusinesses) || allBusinesses.length === 0) {
-      gridContainer.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
-          <p style="font-size: 1rem; font-weight: 600; color: var(--text-main);">No listings available yet</p>
-          <p style="font-size: 0.85rem; margin-top: 5px;">Check back soon for new community deals!</p>
-        </div>
-      `;
-      return;
+    if (!Array.isArray(allBusinesses)) {
+      allBusinesses = [];
     }
 
     // 3. SORT: Featured listings first, then alphabetical by name
@@ -263,7 +255,7 @@ async function loadBusinesses() {
       return (a.Name || '').localeCompare(b.Name || '');
     });
 
-    // Render the first batch of cards
+    // Render the batch (handles empty states and button hiding automatically)
     renderBusinessBatch();
     setupCategoryFilters();
 
@@ -283,6 +275,21 @@ function renderBusinessBatch() {
   if (!gridContainer) return;
 
   gridContainer.innerHTML = '';
+
+  // Handle empty dataset inside batch rendering so we can control the button too
+  if (allBusinesses.length === 0) {
+    gridContainer.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+        <p style="font-size: 1rem; font-weight: 600; color: var(--text-main);">No listings available yet</p>
+        <p style="font-size: 0.85rem; margin-top: 5px;">Check back soon for new community deals!</p>
+      </div>
+    `;
+    
+    // Hide "Load More" button if it exists
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+    return;
+  }
 
   // Slice the array to only show up to the current visibleLimit
   const currentBatch = allBusinesses.slice(0, visibleLimit);
@@ -323,14 +330,8 @@ function renderBusinessBatch() {
     gridContainer.appendChild(card);
   });
 
-// Handle "Load More" button visibility
+  // Handle "Load More" button visibility
   let loadMoreBtn = document.getElementById('loadMoreBtn');
-  
-  // Hide load more button completely if there are no businesses at all
-  if (allBusinesses.length === 0) {
-    if (loadMoreBtn) loadMoreBtn.style.display = 'none';
-    return;
-  }
   
   if (visibleLimit < allBusinesses.length) {
     if (!loadMoreBtn) {
@@ -341,7 +342,7 @@ function renderBusinessBatch() {
       loadMoreBtn.textContent = 'Load More Businesses ↓';
       
       loadMoreBtn.addEventListener('click', () => {
-        visibleLimit += 10; // Increase limit by 10
+        visibleLimit += 10;
         renderBusinessBatch();
       });
       
@@ -350,7 +351,7 @@ function renderBusinessBatch() {
       loadMoreBtn.style.display = 'block';
     }
   } else if (loadMoreBtn) {
-    loadMoreBtn.style.display = 'none'; // Hide when all cards are shown
+    loadMoreBtn.style.display = 'none';
   }
 }
 function setupCategoryFilters() {
