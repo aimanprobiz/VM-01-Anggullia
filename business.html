@@ -194,8 +194,7 @@
           });
 
 document.getElementById('verifyPinBtn').addEventListener('click', () => {
-            // Change 'currentPin.length === 4' to test a specific PIN like '1234'
-            if (currentPin === '1234') { 
+            if (currentPin === '1234') {
               // Transform modal content into success view
               modalContent.innerHTML = `
                 <div style="text-align: center; padding: 20px 10px; display: flex; flex-direction: column; gap: 14px; align-items: center;">
@@ -208,6 +207,7 @@ document.getElementById('verifyPinBtn').addEventListener('click', () => {
                 </div>
               `;
 
+              // Ensure the modal stays open and only closes when "Done" is tapped
               document.getElementById('closeSuccessBtn').addEventListener('click', () => {
                 redeemModal.close();
               });
