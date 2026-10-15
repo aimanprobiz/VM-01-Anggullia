@@ -126,9 +126,9 @@
           openRedeemModalBtn.style.display = 'block';
         } else {
           whatsappBtn.style.display = 'block';
-          const refCode = `DB-${biz.Slug.toUpperCase()}`;
-          const rawMessage = `Assalaamualaikum! I found ${biz.Name} on DailyBarakah SG [${refCode}] and would like to claim/enquire about the Ummah Special: "${biz.Deal || ''}".`;
-          whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodeURIComponent(rawMessage)}`;
+const refCode = `DB-${biz.Slug.toUpperCase()}`;
+const rawMessage = `Assalaamualaikum! I came across ${biz.Name} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${biz.Deal || ''}". Let me know how to proceed, jazakallahu khair!`;
+whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodeURIComponent(rawMessage)}`;
         }
 
         const redeemModal = document.getElementById('redeemModal');
