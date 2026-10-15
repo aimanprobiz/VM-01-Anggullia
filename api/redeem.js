@@ -36,6 +36,17 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Airtable read failed', details: queryData });
     }
 
+    // Determine which field to increment based on the action parameter
+    let fieldToUpdate = "RedemptionsCount";
+
+    if (action === 'whatsapp') {
+      fieldToUpdate = "WhatsAppClicks";
+    } else if (action === 'code') {
+      fieldToUpdate = "CodeClicks";
+    } else if (action === 'copy') {
+      fieldToUpdate = "CodeCopies";
+    }
+
     if (!queryData.records || queryData.records.length === 0) {
       console.error(`No record found in Airtable for slug: ${slug}`);
       return res.status(404).json({ error: `Business record not found for slug: ${slug}` });
