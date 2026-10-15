@@ -1,99 +1,136 @@
-// 1. Carousel Touch, Scroll & Auto-Play Logic
-    const track = document.getElementById('carouselTrack');
-    const dots = document.querySelectorAll('.dot');
-    
-    let currentIndex = 0;
-    const totalSlides = dots.length;
-    const autoScrollDelay = 4500;
-    let autoScrollInterval;
+// 1. Dynamic Carousel & Hadith Avatar Loader
+let currentIndex = 0;
+let autoScrollInterval = null;
+const autoScrollDelay = 4500;
 
-    function scrollToSlide(index) {
-      const slideWidth = track.clientWidth;
-      track.scrollTo({
-        left: slideWidth * index,
-        behavior: 'smooth'
-      });
-    }
+async function loadDynamicCard() {
+  const carouselTrack = document.getElementById('carouselTrack');
+  const carouselIndicators = document.getElementById('carouselIndicators');
 
-    function nextSlide() {
-      currentIndex = (currentIndex + 1) % totalSlides;
-      scrollToSlide(currentIndex);
-    }
+  try {
+    const response = await fetch('/api/cards?t=' + Date.now());
+    if (!response.ok) return;
 
-    function startAutoScroll() {
-      stopAutoScroll();
-      autoScrollInterval = setInterval(nextSlide, autoScrollDelay);
-    }
+    const cards = await response.json();
+    if (!Array.isArray(cards) || cards.length === 0) return;
 
-    function stopAutoScroll() {
-      if (autoScrollInterval) {
-        clearInterval(autoScrollInterval);
+    // A. Use the first item's image as Hadith avatar if available
+    if (cards[0] && cards[0].imageUrl) {
+      const hadithAvatar = document.getElementById('hadith-avatar');
+      if (hadithAvatar) {
+        hadithAvatar.src = cards[0].imageUrl;
+        hadithAvatar.classList.remove('pulsing-placeholder');
       }
     }
 
-    track.addEventListener('scroll', () => {
-      const slideWidth = track.clientWidth;
-      const activeIndex = Math.round(track.scrollLeft / slideWidth);
-      
-      if (currentIndex !== activeIndex) {
-        currentIndex = activeIndex;
-      }
+    // B. Build Carousel Slides & Dots dynamically
+    if (carouselTrack && carouselIndicators) {
+      carouselTrack.innerHTML = '';
+      carouselIndicators.innerHTML = '';
 
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === activeIndex);
-      });
-    });
+      cards.forEach((card, index) => {
+        // Build slide
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide';
 
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        currentIndex = index;
-        scrollToSlide(index);
-        startAutoScroll();
-      });
-    });
-
-    track.addEventListener('touchstart', stopAutoScroll, { passive: true });
-    track.addEventListener('touchend', startAutoScroll);
-    track.addEventListener('mouseenter', stopAutoScroll);
-    track.addEventListener('mouseleave', startAutoScroll);
-
-    startAutoScroll();
-
-    // 2. Load Airtable Carousel Data & Avatar
-    async function loadDynamicCard() {
-      try {
-        const response = await fetch('/api/cards?t=' + Date.now());
-        if (!response.ok) return;
-
-        const cards = await response.json();
-        if (!Array.isArray(cards)) return;
-
-        if (cards.length > 0 && cards[0].imageUrl) {
-          const hadithAvatar = document.getElementById('hadith-avatar');
-          if (hadithAvatar) {
-            hadithAvatar.src = cards[0].imageUrl;
-            hadithAvatar.classList.remove('pulsing-placeholder');
-          }
+        const link = document.createElement('a');
+        link.href = card.url || '#';
+        if (card.url) {
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
         }
 
-        for (let i = 1; i <= 5; i++) {
-          if (cards[i]) {
-            const imgEl = document.getElementById(`caro${i}`);
-            const titleEl = document.getElementById(`title${i}`);
-            const linkEl = document.getElementById(`link${i}`);
+        const img = document.createElement('img');
+        img.src = card.imageUrl || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
+        img.alt = card.Title || `Slide ${index + 1}`;
 
-            if (cards[i].imageUrl && imgEl) {
-              imgEl.src = cards[i].imageUrl;
-              imgEl.classList.remove('pulsing-placeholder');
-            }
-            if (cards[i].Title && titleEl) titleEl.textContent = `${i}. ${cards[i].Title}`;
-            if (cards[i].url && linkEl) linkEl.href = cards[i].url;
-          }
+        link.appendChild(img);
+        slide.appendChild(link);
+
+        if (card.Title) {
+          const caption = document.createElement('div');
+          caption.className = 'carousel-caption';
+          caption.textContent = card.Title;
+          slide.appendChild(caption);
         }
-      } catch (error) {
-        console.error('Error loading Airtable card data:', error);
-      }
+
+        carouselTrack.appendChild(slide);
+
+        // Build dot indicator
+        const dot = document.createElement('span');
+        dot.className = `dot${index === 0 ? ' active' : ''}`;
+        dot.addEventListener('click', () => {
+          scrollToSlide(index);
+          startAutoScroll(cards.length);
+        });
+        carouselIndicators.appendChild(dot);
+      });
+
+      // Initialize carousel events after rendering
+      initCarouselControls(cards.length);
     }
+
+  } catch (error) {
+    console.error('Error loading Airtable card data:', error);
+  }
+}
+
+// 2. Carousel Mechanics
+function scrollToSlide(index) {
+  const track = document.getElementById('carouselTrack');
+  if (!track) return;
+  const slideWidth = track.clientWidth;
+  track.scrollTo({
+    left: slideWidth * index,
+    behavior: 'smooth'
+  });
+  currentIndex = index;
+  updateDots(index);
+}
+
+function updateDots(activeIndex) {
+  const dots = document.querySelectorAll('#carouselIndicators .dot');
+  dots.forEach((dot, idx) => {
+    dot.classList.toggle('active', idx === activeIndex);
+  });
+}
+
+function startAutoScroll(totalSlides) {
+  stopAutoScroll();
+  if (totalSlides <= 1) return;
+  autoScrollInterval = setInterval(() => {
+    const nextIndex = (currentIndex + 1) % totalSlides;
+    scrollToSlide(nextIndex);
+  }, autoScrollDelay);
+}
+
+function stopAutoScroll() {
+  if (autoScrollInterval) {
+    clearInterval(autoScrollInterval);
+  }
+}
+
+function initCarouselControls(totalSlides) {
+  const track = document.getElementById('carouselTrack');
+  if (!track) return;
+
+  track.addEventListener('scroll', () => {
+    const slideWidth = track.clientWidth;
+    if (slideWidth === 0) return;
+    const activeIndex = Math.round(track.scrollLeft / slideWidth);
+    if (currentIndex !== activeIndex) {
+      currentIndex = activeIndex;
+      updateDots(activeIndex);
+    }
+  });
+
+  track.addEventListener('touchstart', stopAutoScroll, { passive: true });
+  track.addEventListener('touchend', () => startAutoScroll(totalSlides));
+  track.addEventListener('mouseenter', stopAutoScroll);
+  track.addEventListener('mouseleave', () => startAutoScroll(totalSlides));
+
+  startAutoScroll(totalSlides);
+}
 
     // 3. Load Local JSON Hadith of the Day
     let globalHadithList = [];
