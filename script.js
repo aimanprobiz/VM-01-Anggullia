@@ -323,8 +323,14 @@ function renderBusinessBatch() {
     gridContainer.appendChild(card);
   });
 
-  // Handle "Load More" button visibility
+// Handle "Load More" button visibility
   let loadMoreBtn = document.getElementById('loadMoreBtn');
+  
+  // Hide load more button completely if there are no businesses at all
+  if (allBusinesses.length === 0) {
+    if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+    return;
+  }
   
   if (visibleLimit < allBusinesses.length) {
     if (!loadMoreBtn) {
