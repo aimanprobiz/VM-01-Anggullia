@@ -45,10 +45,9 @@
     </div>
   </div>
 
-  <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
 <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
   <dialog id="redeemModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 90%; max-width: 360px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
-    <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div id="modalContent" style="display: flex; flex-direction: column; gap: 12px;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary-color);">Cashier Redemption</h3>
         <button id="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 4px;">&times;</button>
@@ -58,7 +57,6 @@
         Please present your screen to the cashier and request the 4-digit PIN to confirm redemption:
       </p>
 
-      <!-- Readonly input so native mobile keyboard doesn't open -->
       <input type="password" id="cashierPin" maxlength="4" readonly placeholder="••••" class="pin-input" style="width: 100%; padding: 10px; font-size: 1.4rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1.5px solid var(--border-color); background-color: #faf9f5; outline: none;">
 
       <!-- Custom On-Screen Number Pad Grid -->
@@ -129,77 +127,74 @@
           whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodeURIComponent(rawMessage)}`;
         }
 
-        // Dialog Modal Logic
-        const redeemModal = document.getElementById('redeemModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const verifyPinBtn = document.getElementById('verifyPinBtn');
-        const cashierPinInput = document.getElementById('cashierPin');
-
-        openRedeemModalBtn.addEventListener('click', () => {
-          cashierPinInput.value = '';
-          redeemModal.showModal();
-        });
-
-        closeModalBtn.addEventListener('click', () => {
-          redeemModal.close();
-        });
-
-        redeemModal.addEventListener('click', (event) => {
-          const rect = redeemModal.getBoundingClientRect();
-          if (
-            event.clientX < rect.left ||
-            event.clientX > rect.right ||
-            event.clientY < rect.top ||
-            event.clientY > rect.bottom
-          ) {
-            redeemModal.close();
-          }
-        });
-
-        verifyPinBtn.addEventListener('click', () => {
-          if (cashierPinInput.value.length === 4) {
-            alert('Voucher successfully validated! Show this confirmation to the cashier.');
-            redeemModal.close();
-          } else {
-            alert('Please enter a valid 4-digit cashier PIN.');
-          }
-        });
-
-      } catch (error) {
-        console.error('Error loading business details:', error);
-      }
-    }
-// Custom Keypad Logic
+const redeemModal = document.getElementById('redeemModal');
+        const modalContent = document.getElementById('modalContent');
+        const openRedeemModalBtn = document.getElementById('openRedeemModalBtn');
         const cashierPinInput = document.getElementById('cashierPin');
         let enteredPin = '';
 
-        document.querySelectorAll('.key-btn').forEach(button => {
-          button.addEventListener('click', () => {
-            if (enteredPin.length < 4) {
-              enteredPin += button.getAttribute('data-num');
-              cashierPinInput.value = enteredPin;
+        // Original HTML layout template of the keypad to reset when opening
+        const keypadTemplate = modalContent.innerHTML;
+
+        function resetKeypad() {
+          modalContent.innerHTML = keypadTemplate;
+          enteredPin = '';
+          attachKeypadListeners();
+        }
+
+        function attachKeypadListeners() {
+          const pinInput = document.getElementById('cashierPin');
+          let currentPin = '';
+
+          document.querySelectorAll('.key-btn').forEach(button => {
+            button.addEventListener('click', () => {
+              if (currentPin.length < 4) {
+                currentPin += button.getAttribute('data-num');
+                pinInput.value = currentPin;
+              }
+            });
+          });
+
+          document.getElementById('keyClear').addEventListener('click', () => {
+            currentPin = '';
+            pinInput.value = '';
+          });
+
+          document.getElementById('keyDelete').addEventListener('click', () => {
+            currentPin = currentPin.slice(0, -1);
+            pinInput.value = currentPin;
+          });
+
+          document.getElementById('closeModalBtn').addEventListener('click', () => {
+            redeemModal.close();
+          });
+
+          document.getElementById('verifyPinBtn').addEventListener('click', () => {
+            if (currentPin.length === 4) {
+              // Transform modal content into a success screen
+              modalContent.innerHTML = `
+                <div style="text-align: center; padding: 20px 10px; display: flex; flex-direction: column; gap: 14px; align-items: center;">
+                  <div style="width: 60px; height: 60px; border-radius: 50%; background-color: rgba(46, 125, 50, 0.15); display: flex; align-items: center; justify-content: center; color: #2e7d32; font-size: 1.8rem; font-weight: bold;">✓</div>
+                  <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--primary-color); margin: 0;">Successfully Redeemed!</h3>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
+                    Voucher validated for <strong>${biz.Name}</strong>.<br>Please show this confirmation screen to the cashier.
+                  </p>
+                  <button id="closeSuccessBtn" class="action-btn" style="width: 100%; margin-top: 10px;">Done</button>
+                </div>
+              `;
+
+              document.getElementById('closeSuccessBtn').addEventListener('click', () => {
+                redeemModal.close();
+              });
+            } else {
+              alert('Please enter a valid 4-digit cashier PIN.');
             }
           });
-        });
-
-        document.getElementById('keyClear').addEventListener('click', () => {
-          enteredPin = '';
-          cashierPinInput.value = '';
-        });
-
-        document.getElementById('keyDelete').addEventListener('click', () => {
-          enteredPin = enteredPin.slice(0, -1);
-          cashierPinInput.value = enteredPin;
-        });
+        }
 
         openRedeemModalBtn.addEventListener('click', () => {
-          enteredPin = '';
-          cashierPinInput.value = '';
+          resetKeypad();
           redeemModal.showModal();
-        });
-
-        closeModalBtn.addEventListener('click', () => {
-          redeemModal.close();
         });
 
         redeemModal.addEventListener('click', (event) => {
@@ -211,15 +206,6 @@
             event.clientY > rect.bottom
           ) {
             redeemModal.close();
-          }
-        });
-
-        verifyPinBtn.addEventListener('click', () => {
-          if (enteredPin.length === 4) {
-            alert('Voucher successfully validated! Show this confirmation to the cashier.');
-            redeemModal.close();
-          } else {
-            alert('Please enter a valid 4-digit cashier PIN.');
           }
         });
     loadBusinessDetail();
