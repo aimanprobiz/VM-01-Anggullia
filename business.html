@@ -167,26 +167,27 @@
         });
 
 // Verify PIN logic using Airtable's record PIN
-        document.getElementById('verifyPinBtn').addEventListener('click', async () => {
+        document.getElementById('verifyPinBtn').addEventListener('click', () => {
           const targetPin = String(biz.PIN || '1234').trim();
 
           if (currentPin === targetPin) {
             redeemModal.close();
 
-            // 1. Increment redemption count in Airtable in the background
-            try {
-              await fetch('/api/redeem', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slug: biz.Slug })
-              });
-            } catch (err) {
-              console.error('Could not log redemption count', err);
-            }
+            // Send redemption request in background with error logging
+            const businessSlug = biz.Slug || biz.slug;
 
-            // 2. Show success alert
-            alert(`Successfully Redeemed!\n\nVoucher validated for ${biz.Name}. \n\nPlease show this confirmation screen to the cashier.`);
-            
+            fetch('/api/redeem', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ slug: businessSlug })
+            })
+            .then(res => res.json())
+            .then(data => console.log('Airtable response:', data))
+            .catch(err => console.error('Fetch error:', err));
+
+            // Show immediate success popup
+            alert(`Successfully Redeemed!\n\nVoucher validated for ${biz.Name}.\n\nPlease show this confirmation screen to the cashier.`);
+
             currentPin = '';
             cashierPinInput.value = '';
           } else {
