@@ -184,9 +184,12 @@
 
 // Verify PIN logic
         document.getElementById('verifyPinBtn').addEventListener('click', () => {
-          if (currentPin === '1234') {
+          // Pulls the PIN from Airtable for this specific business record (falls back to '1234' if blank)
+          const targetPin = String(biz.PIN || '1234').trim();
+
+          if (currentPin === targetPin) {
             redeemModal.close();
-            alert(`Successfully Redeemed!\n\nVoucher validated for ${biz.Name}. \n\nMay you receive barakah for your purchase!`);
+            alert(`Successfully Redeemed!\n\nVoucher validated for ${biz.Name}. Please show this confirmation screen to the cashier.`);
             currentPin = '';
             cashierPinInput.value = '';
           } else {
