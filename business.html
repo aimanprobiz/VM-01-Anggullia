@@ -232,37 +232,35 @@ openCodeModalBtn.style.display = 'block';
           });
         });
 
-        // Verify PIN logic using native alert()
+// Verify PIN logic
         document.getElementById('verifyPinBtn').addEventListener('click', async () => {
           const targetPin = String(biz.PIN || '1234').trim();
 
           if (currentPin === targetPin) {
-            // 1. Show native success alert
-            alert(`✓ Successfully Redeemed!\n\nVoucher validated for ${biz.Name}.\n\nMay your transaction be filled with Barakah!`);
-
-            // 2. Increment redemption count in Airtable in the background
-            try {
-              fetch('/api/redeem', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slug: biz.Slug || biz.slug, action: 'claim' })
-              })
-              .then(res => res.json())
-              .then(data => console.log('Airtable response:', data))
-              .catch(err => console.error('Fetch error:', err));
-            } catch (err) {
-              console.error('Error triggering redemption log:', err);
-            }
-
-            // 3. Close the modal and reset PIN input immediately
+            // 1. Close modal and reset input immediately so the UI is snappy
             redeemModal.close();
             resetModalState();
 
-          } else {
-            // 1. Show native error alert
-            alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
+            // 2. Fire the tracking request instantly in the background (non-blocking)
+            const trackingPayload = JSON.stringify({ slug: biz.Slug || biz.slug, action: 'claim' });
             
-            // 2. Reset the input field for re-entry
+            if (navigator.sendBeacon) {
+              navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+            } else {
+              fetch('/api/redeem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: trackingPayload,
+                keepalive: true
+              }).catch(() => {});
+            }
+
+            // 3. Show success alert after triggering the background count
+            alert(`✓ Successfully Redeemed!\n\nVoucher validated for ${biz.Name}.\n\nMay your transaction be filled with Barakah!`);
+
+          } else {
+            // Show error alert
+            alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
             resetModalState();
           }
         });
