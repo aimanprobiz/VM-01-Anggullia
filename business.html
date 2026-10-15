@@ -44,12 +44,14 @@
       </div>
     </div>
 
-    <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION (Safely inside container flow) -->
+    <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
     <dialog id="redeemModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 90%; max-width: 360px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
-      <div id="modalContent" style="display: flex; flex-direction: column; gap: 12px;">
+      
+      <!-- VIEW 1: KEYPAD & INPUT -->
+      <div id="keypadView" style="display: flex; flex-direction: column; gap: 12px;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary-color);">Cashier Redemption</h3>
-          <button id="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 4px;">&times;</button>
+          <button type="button" class="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 4px;">&times;</button>
         </div>
 
         <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
@@ -59,27 +61,37 @@
         <input type="password" id="cashierPin" maxlength="4" readonly placeholder="••••" class="pin-input" style="width: 100%; padding: 10px; font-size: 1.4rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1.5px solid var(--border-color); background-color: #faf9f5; outline: none;">
 
         <!-- Custom On-Screen Number Pad Grid -->
-        <div id="customKeypad" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px;">
-          <button type="button" class="key-btn" data-num="1" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">1</button>
-          <button type="button" class="key-btn" data-num="2" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">2</button>
-          <button type="button" class="key-btn" data-num="3" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">3</button>
-          <button type="button" class="key-btn" data-num="4" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">4</button>
-          <button type="button" class="key-btn" data-num="5" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">5</button>
-          <button type="button" class="key-btn" data-num="6" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">6</button>
-          <button type="button" class="key-btn" data-num="7" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">7</button>
-          <button type="button" class="key-btn" data-num="8" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">8</button>
-          <button type="button" class="key-btn" data-num="9" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">9</button>
-          <button type="button" id="keyClear" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #f2dede; color: #a94442; border: 1px solid #ebccd1; border-radius: 6px; cursor: pointer;">Clear</button>
-          <button type="button" class="key-btn" data-num="0" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">0</button>
-          <button type="button" id="keyDelete" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #e2e8f0; color: #334155; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;">⌫</button>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px;">
+          <button type="button" class="key-btn" data-num="1" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">1</button>
+          <button type="button" class="key-btn" data-num="2" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">2</button>
+          <button type="button" class="key-btn" data-num="3" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">3</button>
+          <button type="button" class="key-btn" data-num="4" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">4</button>
+          <button type="button" class="key-btn" data-num="5" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">5</button>
+          <button type="button" class="key-btn" data-num="6" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">6</button>
+          <button type="button" class="key-btn" data-num="7" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">7</button>
+          <button type="button" class="key-btn" data-num="8" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">8</button>
+          <button type="button" class="key-btn" data-num="9" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">9</button>
+          <button type="button" id="keyClear" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #f2dede; color: #a94442; border: 1.5px solid #ebccd1; border-radius: 6px; cursor: pointer;">Clear</button>
+          <button type="button" class="key-btn" data-num="0" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 6px; cursor: pointer;">0</button>
+          <button type="button" id="keyDelete" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #e2e8f0; color: #334155; border: 1.5px solid #cbd5e1; border-radius: 6px; cursor: pointer;">⌫</button>
         </div>
 
         <button id="verifyPinBtn" class="action-btn" style="width: 100%; margin-top: 4px;">Confirm PIN</button>
       </div>
+
+      <!-- VIEW 2: SUCCESS CHECKMARK (Hidden by default) -->
+      <div id="successView" style="display: none; text-align: center; padding: 10px 5px; flex-direction: column; gap: 14px; align-items: center;">
+        <div style="width: 65px; height: 65px; border-radius: 50%; background-color: rgba(46, 125, 50, 0.15); display: flex; align-items: center; justify-content: center; color: #2e7d32; font-size: 2rem; font-weight: bold;">✓</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-color); margin: 0;">Successfully Redeemed!</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
+          Voucher validated for <strong id="successBizName">this store</strong>.<br>Please show this confirmation screen to the cashier.
+        </p>
+        <button type="button" class="closeModalBtn action-btn" style="width: 100%; margin-top: 10px;">Done</button>
+      </div>
     </dialog>
   </div>
 
- <script>
+  <script>
     async function loadBusinessDetail() {
       const params = new URLSearchParams(window.location.search);
       const slug = params.get('slug');
@@ -128,99 +140,62 @@
         }
 
         const redeemModal = document.getElementById('redeemModal');
-        const modalContent = document.getElementById('modalContent');
+        const keypadView = document.getElementById('keypadView');
+        const successView = document.getElementById('successView');
+        const cashierPinInput = document.getElementById('cashierPin');
+        const successBizName = document.getElementById('successBizName');
+        let currentPin = '';
 
-        // Static keypad HTML template stored safely in memory
-        const keypadHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary-color);">Cashier Redemption</h3>
-            <button id="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 4px;">&times;</button>
-          </div>
-
-          <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
-            Please present your screen to the cashier and request the 4-digit PIN to confirm redemption:
-          </p>
-
-          <input type="password" id="cashierPin" maxlength="4" readonly placeholder="••••" class="pin-input" style="width: 100%; padding: 10px; font-size: 1.4rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1.5px solid var(--border-color); background-color: #faf9f5; outline: none;">
-
-          <div id="customKeypad" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px;">
-            <button type="button" class="key-btn" data-num="1" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">1</button>
-            <button type="button" class="key-btn" data-num="2" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">2</button>
-            <button type="button" class="key-btn" data-num="3" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">3</button>
-            <button type="button" class="key-btn" data-num="4" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">4</button>
-            <button type="button" class="key-btn" data-num="5" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">5</button>
-            <button type="button" class="key-btn" data-num="6" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">6</button>
-            <button type="button" class="key-btn" data-num="7" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">7</button>
-            <button type="button" class="key-btn" data-num="8" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">8</button>
-            <button type="button" class="key-btn" data-num="9" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">9</button>
-            <button type="button" id="keyClear" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #f2dede; color: #a94442; border: 1px solid #ebccd1; border-radius: 6px; cursor: pointer;">Clear</button>
-            <button type="button" class="key-btn" data-num="0" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">0</button>
-            <button type="button" id="keyDelete" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #e2e8f0; color: #334155; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;">⌫</button>
-          </div>
-
-          <button id="verifyPinBtn" class="action-btn" style="width: 100%; margin-top: 4px;">Confirm PIN</button>
-        `;
-
-        function resetKeypad() {
-          modalContent.innerHTML = keypadHTML;
-          attachKeypadListeners();
-        }
-
-        function attachKeypadListeners() {
-          const pinInput = document.getElementById('cashierPin');
-          let currentPin = '';
-
-          document.querySelectorAll('.key-btn').forEach(button => {
-            button.addEventListener('click', () => {
-              if (currentPin.length < 4) {
-                currentPin += button.getAttribute('data-num');
-                pinInput.value = currentPin;
-              }
-            });
-          });
-
-          document.getElementById('keyClear').addEventListener('click', () => {
-            currentPin = '';
-            pinInput.value = '';
-          });
-
-          document.getElementById('keyDelete').addEventListener('click', () => {
-            currentPin = currentPin.slice(0, -1);
-            pinInput.value = currentPin;
-          });
-
-          document.getElementById('closeModalBtn').addEventListener('click', () => {
-            redeemModal.close();
-          });
-
-          document.getElementById('verifyPinBtn').addEventListener('click', () => {
-            if (currentPin === '1234') {
-              // Completely overwrite modalContent with success view
-              modalContent.innerHTML = `
-                <div style="text-align: center; padding: 20px 10px; display: flex; flex-direction: column; gap: 14px; align-items: center;">
-                  <div style="width: 65px; height: 65px; border-radius: 50%; background-color: rgba(46, 125, 50, 0.15); display: flex; align-items: center; justify-content: center; color: #2e7d32; font-size: 2rem; font-weight: bold;">✓</div>
-                  <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-color); margin: 0;">Successfully Redeemed!</h3>
-                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
-                    Voucher validated for <strong>${biz.Name}</strong>.<br>Please show this confirmation screen to the cashier.
-                  </p>
-                  <button id="closeSuccessBtn" class="action-btn" style="width: 100%; margin-top: 10px;">Done</button>
-                </div>
-              `;
-
-              document.getElementById('closeSuccessBtn').addEventListener('click', () => {
-                redeemModal.close();
-              });
-            } else {
-              alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
+        // Bind keypad buttons once on load
+        document.querySelectorAll('.key-btn').forEach(button => {
+          button.addEventListener('click', () => {
+            if (currentPin.length < 4) {
+              currentPin += button.getAttribute('data-num');
+              cashierPinInput.value = currentPin;
             }
           });
-        }
+        });
 
+        document.getElementById('keyClear').addEventListener('click', () => {
+          currentPin = '';
+          cashierPinInput.value = '';
+        });
+
+        document.getElementById('keyDelete').addEventListener('click', () => {
+          currentPin = currentPin.slice(0, -1);
+          cashierPinInput.value = currentPin;
+        });
+
+        // Open modal & reset view to keypad
         openRedeemModalBtn.addEventListener('click', () => {
-          resetKeypad();
+          currentPin = '';
+          cashierPinInput.value = '';
+          keypadView.style.display = 'flex';
+          successView.style.display = 'none';
           redeemModal.showModal();
         });
 
+        // Close handlers for all elements with class 'closeModalBtn'
+        document.querySelectorAll('.closeModalBtn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            redeemModal.close();
+          });
+        });
+
+        // Verify PIN logic
+        document.getElementById('verifyPinBtn').addEventListener('click', () => {
+          if (currentPin === '1234') {
+            successBizName.textContent = biz.Name;
+            keypadView.style.display = 'none';
+            successView.style.display = 'flex'; // Reveal the green checkmark view cleanly
+          } else {
+            alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
+            currentPin = '';
+            cashierPinInput.value = '';
+          }
+        });
+
+        // Close modal when clicking outside backdrop
         redeemModal.addEventListener('click', (event) => {
           const rect = redeemModal.getBoundingClientRect();
           if (
