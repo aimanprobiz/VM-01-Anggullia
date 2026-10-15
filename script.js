@@ -23,27 +23,6 @@ async function loadDynamicCard() {
       }
     }
 
-    // B. Build Carousel Slides & Dots dynamically
-async function loadDynamicCard() {
-  const carouselTrack = document.getElementById('carouselTrack');
-  const carouselIndicators = document.getElementById('carouselIndicators');
-
-  try {
-    const response = await fetch('/api/cards?t=' + Date.now());
-    if (!response.ok) return;
-
-    const cards = await response.json();
-    if (!Array.isArray(cards) || cards.length === 0) return;
-
-    // A. Use the first item's image as Hadith avatar
-    if (cards[0] && cards[0].imageUrl) {
-      const hadithAvatar = document.getElementById('hadith-avatar');
-      if (hadithAvatar) {
-        hadithAvatar.src = cards[0].imageUrl;
-        hadithAvatar.classList.remove('pulsing-placeholder');
-      }
-    }
-
     // B. Build Carousel Slides & Dots dynamically, skipping the first item ()
     const carouselCards = cards.slice(1);
 
