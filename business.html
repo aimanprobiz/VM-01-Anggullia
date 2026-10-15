@@ -182,12 +182,13 @@
           });
         });
 
-        // Verify PIN logic
+// Verify PIN logic
         document.getElementById('verifyPinBtn').addEventListener('click', () => {
           if (currentPin === '1234') {
-            successBizName.textContent = biz.Name;
-            keypadView.style.display = 'none';
-            successView.style.display = 'flex'; // Reveal the green checkmark view cleanly
+            redeemModal.close();
+            alert(`Successfully Redeemed!\n\nVoucher validated for ${biz.Name}. Please show this confirmation screen to the cashier.`);
+            currentPin = '';
+            cashierPinInput.value = '';
           } else {
             alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
             currentPin = '';
