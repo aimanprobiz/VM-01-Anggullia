@@ -3,8 +3,13 @@
       const params = new URLSearchParams(window.location.search);
       const rawSlug = params.get('slug');
 
+      const setVal = (id, property, value) => {
+        const el = document.getElementById(id);
+        if (el) el[property] = value;
+      };
+
       if (!rawSlug) {
-        document.getElementById('bizName').textContent = "Business not found.";
+        setVal('bizName', 'textContent', 'Business not found.');
         return;
       }
 
@@ -21,7 +26,7 @@
         });
 
         if (!biz) {
-          document.getElementById('bizName').textContent = "Business listing not found.";
+          setVal('bizName', 'textContent', 'Business listing not found.');
           return;
         }
 
@@ -31,21 +36,22 @@
         const bizDealText = biz.Deal || biz.deal || 'No special deal specified.';
         const bizDesc = biz.Description || biz.description || '';
         
-        // Fix for images: check multiple casing variations before falling back to default
         const bizImage = biz.ImageURL || biz.ImageUrl || biz.imageurl || biz.Image || biz.image || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
         const bizSlugVal = biz.Slug || biz.slug || slug;
 
-        // Set page text content
+        // Set page text content safely
         document.title = `${bizName} - DailyBarakah SG`;
-        document.getElementById('bizName').textContent = bizName;
-        document.getElementById('bizSub').textContent = bizSub;
-        document.getElementById('bizDeal').textContent = bizDealText;
-        document.getElementById('bizDescription').textContent = bizDesc;
+        setVal('bizName', 'textContent', bizName);
+        setVal('bizSub', 'textContent', bizSub);
+        setVal('bizDeal', 'textContent', bizDealText);
+        setVal('bizDescription', 'textContent', bizDesc);
 
         // Handle Image URL safely
         const bannerImg = document.getElementById('bizBanner');
-        bannerImg.src = bizImage;
-        bannerImg.style.display = 'block';
+        if (bannerImg) {
+          bannerImg.src = bizImage;
+          bannerImg.style.display = 'block';
+        }
 
         // Action Type Setup
         const openRedeemModalBtn = document.getElementById('openRedeemModalBtn');
@@ -55,60 +61,64 @@
         const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim();
 
         if (actionType === 'claim') {
-          openRedeemModalBtn.style.display = 'block';
+          if (openRedeemModalBtn) openRedeemModalBtn.style.display = 'block';
 
         } else if (actionType === 'code' || actionType === 'promocode') {
-          openCodeModalBtn.style.display = 'block';
+          if (openCodeModalBtn) {
+            openCodeModalBtn.style.display = 'block';
 
-          openCodeModalBtn.addEventListener('click', () => {
-            const promoCode = biz.PromoCode || biz.promocode || biz.promoCode || 'D.BARAKAHSG';
-            const storeUrl = biz.WebsiteURL || biz.websiteurl || biz.WebsiteUrl || '#';
+            openCodeModalBtn.addEventListener('click', () => {
+              const promoCode = biz.PromoCode || biz.promocode || biz.promoCode || 'D.BARAKAHSG';
+              const storeUrl = biz.WebsiteURL || biz.websiteurl || biz.WebsiteUrl || '#';
 
-            const userChoice = confirm(`Exclusive Code for ${bizName}:\n\n👉 ${promoCode}\n\nClick OK to copy the code and visit their store!`);
+              const userChoice = confirm(`Exclusive Code for ${bizName}:\n\n👉 ${promoCode}\n\nClick OK to copy the code and visit their store!`);
 
-            if (userChoice) {
-              navigator.clipboard.writeText(promoCode);
+              if (userChoice) {
+                navigator.clipboard.writeText(promoCode);
 
-              fetch('/api/redeem', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slug: bizSlugVal, action: 'copy' })
-              }).catch(() => {});
+                fetch('/api/redeem', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ slug: bizSlugVal, action: 'copy' })
+                }).catch(() => {});
 
-              if (storeUrl && storeUrl !== '#') {
-                window.open(storeUrl, '_blank');
+                if (storeUrl && storeUrl !== '#') {
+                  window.open(storeUrl, '_blank');
+                }
               }
-            }
-          });
+            });
+          }
 
         } else {
           // WhatsApp Inquiry Option
-          whatsappBtn.style.display = 'block';
-          const refCode = `DB-${bizSlugVal.toUpperCase()}`;
-          const rawMessage = `Assalaamualaikum! I came across ${bizName} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${bizDealText}". Let me know how to proceed, jazakallahu khair!`;
-          const phoneNum = biz.Phone || biz.phone || '';
-          const whatsappUrl = `https://wa.me/${phoneNum}?text=${encodeURIComponent(rawMessage)}`;
-          
-          whatsappBtn.href = whatsappUrl;
+          if (whatsappBtn) {
+            whatsappBtn.style.display = 'block';
+            const refCode = `DB-${bizSlugVal.toUpperCase()}`;
+            const rawMessage = `Assalaamualaikum! I came across ${bizName} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${bizDealText}". Let me know how to proceed, jazakallahu khair!`;
+            const phoneNum = biz.Phone || biz.phone || '';
+            const whatsappUrl = `https://wa.me/${phoneNum}?text=${encodeURIComponent(rawMessage)}`;
+            
+            whatsappBtn.href = whatsappUrl;
 
-          whatsappBtn.addEventListener('click', (e) => {
-            e.preventDefault();
+            whatsappBtn.addEventListener('click', (e) => {
+              e.preventDefault();
 
-            const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'whatsapp' });
+              const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'whatsapp' });
 
-            if (navigator.sendBeacon) {
-              navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
-            } else {
-              fetch('/api/redeem', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: trackingPayload,
-                keepalive: true
-              }).catch(() => {});
-            }
+              if (navigator.sendBeacon) {
+                navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+              } else {
+                fetch('/api/redeem', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: trackingPayload,
+                  keepalive: true
+                }).catch(() => {});
+              }
 
-            window.location.href = whatsappUrl;
-          });
+              window.location.href = whatsappUrl;
+            });
+          }
         }
 
         const redeemModal = document.getElementById('redeemModal');
@@ -117,79 +127,88 @@
 
         function resetModalState() {
           currentPin = '';
-          cashierPinInput.value = '';
+          if (cashierPinInput) cashierPinInput.value = '';
         }
 
         document.querySelectorAll('.key-btn').forEach(button => {
           button.addEventListener('click', () => {
             if (currentPin.length < 4) {
               currentPin += button.getAttribute('data-num');
-              cashierPinInput.value = currentPin;
+              if (cashierPinInput) cashierPinInput.value = currentPin;
             }
           });
         });
 
-        document.getElementById('keyClear').addEventListener('click', () => {
-          resetModalState();
-        });
+        const keyClear = document.getElementById('keyClear');
+        if (keyClear) keyClear.addEventListener('click', resetModalState);
 
-        document.getElementById('keyDelete').addEventListener('click', () => {
-          currentPin = currentPin.slice(0, -1);
-          cashierPinInput.value = currentPin;
-        });
+        const keyDelete = document.getElementById('keyDelete');
+        if (keyDelete) {
+          keyDelete.addEventListener('click', () => {
+            currentPin = currentPin.slice(0, -1);
+            if (cashierPinInput) cashierPinInput.value = currentPin;
+          });
+        }
 
-        openRedeemModalBtn.addEventListener('click', () => {
-          resetModalState();
-          redeemModal.showModal();
-        });
+        if (openRedeemModalBtn && redeemModal) {
+          openRedeemModalBtn.addEventListener('click', () => {
+            resetModalState();
+            redeemModal.showModal();
+          });
+        }
 
         document.querySelectorAll('.closeModalBtn').forEach(btn => {
           btn.addEventListener('click', () => {
-            redeemModal.close();
+            if (redeemModal) redeemModal.close();
             resetModalState();
           });
         });
 
-        document.getElementById('verifyPinBtn').addEventListener('click', async () => {
-          const targetPin = String(biz.PIN || biz.pin || '1234').trim();
+        const verifyPinBtn = document.getElementById('verifyPinBtn');
+        if (verifyPinBtn) {
+          verifyPinBtn.addEventListener('click', async () => {
+            const targetPin = String(biz.PIN || biz.pin || '1234').trim();
 
-          if (currentPin === targetPin) {
-            redeemModal.close();
-            resetModalState();
+            if (currentPin === targetPin) {
+              if (redeemModal) redeemModal.close();
+              resetModalState();
 
-            const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'claim' });
-            
-            if (navigator.sendBeacon) {
-              navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+              const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'claim' });
+              
+              if (navigator.sendBeacon) {
+                navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+              } else {
+                fetch('/api/redeem', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: trackingPayload,
+                  keepalive: true
+                }).catch(() => {});
+              }
+
+              alert(`✓ Successfully Redeemed!\n\nVoucher validated for ${bizName}.\n\nMay your transaction be filled with Barakah!`);
+
             } else {
-              fetch('/api/redeem', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: trackingPayload,
-                keepalive: true
-              }).catch(() => {});
+              alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
+              resetModalState();
             }
+          });
+        }
 
-            alert(`✓ Successfully Redeemed!\n\nVoucher validated for ${bizName}.\n\nMay your transaction be filled with Barakah!`);
-
-          } else {
-            alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
-            resetModalState();
-          }
-        });
-
-        redeemModal.addEventListener('click', (event) => {
-          const rect = redeemModal.getBoundingClientRect();
-          if (
-            event.clientX < rect.left ||
-            event.clientX > rect.right ||
-            event.clientY < rect.top ||
-            event.clientY > rect.bottom
-          ) {
-            redeemModal.close();
-            resetModalState();
-          }
-        });
+        if (redeemModal) {
+          redeemModal.addEventListener('click', (event) => {
+            const rect = redeemModal.getBoundingClientRect();
+            if (
+              event.clientX < rect.left ||
+              event.clientX > rect.right ||
+              event.clientY < rect.top ||
+              event.clientY > rect.bottom
+            ) {
+              redeemModal.close();
+              resetModalState();
+            }
+          });
+        }
 
       } catch (error) {
         console.error('Error loading business details:', error);
