@@ -169,7 +169,59 @@
         console.error('Error loading business details:', error);
       }
     }
+// Custom Keypad Logic
+        const cashierPinInput = document.getElementById('cashierPin');
+        let enteredPin = '';
 
+        document.querySelectorAll('.key-btn').forEach(button => {
+          button.addEventListener('click', () => {
+            if (enteredPin.length < 4) {
+              enteredPin += button.getAttribute('data-num');
+              cashierPinInput.value = enteredPin;
+            }
+          });
+        });
+
+        document.getElementById('keyClear').addEventListener('click', () => {
+          enteredPin = '';
+          cashierPinInput.value = '';
+        });
+
+        document.getElementById('keyDelete').addEventListener('click', () => {
+          enteredPin = enteredPin.slice(0, -1);
+          cashierPinInput.value = enteredPin;
+        });
+
+        openRedeemModalBtn.addEventListener('click', () => {
+          enteredPin = '';
+          cashierPinInput.value = '';
+          redeemModal.showModal();
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+          redeemModal.close();
+        });
+
+        redeemModal.addEventListener('click', (event) => {
+          const rect = redeemModal.getBoundingClientRect();
+          if (
+            event.clientX < rect.left ||
+            event.clientX > rect.right ||
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom
+          ) {
+            redeemModal.close();
+          }
+        });
+
+        verifyPinBtn.addEventListener('click', () => {
+          if (enteredPin.length === 4) {
+            alert('Voucher successfully validated! Show this confirmation to the cashier.');
+            redeemModal.close();
+          } else {
+            alert('Please enter a valid 4-digit cashier PIN.');
+          }
+        });
     loadBusinessDetail();
   </script>
 </body>
