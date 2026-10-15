@@ -46,6 +46,7 @@
   </div>
 
   <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
+<!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
   <dialog id="redeemModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 90%; max-width: 360px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
     <div style="display: flex; flex-direction: column; gap: 12px;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -57,7 +58,24 @@
         Please present your screen to the cashier and request the 4-digit PIN to confirm redemption:
       </p>
 
-      <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input" style="width: 100%; padding: 12px; font-size: 1.4rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1.5px solid var(--border-color); outline: none;">
+      <!-- Readonly input so native mobile keyboard doesn't open -->
+      <input type="password" id="cashierPin" maxlength="4" readonly placeholder="••••" class="pin-input" style="width: 100%; padding: 10px; font-size: 1.4rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1.5px solid var(--border-color); background-color: #faf9f5; outline: none;">
+
+      <!-- Custom On-Screen Number Pad Grid -->
+      <div id="customKeypad" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px;">
+        <button type="button" class="key-btn" data-num="1" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">1</button>
+        <button type="button" class="key-btn" data-num="2" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">2</button>
+        <button type="button" class="key-btn" data-num="3" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">3</button>
+        <button type="button" class="key-btn" data-num="4" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">4</button>
+        <button type="button" class="key-btn" data-num="5" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">5</button>
+        <button type="button" class="key-btn" data-num="6" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">6</button>
+        <button type="button" class="key-btn" data-num="7" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">7</button>
+        <button type="button" class="key-btn" data-num="8" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">8</button>
+        <button type="button" class="key-btn" data-num="9" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">9</button>
+        <button type="button" id="keyClear" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #f2dede; color: #a94442; border: 1px solid #ebccd1; border-radius: 6px; cursor: pointer;">Clear</button>
+        <button type="button" class="key-btn" data-num="0" style="padding: 12px; font-size: 1.1rem; font-weight: 600; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer;">0</button>
+        <button type="button" id="keyDelete" style="padding: 12px; font-size: 0.85rem; font-weight: 600; background: #e2e8f0; color: #334155; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;">⌫</button>
+      </div>
 
       <button id="verifyPinBtn" class="action-btn" style="width: 100%; margin-top: 4px;">Confirm PIN</button>
     </div>
