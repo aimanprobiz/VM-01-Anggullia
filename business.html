@@ -47,8 +47,7 @@
     <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
     <dialog id="redeemModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 90%; max-width: 360px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
       
-      <!-- VIEW 1: KEYPAD & INPUT -->
-      <div id="keypadView" style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary-color);">Cashier Redemption</h3>
           <button type="button" class="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 4px;">&times;</button>
@@ -77,16 +76,6 @@
         </div>
 
         <button id="verifyPinBtn" class="action-btn" style="width: 100%; margin-top: 4px;">Confirm PIN</button>
-      </div>
-
-      <!-- VIEW 2: SUCCESS CHECKMARK (Hidden by default) -->
-      <div id="successView" style="display: none; text-align: center; padding: 10px 5px; flex-direction: column; gap: 14px; align-items: center;">
-        <div style="width: 65px; height: 65px; border-radius: 50%; background-color: rgba(46, 125, 50, 0.15); display: flex; align-items: center; justify-content: center; color: #2e7d32; font-size: 2rem; font-weight: bold;">✓</div>
-        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-color); margin: 0;">Successfully Redeemed!</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
-          Voucher validated for <strong id="successBizName">this store</strong>.<br>Please show this confirmation screen to the cashier.
-        </p>
-        <button type="button" class="closeModalBtn action-btn" style="width: 100%; margin-top: 10px;">Done</button>
       </div>
     </dialog>
   </div>
@@ -140,10 +129,7 @@
         }
 
         const redeemModal = document.getElementById('redeemModal');
-        const keypadView = document.getElementById('keypadView');
-        const successView = document.getElementById('successView');
         const cashierPinInput = document.getElementById('cashierPin');
-        const successBizName = document.getElementById('successBizName');
         let currentPin = '';
 
         // Bind keypad buttons once on load
@@ -166,12 +152,10 @@
           cashierPinInput.value = currentPin;
         });
 
-        // Open modal & reset view to keypad
+        // Open modal & reset input
         openRedeemModalBtn.addEventListener('click', () => {
           currentPin = '';
           cashierPinInput.value = '';
-          keypadView.style.display = 'flex';
-          successView.style.display = 'none';
           redeemModal.showModal();
         });
 
@@ -182,9 +166,8 @@
           });
         });
 
-// Verify PIN logic
+        // Verify PIN logic using Airtable's record PIN
         document.getElementById('verifyPinBtn').addEventListener('click', () => {
-          // Pulls the PIN from Airtable for this specific business record (falls back to '1234' if blank)
           const targetPin = String(biz.PIN || '1234').trim();
 
           if (currentPin === targetPin) {
