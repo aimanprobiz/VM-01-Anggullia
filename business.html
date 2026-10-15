@@ -45,7 +45,7 @@
     </div>
   </div>
 
-<!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
+  <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
   <dialog id="redeemModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 90%; max-width: 360px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
     <div id="modalContent" style="display: flex; flex-direction: column; gap: 12px;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -127,10 +127,8 @@
           whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodeURIComponent(rawMessage)}`;
         }
 
-const redeemModal = document.getElementById('redeemModal');
+        const redeemModal = document.getElementById('redeemModal');
         const modalContent = document.getElementById('modalContent');
-        const openRedeemModalBtn = document.getElementById('openRedeemModalBtn');
-        const cashierPinInput = document.getElementById('cashierPin');
         let enteredPin = '';
 
         // Original HTML layout template of the keypad to reset when opening
@@ -208,6 +206,12 @@ const redeemModal = document.getElementById('redeemModal');
             redeemModal.close();
           }
         });
+
+      } catch (error) {
+        console.error('Error loading business details:', error);
+      }
+    }
+
     loadBusinessDetail();
   </script>
 </body>
