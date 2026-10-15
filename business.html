@@ -193,8 +193,9 @@
             redeemModal.close();
           });
 
-          document.getElementById('verifyPinBtn').addEventListener('click', () => {
-            if (currentPin.length === 4) {
+document.getElementById('verifyPinBtn').addEventListener('click', () => {
+            // Change 'currentPin.length === 4' to test a specific PIN like '1234'
+            if (currentPin === '1234') { 
               // Transform modal content into success view
               modalContent.innerHTML = `
                 <div style="text-align: center; padding: 20px 10px; display: flex; flex-direction: column; gap: 14px; align-items: center;">
@@ -211,7 +212,7 @@
                 redeemModal.close();
               });
             } else {
-              alert('Please enter a valid 4-digit cashier PIN.');
+              alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
             }
           });
         }
