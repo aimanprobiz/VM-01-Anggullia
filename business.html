@@ -166,13 +166,27 @@
           });
         });
 
-        // Verify PIN logic using Airtable's record PIN
-        document.getElementById('verifyPinBtn').addEventListener('click', () => {
+// Verify PIN logic using Airtable's record PIN
+        document.getElementById('verifyPinBtn').addEventListener('click', async () => {
           const targetPin = String(biz.PIN || '1234').trim();
 
           if (currentPin === targetPin) {
             redeemModal.close();
+
+            // 1. Increment redemption count in Airtable in the background
+            try {
+              await fetch('/api/redeem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug: biz.Slug })
+              });
+            } catch (err) {
+              console.error('Could not log redemption count', err);
+            }
+
+            // 2. Show success alert
             alert(`Successfully Redeemed!\n\nVoucher validated for ${biz.Name}. \n\nPlease show this confirmation screen to the cashier.`);
+            
             currentPin = '';
             cashierPinInput.value = '';
           } else {
