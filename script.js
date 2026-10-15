@@ -349,16 +349,26 @@ function renderBusinessBatch() {
 }
 function setupCategoryFilters() {
   const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
-  const businessCards = document.querySelectorAll('#businessGrid .grid-card');
   const gridContainer = document.getElementById('businessGrid');
 
   filterButtons.forEach(button => {
+    // Prevent duplicate event listeners if Load More re-runs things
+    button.replaceWith(button.cloneNode(true));
+  });
+
+  // Re-select fresh buttons after cloning
+  const freshFilterButtons = document.querySelectorAll('#filterContainer .filter-btn');
+
+  freshFilterButtons.forEach(button => {
     button.addEventListener('click', () => {
-      filterButtons.forEach(btn => btn.classList.remove('active'));
+      freshFilterButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
 
       const selectedCat = button.getAttribute('data-cat');
       let visibleCount = 0;
+
+      // 🔍 Dynamically grab all current cards in the grid right now
+      const businessCards = gridContainer.querySelectorAll('.grid-card');
 
       businessCards.forEach(card => {
         const cardCat = card.getAttribute('data-cat');
