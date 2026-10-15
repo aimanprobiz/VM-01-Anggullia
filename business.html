@@ -125,33 +125,39 @@
         const openRedeemModalBtn = document.getElementById('openRedeemModalBtn');
         const openCodeModalBtn = document.getElementById('openCodeModalBtn');
         const whatsappBtn = document.getElementById('whatsappBtn');
-        const actionType = (biz.ActionType || '').toLowerCase();
+        
+        // Convert to lowercase and trim spaces
+        const actionType = (biz.ActionType || '').toLowerCase().trim();
 
         if (actionType === 'claim') {
-          // 1. Show Cashier PIN button
           openRedeemModalBtn.style.display = 'block';
 
-        } else if (actionType === 'code') {
-          // 2. Show Online Promo Code button
+        } else if (actionType === 'code' || actionType === 'promocode') {
           openCodeModalBtn.style.display = 'block';
 
           openCodeModalBtn.addEventListener('click', () => {
             const promoCode = biz.PromoCode || 'BARAKAHSG';
             const storeUrl = biz.WebsiteURL || '#';
 
-            // Show prompt/alert with the promo code
+            // Background click tracking
+            fetch('/api/redeem', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ slug: biz.Slug || biz.slug, action: 'code' })
+            }).catch(() => {});
+
+            // Prompt user with the promo code
             const userChoice = confirm(`Exclusive Code for ${biz.Name}:\n\n👉 ${promoCode}\n\nClick OK to copy the code and visit their store!`);
 
             if (userChoice) {
               navigator.clipboard.writeText(promoCode);
-              if (storeUrl !== '#') {
+              if (storeUrl && storeUrl !== '#') {
                 window.open(storeUrl, '_blank');
               }
             }
           });
 
         } else {
-          // 3. Fallback: Show WhatsApp button
           whatsappBtn.style.display = 'block';
           const refCode = `DB-${biz.Slug.toUpperCase()}`;
           const rawMessage = `Assalaamualaikum! I came across ${biz.Name} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${biz.Deal || ''}". Let me know how to proceed, jazakallahu khair!`;
