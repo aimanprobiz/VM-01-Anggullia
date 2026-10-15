@@ -219,6 +219,11 @@ function initCarouselControls(totalSlides) {
     }
 
 // 4. Dynamic Business Directory Loader & Category Filter
+
+// Pagination state variables
+let allBusinesses = [];
+let visibleLimit = 10; // Shows 10 cards initially
+
 async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
@@ -234,10 +239,10 @@ async function loadBusinesses() {
     const response = await fetch('/api/businesses?t=' + Date.now());
     if (!response.ok) throw new Error('Network response was not ok');
 
-    let businesses = await response.json();
+    allBusinesses = await response.json();
 
     // 2. Handle empty dataset from Airtable
-    if (!Array.isArray(businesses) || businesses.length === 0) {
+    if (!Array.isArray(allBusinesses) || allBusinesses.length === 0) {
       gridContainer.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
           <p style="font-size: 1rem; font-weight: 600; color: var(--text-main);">No listings available yet</p>
@@ -248,7 +253,7 @@ async function loadBusinesses() {
     }
 
     // 3. SORT: Featured listings first, then alphabetical by name
-    businesses.sort((a, b) => {
+    allBusinesses.sort((a, b) => {
       const aFeatured = a.IsFeatured ? 1 : 0;
       const bFeatured = b.IsFeatured ? 1 : 0;
 
@@ -258,48 +263,10 @@ async function loadBusinesses() {
       return (a.Name || '').localeCompare(b.Name || '');
     });
 
-    // Clear loading state
-    gridContainer.innerHTML = '';
-
-    // 4. Render business cards
-    businesses.forEach(biz => {
-      const isFeatured = biz.IsFeatured;
-      const card = document.createElement('div');
-      
-      card.className = isFeatured ? 'grid-card featured-card' : 'grid-card';
-      card.setAttribute('data-cat', biz.Category || 'all');
-      card.style.cursor = 'pointer';
-
-      // Apply gorgeous gold border/background styling if featured
-      if (isFeatured) {
-        card.style.border = '2px solid #eab308';
-        card.style.background = 'linear-gradient(to bottom, #fffdf0, #ffffff)';
-        card.style.position = 'relative';
-      }
-
-      card.onclick = function() {
-        window.location.href = `/business.html?slug=${biz.Slug}`;
-      };
-
-      card.innerHTML = `
-        ${isFeatured ? '<span style="position: absolute; top: 10px; right: 10px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2;">⭐ Featured</span>' : ''}
-        <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
-        <div class="grid-card-body">
-          <div class="vendor-details">
-            <h3 class="vendor-name">${biz.Name}</h3>
-            <p class="vendor-sub">${biz.SubTitle || ''}</p>
-            <span class="deal-badge">${biz.Deal || ''}</span>
-          </div>
-          <a href="/business.html?slug=${biz.Slug}" class="action-btn" style="text-align: center; text-decoration: none;">
-            ${biz.ActionType || 'View Details'}
-          </a>
-        </div>
-      `;
-
-      gridContainer.appendChild(card);
-    });
-
+    // Render the first batch of cards
+    renderBusinessBatch();
     setupCategoryFilters();
+
   } catch (error) {
     console.error('Error loading businesses from Airtable:', error);
     gridContainer.innerHTML = `
@@ -307,6 +274,77 @@ async function loadBusinesses() {
         <p style="font-size: 0.9rem; color: #d9534f;">Unable to load business listings. Please refresh the page.</p>
       </div>
     `;
+  }
+}
+
+// Helper function to render batches based on visibleLimit
+function renderBusinessBatch() {
+  const gridContainer = document.getElementById('businessGrid');
+  if (!gridContainer) return;
+
+  gridContainer.innerHTML = '';
+
+  // Slice the array to only show up to the current visibleLimit
+  const currentBatch = allBusinesses.slice(0, visibleLimit);
+
+  currentBatch.forEach(biz => {
+    const isFeatured = biz.IsFeatured;
+    const card = document.createElement('div');
+    
+    card.className = isFeatured ? 'grid-card featured-card' : 'grid-card';
+    card.setAttribute('data-cat', biz.Category || 'all');
+    card.style.cursor = 'pointer';
+
+    if (isFeatured) {
+      card.style.border = '2px solid #eab308';
+      card.style.background = 'linear-gradient(to bottom, #fffdf0, #ffffff)';
+      card.style.position = 'relative';
+    }
+
+    card.onclick = function() {
+      window.location.href = `/business.html?slug=${biz.Slug}`;
+    };
+
+    card.innerHTML = `
+      ${isFeatured ? '<span style="position: absolute; top: 10px; right: 10px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2;">⭐ Featured</span>' : ''}
+      <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
+      <div class="grid-card-body">
+        <div class="vendor-details">
+          <h3 class="vendor-name">${biz.Name}</h3>
+          <p class="vendor-sub">${biz.SubTitle || ''}</p>
+          <span class="deal-badge">${biz.Deal || ''}</span>
+        </div>
+        <a href="/business.html?slug=${biz.Slug}" class="action-btn" style="text-align: center; text-decoration: none;">
+          ${biz.ActionType || 'View Details'}
+        </a>
+      </div>
+    `;
+
+    gridContainer.appendChild(card);
+  });
+
+  // Handle "Load More" button visibility
+  let loadMoreBtn = document.getElementById('loadMoreBtn');
+  
+  if (visibleLimit < allBusinesses.length) {
+    if (!loadMoreBtn) {
+      loadMoreBtn = document.createElement('button');
+      loadMoreBtn.id = 'loadMoreBtn';
+      loadMoreBtn.className = 'action-btn';
+      loadMoreBtn.style.cssText = 'width: 100%; margin: 24px 0; background: var(--card-bg); color: var(--primary-color); border: 1.5px solid var(--primary-color); font-weight: 600; cursor: pointer;';
+      loadMoreBtn.textContent = 'Load More Businesses ↓';
+      
+      loadMoreBtn.addEventListener('click', () => {
+        visibleLimit += 10; // Increase limit by 10
+        renderBusinessBatch();
+      });
+      
+      gridContainer.parentNode.appendChild(loadMoreBtn);
+    } else {
+      loadMoreBtn.style.display = 'block';
+    }
+  } else if (loadMoreBtn) {
+    loadMoreBtn.style.display = 'none'; // Hide when all cards are shown
   }
 }
 function setupCategoryFilters() {
