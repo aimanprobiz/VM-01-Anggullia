@@ -284,7 +284,15 @@ function renderBusinessBatch() {
     return;
   }
 
-  const currentBatch = allBusinesses.slice(0, visibleLimit);
+  // Check if a category filter is active so batch rendering honors it
+  const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
+  const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
+
+  const targetDataset = selectedCat === 'all' 
+    ? allBusinesses 
+    : allBusinesses.filter(biz => (biz.Category || 'all') === selectedCat);
+
+  const currentBatch = targetDataset.slice(0, visibleLimit);
 
   currentBatch.forEach(biz => {
     const isFeatured = biz.IsFeatured;
@@ -324,7 +332,7 @@ function renderBusinessBatch() {
 
   let loadMoreBtn = document.getElementById('loadMoreBtn');
   
-  if (allBusinesses.length === 0 || visibleLimit >= allBusinesses.length) {
+  if (targetDataset.length === 0 || visibleLimit >= targetDataset.length) {
     if (loadMoreBtn) {
       loadMoreBtn.style.setProperty('display', 'none', 'important');
     }
@@ -363,6 +371,10 @@ function setupCategoryFilters() {
       freshFilterButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
 
+      // Reset visible limit when switching categories so it starts fresh from 10 items in that category
+      visibleLimit = 10;
+      renderBusinessBatch();
+
       const selectedCat = button.getAttribute('data-cat');
       let visibleCount = 0;
 
@@ -393,14 +405,9 @@ function setupCategoryFilters() {
         } else {
           emptyMsg.style.display = 'block';
         }
-        // Force hide Load More when filtered view has no results
         if (loadMoreBtn) loadMoreBtn.style.setProperty('display', 'none', 'important');
       } else {
         if (emptyMsg) emptyMsg.style.display = 'none';
-        // Restore Load More button if there are more items to show overall
-        if (loadMoreBtn && visibleLimit < allBusinesses.length) {
-          loadMoreBtn.style.setProperty('display', 'block', 'important');
-        }
       }
     });
   });
