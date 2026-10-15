@@ -30,7 +30,7 @@
         <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"></p>
       </div>
 
-<!-- 5. Main Action Area -->
+      <!-- 5. Main Action Area -->
       <div id="redemptionArea">
         <!-- Option 1: In-store Redemption Button (Triggers Cashier PIN Modal) -->
         <button id="openRedeemModalBtn" class="action-btn" style="display: none; width: 100%;">
@@ -47,6 +47,7 @@
           Message Vendor on WhatsApp 💬
         </a>
       </div>
+    </div>
 
     <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
     <dialog id="redeemModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 90%; max-width: 360px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
@@ -60,9 +61,6 @@
         <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
           Please present your screen to the cashier and request the 4-digit PIN to confirm redemption:
         </p>
-
-        <!-- Custom In-App Notification Banner (Replaces alert header) -->
-        <div id="pinAlertMsg" style="display: none; padding: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-align: center; line-height: 1.4;"></div>
 
         <input type="password" id="cashierPin" maxlength="4" readonly placeholder="••••" class="pin-input" style="width: 100%; padding: 10px; font-size: 1.4rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1.5px solid var(--border-color); background-color: #faf9f5; outline: none;">
 
@@ -121,7 +119,7 @@
         bannerImg.src = biz.ImageURL || defaultImg;
         bannerImg.style.display = 'block';
 
-// Action Type Setup
+        // Action Type Setup
         const openRedeemModalBtn = document.getElementById('openRedeemModalBtn');
         const openCodeModalBtn = document.getElementById('openCodeModalBtn');
         const whatsappBtn = document.getElementById('whatsappBtn');
@@ -136,8 +134,8 @@
           openCodeModalBtn.style.display = 'block';
 
           openCodeModalBtn.addEventListener('click', () => {
-            const promoCode = biz.PromoCode || 'D.BARAKAHSG';
-            const storeUrl = biz.WebsiteURL || '#';
+            const promoCode = biz.PromoCode || biz.promocode || biz.promoCode || 'D.BARAKAHSG';
+            const storeUrl = biz.WebsiteURL || biz.websiteurl || biz.WebsiteUrl || '#';
 
             // Background click tracking
             fetch('/api/redeem', {
@@ -158,31 +156,45 @@
           });
 
         } else {
+          // WhatsApp Inquiry Option
           whatsappBtn.style.display = 'block';
           const refCode = `DB-${biz.Slug.toUpperCase()}`;
           const rawMessage = `Assalaamualaikum! I came across ${biz.Name} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${biz.Deal || ''}". Let me know how to proceed, jazakallahu khair!`;
-          whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodeURIComponent(rawMessage)}`;
+          const whatsappUrl = `https://wa.me/${biz.Phone || ''}?text=${encodeURIComponent(rawMessage)}`;
+          
+          whatsappBtn.href = whatsappUrl;
+
+          // Track click in Airtable when tapped
+          whatsappBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const trackingPayload = JSON.stringify({ slug: biz.Slug || biz.slug, action: 'whatsapp' });
+
+            // Use sendBeacon for seamless non-blocking request, fallback to fetch
+            if (navigator.sendBeacon) {
+              navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+            } else {
+              fetch('/api/redeem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: trackingPayload,
+                keepalive: true
+              }).catch(() => {});
+            }
+
+            // Immediately redirect to WhatsApp app/web
+            window.location.href = whatsappUrl;
+          });
         }
 
         const redeemModal = document.getElementById('redeemModal');
         const cashierPinInput = document.getElementById('cashierPin');
-        const pinAlertMsg = document.getElementById('pinAlertMsg');
         let currentPin = '';
 
-        // Helper to display custom inline messages
-        function showMessage(text, isSuccess) {
-          pinAlertMsg.style.display = 'block';
-          pinAlertMsg.style.backgroundColor = isSuccess ? '#e8f5e9' : '#fde8e8';
-          pinAlertMsg.style.color = isSuccess ? '#2e7d32' : '#c81e1e';
-          pinAlertMsg.style.border = isSuccess ? '1.5px solid #a5d6a7' : '1.5px solid #f8b4b4';
-          pinAlertMsg.innerText = text;
-        }
-
-        // Helper to reset modal feedback
+        // Helper to reset modal input
         function resetModalState() {
           currentPin = '';
           cashierPinInput.value = '';
-          pinAlertMsg.style.display = 'none';
         }
 
         // Bind keypad buttons once on load
@@ -196,9 +208,7 @@
         });
 
         document.getElementById('keyClear').addEventListener('click', () => {
-          currentPin = '';
-          cashierPinInput.value = '';
-          pinAlertMsg.style.display = 'none';
+          resetModalState();
         });
 
         document.getElementById('keyDelete').addEventListener('click', () => {
@@ -220,7 +230,7 @@
           });
         });
 
-// Verify PIN logic using native alert()
+        // Verify PIN logic using native alert()
         document.getElementById('verifyPinBtn').addEventListener('click', async () => {
           const targetPin = String(biz.PIN || '1234').trim();
 
@@ -233,7 +243,7 @@
               fetch('/api/redeem', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slug: biz.Slug || biz.slug })
+                body: JSON.stringify({ slug: biz.Slug || biz.slug, action: 'claim' })
               })
               .then(res => res.json())
               .then(data => console.log('Airtable response:', data))
@@ -251,8 +261,7 @@
             alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
             
             // 2. Reset the input field for re-entry
-            currentPin = '';
-            cashierPinInput.value = '';
+            resetModalState();
           }
         });
 
