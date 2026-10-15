@@ -57,6 +57,9 @@
           Please present your screen to the cashier and request the 4-digit PIN to confirm redemption:
         </p>
 
+        <!-- Custom In-App Notification Banner (Replaces alert header) -->
+        <div id="pinAlertMsg" style="display: none; padding: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; text-align: center; line-height: 1.4;"></div>
+
         <input type="password" id="cashierPin" maxlength="4" readonly placeholder="••••" class="pin-input" style="width: 100%; padding: 10px; font-size: 1.4rem; text-align: center; letter-spacing: 8px; border-radius: 8px; border: 1.5px solid var(--border-color); background-color: #faf9f5; outline: none;">
 
         <!-- Custom On-Screen Number Pad Grid -->
@@ -130,7 +133,24 @@
 
         const redeemModal = document.getElementById('redeemModal');
         const cashierPinInput = document.getElementById('cashierPin');
+        const pinAlertMsg = document.getElementById('pinAlertMsg');
         let currentPin = '';
+
+        // Helper to display custom inline messages
+        function showMessage(text, isSuccess) {
+          pinAlertMsg.style.display = 'block';
+          pinAlertMsg.style.backgroundColor = isSuccess ? '#e8f5e9' : '#fde8e8';
+          pinAlertMsg.style.color = isSuccess ? '#2e7d32' : '#c81e1e';
+          pinAlertMsg.style.border = isSuccess ? '1.5px solid #a5d6a7' : '1.5px solid #f8b4b4';
+          pinAlertMsg.innerText = text;
+        }
+
+        // Helper to reset modal feedback
+        function resetModalState() {
+          currentPin = '';
+          cashierPinInput.value = '';
+          pinAlertMsg.style.display = 'none';
+        }
 
         // Bind keypad buttons once on load
         document.querySelectorAll('.key-btn').forEach(button => {
@@ -145,6 +165,7 @@
         document.getElementById('keyClear').addEventListener('click', () => {
           currentPin = '';
           cashierPinInput.value = '';
+          pinAlertMsg.style.display = 'none';
         });
 
         document.getElementById('keyDelete').addEventListener('click', () => {
@@ -154,8 +175,7 @@
 
         // Open modal & reset input
         openRedeemModalBtn.addEventListener('click', () => {
-          currentPin = '';
-          cashierPinInput.value = '';
+          resetModalState();
           redeemModal.showModal();
         });
 
@@ -163,35 +183,41 @@
         document.querySelectorAll('.closeModalBtn').forEach(btn => {
           btn.addEventListener('click', () => {
             redeemModal.close();
+            resetModalState();
           });
         });
 
-// Verify PIN logic using Airtable's record PIN
-        document.getElementById('verifyPinBtn').addEventListener('click', () => {
+        // Verify PIN logic
+        document.getElementById('verifyPinBtn').addEventListener('click', async () => {
           const targetPin = String(biz.PIN || '1234').trim();
 
           if (currentPin === targetPin) {
-            redeemModal.close();
+            // 1. Display success message inside modal
+            showMessage(`✓ Successfully Redeemed!\n\nVoucher validated for ${biz.Name}. Please show this confirmation to the cashier.`, true);
 
-            // Send redemption request in background with error logging
-            const businessSlug = biz.Slug || biz.slug;
+            // 2. Increment redemption count in Airtable in background
+            try {
+              fetch('/api/redeem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug: biz.Slug || biz.slug })
+              })
+              .then(res => res.json())
+              .then(data => console.log('Airtable response:', data))
+              .catch(err => console.error('Fetch error:', err));
+            } catch (err) {
+              console.error('Error triggering redemption log:', err);
+            }
 
-            fetch('/api/redeem', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ slug: businessSlug })
-            })
-            .then(res => res.json())
-            .then(data => console.log('Airtable response:', data))
-            .catch(err => console.error('Fetch error:', err));
+            // 3. Auto-close modal after 3 seconds so cashier has time to see it
+            setTimeout(() => {
+              redeemModal.close();
+              resetModalState();
+            }, 3000);
 
-            // Show immediate success popup
-            alert(`Successfully Redeemed!\n\nVoucher validated for ${biz.Name}.\n\nPlease show this confirmation screen to the cashier.`);
-
-            currentPin = '';
-            cashierPinInput.value = '';
           } else {
-            alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
+            // Display error message inside modal
+            showMessage('Incorrect PIN. Please enter the correct 4-digit cashier PIN.', false);
             currentPin = '';
             cashierPinInput.value = '';
           }
@@ -207,6 +233,7 @@
             event.clientY > rect.bottom
           ) {
             redeemModal.close();
+            resetModalState();
           }
         });
 
