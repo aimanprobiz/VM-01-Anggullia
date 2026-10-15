@@ -30,19 +30,23 @@
         <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"></p>
       </div>
 
-      <!-- 5. Main Action Area -->
+<!-- 5. Main Action Area -->
       <div id="redemptionArea">
-        <!-- In-store Redemption Button (Triggers Popup Modal) -->
+        <!-- Option 1: In-store Redemption Button (Triggers Cashier PIN Modal) -->
         <button id="openRedeemModalBtn" class="action-btn" style="display: none; width: 100%;">
           Redeem In-Store Voucher 🎟️
         </button>
 
-        <!-- WhatsApp Redirect Button -->
+        <!-- Option 2: Unique Promo Code Button (For E-Commerce / Online Stores) -->
+        <button id="openCodeModalBtn" class="action-btn" style="display: none; width: 100%;">
+          Reveal Online Promo Code 🏷️
+        </button>
+
+        <!-- Option 3: WhatsApp Redirect Button (For Enquiries / Services) -->
         <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center; text-decoration: none; width: 100%;">
           Message Vendor on WhatsApp 💬
         </a>
       </div>
-    </div>
 
     <!-- POPUP MODAL FOR CASHIER PIN REDEMPTION -->
     <dialog id="redeemModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 90%; max-width: 360px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
