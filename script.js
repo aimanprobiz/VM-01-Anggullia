@@ -330,10 +330,14 @@ function renderBusinessBatch() {
     gridContainer.appendChild(card);
   });
 
-  // Handle "Load More" button visibility
+// Handle "Load More" button visibility
   let loadMoreBtn = document.getElementById('loadMoreBtn');
   
-  if (visibleLimit < allBusinesses.length) {
+  if (allBusinesses.length === 0 || visibleLimit >= allBusinesses.length) {
+    if (loadMoreBtn) {
+      loadMoreBtn.style.display = 'none';
+    }
+  } else {
     if (!loadMoreBtn) {
       loadMoreBtn = document.createElement('button');
       loadMoreBtn.id = 'loadMoreBtn';
@@ -350,10 +354,7 @@ function renderBusinessBatch() {
     } else {
       loadMoreBtn.style.display = 'block';
     }
-  } else if (loadMoreBtn) {
-    loadMoreBtn.style.display = 'none';
   }
-}
 function setupCategoryFilters() {
   const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
   const gridContainer = document.getElementById('businessGrid');
