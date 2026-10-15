@@ -79,7 +79,7 @@
     </dialog>
   </div>
 
-  <script>
+ <script>
     async function loadBusinessDetail() {
       const params = new URLSearchParams(window.location.search);
       const slug = params.get('slug');
@@ -193,13 +193,13 @@
             redeemModal.close();
           });
 
-document.getElementById('verifyPinBtn').addEventListener('click', () => {
+          document.getElementById('verifyPinBtn').addEventListener('click', () => {
             if (currentPin === '1234') {
-              // Transform modal content into success view
+              // Completely overwrite modalContent with success view
               modalContent.innerHTML = `
                 <div style="text-align: center; padding: 20px 10px; display: flex; flex-direction: column; gap: 14px; align-items: center;">
-                  <div style="width: 60px; height: 60px; border-radius: 50%; background-color: rgba(46, 125, 50, 0.15); display: flex; align-items: center; justify-content: center; color: #2e7d32; font-size: 1.8rem; font-weight: bold;">✓</div>
-                  <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--primary-color); margin: 0;">Successfully Redeemed!</h3>
+                  <div style="width: 65px; height: 65px; border-radius: 50%; background-color: rgba(46, 125, 50, 0.15); display: flex; align-items: center; justify-content: center; color: #2e7d32; font-size: 2rem; font-weight: bold;">✓</div>
+                  <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-color); margin: 0;">Successfully Redeemed!</h3>
                   <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
                     Voucher validated for <strong>${biz.Name}</strong>.<br>Please show this confirmation screen to the cashier.
                   </p>
@@ -207,7 +207,6 @@ document.getElementById('verifyPinBtn').addEventListener('click', () => {
                 </div>
               `;
 
-              // Ensure the modal stays open and only closes when "Done" is tapped
               document.getElementById('closeSuccessBtn').addEventListener('click', () => {
                 redeemModal.close();
               });
