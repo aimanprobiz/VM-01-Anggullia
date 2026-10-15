@@ -121,18 +121,41 @@
         bannerImg.src = biz.ImageURL || defaultImg;
         bannerImg.style.display = 'block';
 
-        // Action Type Setup
+// Action Type Setup
         const openRedeemModalBtn = document.getElementById('openRedeemModalBtn');
+        const openCodeModalBtn = document.getElementById('openCodeModalBtn');
         const whatsappBtn = document.getElementById('whatsappBtn');
         const actionType = (biz.ActionType || '').toLowerCase();
 
         if (actionType === 'claim') {
+          // 1. Show Cashier PIN button
           openRedeemModalBtn.style.display = 'block';
+
+        } else if (actionType === 'code') {
+          // 2. Show Online Promo Code button
+          openCodeModalBtn.style.display = 'block';
+
+          openCodeModalBtn.addEventListener('click', () => {
+            const promoCode = biz.PromoCode || 'BARAKAHSG';
+            const storeUrl = biz.WebsiteURL || '#';
+
+            // Show prompt/alert with the promo code
+            const userChoice = confirm(`Exclusive Code for ${biz.Name}:\n\n👉 ${promoCode}\n\nClick OK to copy the code and visit their store!`);
+
+            if (userChoice) {
+              navigator.clipboard.writeText(promoCode);
+              if (storeUrl !== '#') {
+                window.open(storeUrl, '_blank');
+              }
+            }
+          });
+
         } else {
+          // 3. Fallback: Show WhatsApp button
           whatsappBtn.style.display = 'block';
-const refCode = `DB-${biz.Slug.toUpperCase()}`;
-const rawMessage = `Assalaamualaikum! I came across ${biz.Name} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${biz.Deal || ''}". Let me know how to proceed, jazakallahu khair!`;
-whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodeURIComponent(rawMessage)}`;
+          const refCode = `DB-${biz.Slug.toUpperCase()}`;
+          const rawMessage = `Assalaamualaikum! I came across ${biz.Name} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${biz.Deal || ''}". Let me know how to proceed, jazakallahu khair!`;
+          whatsappBtn.href = `https://wa.me/${biz.Phone || ''}?text=${encodeURIComponent(rawMessage)}`;
         }
 
         const redeemModal = document.getElementById('redeemModal');
