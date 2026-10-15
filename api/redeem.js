@@ -9,9 +9,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing business slug' });
   }
 
-  const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-  const TABLE_NAME = 'Businesses'; // Make sure this matches your Airtable table name
+const AIRTABLE_API_KEY = process.env.AIRTABLE_PAT; 
+  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || process.env.AIRTABLE_BASE_ID; 
+  const TABLE_NAME = 'Businesses';
 
   try {
     // 1. Find the Airtable Record ID using the slug
