@@ -214,28 +214,55 @@
       flex-direction: column;
     }
 
-    /* Stacked Wrapped Categories */
-.filter-stacked {
-  display: flex;
-  flex-wrap: nowrap; /* Prevent wrapping into multiple rows */
-  overflow-x: auto;   /* Enable smooth horizontal scrolling */
-  gap: 8px;
-  margin-bottom: 16px;
-  padding-bottom: 4px; /* Space for scrollbar if visible */
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
-  -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
-}
+    /* Modern Swipeable Category Container */
+    .filter-stacked {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 4px 2px 8px 2px; /* Extra bottom padding for touch breathing room */
+      scrollbar-width: none; /* Firefox */
+      -webkit-overflow-scrolling: touch;
+      /* Soft negative margin trick if you want it to bleed edge-to-edge of the card container */
+      margin-left: -4px;
+      margin-right: -4px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.filter-stacked::-webkit-scrollbar {
-  display: none;
-}
+    .filter-stacked::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
 
-.filter-btn {
-  flex: 0 0 auto; /* Prevent pills from shrinking or stretching */
-  white-space: nowrap; /* Keep category text on a single line */
-}
+    /* Refined Pill Styling */
+    .filter-btn {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      background-color: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
+    .filter-btn:hover {
+      border-color: var(--accent-gold);
+      color: var(--text-main);
+    }
+
+    .filter-btn.active {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 3px 8px rgba(15, 56, 44, 0.2);
+    }
     /* 2-Column Visual Grid */
     .business-grid {
       display: grid;
