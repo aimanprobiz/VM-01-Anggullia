@@ -313,15 +313,13 @@ function renderBusinessBatch() {
     };
 
     card.innerHTML = `
-      ${isFeatured ? '<span style="position: absolute; top: 10px; right: 10px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 3;">⭐ Featured</span>' : ''}
-      <div class="card-banner-wrapper">
-        <span class="deal-badge">${biz.Deal || 'Special Offer'}</span>
-        <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
-      </div>
+      ${isFeatured ? '<span style="position: absolute; top: 10px; right: 10px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2;">⭐ Featured</span>' : ''}
+      <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
       <div class="grid-card-body">
         <div class="vendor-details">
           <h3 class="vendor-name">${biz.Name}</h3>
           <p class="vendor-sub">${biz.SubTitle || ''}</p>
+          <span class="deal-badge">${biz.Deal || ''}</span>
         </div>
         <a href="/business.html?slug=${biz.Slug}" class="action-btn" style="text-align: center; text-decoration: none;">
           ${biz.ActionType || 'View Details'}
