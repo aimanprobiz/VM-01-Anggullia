@@ -214,33 +214,55 @@
       flex-direction: column;
     }
 
-    /* Stacked Wrapped Categories */
+    /* Modern Swipeable Category Container */
     .filter-stacked {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px 6px;
-      margin-bottom: 16px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 4px 2px 8px 2px; /* Extra bottom padding for touch breathing room */
+      scrollbar-width: none; /* Firefox */
+      -webkit-overflow-scrolling: touch;
+      /* Soft negative margin trick if you want it to bleed edge-to-edge of the card container */
+      margin-left: -4px;
+      margin-right: -4px;
+      padding-left: 4px;
+      padding-right: 4px;
     }
 
+    .filter-stacked::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    /* Refined Pill Styling */
     .filter-btn {
+      flex: 0 0 auto;
+      white-space: nowrap;
       background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 6px 12px;
+      border: 1.5px solid var(--border-color);
+      padding: 7px 14px;
       border-radius: 20px;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 500;
       color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.2s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent-gold);
+      color: var(--text-main);
     }
 
     .filter-btn.active {
-      background-color: var(--accent-gold-bg);
-      border-color: var(--accent-gold);
-      color: var(--primary-color);
-      font-weight: 700;
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 3px 8px rgba(15, 56, 44, 0.2);
     }
-
     /* 2-Column Visual Grid */
     .business-grid {
       display: grid;
