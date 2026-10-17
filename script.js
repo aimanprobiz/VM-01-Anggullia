@@ -227,12 +227,18 @@ async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
 
-  gridContainer.innerHTML = `
-    <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
-      <p style="font-size: 0.95rem; font-weight: 500;">Loading community listings...</p>
+gridContainer.innerHTML = Array(4).fill(`
+    <div class="grid-card skeleton-card">
+      <div class="skeleton-img"></div>
+      <div class="grid-card-body">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line sub"></div>
+        <div class="skeleton-line badge"></div>
+        <div class="skeleton-line btn"></div>
+      </div>
     </div>
-  `;
-
+  `).join('');
+  
   try {
     const response = await fetch('/api/businesses?t=' + Date.now());
     if (!response.ok) throw new Error('Network response was not ok');
