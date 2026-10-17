@@ -214,21 +214,22 @@
       flex-direction: column;
     }
 
-    /* Modern Swipeable Category Container */
+/* Modern Swipeable & Sticky Category Container */
     .filter-stacked {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background-color: var(--bg-color); /* Matches page background so scrolling cards don't bleed through behind pills */
       display: flex;
       flex-wrap: nowrap;
       overflow-x: auto;
       gap: 8px;
       margin-bottom: 18px;
-      padding: 4px 2px 8px 2px; /* Extra bottom padding for touch breathing room */
+      padding: 10px 4px 10px 4px; /* Slightly adjusted padding for smooth sticky alignment */
       scrollbar-width: none; /* Firefox */
       -webkit-overflow-scrolling: touch;
-      /* Soft negative margin trick if you want it to bleed edge-to-edge of the card container */
       margin-left: -4px;
       margin-right: -4px;
-      padding-left: 4px;
-      padding-right: 4px;
     }
 
     .filter-stacked::-webkit-scrollbar {
