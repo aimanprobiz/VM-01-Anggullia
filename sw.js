@@ -1,14 +1,15 @@
 // sw.js
-const CACHE_NAME = 'app-cache-v4'; // Bumped to v4 to purge old cached index.html
+const CACHE_NAME = 'app-cache-v6'; // Bumped version
 const ASSETS = [
   '/',
   '/index.html',
+  '/business.html',
   '/manifest.json'
 ];
 
 // 1. Install & Immediate Takeover
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Force active service worker takeover without waiting for user to close tabs
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
@@ -18,9 +19,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     Promise.all([
-      // Claim control of all open browser tabs immediately
       self.clients.claim(),
-      // Delete old caches (e.g., 'app-cache-v1')
       caches.keys().then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cache) => {
@@ -34,17 +33,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 3. Network-First Strategy for HTML/API, Cache-First for static assets
+// 3. Optimized Stale-While-Revalidate / Network-First Strategy
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Bypass service worker cache completely for API calls
+  // Bypass service worker cache completely for all API calls
   if (url.pathname.startsWith('/api/')) {
     return;
   }
 
-  // Network-First for HTML/Documents so updates pull live immediately
+  // For HTML pages, use Network-First so users always get live updates instantly
   if (event.request.mode === 'navigate' || event.request.headers.get('accept').includes('text/html')) {
+    event.respondBy?.() // standard syntax below:
     event.respondWith(
       fetch(event.request)
         .then((networkResponse) => {
@@ -53,12 +53,12 @@ self.addEventListener('fetch', (event) => {
             return networkResponse;
           });
         })
-        .catch(() => caches.match(event.request)) // Fallback to cache if offline
+        .catch(() => caches.match(event.request))
     );
     return;
   }
 
-  // Cache-First with Network Fallback for other assets (e.g., images, manifest)
+  // Cache-First for static assets (styles, images)
   event.respondWith(
     caches.match(event.request).then((response) => response || fetch(event.request))
   );
