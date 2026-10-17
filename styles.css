@@ -383,3 +383,35 @@
     .pin-input:focus {
       border-color: var(--primary-color);
     }
+
+/* Skeleton Loading Shimmer Effect */
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-img, .skeleton-line {
+  background: linear-gradient(90deg, #e2dbc9 25%, #f5f2e9 50%, #e2dbc9 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+.skeleton-img {
+  width: 100%;
+  height: 105px;
+}
+
+.skeleton-line {
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.skeleton-line.title { width: 80%; height: 14px; }
+.skeleton-line.sub { width: 60%; }
+.skeleton-line.badge { width: 50%; height: 18px; margin-top: 4px; }
+.skeleton-line.btn { width: 100%; height: 32px; margin-top: 8px; border-radius: var(--radius-sm); }
