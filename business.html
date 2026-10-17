@@ -33,7 +33,10 @@
         <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
           Ummah Special:
         </p>
-        <p id="bizDeal" class="skeleton-line" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); width: 50%; min-height: 18px; margin-top: 4px;"></p>
+        <div id="dealSkeleton">
+          <div class="skeleton-line" style="width: 60%; height: 16px; margin-top: 6px;"></div>
+        </div>
+        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); display: none;"></p>
       </div>
 
       <!-- 5. Main Action Area -->
@@ -149,8 +152,9 @@
 
         const dealEl = document.getElementById('bizDeal');
         dealEl.textContent = bizDealText;
-        dealEl.classList.remove('skeleton-line');
-        dealEl.style.minHeight = 'auto';
+        dealEl.style.display = 'block';
+        const dealSkeleton = document.getElementById('dealSkeleton');
+        if (dealSkeleton) dealSkeleton.style.display = 'none';
 
         const descEl = document.getElementById('bizDescription');
         descEl.textContent = bizDesc;
