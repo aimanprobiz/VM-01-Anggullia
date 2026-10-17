@@ -330,11 +330,10 @@ card.innerHTML = `
           <span class="deal-badge">${biz.Deal || ''}</span>
         </div>
         <button class="action-btn" style="text-align: center;">
-          ${biz.ActionType || 'View Details'}
+          View Details
         </button>
       </div>
     `;
-
     gridContainer.appendChild(card);
   });
 
