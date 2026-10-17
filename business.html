@@ -29,20 +29,13 @@
       <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-bottom: 15px; white-space: pre-line; display: none;"></p>
       
 <!-- 4. Ummah Special -->
-      <div id="dealBoxWrapper" style="display: none; background-color: var(--accent-gold-bg, #fdf8ec); padding: 12px; border-radius: var(--radius-sm, 8px); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 15px;">
+      <div id="dealBox" style="background-color: var(--accent-gold-bg, #fdf8ec); padding: 12px; border-radius: var(--radius-sm, 8px); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 15px; display: none;">
         <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
           Ummah Special:
         </p>
         <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-top: 4px;"></p>
       </div>
-
-      <!-- Temporary skeleton placeholder for the deal box while loading -->
-      <div id="dealBoxSkeleton" style="background-color: var(--accent-gold-bg, #fdf8ec); padding: 12px; border-radius: var(--radius-sm, 8px); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 15px;">
-        <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
-          Ummah Special:
-        </p>
-        <div class="skeleton-line" style="width: 60%; height: 16px;"></div>
-      </div>
+      
       <!-- 5. Main Action Area -->
       <div id="redemptionArea">
         <!-- Option 1: In-store Redemption Button (Triggers Cashier PIN Modal) -->
@@ -157,11 +150,8 @@
 const dealEl = document.getElementById('bizDeal');
         dealEl.textContent = bizDealText;
 
-        const dealBoxSkeleton = document.getElementById('dealBoxSkeleton');
-        if (dealBoxSkeleton) dealBoxSkeleton.style.display = 'none';
-
-        const dealBoxWrapper = document.getElementById('dealBoxWrapper');
-        if (dealBoxWrapper) dealBoxWrapper.style.display = 'block';
+        const dealBox = document.getElementById('dealBox');
+        if (dealBox) dealBox.style.display = 'block';
 
         const dealContent = document.getElementById('dealContent');
         if (dealContent) dealContent.style.display = 'block';
