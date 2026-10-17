@@ -227,7 +227,7 @@ async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
 
-gridContainer.innerHTML = Array(4).fill(`
+gridContainer.innerHTML = Array(10).fill(`
     <div class="grid-card skeleton-card">
       <div class="skeleton-img"></div>
       <div class="grid-card-body">
