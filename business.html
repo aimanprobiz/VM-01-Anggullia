@@ -13,21 +13,27 @@
 
     <div class="card" id="detailContainer" style="margin-top: 10px;">
       <!-- 1. Header: Name & Subtitle -->
-      <h2 id="bizName" style="color: var(--primary-color); margin-bottom: 4px;">Loading business...</h2>
-      <p id="bizSub" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px;"></p>
+      <h2 id="bizName" class="skeleton-line title" style="color: var(--primary-color); margin-bottom: 4px; width: 70%; min-height: 24px;"></h2>
+      <p id="bizSub" class="skeleton-line sub" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px; width: 45%; min-height: 16px;"></p>
       
       <!-- 2. Image below Subtitle -->
+      <div id="bizBannerSkeleton" class="skeleton-img" style="width: 100%; border-radius: var(--radius-sm, 8px); margin-bottom: 15px; height: 180px;"></div>
       <img id="bizBanner" src="" alt="Business Banner" style="width: 100%; border-radius: var(--radius-sm, 8px); display: none; margin-bottom: 15px; object-fit: cover; max-height: 220px;">
 
       <!-- 3. Description -->
-      <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-bottom: 15px; white-space: pre-line;"></p>
+      <div id="descSkeleton">
+        <div class="skeleton-line" style="width: 100%; height: 12px; margin-bottom: 8px;"></div>
+        <div class="skeleton-line" style="width: 90%; height: 12px; margin-bottom: 8px;"></div>
+        <div class="skeleton-line" style="width: 65%; height: 12px; margin-bottom: 15px;"></div>
+      </div>
+      <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-bottom: 15px; white-space: pre-line; display: none;"></p>
 
       <!-- 4. Ummah Special -->
       <div id="dealBox" style="background-color: var(--accent-gold-bg, #fdf8ec); padding: 12px; border-radius: var(--radius-sm, 8px); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 15px;">
         <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
           Ummah Special:
         </p>
-        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"></p>
+        <p id="bizDeal" class="skeleton-line" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); width: 50%; min-height: 18px; margin-top: 4px;"></p>
       </div>
 
       <!-- 5. Main Action Area -->
@@ -118,7 +124,7 @@
           return;
         }
 
-        // Safe property getters matching your exact Airtable schema keys[cite: 7]
+        // Safe property getters matching your exact Airtable schema keys
         const bizName = biz.Name || biz.name || 'Business Details';
         const bizSub = biz.SubTitle || biz.subtitle || '';
         const bizDealText = biz.Deal || biz.deal || 'No special deal specified.';
@@ -128,18 +134,37 @@
         const defaultSlug = bizName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const bizSlugVal = biz.Slug || biz.slug || defaultSlug;
 
-        // Set page text content safely
+        // Set page text content safely & clear skeletons
         document.title = `${bizName} - DailyBarakah SG`;
-        setVal('bizName', 'textContent', bizName);
-        setVal('bizSub', 'textContent', bizSub);
-        setVal('bizDeal', 'textContent', bizDealText);
-        setVal('bizDescription', 'textContent', bizDesc);
+        
+        const nameEl = document.getElementById('bizName');
+        nameEl.textContent = bizName;
+        nameEl.classList.remove('skeleton-line', 'title');
+        nameEl.style.minHeight = 'auto';
 
-        // Handle Image URL safely
+        const subEl = document.getElementById('bizSub');
+        subEl.textContent = bizSub;
+        subEl.classList.remove('skeleton-line', 'sub');
+        subEl.style.minHeight = 'auto';
+
+        const dealEl = document.getElementById('bizDeal');
+        dealEl.textContent = bizDealText;
+        dealEl.classList.remove('skeleton-line');
+        dealEl.style.minHeight = 'auto';
+
+        const descEl = document.getElementById('bizDescription');
+        descEl.textContent = bizDesc;
+        descEl.style.display = 'block';
+        const descSkeleton = document.getElementById('descSkeleton');
+        if (descSkeleton) descSkeleton.style.display = 'none';
+
+        // Handle Image URL safely & hide banner skeleton
         const bannerImg = document.getElementById('bizBanner');
+        const bannerSkeleton = document.getElementById('bizBannerSkeleton');
         if (bannerImg) {
           bannerImg.src = bizImage;
           bannerImg.style.display = 'block';
+          if (bannerSkeleton) bannerSkeleton.style.display = 'none';
         }
 
         // Action Type Setup
