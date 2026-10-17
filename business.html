@@ -27,16 +27,25 @@
         <div class="skeleton-line" style="width: 65%; height: 12px; margin-bottom: 15px;"></div>
       </div>
       <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-bottom: 15px; white-space: pre-line; display: none;"></p>
-
-      <!-- 4. Ummah Special -->
+      
+<!-- 4. Ummah Special -->
       <div id="dealBox" style="background-color: var(--accent-gold-bg, #fdf8ec); padding: 12px; border-radius: var(--radius-sm, 8px); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 15px;">
-        <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
-          Ummah Special:
-        </p>
+        
+        <!-- Skeleton loader for the entire box -->
         <div id="dealSkeleton">
-          <div class="skeleton-line" style="width: 60%; height: 18px; margin-top: 4px;"></div>
+          <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+            Ummah Special:
+          </p>
+          <div class="skeleton-line" style="width: 60%; height: 16px;"></div>
         </div>
-        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); display: none; margin-top: 4px;"></p>
+
+        <!-- Real content (hidden initially) -->
+        <div id="dealContent" style="display: none;">
+          <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
+            Ummah Special:
+          </p>
+          <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-top: 4px;"></p>
+        </div>
       </div>
 
       <!-- 5. Main Action Area -->
@@ -150,11 +159,14 @@
         subEl.classList.remove('skeleton-line', 'sub');
         subEl.style.minHeight = 'auto';
 
-        const dealEl = document.getElementById('bizDeal');
+const dealEl = document.getElementById('bizDeal');
         dealEl.textContent = bizDealText;
-        dealEl.style.display = 'block';
+
         const dealSkeleton = document.getElementById('dealSkeleton');
         if (dealSkeleton) dealSkeleton.style.display = 'none';
+
+        const dealContent = document.getElementById('dealContent');
+        if (dealContent) dealContent.style.display = 'block';
 
         const descEl = document.getElementById('bizDescription');
         descEl.textContent = bizDesc;
