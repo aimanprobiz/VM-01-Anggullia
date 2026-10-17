@@ -312,6 +312,14 @@ function renderBusinessBatch() {
       window.location.href = `/business.html?slug=${biz.Slug}`;
     };
 
+// Determine icon indicator based on ActionType
+    const actionType = (biz.ActionType || '').toLowerCase();
+    let actionIcon = '➡️';
+    if (actionType.includes('claim')) actionIcon = '🎟️';
+    else if (actionType.includes('code') || actionType.includes('promo')) actionIcon = '🏷️';
+    else if (actionType.includes('book')) actionIcon = '📅';
+    else if (actionType.includes('enquire') || actionType.includes('whatsapp')) actionIcon = '💬';
+
     card.innerHTML = `
       ${isFeatured ? '<span style="position: absolute; top: 10px; right: 10px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2;">⭐ Featured</span>' : ''}
       <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
@@ -321,9 +329,9 @@ function renderBusinessBatch() {
           <p class="vendor-sub">${biz.SubTitle || ''}</p>
           <span class="deal-badge">${biz.Deal || ''}</span>
         </div>
-        <a href="/business.html?slug=${biz.Slug}" class="action-btn" style="text-align: center; text-decoration: none;">
-          ${biz.ActionType || 'View Details'}
-        </a>
+        <button class="action-btn" style="text-align: center;">
+          View Details ${actionIcon}
+        </button>
       </div>
     `;
 
