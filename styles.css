@@ -365,20 +365,21 @@
     /* Minimalist Unified Featured Pill Tag for Grid Cards */
 .grid-featured-badge {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: linear-gradient(135deg, #e3c263 0%, #c29a38 100%); /* Rich metallic gold gradient */
-  color: #ffffff;
-  font-size: 0.62rem;
-  font-weight: 700;
-  padding: 4px 9px;
-  border-radius: 20px; /* Rounded pill shape matching your category buttons */
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+  top: 6px;
+  right: 6px;
+  background: var(--accent-gold);
+  color: var(--primary-color);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
   z-index: 2;
-  border: 1px solid rgba(255, 255, 255, 0.4); /* Faint white rim for crisp contrast against images */
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* Lifted badge shadow */
-  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ffffff;
 }
 
 .grid-card.featured-card {
