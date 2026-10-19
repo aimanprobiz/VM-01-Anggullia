@@ -330,7 +330,7 @@ card.innerHTML = `
         <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
         
         <!-- 2. Featured Badge -->
-        ${isFeatured ? '<span class="grid-featured-badge">Featured</span>' : ''}
+        ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
       </div>
 
       <div class="grid-card-body">
