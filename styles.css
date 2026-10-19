@@ -380,9 +380,9 @@
 }
 
 .grid-card.featured-card {
-  border: 1.5px solid var(--accent-gold);
+  border: 1px solid var(--border-color); /* Matches your standard card border */
   background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
-  box-shadow: 0 4px 12px rgba(221, 186, 88, 0.18);
+  box-shadow: var(--shadow-md); /* Uses your existing deeper shadow variable */
   position: relative;
 }
 
