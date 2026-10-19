@@ -380,34 +380,23 @@
 }
 
 .grid-card.featured-card {
-  /* 1. Subtle, high-end warm border to catch top light */
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-top: 1.5px solid rgba(221, 186, 88, 0.6);
+  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
   
-  /* 2. Warm gradient background */
-  background: linear-gradient(145deg, #ffffff 0%, #fffbf0 100%);
-  
-  /* 3. Deep 3D multi-layered shadow with higher blur and spread */
+  /* Clean, realistic multi-layered shadow */
   box-shadow: 
-    0 20px 35px -5px rgba(12, 43, 34, 0.22), 
-    0 10px 15px -5px rgba(12, 43, 34, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 10px 25px -3px rgba(12, 43, 34, 0.12),
+    0 4px 6px -2px rgba(12, 43, 34, 0.05);
     
-  /* 4. Physical lift and hardware-accelerated positioning */
-  transform: translateY(-4px) scale(1.01);
+  /* Gentle 2px lift without scaling out of bounds */
+  transform: translateY(-2px);
   position: relative;
-  z-index: 3;
+  z-index: 2;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* 5. Interactive 3D pop effect when tapped/hovered */
-.grid-card.featured-card:active,
-.grid-card.featured-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 
-    0 25px 45px -5px rgba(12, 43, 34, 0.28), 
-    0 12px 20px -5px rgba(12, 43, 34, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+.grid-card.featured-card:active {
+  transform: scale(0.98); /* Subtle press-down feel when tapped on mobile */
 }
 /* Dialog Backdrop Styling */
     dialog::backdrop {
