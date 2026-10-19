@@ -308,9 +308,7 @@ function renderBusinessBatch() {
     card.setAttribute('data-cat', biz.Category || 'all');
     card.style.cursor = 'pointer';
 
-    if (isFeatured) {
-      card.style.border = '2px solid #eab308';
-      card.style.background = 'linear-gradient(to bottom, #fffdf0, #ffffff)';
+if (isFeatured) {
       card.style.position = 'relative';
     }
 
