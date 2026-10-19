@@ -327,13 +327,12 @@ function renderBusinessBatch() {
     else if (actionType.includes('enquire') || actionType.includes('whatsapp')) actionIcon = '💬';
 
 card.innerHTML = `
-      ${isFeatured ? '<span style="position: absolute; top: 10px; right: 10px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2;">⭐ Featured</span>' : ''}
+      ${isFeatured ? '<span style="position: absolute; top: 8px; right: 8px; background: var(--accent-gold); color: var(--primary-color); font-size: 0.62rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Featured</span>' : ''}
       <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
       <div class="grid-card-body">
-        <div class="vendor-details">
+        <div class="vendor-details" style="margin-bottom: 4px;">
           <h3 class="vendor-name">${biz.Name}</h3>
           <p class="vendor-sub">${biz.SubTitle || ''}</p>
-          <span class="deal-badge">${biz.Deal || ''}</span>
         </div>
         <button class="action-btn" style="text-align: center;">
           View Details
