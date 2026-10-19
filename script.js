@@ -331,16 +331,16 @@ card.innerHTML = `
         <!-- 1. Vendor Image (Clean & Un-obstructed) -->
         <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
         
-        <!-- 2. Featured Badge (Small, minimal, consistent corner placement) -->
+        <!-- 2. Featured Badge -->
         ${isFeatured ? '<span class="grid-featured-badge">Featured</span>' : ''}
       </div>
 
       <div class="grid-card-body">
         <div class="vendor-details">
-          <!-- 3. Business Name (Bold, high contrast) -->
+          <!-- 3. Business Name -->
           <h3 class="vendor-name">${biz.Name}</h3>
           
-          <!-- 4. Short Category/Tagline (Muted text - using SubTitle) -->
+          <!-- 4. Short Category/Tagline -->
           <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
         </div>
 
