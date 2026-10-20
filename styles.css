@@ -383,8 +383,10 @@
 }
 
 .grid-card.featured-card {
-  border: 1px solid var(--border-color);
+border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
   background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
+  box-shadow: var(--shadow-md);
+  position: relative;
   
   /* Clean, realistic multi-layered shadow */
   box-shadow: 
