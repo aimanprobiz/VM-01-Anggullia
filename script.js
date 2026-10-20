@@ -354,7 +354,7 @@ function renderBusinessBatch() {
       <div class="grid-card-body">
         <div class="vendor-details">
           <!-- Render deal badge pill dynamically if a deal text exists -->
-          ${dealText ? `<div class="deal-badge"><span>✂️</span> ${dealText}</div>` : ''}
+          ${dealText ? `<div class="deal-badge"><span></span> ${dealText}</div>` : ''}
 
           <h3 class="vendor-name">${biz.Name}</h3>
           <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
