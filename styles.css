@@ -522,3 +522,9 @@ border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
 .action-btn-primary:active {
   transform: scale(0.98);
 }
+
+/* Darker Subtitle specifically for Business Detail Card */
+#bizSub {
+  color: #2c3e35; /* Darker, richer forest-grey shade */
+  font-weight: 500; /* Optional: slightly medium weight for better legibility */
+}
