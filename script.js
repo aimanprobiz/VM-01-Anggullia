@@ -271,30 +271,31 @@ gridContainer.innerHTML = Array(10).fill(`
   }
 }
 
-// Add a scroll listener for infinite loading and back-to-top visibility
+// Scroll listener for infinite loading and bottom-triggered back-to-top button
 window.addEventListener('scroll', () => {
   const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
   const currentScroll = window.scrollY;
+  const distanceToBottom = scrollableHeight - currentScroll;
 
   // 1. Infinite Scroll trigger (loads more when within 300px of the bottom)
-  if (scrollableHeight - currentScroll < 300) {
+  if (distanceToBottom < 300) {
     const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
     const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
     const targetDataset = selectedCat === 'all' 
       ? allBusinesses 
       : allBusinesses.filter(biz => (biz.Category || 'all') === selectedCat);
 
-    // Only load more if there are more items left to show and we aren't already maxed out
     if (visibleLimit < targetDataset.length) {
       visibleLimit += 10;
       renderBusinessBatch();
     }
   }
 
-  // 2. Back-to-Top Button visibility
+  // 2. Back-to-Top Button visibility (ONLY appears when near/at the unscrollable bottom)
   const backToTopBtn = document.getElementById('backToTopBtn');
   if (backToTopBtn) {
-    if (currentScroll > 400) {
+    // Appears only when user is within 150px of the total bottom
+    if (distanceToBottom <= 150) {
       backToTopBtn.style.opacity = '1';
       backToTopBtn.style.pointerEvents = 'auto';
     } else {
