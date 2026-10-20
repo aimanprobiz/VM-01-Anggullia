@@ -338,7 +338,9 @@
     /* Action Button with Gold Trim & Signature Hover State */
     .action-btn {
       width: 100%;
+        border-color: var(--accent-gold);
       background-color: var(--primary-color);
+        box-shadow: 0 2px 6px rgba(221, 186, 88, 0.25);
       color: #ffffff;
       border: 1.5px solid var(--accent-gold);
       padding: 8px 0;
