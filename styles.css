@@ -467,11 +467,11 @@ border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
 .coupon-ticket {
   position: relative;
   background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%);
-  border: 2px dashed #c29a38;
+  border: 1.5px dashed #c29a38;
   border-radius: 12px;
-  padding: 16px 20px;
-  margin: 8px 0;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  padding: 16px 28px; /* Increased side padding away from notches */
+  margin: 12px 0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
   overflow: hidden;
 }
 
