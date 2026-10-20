@@ -271,6 +271,39 @@ gridContainer.innerHTML = Array(10).fill(`
   }
 }
 
+// Add a scroll listener for infinite loading and back-to-top visibility
+window.addEventListener('scroll', () => {
+  const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const currentScroll = window.scrollY;
+
+  // 1. Infinite Scroll trigger (loads more when within 300px of the bottom)
+  if (scrollableHeight - currentScroll < 300) {
+    const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
+    const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
+    const targetDataset = selectedCat === 'all' 
+      ? allBusinesses 
+      : allBusinesses.filter(biz => (biz.Category || 'all') === selectedCat);
+
+    // Only load more if there are more items left to show and we aren't already maxed out
+    if (visibleLimit < targetDataset.length) {
+      visibleLimit += 10;
+      renderBusinessBatch();
+    }
+  }
+
+  // 2. Back-to-Top Button visibility
+  const backToTopBtn = document.getElementById('backToTopBtn');
+  if (backToTopBtn) {
+    if (currentScroll > 400) {
+      backToTopBtn.style.opacity = '1';
+      backToTopBtn.style.pointerEvents = 'auto';
+    } else {
+      backToTopBtn.style.opacity = '0';
+      backToTopBtn.style.pointerEvents = 'none';
+    }
+  }
+});
+
 function renderBusinessBatch() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
@@ -284,13 +317,9 @@ function renderBusinessBatch() {
         <p style="font-size: 0.85rem; margin-top: 5px;">Check back soon for new community deals!</p>
       </div>
     `;
-    
-    const loadMoreBtn = document.getElementById('loadMoreBtn');
-    if (loadMoreBtn) loadMoreBtn.style.setProperty('display', 'none', 'important');
     return;
   }
 
-  // Check if a category filter is active so batch rendering honors it
   const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
   const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
 
@@ -308,41 +337,22 @@ function renderBusinessBatch() {
     card.setAttribute('data-cat', biz.Category || 'all');
     card.style.cursor = 'pointer';
 
-if (isFeatured) {
-      card.style.position = 'relative';
-    }
-
     card.onclick = function() {
       window.location.href = `/business.html?slug=${biz.Slug}`;
     };
 
-// Determine icon indicator based on ActionType
-    const actionType = (biz.ActionType || '').toLowerCase();
-    let actionIcon = '➡️';
-    if (actionType.includes('claim')) actionIcon = '🎟️';
-    else if (actionType.includes('code') || actionType.includes('promo')) actionIcon = '🏷️';
-    else if (actionType.includes('book')) actionIcon = '📅';
-    else if (actionType.includes('enquire') || actionType.includes('whatsapp')) actionIcon = '💬';
-
-card.innerHTML = `
+    card.innerHTML = `
       <div style="position: relative;">
-        <!-- 1. Vendor Image (Clean & Un-obstructed) -->
         <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
-        
-        <!-- 2. Featured Badge -->
         ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
       </div>
 
       <div class="grid-card-body">
         <div class="vendor-details">
-          <!-- 3. Business Name -->
           <h3 class="vendor-name">${biz.Name}</h3>
-          
-          <!-- 4. Short Category/Tagline -->
           <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
         </div>
 
-        <!-- 5. Action Button -->
         <button class="action-btn" style="text-align: center;">
           View Details
         </button>
@@ -351,30 +361,9 @@ card.innerHTML = `
     gridContainer.appendChild(card);
   });
 
-  let loadMoreBtn = document.getElementById('loadMoreBtn');
-  
-  if (targetDataset.length === 0 || visibleLimit >= targetDataset.length) {
-    if (loadMoreBtn) {
-      loadMoreBtn.style.setProperty('display', 'none', 'important');
-    }
-  } else {
-    if (!loadMoreBtn) {
-      loadMoreBtn = document.createElement('button');
-      loadMoreBtn.id = 'loadMoreBtn';
-      loadMoreBtn.className = 'action-btn';
-      loadMoreBtn.style.cssText = 'width: 100%; margin: 24px 0; background: var(--card-bg); color: var(--primary-color); border: 1.5px solid var(--primary-color); font-weight: 600; cursor: pointer;';
-      loadMoreBtn.textContent = 'Load More Businesses ↓';
-      
-      loadMoreBtn.addEventListener('click', () => {
-        visibleLimit += 10;
-        renderBusinessBatch();
-      });
-      
-      gridContainer.parentNode.appendChild(loadMoreBtn);
-    } else {
-      loadMoreBtn.style.setProperty('display', 'block', 'important');
-    }
-  }
+  // Automatically ensure old manual loadMoreBtn is removed if it exists
+  const oldBtn = document.getElementById('loadMoreBtn');
+  if (oldBtn) oldBtn.remove();
 }
 
 function setupCategoryFilters() {
