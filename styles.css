@@ -341,33 +341,29 @@
     }
 
     /* Action Button with Gold Trim & Signature Hover State */
-    .action-btn {
-      width: 100%;
-        border-color: var(--accent-gold);
-      background-color: var(--primary-color);
-        box-shadow: 0 2px 6px rgba(221, 186, 88, 0.25);
-      color: #ffffff;
-      border: 1.5px solid var(--accent-gold);
-      padding: 8px 0;
-      border-radius: var(--radius-sm);
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-      box-sizing: border-box;
-      margin-top: 6px;
-    }
+.action-btn {
+  width: 100%;
+  background-color: transparent; /* Light background instead of heavy dark green */
+  color: var(--primary-color);
+  border: 1.5px solid var(--primary-color);
+  padding: 7px 0;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: auto; /* Pushes button cleanly to the bottom of the card */
+}
 
-    .action-btn:hover,
-    .action-btn:active {
-      background-color: var(--accent-gold);
-      color: var(--primary-color);
-      border-color: var(--accent-gold);
-    }
+.action-btn:hover,
+.action-btn:active {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
 
     /* Minimalist Unified Featured Pill Tag for Grid Cards */
 .grid-featured-badge {
