@@ -328,17 +328,23 @@
   min-height: 1.95rem; /* Keeps card buttons aligned evenly across all cards */
 }
 
-    .deal-badge {
-      display: inline-block;
-      background-color: var(--accent-gold-bg);
-      color: var(--primary-color);
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 3px 6px;
-      border-radius: 6px;
-      border: 1px solid rgba(221, 186, 88, 0.4);
-      line-height: 1.2;
-    }
+/* Standout Cream Accent Deal Badge for Grid Cards */
+.deal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #fffdf2; /* Cream accent background */
+  color: var(--primary-color, #0f382c); /* Deep green text for crisp contrast */
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px; /* Rounded pill shape */
+  border: 1px solid var(--accent-gold, #ddba58); /* Subtle gold border */
+  margin-top: 6px;   /* Clean spacing away from card photo boundary */
+  margin-bottom: 6px;/* Clear spacing before title/sub text below */
+  line-height: 1.2;
+  box-shadow: 0 1px 3px rgba(15, 56, 44, 0.05);
+}
 
     /* Action Button with Gold Trim & Signature Hover State */
 .action-btn {
