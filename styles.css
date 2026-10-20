@@ -523,7 +523,7 @@ border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
 .coupon-deal-text {
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--primary-color, #0f382c);
+  color: #000000;
   line-height: 1.25;
   margin: 2px 0 0 0;
 }
