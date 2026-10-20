@@ -501,3 +501,52 @@ border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
   border-bottom-left-radius: 20px;
   border-right: none; /* Removes outer rectangle border */
 }
+
+/* 1. Coupon Header Layout */
+.coupon-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+/* 2. Muted Gold Category Tag */
+.coupon-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--accent-gold, #c29a38);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* 3. Bold High-Contrast Green Offer Text */
+.coupon-deal-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-color, #0f382c);
+  line-height: 1.25;
+  margin: 2px 0 0 0;
+}
+
+/* 4. High-Contrast Primary Button for Business Detail Page */
+.action-btn-primary {
+  width: 100%;
+  background-color: var(--primary-color, #0f382c);
+  color: #ffffff;
+  border: 1.5px solid var(--accent-gold, #ddba58);
+  padding: 12px 0;
+  border-radius: var(--radius-md, 12px);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.action-btn-primary:active {
+  transform: scale(0.98);
+}
