@@ -5,53 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Business Details - DailyBarakah SG</title>
   <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* High-contrast CTA Button for Detail View */
+    .action-btn-primary {
+      width: 100%;
+      background-color: var(--primary-color, #0f382c);
+      color: #ffffff;
+      border: 1.5px solid var(--accent-gold, #ddba58);
+      padding: 12px 0;
+      border-radius: var(--radius-md, 8px);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+      transition: transform 0.15s ease, background-color 0.2s ease;
+    }
+
+    .action-btn-primary:active {
+      transform: scale(0.98);
+    }
+  </style>
 </head>
 <body>
 
   <div class="mobile-container">
-    <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600;">← Back to Directory</a>
+    <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 8px;">
+      ← Back to Directory
+    </a>
 
-    <div class="card" id="detailContainer" style="margin-top: 10px;">
-      <!-- 1. Header: Name & Subtitle -->
-<h2 id="bizName" class="skeleton-line title" style="color: var(--primary-color); margin-bottom: 4px; min-height: 24px;"></h2>
-<p id="bizSub" class="skeleton-line sub" style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 12px; min-height: 16px;"></p>
+    <!-- Detail Card Wrapper -->
+    <div class="card" id="detailContainer" style="padding: 0; overflow: hidden; margin-top: 4px;">
       
-      <!-- 2. Image below Subtitle -->
-      <div id="bizBannerSkeleton" class="skeleton-img" style="width: 100%; border-radius: var(--radius-sm, 8px); margin-bottom: 15px; height: 180px;"></div>
-      <img id="bizBanner" src="" alt="Business Banner" style="width: 100%; border-radius: var(--radius-sm, 8px); display: none; margin-bottom: 15px; object-fit: cover; max-height: 220px;">
+      <!-- 1. Banner Image at the Very Top -->
+      <div id="bizBannerSkeleton" class="skeleton-img" style="width: 100%; height: 210px; border-radius: 0;"></div>
+      <img id="bizBanner" src="" alt="Business Banner" style="width: 100%; height: 210px; object-fit: cover; display: none;">
 
-      <!-- 3. Description -->
-      <div id="descSkeleton">
-        <div class="skeleton-line" style="width: 100%; height: 12px; margin-bottom: 8px;"></div>
-        <div class="skeleton-line" style="width: 90%; height: 12px; margin-bottom: 8px;"></div>
-        <div class="skeleton-line" style="width: 65%; height: 12px; margin-bottom: 15px;"></div>
-      </div>
-      <p id="bizDescription" style="font-size: 0.9rem; line-height: 1.55; margin-bottom: 15px; white-space: pre-line; display: none;"></p>
-      
-<!-- 4. Ummah Special -->
-      <div id="dealBox" style="background-color: var(--accent-gold-bg, #fdf8ec); padding: 12px; border-radius: var(--radius-sm, 8px); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 15px; display: none;">
-        <p style="font-size: 0.72rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
-          Ummah Special:
-        </p>
-        <p id="bizDeal" style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-top: 4px;"></p>
-      </div>
-      
-      <!-- 5. Main Action Area -->
-      <div id="redemptionArea">
-        <!-- Option 1: In-store Redemption Button (Triggers Cashier PIN Modal) -->
-        <button id="openRedeemModalBtn" class="action-btn" style="display: none; width: 100%;">
-          Redeem In-Store Voucher
-        </button>
+      <!-- Inner Content Padding Block -->
+      <div style="padding: 18px 16px; display: flex; flex-direction: column; gap: 14px;">
+        
+        <!-- 2. Business Title & Subtitle -->
+        <div>
+          <h2 id="bizName" class="skeleton-line title" style="color: var(--primary-color); font-size: 1.35rem; font-weight: 700; margin-bottom: 4px; line-height: 1.25;"></h2>
+          <p id="bizSub" class="skeleton-line sub" style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.4;"></p>
+        </div>
 
-        <!-- Option 2: Unique Promo Code Button (For E-Commerce / Online Stores) -->
-        <button id="openCodeModalBtn" class="action-btn" style="display: none; width: 100%;">
-          Reveal Online Promo Code
-        </button>
+        <!-- 3. Business Description -->
+        <div id="descSkeleton">
+          <div class="skeleton-line" style="width: 100%; height: 12px; margin-bottom: 8px;"></div>
+          <div class="skeleton-line" style="width: 90%; height: 12px; margin-bottom: 8px;"></div>
+          <div class="skeleton-line" style="width: 65%; height: 12px;"></div>
+        </div>
+        <p id="bizDescription" style="font-size: 0.9rem; color: var(--text-main); line-height: 1.6; white-space: pre-line; display: none; margin: 0;"></p>
+        
+        <!-- 4. Ummah Special Voucher Box (Styled as a Gold Ticket) -->
+        <div id="dealBox" style="background: linear-gradient(135deg, #fffdf5 0%, #fef8e7 100%); padding: 12px 14px; border-radius: var(--radius-md, 8px); border: 1.5px dashed var(--accent-gold, #ddba58); display: none;">
+          <p style="font-size: 0.68rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <span>✨</span> UMMAH SPECIAL DEAL
+          </p>
+          <p id="bizDeal" style="font-size: 1rem; font-weight: 700; color: var(--primary-color); line-height: 1.3; margin: 0;"></p>
+        </div>
 
-        <!-- Option 3: WhatsApp Redirect Button (For Enquiries / Services) -->
-        <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center; text-decoration: none; width: 100%;">
-          Message Vendor on WhatsApp 💬
-        </a>
+        <!-- 5. Main Call to Action Area -->
+        <div id="redemptionArea" style="margin-top: 2px;">
+          <!-- Option 1: In-Store Redemption -->
+          <button id="openRedeemModalBtn" class="action-btn-primary" style="display: none; width: 100%;">
+            Redeem In-Store Voucher 🎟️
+          </button>
+
+          <!-- Option 2: Unique Promo Code -->
+          <button id="openCodeModalBtn" class="action-btn-primary" style="display: none; width: 100%;">
+            Reveal Online Promo Code 🏷️
+          </button>
+
+          <!-- Option 3: WhatsApp Direct Link -->
+          <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn-primary" style="display: none; text-align: center; width: 100%;">
+            Message Vendor on WhatsApp 💬
+          </a>
+        </div>
+
       </div>
     </div>
 
@@ -147,14 +182,11 @@
         subEl.classList.remove('skeleton-line', 'sub');
         subEl.style.minHeight = 'auto';
 
-const dealEl = document.getElementById('bizDeal');
+        const dealEl = document.getElementById('bizDeal');
         dealEl.textContent = bizDealText;
 
         const dealBox = document.getElementById('dealBox');
         if (dealBox) dealBox.style.display = 'block';
-
-        const dealContent = document.getElementById('dealContent');
-        if (dealContent) dealContent.style.display = 'block';
 
         const descEl = document.getElementById('bizDescription');
         descEl.textContent = bizDesc;
@@ -179,11 +211,11 @@ const dealEl = document.getElementById('bizDeal');
         const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim();
 
         if (actionType === 'claim') {
-          if (openRedeemModalBtn) openRedeemModalBtn.style.display = 'block';
+          if (openRedeemModalBtn) openRedeemModalBtn.style.display = 'flex';
 
         } else if (actionType === 'code' || actionType === 'promocode') {
           if (openCodeModalBtn) {
-            openCodeModalBtn.style.display = 'block';
+            openCodeModalBtn.style.display = 'flex';
 
             openCodeModalBtn.addEventListener('click', () => {
               const promoCode = biz.PromoCode || biz.promocode || biz.promoCode || 'D.BARAKAHSG';
@@ -210,7 +242,7 @@ const dealEl = document.getElementById('bizDeal');
         } else {
           // WhatsApp Inquiry Option
           if (whatsappBtn) {
-            whatsappBtn.style.display = 'block';
+            whatsappBtn.style.display = 'flex';
             const refCode = `DB-${bizSlugVal.toUpperCase()}`;
             const rawMessage = `Assalaamualaikum! I came across ${bizName} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${bizDealText}". Let me know how to proceed, jazakallahu khair!`;
             const phoneNum = biz.Phone || biz.phone || '';
