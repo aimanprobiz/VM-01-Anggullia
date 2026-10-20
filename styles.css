@@ -374,12 +374,12 @@
   box-shadow: 0 1px 3px rgba(15, 56, 44, 0.05);
 }
 
-    /* Action Button with Gold Trim & Signature Hover State */
+/* Action Button with Dark Green Base and Gold Trim */
 .action-btn {
   width: 100%;
-  background-color: rgba(221, 186, 88, 0.15); /* Warm beige/gold tint (matches your --accent-gold-bg) */
-  color: var(--primary-color); /* Rich dark green text for high readability */
-  border: 1px solid rgba(221, 186, 88, 0.4); /* Soft matching border */
+  background-color: var(--primary-color, #0f382c); /* Solid dark green background */
+  color: #ffffff; /* White text */
+  border: 1.5px solid var(--accent-gold, #ddba58); /* Gold border trim */
   padding: 8px 0;
   border-radius: var(--radius-sm);
   font-size: 0.78rem;
@@ -392,14 +392,15 @@
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   box-sizing: border-box;
   margin-top: 6px;
+  box-shadow: 0 2px 6px rgba(15, 56, 44, 0.15);
 }
 
-/* Interactive state when tapped or hovered */
+/* Interactive hover / active state: Gold background with dark green text */
 .action-btn:hover,
 .action-btn:active {
-  background-color: var(--primary-color); /* Fills in solid dark green on tap */
-  color: #ffffff;
-  border-color: var(--primary-color);
+  background-color: var(--accent-gold, #ddba58); /* Flips to gold */
+  color: var(--primary-color, #0f382c); /* Dark green text */
+  border-color: var(--primary-color, #0f382c);
 }
     /* Minimalist Unified Featured Pill Tag for Grid Cards */
 .grid-featured-badge {
