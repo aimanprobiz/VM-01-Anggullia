@@ -342,6 +342,9 @@ function renderBusinessBatch() {
       window.location.href = `/business.html?slug=${biz.Slug}`;
     };
 
+    // Extract deal text from Airtable schema keys safely
+    const dealText = biz.Deal || biz.deal || '';
+
     card.innerHTML = `
       <div style="position: relative;">
         <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
@@ -350,6 +353,9 @@ function renderBusinessBatch() {
 
       <div class="grid-card-body">
         <div class="vendor-details">
+          <!-- Render deal badge pill dynamically if a deal text exists -->
+          ${dealText ? `<div class="deal-badge"><span>✂️</span> ${dealText}</div>` : ''}
+
           <h3 class="vendor-name">${biz.Name}</h3>
           <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
         </div>
