@@ -357,23 +357,22 @@
 }
 
 /* Standout Cream Accent Deal Badge for Grid Cards */
+/* Light Green Tinted Deal Badge for Grid Cards */
 .deal-badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background-color: #fffdf2; /* Cream accent background */
+  background-color: rgba(15, 56, 44, 0.08); /* Soft light green tint derived from primary color */
   color: var(--primary-color, #0f382c); /* Deep green text for crisp contrast */
   font-size: 0.72rem;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 20px; /* Rounded pill shape */
-  border: 1px solid var(--accent-gold, #ddba58); /* Subtle gold border */
+  border: none; /* Removed the accent border */
   margin-top: 6px;   /* Clean spacing away from card photo boundary */
   margin-bottom: 6px;/* Clear spacing before title/sub text below */
   line-height: 1.2;
-  box-shadow: 0 1px 3px rgba(15, 56, 44, 0.05);
 }
-
 /* Action Button with Dark Green Base and Gold Trim */
 .action-btn {
   width: 100%;
