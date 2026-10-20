@@ -514,7 +514,7 @@ border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
 .coupon-tag {
   font-size: 0.65rem;
   font-weight: 700;
-  color: var(--accent-gold, #c29a38);
+  color: #000000;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
