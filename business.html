@@ -62,13 +62,19 @@
         <p id="bizDescription" style="font-size: 0.9rem; color: var(--text-main); line-height: 1.6; white-space: pre-line; display: none; margin: 0;"></p>
         
         <!-- 4. Ummah Special Voucher Box (Styled as a Gold Ticket) -->
-        <div id="dealBox" style="background: linear-gradient(135deg, #fffdf5 0%, #fef8e7 100%); padding: 12px 14px; border-radius: var(--radius-md, 8px); border: 1.5px dashed var(--accent-gold, #ddba58); display: none;">
-          <p style="font-size: 0.68rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-            <span>✨</span> UMMAH SPECIAL DEAL
-          </p>
-          <p id="bizDeal" style="font-size: 1rem; font-weight: 700; color: var(--primary-color); line-height: 1.3; margin: 0;"></p>
-        </div>
-
+<!-- Old-School Ticket Voucher Box -->
+<div id="dealBox" class="coupon-ticket" style="display: none;">
+  <div class="coupon-left-notch"></div>
+  <div class="coupon-right-notch"></div>
+  
+  <div class="coupon-content">
+    <div class="coupon-header">
+      <span class="coupon-icon">✂️</span>
+      <span class="coupon-tag">UMMAH SPECIAL</span>
+    </div>
+    <p id="bizDeal" class="coupon-deal-text"></p>
+  </div>
+</div>
         <!-- 5. Main Call to Action Area -->
         <div id="redemptionArea" style="margin-top: 2px;">
           <!-- Option 1: In-Store Redemption -->
