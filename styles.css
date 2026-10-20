@@ -481,10 +481,10 @@ border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 16px;
-  height: 24px;
-  background-color: var(--card-bg, #ffffff); /* Matches parent card background to create hole effect */
-  border: 2px solid #c29a38;
+  width: 14px;
+  height: 22px;
+  background-color: var(--bg-color, #f5f2e9); /* Matches the main page background color */
+  border: 1.5px dashed #c29a38; /* Matches the dashed border of the coupon */
   z-index: 2;
 }
 
@@ -492,36 +492,12 @@ border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
   left: -2px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  border-left: none;
+  border-left: none; /* Removes outer rectangle border */
 }
 
 .coupon-right-notch {
   right: -2px;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  border-right: none;
-}
-
-/* Coupon Content Formatting */
-.coupon-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 6px;
-}
-
-.coupon-tag {
-  font-size: 0.68rem;
-  font-weight: 800;
-  color: var(--primary-color, #0f382c);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.coupon-deal-text {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--primary-color, #0f382c);
-  line-height: 1.3;
-  margin: 0;
+  border-right: none; /* Removes outer rectangle border */
 }
