@@ -356,6 +356,30 @@
       } catch (error) {
         console.error('Error loading business details:', error);
       }
+
+      // --- Social Media Links Logic ---
+        const igUrl = biz.InstagramURL || biz.instagramurl || biz.Instagram || '';
+        const tiktokUrl = biz.TikTokURL || biz.tiktokurl || biz.TikTok || '';
+        const phoneNum = biz.Phone || biz.phone || '';
+
+        const igBtn = document.getElementById('socialInstagram');
+        const tiktokBtn = document.getElementById('socialTiktok');
+        const waSocialBtn = document.getElementById('socialWhatsapp');
+
+        if (igUrl && igBtn) {
+          igBtn.href = igUrl.startsWith('http') ? igUrl : `https://${igUrl}`;
+          igBtn.style.display = 'flex';
+        }
+
+        if (tiktokUrl && tiktokBtn) {
+          tiktokBtn.href = tiktokUrl.startsWith('http') ? tiktokUrl : `https://${tiktokUrl}`;
+          tiktokBtn.style.display = 'flex';
+        }
+
+        if (phoneNum && waSocialBtn) {
+          waSocialBtn.href = `https://wa.me/${phoneNum}`;
+          waSocialBtn.style.display = 'flex';
+        }
     }
 
     loadBusinessDetail();
