@@ -271,31 +271,33 @@ gridContainer.innerHTML = Array(10).fill(`
   }
 }
 
-// Scroll listener for infinite loading and bottom-triggered back-to-top button
+// Unified Scroll Listener for Infinite Scroll & Back-to-Top (Option 2)
+let lastScrollY = window.scrollY;
+
 window.addEventListener('scroll', () => {
   const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
   const currentScroll = window.scrollY;
   const distanceToBottom = scrollableHeight - currentScroll;
 
   // 1. Infinite Scroll trigger (loads more when within 300px of the bottom)
-  if (distanceToBottom < 300) {
-    const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
-    const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
-    const targetDataset = selectedCat === 'all' 
-      ? allBusinesses 
-      : allBusinesses.filter(biz => (biz.Category || 'all') === selectedCat);
+  const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
+  const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
+  const targetDataset = selectedCat === 'all' 
+    ? allBusinesses 
+    : allBusinesses.filter(biz => (biz.Category || 'all') === selectedCat);
 
-    if (visibleLimit < targetDataset.length) {
-      visibleLimit += 10;
-      renderBusinessBatch();
-    }
+  if (distanceToBottom < 300 && visibleLimit < targetDataset.length) {
+    visibleLimit += 10;
+    renderBusinessBatch();
   }
 
-  // 2. Back-to-Top Button visibility (ONLY appears when near/at the unscrollable bottom)
+  // 2. Dynamic Back-to-Top Button Logic (Option 2: Appears when scrolling UP past 300px)
   const backToTopBtn = document.getElementById('backToTopBtn');
   if (backToTopBtn) {
-    // Appears only when user is within 150px of the total bottom
-    if (distanceToBottom <= 150) {
+    const isScrollingUp = currentScroll < lastScrollY;
+    const isPastThreshold = currentScroll > 300;
+
+    if (isScrollingUp && isPastThreshold) {
       backToTopBtn.style.opacity = '1';
       backToTopBtn.style.pointerEvents = 'auto';
     } else {
@@ -303,6 +305,8 @@ window.addEventListener('scroll', () => {
       backToTopBtn.style.pointerEvents = 'none';
     }
   }
+
+  lastScrollY = currentScroll;
 });
 
 function renderBusinessBatch() {
