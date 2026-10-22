@@ -299,21 +299,34 @@
       gap: 12px;
     }
 
-    .grid-card {
-      background-color: var(--card-bg);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.15s ease;
-    }
+/* 2-Column Visual Grid Card Base */
+.grid-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Smooth transition for hover lift & shadow enhancement */
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease;
+  will-change: transform, box-shadow;
+}
 
-    .grid-card:active {
-      transform: scale(0.98);
-    }
+/* Popping Hover State for Desktop & Mouse Interaction */
+.grid-card:hover {
+  transform: translateY(-5px) scale(1.01); /* Gently lifts up 5px and subtly scales up */
+  box-shadow: 0 12px 24px -4px rgba(12, 43, 34, 0.15), 0 4px 8px -2px rgba(12, 43, 34, 0.08); /* Richer depth shadow */
+  border-color: rgba(221, 186, 88, 0.6); /* Subtle gold border highlight on hover */
+}
+
+/* Tactile Active/Pressed State for Mobile Taps */
+.grid-card:active {
+  transform: translateY(-1px) scale(0.98); /* Press-down tactile effect when clicked/tapped */
+  box-shadow: var(--shadow-sm);
+  transition-duration: 0.1s;
+}
 
     .card-banner {
       width: 100%;
