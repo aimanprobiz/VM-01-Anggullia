@@ -18,7 +18,7 @@
   --radius-sm: 8px;
 }
 
-/* Fixed: Added back the asterisk (*) selector */
+/* Fixed universal selector */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -218,7 +218,7 @@ body {
   flex-direction: column;
 }
 
-/* Balanced Sheer Glass Category Bar (35% opacity + 3px blur) */
+/* Balanced Sheer Glass Category Bar */
 .filter-stacked {
   position: sticky;
   top: 0;
@@ -546,7 +546,7 @@ dialog::backdrop {
 
 .social-btn {
   flex: 1;
-  height: 38px; /* Fixed touch height */
+  height: 38px;
   background-color: var(--card-bg);
   color: var(--primary-color);
   border: 1.5px solid var(--border-color);
@@ -638,4 +638,33 @@ dialog::backdrop {
 .featured-card .deal-badge {
   border: 1px solid var(--accent-gold, #ddba58);
   box-shadow: 0 1px 3px rgba(221, 186, 88, 0.15);
+}
+
+/* Floating Back to Top Button */
+#backToTopBtn {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: 1.5px solid var(--accent-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(12, 43, 34, 0.25);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease, background-color 0.2s ease;
+  z-index: 999;
+}
+
+#backToTopBtn:hover,
+#backToTopBtn:active {
+  background-color: var(--accent-gold);
+  color: var(--primary-color);
+  transform: scale(1.05);
 }
