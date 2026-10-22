@@ -435,10 +435,18 @@
 }
 
 .grid-card.featured-card {
-border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
+  border: 1px solid rgba(221, 186, 88, 0.5);
   background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(12, 43, 34, 0.08);
   position: relative;
+  z-index: 2;
+}
+
+.grid-card.featured-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 14px 28px -4px rgba(15, 56, 44, 0.2);
+  border-color: var(--accent-gold);
+}
   
   /* Clean, realistic multi-layered shadow */
   box-shadow: 
