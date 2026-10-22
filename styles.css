@@ -217,12 +217,6 @@ body {
   flex-direction: column;
 }
 
-/* Modern Swipeable, Sticky & Frosted Glass Category Bar */
-.filter-stacked {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  
 /* Ultra-Clear Almost Transparent Glass Category Bar */
 .filter-stacked {
   position: sticky;
