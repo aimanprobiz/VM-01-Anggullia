@@ -217,22 +217,35 @@ body {
   flex-direction: column;
 }
 
-/* Modern Swipeable & Sticky Category Container */
+/* Modern Swipeable, Sticky & Frosted Glass Category Bar */
 .filter-stacked {
   position: sticky;
   top: 0;
   z-index: 10;
-  background-color: var(--bg-color);
+  
+  /* Semi-transparent background matching your cream tone */
+  background-color: rgba(245, 242, 233, 0.82); 
+  
+  /* Frosted Glass Effect: Blurs content scrolling underneath */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: 8px;
   margin-bottom: 18px;
-  padding: 10px 4px;
+  padding: 10px 16px; /* Smooth edge-to-edge padding */
+  
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  margin-left: -4px;
-  margin-right: -4px;
+  
+  /* Bleed out to container edges for edge-to-edge blur */
+  margin-left: -16px;
+  margin-right: -16px;
+  
+  /* Optional: Very subtle bottom border to delineate the header */
+  border-bottom: 1px solid rgba(226, 219, 201, 0.5);
 }
 
 .filter-stacked::-webkit-scrollbar {
