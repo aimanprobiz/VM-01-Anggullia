@@ -223,29 +223,33 @@ body {
   top: 0;
   z-index: 10;
   
-  /* Semi-transparent background matching your cream tone */
-  background-color: rgba(245, 242, 233, 0.45); 
+/* Ultra-Clear Almost Transparent Glass Category Bar */
+.filter-stacked {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   
-  /* Frosted Glass Effect: Blurs content scrolling underneath */
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  /* Ultra-sheer tint (80% transparent) */
+  background-color: rgba(245, 242, 233, 0.2); 
+  
+  /* Minimal whisper of blur */
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: 8px;
   margin-bottom: 18px;
-  padding: 10px 16px; /* Smooth edge-to-edge padding */
+  padding: 10px 16px;
   
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   
-  /* Bleed out to container edges for edge-to-edge blur */
   margin-left: -16px;
   margin-right: -16px;
   
-  /* Optional: Very subtle bottom border to delineate the header */
-  border-bottom: 1px solid rgba(226, 219, 201, 0.35);
+  border-bottom: 1px solid rgba(226, 219, 201, 0.25);
 }
 
 .filter-stacked::-webkit-scrollbar {
