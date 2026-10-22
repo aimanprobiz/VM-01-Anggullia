@@ -10,34 +10,34 @@
 
   <div class="mobile-container">
     
-<!-- Top Header Navigation Row -->
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-  <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-    ← Back to Directory
-  </a>
+    <!-- Top Header Navigation Row -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+        ← Back to Directory
+      </a>
 
-  <!-- Ultra-Minimalist Actions Group -->
-  <div style="display: flex; align-items: center; gap: 12px;">
-    
-    <!-- Copy Link Button -->
-    <button id="copyLinkBtn" class="minimal-icon-btn" aria-label="Copy Page Link" title="Copy Link">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-      </svg>
-    </button>
+      <!-- Ultra-Minimalist Actions Group -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        
+        <!-- Copy Link Button -->
+        <button id="copyLinkBtn" class="minimal-icon-btn" aria-label="Copy Page Link" title="Copy Link">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+          </svg>
+        </button>
 
-    <!-- Native Share Button -->
-    <button id="shareBtn" class="minimal-icon-btn" aria-label="Share Business Profile" title="Share Profile">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-        <polyline points="16 6 12 2 8 6"></polyline>
-        <line x1="12" y1="2" x2="12" y2="15"></line>
-      </svg>
-    </button>
+        <!-- Native Share Button -->
+        <button id="shareBtn" class="minimal-icon-btn" aria-label="Share Business Profile" title="Share Profile">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+            <polyline points="16 6 12 2 8 6"></polyline>
+            <line x1="12" y1="2" x2="12" y2="15"></line>
+          </svg>
+        </button>
 
-  </div>
-</div>
+      </div>
+    </div>
 
     <!-- Detail Card Wrapper -->
     <div class="card" id="detailContainer" style="padding: 0; overflow: hidden; margin-top: 4px;">
@@ -170,7 +170,20 @@
         if (el) el[property] = value;
       };
 
-// --- Universal Share & Copy Link Logic ---
+      // --- Copy Link Logic ---
+      const copyLinkBtn = document.getElementById('copyLinkBtn');
+      if (copyLinkBtn) {
+        copyLinkBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            alert('✓ Profile link copied!');
+          } catch (err) {
+            alert('Copy link: ' + window.location.href);
+          }
+        });
+      }
+
+      // --- Native Share Logic ---
       const shareBtn = document.getElementById('shareBtn');
       if (shareBtn) {
         shareBtn.addEventListener('click', async () => {
@@ -186,31 +199,18 @@
             url: window.location.href
           };
 
-          // On Mobile devices (iOS / Android)
           if (navigator.share) {
             try {
               await navigator.share(shareData);
             } catch (err) {
-              // User dismissed or closed the share sheet
+              // User cancelled share
             }
-          } else {
-            // Desktop or browser fallback: Directly copies link to clipboard
-            try {
-              await navigator.clipboard.writeText(window.location.href);
-              
-              // Temporary feedback text on the button
-              const btnText = shareBtn.querySelector('span');
-              if (btnText) {
-                const originalText = btnText.textContent;
-                btnText.textContent = 'Link Copied!';
-                setTimeout(() => { btnText.textContent = originalText; }, 2000);
-              }
-            } catch (err) {
-              alert('Copy link: ' + window.location.href);
-            }
+          } else if (copyLinkBtn) {
+            copyLinkBtn.click();
           }
         });
       }
+
       if (!rawSlug) {
         setVal('bizName', 'textContent', 'Business not found.');
         return;
