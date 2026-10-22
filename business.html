@@ -161,7 +161,7 @@
 
 <!-- Minimalist White Toast Notification -->
 <div id="ctaToast" style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(16px); background: #ffffff; color: #000000; padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); display: flex; align-items: center; gap: 6px; opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; white-space: nowrap;">
-  <span style="letter-spacing: -0.01em;">Tap the button below to claim this deal</span>
+  <span style="letter-spacing: -0.01em;">Tap the button below to claim this deal!</span>
 </div>
   </div>
 
@@ -175,7 +175,7 @@
         if (el) el[property] = value;
       };
 
-// --- Interactive Deal Box Toast & Scroll Prompt ---
+// --- Interactive Deal Box Toast & 2.8s Scroll Prompt ---
 const dealBox = document.getElementById('dealBox');
 const ctaToast = document.getElementById('ctaToast');
 
@@ -187,30 +187,30 @@ if (dealBox) {
     const activeCta = document.querySelector('#redemptionArea button[style*="flex"], #redemptionArea a[style*="flex"]');
 
     if (activeCta) {
-      // 2. Smoothly scroll the CTA button into clear view
+      // 2. Smoothly scroll the CTA button into view
       activeCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-      // 3. Temporarily highlight/pulse the CTA button
-      activeCta.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease';
-      activeCta.style.transform = 'scale(1.05)';
-      activeCta.style.boxShadow = '0 0 15px rgba(221, 186, 88, 0.8)';
+      // 3. Trigger 2.8s pulse animation
+      activeCta.classList.remove('cta-pulse-active');
+      void activeCta.offsetWidth; // Force CSS reflow to re-trigger animation if clicked twice
+      activeCta.classList.add('cta-pulse-active');
 
+      // Remove the class after exactly 2.8 seconds
       setTimeout(() => {
-        activeCta.style.transform = 'scale(1)';
-        activeCta.style.boxShadow = '';
-      }, 400);
+        activeCta.classList.remove('cta-pulse-active');
+      }, 2800);
     }
 
-    // 4. Show Floating Toast Pop-up
+    // 4. Trigger the white minimalist floating toast for 2.8 seconds
     if (ctaToast) {
       ctaToast.style.opacity = '1';
       ctaToast.style.transform = 'translateX(-50%) translateY(0)';
 
-      // Auto-hide after 2.5 seconds
+      // Auto-hide toast after 2.8 seconds
       setTimeout(() => {
         ctaToast.style.opacity = '0';
-        ctaToast.style.transform = 'translateX(-50%) translateY(20px)';
-      }, 2500);
+        ctaToast.style.transform = 'translateX(-50%) translateY(16px)';
+      }, 2800);
     }
   });
 }
