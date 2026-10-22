@@ -546,21 +546,28 @@ dialog::backdrop {
 
 .social-btn {
   flex: 1;
+  min-width: 0; /* Prevents text overflow */
   background-color: var(--card-bg);
   color: var(--primary-color);
   border: 1.5px solid var(--border-color);
-  padding: 10px 0;
+  padding: 8px 2px;
   border-radius: var(--radius-sm);
-  font-size: 0.78rem;
+  font-size: 0.68rem; /* Compact font size to fit 4 items comfortably */
   font-weight: 600;
   text-align: center;
   text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 3px;
   box-shadow: var(--shadow-sm);
   transition: all 0.2s ease;
+}
+
+.social-btn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .social-btn:hover {
