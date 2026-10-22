@@ -172,13 +172,13 @@
       </div>
     </dialog>
 
-<!-- Minimalist White Toast Notification -->
-<div id="ctaToast" style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(16px); background: #ffffff; color: #000000; padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); display: flex; align-items: center; gap: 6px; opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; white-space: nowrap;">
+<!-- Minimalist White Toast Notification (CTA Scroll) -->
+<div id="ctaToast" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.92); background: #ffffff; color: #000000; padding: 12px 20px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18); display: flex; align-items: center; gap: 6px; opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; white-space: nowrap;">
   <span style="letter-spacing: -0.01em;">Tap the button below to claim this deal!</span>
 </div>
     
-    <!-- Social/Website Toast Notification -->
-<div id="socialToast" style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(16px); background: #ffffff; color: #000000; padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); display: flex; align-items: center; gap: 6px; opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; white-space: nowrap;">
+<!-- Social/Website Toast Notification (Missing Links) -->
+<div id="socialToast" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.92); background: #ffffff; color: #000000; padding: 12px 20px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18); display: flex; align-items: center; gap: 6px; opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; white-space: nowrap;">
   <span id="socialToastMsg" style="letter-spacing: -0.01em;"></span>
 </div>
     
@@ -223,12 +223,12 @@ if (dealBox) {
     // 4. Trigger the white minimalist floating toast for 2.8 seconds
     if (ctaToast) {
       ctaToast.style.opacity = '1';
-      ctaToast.style.transform = 'translateX(-50%) translateY(0)';
+      ctaToast.style.transform = 'translate(-50%, -50%) scale(1)';
 
       // Auto-hide toast after 2.8 seconds
       setTimeout(() => {
         ctaToast.style.opacity = '0';
-        ctaToast.style.transform = 'translateX(-50%) translateY(16px)';
+        ctaToast.style.transform = 'translate(-50%, -50%) scale(0.92)';
       }, 2800);
     }
   });
@@ -503,21 +503,20 @@ if (dealBox) {
         const socialToastMsg = document.getElementById('socialToastMsg');
         let socialToastTimeout = null;
 
-        function showSocialToast(message) {
+function showSocialToast(message) {
           if (!socialToast || !socialToastMsg) return;
           
           socialToastMsg.textContent = message;
           socialToast.style.opacity = '1';
-          socialToast.style.transform = 'translateX(-50%) translateY(0)';
+          socialToast.style.transform = 'translate(-50%, -50%) scale(1)';
 
           if (socialToastTimeout) clearTimeout(socialToastTimeout);
 
           socialToastTimeout = setTimeout(() => {
             socialToast.style.opacity = '0';
-            socialToast.style.transform = 'translateX(-50%) translateY(16px)';
+            socialToast.style.transform = 'translate(-50%, -50%) scale(0.92)';
           }, 2500);
         }
-
         function setupLinkButton(btnId, targetUrl, platformName) {
           const btn = document.getElementById(btnId);
           if (!btn) return;
