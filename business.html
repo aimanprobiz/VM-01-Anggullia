@@ -5,13 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Business Details - DailyBarakah SG</title>
   <link rel="stylesheet" href="/styles.css">
-
-  <!-- Open Graph / WhatsApp Preview Meta Tags -->
-  <meta property="og:title" id="metaTitle" content="DailyBarakah SG - Business Directory">
-  <meta property="og:description" id="metaDesc" content="Discover trusted local Muslim businesses and exclusive deals in Singapore.">
-  <meta property="og:image" id="metaImage" content="https://vm-ang.vercel.app/images/default-banner.jpg">
-  <meta property="og:url" id="metaUrl" content="">
-  <meta property="og:type" content="website">
 </head>
 <body>
 
@@ -166,10 +159,10 @@
       </div>
     </dialog>
 
-    <!-- Minimalist White Toast Notification -->
-    <div id="ctaToast" style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(16px); background: #ffffff; color: #000000; padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); display: flex; align-items: center; gap: 6px; opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; white-space: nowrap;">
-      <span style="letter-spacing: -0.01em;">Tap the button below to claim this deal!</span>
-    </div>
+<!-- Minimalist White Toast Notification -->
+<div id="ctaToast" style="position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(16px); background: #ffffff; color: #000000; padding: 8px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); display: flex; align-items: center; gap: 6px; opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; white-space: nowrap;">
+  <span style="letter-spacing: -0.01em;">Tap the button below to claim this deal!</span>
+</div>
   </div>
 
   <script>
@@ -182,38 +175,45 @@
         if (el) el[property] = value;
       };
 
-      // --- Interactive Deal Box Toast & 2.8s Scroll Prompt ---
-      const dealBox = document.getElementById('dealBox');
-      const ctaToast = document.getElementById('ctaToast');
+// --- Interactive Deal Box Toast & 2.8s Scroll Prompt ---
+const dealBox = document.getElementById('dealBox');
+const ctaToast = document.getElementById('ctaToast');
 
-      if (dealBox) {
-        dealBox.style.cursor = 'pointer';
+if (dealBox) {
+  dealBox.style.cursor = 'pointer';
 
-        dealBox.addEventListener('click', () => {
-          const activeCta = document.querySelector('#redemptionArea button[style*="flex"], #redemptionArea a[style*="flex"]');
+  dealBox.addEventListener('click', () => {
+    // 1. Find the currently visible main CTA button
+    const activeCta = document.querySelector('#redemptionArea button[style*="flex"], #redemptionArea a[style*="flex"]');
 
-          if (activeCta) {
-            activeCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            activeCta.classList.remove('cta-pulse-active');
-            void activeCta.offsetWidth; 
-            activeCta.classList.add('cta-pulse-active');
+    if (activeCta) {
+      // 2. Smoothly scroll the CTA button into view
+      activeCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            setTimeout(() => {
-              activeCta.classList.remove('cta-pulse-active');
-            }, 2800);
-          }
+      // 3. Trigger 2.8s pulse animation
+      activeCta.classList.remove('cta-pulse-active');
+      void activeCta.offsetWidth; // Force CSS reflow to re-trigger animation if clicked twice
+      activeCta.classList.add('cta-pulse-active');
 
-          if (ctaToast) {
-            ctaToast.style.opacity = '1';
-            ctaToast.style.transform = 'translateX(-50%) translateY(0)';
+      // Remove the class after exactly 2.8 seconds
+      setTimeout(() => {
+        activeCta.classList.remove('cta-pulse-active');
+      }, 2800);
+    }
 
-            setTimeout(() => {
-              ctaToast.style.opacity = '0';
-              ctaToast.style.transform = 'translateX(-50%) translateY(16px)';
-            }, 2800);
-          }
-        });
-      }
+    // 4. Trigger the white minimalist floating toast for 2.8 seconds
+    if (ctaToast) {
+      ctaToast.style.opacity = '1';
+      ctaToast.style.transform = 'translateX(-50%) translateY(0)';
+
+      // Auto-hide toast after 2.8 seconds
+      setTimeout(() => {
+        ctaToast.style.opacity = '0';
+        ctaToast.style.transform = 'translateX(-50%) translateY(16px)';
+      }, 2800);
+    }
+  });
+}
       
       // --- Copy Link Logic ---
       const copyLinkBtn = document.getElementById('copyLinkBtn');
@@ -288,17 +288,6 @@
         const bizSlugVal = biz.Slug || biz.slug || defaultSlug;
 
         document.title = `${bizName} - DailyBarakah SG`;
-
-        // --- Dynamically update OpenGraph Meta Tags for WhatsApp/Social previews ---
-        const metaTitleEl = document.getElementById('metaTitle');
-        const metaDescEl = document.getElementById('metaDesc');
-        const metaImageEl = document.getElementById('metaImage');
-        const metaUrlEl = document.getElementById('metaUrl');
-
-        if (metaTitleEl) metaTitleEl.setAttribute('content', `${bizName} - Special Deal on DailyBarakah SG`);
-        if (metaDescEl) metaDescEl.setAttribute('content', `Check out ${bizName}! Special Deal: "${bizDealText}"`);
-        if (metaImageEl) metaImageEl.setAttribute('content', bizImage);
-        if (metaUrlEl) metaUrlEl.setAttribute('content', window.location.href);
         
         const nameEl = document.getElementById('bizName');
         nameEl.textContent = bizName;
@@ -461,7 +450,7 @@
                 }).catch(() => {});
               }
 
-              alert(`✓ Successfully Redeemed!\n\nVoucher validated for ${bizName}.\n\nMaya your transaction be filled with Barakah!`);
+              alert(`✓ Successfully Redeemed!\n\nVoucher validated for ${bizName}.\n\nMay your transaction be filled with Barakah!`);
 
             } else {
               alert('Incorrect PIN. Please enter the correct 4-digit cashier PIN.');
