@@ -587,3 +587,25 @@ border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
   border-color: var(--accent-gold);
   background-color: var(--accent-gold-bg);
 }
+
+/* Minimalist Top Nav Share Button */
+.share-btn {
+  background: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+}
+
+.share-btn:hover,
+.share-btn:active {
+  border-color: var(--accent-gold);
+  background-color: var(--accent-gold-bg);
+}
