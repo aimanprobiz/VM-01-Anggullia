@@ -610,3 +610,36 @@ dialog::backdrop {
 .minimal-icon-btn:active {
   opacity: 0.6;
 }
+
+/* 2.8 Second Smooth Gold Pulse for CTA Button */
+@keyframes ctaPulseGlow {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  }
+  20% {
+    transform: scale(1.03);
+    box-shadow: 0 0 16px rgba(221, 186, 88, 0.85);
+  }
+  40% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  }
+  60% {
+    transform: scale(1.03);
+    box-shadow: 0 0 16px rgba(221, 186, 88, 0.85);
+  }
+  80% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  }
+}
+
+/* Active class applied dynamically by JS */
+.cta-pulse-active {
+  animation: ctaPulseGlow 2.8s ease-in-out forwards !important;
+}
