@@ -224,11 +224,11 @@ body {
   z-index: 10;
   
   /* Semi-transparent background matching your cream tone */
-  background-color: rgba(245, 242, 233, 0.82); 
+  background-color: rgba(245, 242, 233, 0.45); 
   
   /* Frosted Glass Effect: Blurs content scrolling underneath */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   
   display: flex;
   flex-wrap: nowrap;
@@ -245,7 +245,7 @@ body {
   margin-right: -16px;
   
   /* Optional: Very subtle bottom border to delineate the header */
-  border-bottom: 1px solid rgba(226, 219, 201, 0.5);
+  border-bottom: 1px solid rgba(226, 219, 201, 0.35);
 }
 
 .filter-stacked::-webkit-scrollbar {
