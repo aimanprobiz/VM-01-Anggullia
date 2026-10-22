@@ -127,6 +127,16 @@
             <span>WhatsApp</span>
           </a>
 
+          <!-- Website -->
+          <a id="socialWebsite" href="#" target="_blank" rel="noopener noreferrer" class="social-btn" style="display: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>Website</span>
+          </a>
+
         </div>
 
       </div>
@@ -482,14 +492,21 @@ if (dealBox) {
         }
 
         // --- Social Media Links Logic ---
+        const webUrl = biz.WebsiteURL || biz.websiteurl || biz.WebsiteUrl || '';
         const igUrl = biz.InstagramURL || biz.instagramurl || biz.Instagram || '';
         const tiktokUrl = biz.TikTokURL || biz.tiktokurl || biz.TikTok || '';
         const phoneNum = biz.Phone || biz.phone || '';
 
+        const webBtn = document.getElementById('socialWebsite');
         const igBtn = document.getElementById('socialInstagram');
         const tiktokBtn = document.getElementById('socialTiktok');
         const waSocialBtn = document.getElementById('socialWhatsapp');
 
+       if (webUrl && webBtn) {
+          webBtn.href = webUrl.startsWith('http') ? webUrl : `https://${webUrl}`;
+          webBtn.style.display = 'flex';
+        }
+        
         if (igUrl && igBtn) {
           igBtn.href = igUrl.startsWith('http') ? igUrl : `https://${igUrl}`;
           igBtn.style.display = 'flex';
