@@ -177,6 +177,46 @@
         if (el) el[property] = value;
       };
 
+// --- Interactive Deal Box Toast & Scroll Prompt ---
+const dealBox = document.getElementById('dealBox');
+const ctaToast = document.getElementById('ctaToast');
+
+if (dealBox) {
+  dealBox.style.cursor = 'pointer';
+
+  dealBox.addEventListener('click', () => {
+    // 1. Find the currently visible main CTA button
+    const activeCta = document.querySelector('#redemptionArea button[style*="flex"], #redemptionArea a[style*="flex"]');
+
+    if (activeCta) {
+      // 2. Smoothly scroll the CTA button into clear view
+      activeCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // 3. Temporarily highlight/pulse the CTA button
+      activeCta.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease';
+      activeCta.style.transform = 'scale(1.05)';
+      activeCta.style.boxShadow = '0 0 15px rgba(221, 186, 88, 0.8)';
+
+      setTimeout(() => {
+        activeCta.style.transform = 'scale(1)';
+        activeCta.style.boxShadow = '';
+      }, 400);
+    }
+
+    // 4. Show Floating Toast Pop-up
+    if (ctaToast) {
+      ctaToast.style.opacity = '1';
+      ctaToast.style.transform = 'translateX(-50%) translateY(0)';
+
+      // Auto-hide after 2.5 seconds
+      setTimeout(() => {
+        ctaToast.style.opacity = '0';
+        ctaToast.style.transform = 'translateX(-50%) translateY(20px)';
+      }, 2500);
+    }
+  });
+}
+      
       // --- Copy Link Logic ---
       const copyLinkBtn = document.getElementById('copyLinkBtn');
       if (copyLinkBtn) {
