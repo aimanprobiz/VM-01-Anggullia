@@ -611,3 +611,21 @@ border: 1px solid rgba(221, 186, 88, 0.4); /* Faint gold outline */
   background: transparent;
   border: none;
 }
+
+/* Super Minimalist Icon Buttons */
+.minimal-icon-btn {
+  background: transparent;
+  color: var(--primary-color);
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.minimal-icon-btn:hover,
+.minimal-icon-btn:active {
+  opacity: 0.6;
+}
