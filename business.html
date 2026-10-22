@@ -174,7 +174,7 @@
 
 <!-- Minimalist White Toast Notification (CTA Scroll) -->
 <div id="ctaToast" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.92); background: #ffffff; color: #000000; padding: 12px 20px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18); display: flex; align-items: center; gap: 6px; opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); z-index: 9999; white-space: nowrap;">
-  <span style="letter-spacing: -0.01em;">Tap the button below to claim this deal!</span>
+  <span style="letter-spacing: -0.01em;">Tap the button to claim this deal!</span>
 </div>
     
 <!-- Social/Website Toast Notification (Missing Links) -->
@@ -259,7 +259,7 @@ if (dealBox) {
 
           const shareData = {
             title: `${currentTitle} - DailyBarakah SG`,
-            text: `Check out ${currentTitle} on DailyBarakah SG! Special Deal: "${currentDeal}"`,
+            text: `Check out *${currentTitle}* on DailyBarakah SG! Special Deal: "${currentDeal}"`,
             url: window.location.href
           };
 
