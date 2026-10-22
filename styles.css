@@ -633,3 +633,9 @@ dialog::backdrop {
 .cta-pulse-active {
   animation: ctaPulseGlow 2.8s ease-in-out forwards !important;
 }
+
+/* Subtle gold border for offer/deal badges inside Featured Cards only */
+.featured-card .deal-badge {
+  border: 1px solid var(--accent-gold, #ddba58);
+  box-shadow: 0 1px 3px rgba(221, 186, 88, 0.15);
+}
