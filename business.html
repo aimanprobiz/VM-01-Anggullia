@@ -353,10 +353,6 @@
           });
         }
 
-      } catch (error) {
-        console.error('Error loading business details:', error);
-      }
-
       // --- Social Media Links Logic ---
         const igUrl = biz.InstagramURL || biz.instagramurl || biz.Instagram || '';
         const tiktokUrl = biz.TikTokURL || biz.tiktokurl || biz.TikTok || '';
@@ -380,6 +376,10 @@
           waSocialBtn.href = `https://wa.me/${phoneNum}`;
           waSocialBtn.style.display = 'flex';
         }
+      } catch (error) {
+        console.error('Error loading business details:', error);
+      }
+
     }
 
     loadBusinessDetail();
