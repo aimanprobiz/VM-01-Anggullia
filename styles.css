@@ -218,34 +218,55 @@ body {
   flex-direction: column;
 }
 
-/* Balanced Sheer Glass Category Bar */
+/* Balanced Sheer Glass Category Bar with Enhanced Horizontal Touch Scroll */
 .filter-stacked {
   position: sticky;
   top: 0;
   z-index: 10;
   
-  background-color: rgba(245, 242, 233, 0.35); 
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  background-color: rgba(245, 242, 233, 0.85); 
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: 8px;
   margin-bottom: 18px;
+  
+  /* Adds breathing room at the far left and right edges when scrolling */
   padding: 10px 16px;
   
+  /* Native touch momentum & snapping */
+  scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   
   margin-left: -16px;
   margin-right: -16px;
   
-  border-bottom: 1px solid rgba(226, 219, 201, 0.3);
+  border-bottom: 1px solid rgba(226, 219, 201, 0.5);
 }
 
 .filter-stacked::-webkit-scrollbar {
-  display: none;
+  display: none; /* Hides scrollbar on webkit browsers */
+}
+
+/* Ensure individual category pills align nicely on snap */
+.filter-btn {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  white-space: nowrap;
+  background-color: var(--card-bg);
+  border: 1.5px solid var(--border-color);
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Refined Pill Styling */
