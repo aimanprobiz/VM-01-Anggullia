@@ -319,24 +319,19 @@ if (dealBox) {
         subEl.style.minHeight = 'auto';
 
         // --- UPDATED TICKET LOGIC FOR MISSING DEALS ---
+const bizDealText = biz.Deal || biz.deal || 'NONE';
         const dealEl = document.getElementById('bizDeal');
         const dealBox = document.getElementById('dealBox');
         const couponTagEl = dealBox ? dealBox.querySelector('.coupon-tag') : null;
 
         if (dealBox) {
           dealBox.style.display = 'block';
+          if (couponTagEl) couponTagEl.textContent = 'UMMAH SPECIAL:';
+          dealEl.textContent = bizDealText.toUpperCase(); // Displays "NONE" nicely
           
-          if (bizDealText) {
-            if (couponTagEl) couponTagEl.textContent = 'UMMAH SPECIAL:';
-            dealEl.textContent = bizDealText;
-            dealBox.style.background = 'linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%)';
-            dealBox.style.borderColor = 'var(--accent-gold, #c29a38)';
-          } else {
-            if (couponTagEl) couponTagEl.textContent = 'COMMUNITY DIRECTORY:';
-            dealEl.textContent = 'Supported Local Business';
-            dealBox.style.background = 'rgba(15, 56, 44, 0.03)';
-            dealBox.style.borderColor = 'var(--border-color)';
-          }
+          // Keeps the exact same active gold ticket look
+          dealBox.style.background = 'linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%)';
+          dealBox.style.borderColor = 'var(--accent-gold, #c29a38)';
         }
 
         const descEl = document.getElementById('bizDescription');
@@ -423,12 +418,13 @@ if (dealBox) {
               window.location.href = whatsappUrl;
             });
           }
-        } else {
-          // --- NO PROMO METHOD FALLBACK (DIM BUTTON) ---
+} else {
+          // --- FALLBACK FOR NO DIGITAL REDEMPTION ---
           if (redemptionArea) {
             redemptionArea.innerHTML = `
-              <div class="action-btn-dim">
-                No Active Digital Offer — Visit Links Below ↗
+              <div style="background-color: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; text-align: center; box-shadow: var(--shadow-sm);">
+                <p style="font-size: 0.82rem; font-weight: 600; color: var(--text-main); margin-bottom: 2px;">General Business Listing</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">No digital coupon required. Connect via their official links below!</p>
               </div>
             `;
           }
