@@ -444,7 +444,7 @@ function setupCategoryFilters() {
   });
 }
 
-// --- Interactive Real-Time Category Drag & Swipe ---
+// --- High-Sensitivity Real-Time Category Drag & Swipe ---
 function enableCategorySwipe() {
   const gridContainer = document.getElementById('businessGrid');
   const filterContainer = document.getElementById('filterContainer');
@@ -454,6 +454,7 @@ function enableCategorySwipe() {
   let startX = 0;
   let startY = 0;
   let currentX = 0;
+  let startTime = 0;
   let isDragging = false;
   let isHorizontalSwipe = null;
 
@@ -461,6 +462,7 @@ function enableCategorySwipe() {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
     currentX = startX;
+    startTime = Date.now();
     isDragging = true;
     isHorizontalSwipe = null;
   }, { passive: true });
@@ -472,22 +474,20 @@ function enableCategorySwipe() {
     const diffX = currentX - startX;
     const diffY = e.touches[0].clientY - startY;
 
-    // Detect gesture direction on first moves
+    // Detect gesture early after 4px movement
     if (isHorizontalSwipe === null) {
-      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 8) {
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 4) {
         isHorizontalSwipe = true;
       } else if (Math.abs(diffY) > Math.abs(diffX)) {
         isHorizontalSwipe = false;
       }
     }
 
-    // If swiping horizontally, move the card grid in real-time with finger
     if (isHorizontalSwipe) {
       gridContainer.classList.add('dragging');
-      // Dynamic shift + subtle opacity drop as it leaves
       const dragPercent = Math.min(Math.abs(diffX) / window.innerWidth, 1);
       gridContainer.style.transform = `translateX(${diffX}px)`;
-      gridContainer.style.opacity = `${1 - dragPercent * 0.4}`;
+      gridContainer.style.opacity = `${1 - dragPercent * 0.35}`;
     }
   }, { passive: true });
 
@@ -499,23 +499,27 @@ function enableCategorySwipe() {
 
     if (isHorizontalSwipe) {
       const diffX = currentX - startX;
-      const threshold = window.innerWidth * 0.22; // 22% drag threshold to commit page change
+      const duration = Date.now() - startTime;
+      
+      // High sensitivity threshold: ~35-40px distance or a fast flick under 250ms
+      const distanceThreshold = window.innerWidth * 0.10; 
+      const isFastFlick = duration < 250 && Math.abs(diffX) > 25;
+
       const filterButtons = Array.from(filterContainer.querySelectorAll('.filter-btn'));
       const activeIndex = filterButtons.findIndex(btn => btn.classList.contains('active'));
 
       let targetIndex = activeIndex;
 
-      if (diffX < -threshold && activeIndex < filterButtons.length - 1) {
-        // Swiped left sufficiently -> Next Category
+      if ((diffX < -distanceThreshold || (isFastFlick && diffX < 0)) && activeIndex < filterButtons.length - 1) {
+        // Swiped left -> Next Category
         targetIndex = activeIndex + 1;
-      } else if (diffX > threshold && activeIndex > 0) {
-        // Swiped right sufficiently -> Previous Category
+      } else if ((diffX > distanceThreshold || (isFastFlick && diffX > 0)) && activeIndex > 0) {
+        // Swiped right -> Previous Category
         targetIndex = activeIndex - 1;
       }
 
       if (targetIndex !== activeIndex) {
-        // Complete departure transition out
-        const exitDirection = diffX < 0 ? -window.innerWidth : window.innerWidth;
+        const exitDirection = diffX < 0 ? -window.innerWidth * 0.8 : window.innerWidth * 0.8;
         gridContainer.style.transform = `translateX(${exitDirection}px)`;
         gridContainer.style.opacity = '0';
 
@@ -523,9 +527,8 @@ function enableCategorySwipe() {
           const targetBtn = filterButtons[targetIndex];
           targetBtn.click();
 
-          // Prepare entrance from opposite side
           gridContainer.classList.add('dragging');
-          gridContainer.style.transform = `translateX(${-exitDirection * 0.5}px)`;
+          gridContainer.style.transform = `translateX(${-exitDirection * 0.4}px)`;
           gridContainer.style.opacity = '0';
 
           requestAnimationFrame(() => {
@@ -535,10 +538,10 @@ function enableCategorySwipe() {
           });
 
           targetBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        }, 160);
+        }, 120);
 
       } else {
-        // Snap back to center if swipe wasn't far enough
+        // Snap back to center
         gridContainer.style.transform = 'translateX(0)';
         gridContainer.style.opacity = '1';
       }
