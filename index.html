@@ -102,7 +102,7 @@
       </div>
     </section>
 
-<!-- 2. MASJID ANGULLIA ACTIVITIES CAROUSEL -->
+    <!-- 2. MASJID ANGULLIA ACTIVITIES CAROUSEL -->
     <section class="carousel-section">
       <h2 class="section-title">Masjid Angullia Activities</h2>
       <div class="carousel-wrapper">
@@ -124,22 +124,27 @@
     <section class="business-section">
       <h2 class="section-title">Support Local Muslim Businesses</h2>
 
-     <!-- Category Pills (Ensure data-cat values match Airtable values or 'all') -->
-  <div class="filter-stacked" id="filterContainer">
-    <button class="filter-btn active" data-cat="all">All Deals</button>
-    <button class="filter-btn" data-cat="Quran Tutors">Quran Tutors</button>
-    <button class="filter-btn" data-cat="Photography">Photography</button>
-    <button class="filter-btn" data-cat="F&B / Bakers">F&B / Bakers</button>
-    <button class="filter-btn" data-cat="Books & Gifts">Books & Gifts</button>
-    <button class="filter-btn" data-cat="Health & Sunnah">Health & Sunnah</button>
-    <button class="filter-btn" data-cat="Modest Fashion">Modest Fashion</button>
-  </div>
+      <!-- Category Pills Bar -->
+      <div class="filter-stacked" id="filterContainer">
+        <button class="filter-btn active" data-cat="all">All Deals</button>
+        <button class="filter-btn" data-cat="Quran Tutors">Quran Tutors</button>
+        <button class="filter-btn" data-cat="Photography">Photography</button>
+        <button class="filter-btn" data-cat="F&B / Bakers">F&B / Bakers</button>
+        <button class="filter-btn" data-cat="Books & Gifts">Books & Gifts</button>
+        <button class="filter-btn" data-cat="Health & Sunnah">Health & Sunnah</button>
+        <button class="filter-btn" data-cat="Modest Fashion">Modest Fashion</button>
+      </div>
 
-  <!-- Dynamic Business Grid Container -->
-  <div class="business-grid" id="businessGrid">
-    <!-- Rendered dynamically via script.js -->
-  </div>
-      
+      <!-- Swipeable Category Viewport -->
+      <div class="category-swipe-viewport" id="categorySwipeViewport">
+        <div class="category-swipe-track" id="categorySwipeTrack">
+          <div class="category-page" id="prevCategoryPage"></div>
+          <div class="category-page active-page" id="activeCategoryPage">
+            <div class="business-grid" id="businessGrid"></div>
+          </div>
+          <div class="category-page" id="nextCategoryPage"></div>
+        </div>
+      </div>
     </section>
 
     <!-- FOOTER -->
@@ -162,11 +167,12 @@
     </footer>
     
   </div>
-<script src="/script.js" defer></script>
-  <!-- Floating Back to Top Button -->
-<!-- Back to Top Button -->
-<button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top" title="Back to top">
-  ↑
-</button>
+
+  <script src="/script.js" defer></script>
+
+  <!-- Back to Top Button -->
+  <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top" title="Back to top">
+    ↑
+  </button>
 </body>
 </html>
