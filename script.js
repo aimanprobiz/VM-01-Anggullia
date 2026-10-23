@@ -444,86 +444,106 @@ function setupCategoryFilters() {
   });
 }
 
-// --- Swipe Between Categories Feature ---
+// --- Interactive Real-Time Category Drag & Swipe ---
 function enableCategorySwipe() {
   const gridContainer = document.getElementById('businessGrid');
   const filterContainer = document.getElementById('filterContainer');
-  
+
   if (!gridContainer || !filterContainer) return;
 
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let touchEndX = 0;
-  let touchEndY = 0;
-
-  const minSwipeDistance = 50;
+  let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  let isDragging = false;
+  let isHorizontalSwipe = null;
 
   gridContainer.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    currentX = startX;
+    isDragging = true;
+    isHorizontalSwipe = null;
   }, { passive: true });
 
-  gridContainer.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    touchEndY = e.changedTouches[0].screenY;
-    handleCategorySwipe();
+  gridContainer.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+
+    currentX = e.touches[0].clientX;
+    const diffX = currentX - startX;
+    const diffY = e.touches[0].clientY - startY;
+
+    // Detect gesture direction on first moves
+    if (isHorizontalSwipe === null) {
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 8) {
+        isHorizontalSwipe = true;
+      } else if (Math.abs(diffY) > Math.abs(diffX)) {
+        isHorizontalSwipe = false;
+      }
+    }
+
+    // If swiping horizontally, move the card grid in real-time with finger
+    if (isHorizontalSwipe) {
+      gridContainer.classList.add('dragging');
+      // Dynamic shift + subtle opacity drop as it leaves
+      const dragPercent = Math.min(Math.abs(diffX) / window.innerWidth, 1);
+      gridContainer.style.transform = `translateX(${diffX}px)`;
+      gridContainer.style.opacity = `${1 - dragPercent * 0.4}`;
+    }
   }, { passive: true });
 
-  function handleCategorySwipe() {
-    const deltaX = touchEndX - touchStartX;
-    const deltaY = touchEndY - touchStartY;
+  gridContainer.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
 
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+    gridContainer.classList.remove('dragging');
+
+    if (isHorizontalSwipe) {
+      const diffX = currentX - startX;
+      const threshold = window.innerWidth * 0.22; // 22% drag threshold to commit page change
       const filterButtons = Array.from(filterContainer.querySelectorAll('.filter-btn'));
       const activeIndex = filterButtons.findIndex(btn => btn.classList.contains('active'));
 
-      if (activeIndex === -1) return;
+      let targetIndex = activeIndex;
 
-      let nextIndex = activeIndex;
-
-      if (deltaX < 0) {
-        if (activeIndex < filterButtons.length - 1) {
-          nextIndex = activeIndex + 1;
-        }
-      } else {
-        if (activeIndex > 0) {
-          nextIndex = activeIndex - 1;
-        }
+      if (diffX < -threshold && activeIndex < filterButtons.length - 1) {
+        // Swiped left sufficiently -> Next Category
+        targetIndex = activeIndex + 1;
+      } else if (diffX > threshold && activeIndex > 0) {
+        // Swiped right sufficiently -> Previous Category
+        targetIndex = activeIndex - 1;
       }
 
-      if (nextIndex !== activeIndex) {
-        const targetBtn = filterButtons[nextIndex];
-        const slideDir = deltaX < 0 ? 'right' : 'left';
+      if (targetIndex !== activeIndex) {
+        // Complete departure transition out
+        const exitDirection = diffX < 0 ? -window.innerWidth : window.innerWidth;
+        gridContainer.style.transform = `translateX(${exitDirection}px)`;
+        gridContainer.style.opacity = '0';
 
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        targetBtn.classList.add('active');
+        setTimeout(() => {
+          const targetBtn = filterButtons[targetIndex];
+          targetBtn.click();
 
-        visibleLimit = 10;
-        renderBusinessBatch(slideDir);
+          // Prepare entrance from opposite side
+          gridContainer.classList.add('dragging');
+          gridContainer.style.transform = `translateX(${-exitDirection * 0.5}px)`;
+          gridContainer.style.opacity = '0';
 
-        targetBtn.scrollIntoView({
-          behavior: 'smooth',
-          inline: 'center',
-          block: 'nearest'
-        });
+          requestAnimationFrame(() => {
+            gridContainer.classList.remove('dragging');
+            gridContainer.style.transform = 'translateX(0)';
+            gridContainer.style.opacity = '1';
+          });
 
-        // Trigger filter visibility update after swipe
-        const selectedCat = targetBtn.getAttribute('data-cat');
-        let visibleCount = 0;
-        const businessCards = gridContainer.querySelectorAll('.grid-card');
+          targetBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }, 160);
 
-        businessCards.forEach(card => {
-          const cardCat = card.getAttribute('data-cat');
-          if (selectedCat === 'all' || cardCat === selectedCat) {
-            card.style.display = 'flex';
-            visibleCount++;
-          } else {
-            card.style.display = 'none';
-          }
-        });
+      } else {
+        // Snap back to center if swipe wasn't far enough
+        gridContainer.style.transform = 'translateX(0)';
+        gridContainer.style.opacity = '1';
       }
     }
-  }
+  });
 }
 
 // Enable Category Swiping on Page Initialization
