@@ -444,12 +444,13 @@ function setupCategoryFilters() {
   });
 }
 
-// --- High-Sensitivity Real-Time Category Drag & Swipe ---
+// --- True Side-by-Side Real-Time Category Swiper ---
 function enableCategorySwipe() {
-  const gridContainer = document.getElementById('businessGrid');
+  const wrapper = document.getElementById('gridWrapper');
+  const activeGrid = document.getElementById('businessGrid');
   const filterContainer = document.getElementById('filterContainer');
 
-  if (!gridContainer || !filterContainer) return;
+  if (!wrapper || !activeGrid || !filterContainer) return;
 
   let startX = 0;
   let startY = 0;
@@ -457,24 +458,25 @@ function enableCategorySwipe() {
   let startTime = 0;
   let isDragging = false;
   let isHorizontalSwipe = null;
+  let adjacentGrid = null;
 
-  gridContainer.addEventListener('touchstart', (e) => {
+  wrapper.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
     currentX = startX;
     startTime = Date.now();
     isDragging = true;
     isHorizontalSwipe = null;
+    adjacentGrid = null;
   }, { passive: true });
 
-  gridContainer.addEventListener('touchmove', (e) => {
+  wrapper.addEventListener('touchmove', (e) => {
     if (!isDragging) return;
 
     currentX = e.touches[0].clientX;
     const diffX = currentX - startX;
     const diffY = e.touches[0].clientY - startY;
 
-    // Detect gesture early after 4px movement
     if (isHorizontalSwipe === null) {
       if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 4) {
         isHorizontalSwipe = true;
@@ -484,25 +486,73 @@ function enableCategorySwipe() {
     }
 
     if (isHorizontalSwipe) {
-      gridContainer.classList.add('dragging');
-      const dragPercent = Math.min(Math.abs(diffX) / window.innerWidth, 1);
-      gridContainer.style.transform = `translateX(${diffX}px)`;
-      gridContainer.style.opacity = `${1 - dragPercent * 0.35}`;
+      const filterButtons = Array.from(filterContainer.querySelectorAll('.filter-btn'));
+      const activeIndex = filterButtons.findIndex(btn => btn.classList.contains('active'));
+
+      // 1. Dynamically render adjacent page on first movement
+      if (!adjacentGrid && Math.abs(diffX) > 5) {
+        const targetIndex = diffX < 0 ? activeIndex + 1 : activeIndex - 1;
+
+        if (targetIndex >= 0 && targetIndex < filterButtons.length) {
+          const targetCat = filterButtons[targetIndex].getAttribute('data-cat');
+          
+          adjacentGrid = document.createElement('div');
+          adjacentGrid.className = 'business-grid';
+          adjacentGrid.id = 'adjacentGrid';
+
+          // Filter listings for adjacent category
+          const targetDataset = targetCat === 'all' 
+            ? allBusinesses 
+            : allBusinesses.filter(biz => (biz.Category || 'all') === targetCat);
+
+          const batch = targetDataset.slice(0, 10);
+          adjacentGrid.innerHTML = batch.map(biz => `
+            <div class="grid-card ${biz.IsFeatured ? 'featured-card' : ''}" onclick="window.location.href='/business.html?slug=${biz.Slug}'">
+              <div style="position: relative;">
+                <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
+                ${biz.IsFeatured ? '<span class="grid-featured-badge">★</span>' : ''}
+              </div>
+              <div class="grid-card-body">
+                <div class="vendor-details">
+                  <div class="deal-badge">${biz.Deal || 'No offer'}</div>
+                  <h3 class="vendor-name">${biz.Name}</h3>
+                  <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
+                </div>
+                <button class="action-btn">View Details</button>
+              </div>
+            </div>
+          `).join('');
+
+          // Append to left or right based on drag direction
+          if (diffX < 0) {
+            wrapper.appendChild(adjacentGrid);
+          } else {
+            wrapper.insertBefore(adjacentGrid, activeGrid);
+            wrapper.style.transform = `translateX(-100%)`;
+          }
+        }
+      }
+
+      // 2. Real-Time Finger Tracking
+      wrapper.classList.add('dragging');
+      if (diffX < 0) {
+        wrapper.style.transform = `translateX(${diffX}px)`;
+      } else if (adjacentGrid) {
+        wrapper.style.transform = `translateX(calc(-100% + ${diffX}px))`;
+      }
     }
   }, { passive: true });
 
-  gridContainer.addEventListener('touchend', () => {
+  wrapper.addEventListener('touchend', () => {
     if (!isDragging) return;
     isDragging = false;
 
-    gridContainer.classList.remove('dragging');
+    wrapper.classList.remove('dragging');
 
     if (isHorizontalSwipe) {
       const diffX = currentX - startX;
       const duration = Date.now() - startTime;
-      
-      // High sensitivity threshold: ~35-40px distance or a fast flick under 250ms
-      const distanceThreshold = window.innerWidth * 0.10; 
+      const distanceThreshold = window.innerWidth * 0.12; 
       const isFastFlick = duration < 250 && Math.abs(diffX) > 25;
 
       const filterButtons = Array.from(filterContainer.querySelectorAll('.filter-btn'));
@@ -511,39 +561,44 @@ function enableCategorySwipe() {
       let targetIndex = activeIndex;
 
       if ((diffX < -distanceThreshold || (isFastFlick && diffX < 0)) && activeIndex < filterButtons.length - 1) {
-        // Swiped left -> Next Category
         targetIndex = activeIndex + 1;
       } else if ((diffX > distanceThreshold || (isFastFlick && diffX > 0)) && activeIndex > 0) {
-        // Swiped right -> Previous Category
         targetIndex = activeIndex - 1;
       }
 
-      if (targetIndex !== activeIndex) {
-        const exitDirection = diffX < 0 ? -window.innerWidth * 0.8 : window.innerWidth * 0.8;
-        gridContainer.style.transform = `translateX(${exitDirection}px)`;
-        gridContainer.style.opacity = '0';
+      if (targetIndex !== activeIndex && adjacentGrid) {
+        // Slide completely into adjacent page
+        wrapper.style.transform = diffX < 0 ? `translateX(-100%)` : `translateX(0%)`;
 
         setTimeout(() => {
           const targetBtn = filterButtons[targetIndex];
-          targetBtn.click();
+          
+          // Switch active filter pill
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          targetBtn.classList.add('active');
 
-          gridContainer.classList.add('dragging');
-          gridContainer.style.transform = `translateX(${-exitDirection * 0.4}px)`;
-          gridContainer.style.opacity = '0';
+          // Clean up DOM and reset main grid to new category
+          visibleLimit = 10;
+          renderBusinessBatch();
+
+          wrapper.classList.add('dragging');
+          wrapper.style.transform = 'translateX(0)';
+          if (adjacentGrid) adjacentGrid.remove();
 
           requestAnimationFrame(() => {
-            gridContainer.classList.remove('dragging');
-            gridContainer.style.transform = 'translateX(0)';
-            gridContainer.style.opacity = '1';
+            wrapper.classList.remove('dragging');
           });
 
           targetBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        }, 120);
+        }, 260);
 
       } else {
-        // Snap back to center
-        gridContainer.style.transform = 'translateX(0)';
-        gridContainer.style.opacity = '1';
+        // Snap back to current page
+        wrapper.style.transform = adjacentGrid && diffX > 0 ? 'translateX(-100%)' : 'translateX(0)';
+        setTimeout(() => {
+          wrapper.style.transform = 'translateX(0)';
+          if (adjacentGrid) adjacentGrid.remove();
+        }, 260);
       }
     }
   });
