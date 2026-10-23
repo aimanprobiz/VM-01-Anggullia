@@ -346,29 +346,30 @@ function renderBusinessBatch() {
       window.location.href = `/business.html?slug=${biz.Slug}`;
     };
 
-    // Extract deal text from Airtable schema keys safely
-    const dealText = biz.Deal || biz.deal || '';
+// Extract deal text; if empty or missing, fallback to 'NO OFFER'
+const rawDeal = biz.Deal || biz.deal || '';
+const dealText = rawDeal.trim() !== '' ? rawDeal : 'No offer';
 
-    card.innerHTML = `
-      <div style="position: relative;">
-        <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
-        ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
-      </div>
+card.innerHTML = `
+  <div style="position: relative;">
+    <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
+    ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
+  </div>
 
-      <div class="grid-card-body">
-        <div class="vendor-details">
-          <!-- Render deal badge pill dynamically if a deal text exists -->
-          ${dealText ? `<div class="deal-badge"><span></span> ${dealText}</div>` : ''}
+  <div class="grid-card-body">
+    <div class="vendor-details">
+      <!-- Always renders the deal badge pill with the exact same colors -->
+      <div class="deal-badge"><span></span> ${dealText}</div>
 
-          <h3 class="vendor-name">${biz.Name}</h3>
-          <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
-        </div>
+      <h3 class="vendor-name">${biz.Name}</h3>
+      <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
+    </div>
 
-        <button class="action-btn" style="text-align: center;">
-          View Details
-        </button>
-      </div>
-    `;
+    <button class="action-btn" style="text-align: center;">
+      View Details
+    </button>
+  </div>
+`;
     gridContainer.appendChild(card);
   });
 
