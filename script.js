@@ -219,6 +219,14 @@ function displayHadith(hadith) {
   document.getElementById('hadith-tag').textContent = hadith.tag;
 }
 
+// Helper function for safe horizontal-only scrolling of active category pills
+function centerFilterPill(btn) {
+  const container = document.getElementById('filterContainer');
+  if (!container || !btn) return;
+  const scrollLeft = btn.offsetLeft - (container.clientWidth / 2) + (btn.clientWidth / 2);
+  container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+}
+
 // 4. Dynamic Business Directory Loader & Category Filter
 let allBusinesses = [];
 let visibleLimit = 10;
@@ -311,7 +319,6 @@ function renderBusinessBatch(direction = '') {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
 
-  // Clear previous animation classes and trigger reflow
   gridContainer.classList.remove('grid-slide-right', 'grid-slide-left');
   void gridContainer.offsetWidth; 
 
@@ -440,6 +447,9 @@ function setupCategoryFilters() {
       } else {
         if (emptyMsg) emptyMsg.style.display = 'none';
       }
+
+      // Safe horizontal scroll without vertical jump
+      centerFilterPill(button);
     });
   });
 }
@@ -528,17 +538,17 @@ function enableCategorySwipe() {
             wrapper.appendChild(adjacentGrid);
           } else {
             wrapper.insertBefore(adjacentGrid, activeGrid);
-            wrapper.style.transform = `translateX(-100%)`;
+            wrapper.style.transform = `translateX(calc(-100% - 20px))`;
           }
         }
       }
 
-      // 2. Real-Time Finger Tracking
+      // 2. Real-Time Finger Tracking with gap account
       wrapper.classList.add('dragging');
       if (diffX < 0) {
         wrapper.style.transform = `translateX(${diffX}px)`;
       } else if (adjacentGrid) {
-        wrapper.style.transform = `translateX(calc(-100% + ${diffX}px))`;
+        wrapper.style.transform = `translateX(calc(-100% - 20px + ${diffX}px))`;
       }
     }
   }, { passive: true });
@@ -567,8 +577,8 @@ function enableCategorySwipe() {
       }
 
       if (targetIndex !== activeIndex && adjacentGrid) {
-        // Slide completely into adjacent page
-        wrapper.style.transform = diffX < 0 ? `translateX(-100%)` : `translateX(0%)`;
+        // Slide completely into adjacent page (accounting for 20px gap)
+        wrapper.style.transform = diffX < 0 ? `translateX(calc(-100% - 20px))` : `translateX(0%)`;
 
         setTimeout(() => {
           const targetBtn = filterButtons[targetIndex];
@@ -589,12 +599,13 @@ function enableCategorySwipe() {
             wrapper.classList.remove('dragging');
           });
 
-          targetBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          // Safe horizontal-only scroll (prevents vertical page jump)
+          centerFilterPill(targetBtn);
         }, 260);
 
       } else {
         // Snap back to current page
-        wrapper.style.transform = adjacentGrid && diffX > 0 ? 'translateX(-100%)' : 'translateX(0)';
+        wrapper.style.transform = adjacentGrid && diffX > 0 ? `translateX(calc(-100% - 20px))` : 'translateX(0)';
         setTimeout(() => {
           wrapper.style.transform = 'translateX(0)';
           if (adjacentGrid) adjacentGrid.remove();
