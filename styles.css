@@ -668,3 +668,19 @@ dialog::backdrop {
   color: var(--primary-color);
   transform: scale(1.05);
 }
+
+/* --- Category Swipe Transition Animation --- */
+@keyframes categoryFadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.grid-card-animate {
+  animation: categoryFadeSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
