@@ -549,29 +549,47 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
           }, 2500);
         }
 
-        function setupLinkButton(btnId, targetUrl, platformName) {
-          const btn = document.getElementById(btnId);
-          if (!btn) return;
+function setupLinkButton(btnId, targetUrl, platformName, actionKey) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
 
-          if (targetUrl) {
-            btn.href = targetUrl.startsWith('http') ? targetUrl : `https://${targetUrl}`;
-            btn.style.opacity = '1';
-          } else {
-            btn.href = 'javascript:void(0)';
-            btn.removeAttribute('target'); 
-            btn.style.opacity = '0.5'; 
+  if (targetUrl) {
+    btn.href = targetUrl.startsWith('http') ? targetUrl : `https://${targetUrl}`;
+    btn.style.opacity = '1';
 
-            btn.addEventListener('click', (e) => {
-              e.preventDefault();
-              showSocialToast(`No ${platformName} link available for this business`);
-            });
-          }
-        }
+    // Track click event to Airtable before navigating
+    btn.addEventListener('click', () => {
+      const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: actionKey });
 
-        setupLinkButton('socialWebsite', webUrl, 'website');
-        setupLinkButton('socialInstagram', igUrl, 'Instagram');
-        setupLinkButton('socialTiktok', tiktokUrl, 'TikTok');
-        setupLinkButton('socialWhatsapp', phoneNum ? `https://wa.me/${phoneNum}` : '', 'WhatsApp');
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+      } else {
+        fetch('/api/redeem', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: trackingPayload,
+          keepalive: true
+        }).catch(() => {});
+      }
+    });
+
+  } else {
+    btn.href = 'javascript:void(0)';
+    btn.removeAttribute('target'); 
+    btn.style.opacity = '0.5'; 
+
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      showSocialToast(`No ${platformName} link available for this business`);
+    });
+  }
+}
+
+// Pass action keys matching the API handler:
+setupLinkButton('socialWebsite', webUrl, 'website', 'website');
+setupLinkButton('socialInstagram', igUrl, 'Instagram', 'instagram');
+setupLinkButton('socialTiktok', tiktokUrl, 'TikTok', 'tiktok');
+setupLinkButton('socialWhatsapp', phoneNum ? `https://wa.me/${phoneNum}` : '', 'WhatsApp', 'social_whatsapp');
       } catch (error) {
         console.error('Error loading business details:', error);
       }
