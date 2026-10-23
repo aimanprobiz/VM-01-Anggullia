@@ -219,80 +219,227 @@ function displayHadith(hadith) {
   document.getElementById('hadith-tag').textContent = hadith.tag;
 }
 
-// 4. Dynamic Business Directory Loader & Category Filter
+// 4. Dynamic Category Swipe Engine & Business Loader
 let allBusinesses = [];
+let categories = [];
+let currentCategoryIndex = 0;
 let visibleLimit = 10;
 
-async function loadBusinesses() {
-  const gridContainer = document.getElementById('businessGrid');
-  if (!gridContainer) return;
+function initCategories() {
+  const filterBtns = document.querySelectorAll('#filterContainer .filter-btn');
+  categories = Array.from(filterBtns).map(btn => btn.getAttribute('data-cat'));
+}
 
-gridContainer.innerHTML = Array(10).fill(`
-    <div class="grid-card skeleton-card">
-      <div class="skeleton-img"></div>
-      <div class="grid-card-body">
-        <div class="skeleton-line title"></div>
-        <div class="skeleton-line sub"></div>
-        <div class="skeleton-line badge"></div>
-        <div class="skeleton-line btn"></div>
+async function loadBusinesses() {
+  initCategories();
+
+  const gridContainer = document.getElementById('businessGrid');
+  if (gridContainer) {
+    gridContainer.innerHTML = Array(6).fill(`
+      <div class="grid-card skeleton-card">
+        <div class="skeleton-img"></div>
+        <div class="grid-card-body">
+          <div class="skeleton-line title"></div>
+          <div class="skeleton-line sub"></div>
+          <div class="skeleton-line badge"></div>
+          <div class="skeleton-line btn"></div>
+        </div>
       </div>
-    </div>
-  `).join('');
-  
+    `).join('');
+  }
+
   try {
     const response = await fetch('/api/businesses?t=' + Date.now());
     if (!response.ok) throw new Error('Network response was not ok');
 
     allBusinesses = await response.json();
-    if (!Array.isArray(allBusinesses)) {
-      allBusinesses = [];
-    }
+    if (!Array.isArray(allBusinesses)) allBusinesses = [];
 
     allBusinesses.sort((a, b) => {
       const aFeatured = a.IsFeatured ? 1 : 0;
       const bFeatured = b.IsFeatured ? 1 : 0;
-
-      if (aFeatured !== bFeatured) {
-        return bFeatured - aFeatured;
-      }
+      if (aFeatured !== bFeatured) return bFeatured - aFeatured;
       return (a.Name || '').localeCompare(b.Name || '');
     });
 
-    renderBusinessBatch();
+    renderCurrentCategoryView();
     setupCategoryFilters();
+    initSwipeGestures();
 
   } catch (error) {
-    console.error('Error loading businesses from Airtable:', error);
-    gridContainer.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 0.9rem; color: #d9534f;">Unable to load business listings. Please refresh the page.</p>
-      </div>
-    `;
+    console.error('Error loading businesses:', error);
   }
 }
 
-// Unified Scroll Listener for Infinite Scroll & Back-to-Top (Option 2)
+function renderGridForCategory(catName) {
+  const targetDataset = catName === 'all' 
+    ? allBusinesses 
+    : allBusinesses.filter(biz => (biz.Category || 'all') === catName);
+
+  if (targetDataset.length === 0) {
+    return `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+        <p style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">No listings in this category</p>
+        <p style="font-size: 0.82rem; margin-top: 4px;">Check back soon for new community deals!</p>
+      </div>
+    `;
+  }
+
+  return targetDataset.slice(0, visibleLimit).map(biz => {
+    const isFeatured = biz.IsFeatured;
+    const rawDeal = biz.Deal || biz.deal || '';
+    const dealText = rawDeal.trim() !== '' ? rawDeal : 'No offer';
+
+    return `
+      <div class="${isFeatured ? 'grid-card featured-card' : 'grid-card'}" 
+           style="cursor: pointer;" 
+           onclick="window.location.href='/business.html?slug=${biz.Slug}'">
+        <div style="position: relative;">
+          <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
+          ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
+        </div>
+        <div class="grid-card-body">
+          <div class="vendor-details">
+            <div class="deal-badge"><span></span> ${dealText}</div>
+            <h3 class="vendor-name">${biz.Name}</h3>
+            <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
+          </div>
+          <button class="action-btn" style="text-align: center;">View Details</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCurrentCategoryView() {
+  if (categories.length === 0) return;
+
+  const prevIndex = (currentCategoryIndex - 1 + categories.length) % categories.length;
+  const nextIndex = (currentCategoryIndex + 1) % categories.length;
+
+  const activeCat = categories[currentCategoryIndex];
+  const prevCat = categories[prevIndex];
+  const nextCat = categories[nextIndex];
+
+  document.getElementById('prevCategoryPage').innerHTML = `<div class="business-grid">${renderGridForCategory(prevCat)}</div>`;
+  document.getElementById('activeCategoryPage').innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat)}</div>`;
+  document.getElementById('nextCategoryPage').innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat)}</div>`;
+
+  const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
+  filterButtons.forEach((btn, idx) => {
+    const isActive = idx === currentCategoryIndex;
+    btn.classList.toggle('active', isActive);
+    if (isActive) {
+      btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  });
+}
+
+function switchCategory(newIndex) {
+  if (newIndex === currentCategoryIndex) return;
+  visibleLimit = 10;
+  currentCategoryIndex = newIndex;
+  renderCurrentCategoryView();
+}
+
+function setupCategoryFilters() {
+  const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
+  filterButtons.forEach((button, idx) => {
+    button.addEventListener('click', () => {
+      switchCategory(idx);
+    });
+  });
+}
+
+// 5. Touch Engine (Real-time Gesture Tracking)
+function initSwipeGestures() {
+  const viewport = document.getElementById('categorySwipeViewport');
+  const track = document.getElementById('categorySwipeTrack');
+  if (!viewport || !track) return;
+
+  let startX = 0;
+  let startY = 0;
+  let currentDeltaX = 0;
+  let isSwiping = false;
+  let isHorizontalMove = null;
+
+  viewport.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    currentDeltaX = 0;
+    isSwiping = true;
+    isHorizontalMove = null;
+    track.classList.remove('animating');
+  }, { passive: true });
+
+  viewport.addEventListener('touchmove', (e) => {
+    if (!isSwiping) return;
+
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - startX;
+    const deltaY = touch.clientY - startY;
+
+    if (isHorizontalMove === null) {
+      isHorizontalMove = Math.abs(deltaX) > Math.abs(deltaY);
+    }
+
+    if (!isHorizontalMove) return;
+
+    currentDeltaX = deltaX;
+
+    const viewportWidth = viewport.clientWidth;
+    const baseOffsetPercent = -33.333;
+    const dragOffsetPercent = (currentDeltaX / viewportWidth) * 33.333;
+
+    track.style.transform = `translateX(${baseOffsetPercent + dragOffsetPercent}%)`;
+  }, { passive: true });
+
+  viewport.addEventListener('touchend', () => {
+    if (!isSwiping || isHorizontalMove === false) {
+      isSwiping = false;
+      return;
+    }
+
+    isSwiping = false;
+    track.classList.add('animating');
+
+    const viewportWidth = viewport.clientWidth;
+    const threshold = viewportWidth * 0.22;
+
+    if (currentDeltaX < -threshold) {
+      track.style.transform = `translateX(-66.666%)`;
+      setTimeout(() => {
+        track.classList.remove('animating');
+        currentCategoryIndex = (currentCategoryIndex + 1) % categories.length;
+        visibleLimit = 10;
+        renderCurrentCategoryView();
+        track.style.transform = `translateX(-33.333%)`;
+      }, 280);
+
+    } else if (currentDeltaX > threshold) {
+      track.style.transform = `translateX(0%)`;
+      setTimeout(() => {
+        track.classList.remove('animating');
+        currentCategoryIndex = (currentCategoryIndex - 1 + categories.length) % categories.length;
+        visibleLimit = 10;
+        renderCurrentCategoryView();
+        track.style.transform = `translateX(-33.333%)`;
+      }, 280);
+
+    } else {
+      track.style.transform = `translateX(-33.333%)`;
+    }
+  });
+}
+
+// 6. Unified Scroll Listener for Back-to-Top
 let lastScrollY = window.scrollY;
 
 window.addEventListener('scroll', () => {
-  const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
   const currentScroll = window.scrollY;
-  const distanceToBottom = scrollableHeight - currentScroll;
-
-  // 1. Infinite Scroll trigger (loads more when within 300px of the bottom)
-  const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
-  const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
-  const targetDataset = selectedCat === 'all' 
-    ? allBusinesses 
-    : allBusinesses.filter(biz => (biz.Category || 'all') === selectedCat);
-
-  if (distanceToBottom < 300 && visibleLimit < targetDataset.length) {
-    visibleLimit += 10;
-    renderBusinessBatch();
-  }
-
-  // 2. Dynamic Back-to-Top Button Logic (Option 2: Appears when scrolling UP past 300px)
   const backToTopBtn = document.getElementById('backToTopBtn');
+  
   if (backToTopBtn) {
     const isScrollingUp = currentScroll < lastScrollY;
     const isPastThreshold = currentScroll > 300;
@@ -309,152 +456,7 @@ window.addEventListener('scroll', () => {
   lastScrollY = currentScroll;
 });
 
-function renderBusinessBatch() {
-  const gridContainer = document.getElementById('businessGrid');
-  if (!gridContainer) return;
-
-  gridContainer.innerHTML = '';
-
-  if (allBusinesses.length === 0) {
-    gridContainer.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 1rem; font-weight: 600; color: var(--text-main);">No listings available yet</p>
-        <p style="font-size: 0.85rem; margin-top: 5px;">Check back soon for new community deals!</p>
-      </div>
-    `;
-    return;
-  }
-
-  const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
-  const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
-
-  const targetDataset = selectedCat === 'all' 
-    ? allBusinesses 
-    : allBusinesses.filter(biz => (biz.Category || 'all') === selectedCat);
-
-  const currentBatch = targetDataset.slice(0, visibleLimit);
-
-  currentBatch.forEach(biz => {
-    const isFeatured = biz.IsFeatured;
-    const card = document.createElement('div');
-    
-    card.className = isFeatured ? 'grid-card featured-card' : 'grid-card';
-    card.setAttribute('data-cat', biz.Category || 'all');
-    card.style.cursor = 'pointer';
-
-    card.onclick = function() {
-      window.location.href = `/business.html?slug=${biz.Slug}`;
-    };
-
-// Extract deal text; if empty or missing, fallback to 'NO OFFER'
-const rawDeal = biz.Deal || biz.deal || '';
-const dealText = rawDeal.trim() !== '' ? rawDeal : 'No offer';
-
-card.innerHTML = `
-  <div style="position: relative;">
-    <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
-    ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
-  </div>
-
-  <div class="grid-card-body">
-    <div class="vendor-details">
-      <!-- Always renders the deal badge pill with the exact same colors -->
-      <div class="deal-badge"><span></span> ${dealText}</div>
-
-      <h3 class="vendor-name">${biz.Name}</h3>
-      <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
-    </div>
-
-    <button class="action-btn" style="text-align: center;">
-      View Details
-    </button>
-  </div>
-`;
-    gridContainer.appendChild(card);
-  });
-
-  // Automatically ensure old manual loadMoreBtn is removed if it exists
-  const oldBtn = document.getElementById('loadMoreBtn');
-  if (oldBtn) oldBtn.remove();
-}
-
-function setupCategoryFilters() {
-  const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
-
-  filterButtons.forEach(button => {
-    // 1. Remove old event listeners by replacing the node
-    const newButton = button.cloneNode(true);
-    button.replaceWith(newButton);
-
-    // 2. Add clean click listener
-    newButton.addEventListener('click', () => {
-      document.querySelectorAll('#filterContainer .filter-btn').forEach(btn => btn.classList.remove('active'));
-      newButton.classList.add('active');
-
-      // 3. Reset limit back to 10 for the new category and trigger a clean re-render
-      visibleLimit = 10;
-      renderBusinessBatch();
-    });
-  });
-}
-
-// 5. BUSINESS MODAL ACTION LOGIC
-const bizModal = document.getElementById('businessModal');
-const closeBizModalBtn = document.getElementById('closeBizModalBtn');
-const bizModalTitle = document.getElementById('bizModalTitle');
-const bizModalSub = document.getElementById('bizModalSub');
-const bizModalDeal = document.getElementById('bizModalDeal');
-const pinArea = document.getElementById('pinArea');
-const whatsappBtn = document.getElementById('whatsappBtn');
-const cashierPinInput = document.getElementById('cashierPin');
-const verifyPinBtn = document.getElementById('verifyPinBtn');
-
-function openBizModal(actionType, name, sub, deal, phone = '') {
-  bizModalTitle.textContent = name;
-  bizModalSub.textContent = sub;
-  bizModalDeal.textContent = deal;
-  cashierPinInput.value = '';
-
-  if (actionType === 'claim') {
-    pinArea.style.display = 'block';
-    whatsappBtn.style.display = 'none';
-  } else {
-    pinArea.style.display = 'none';
-    whatsappBtn.style.display = 'block';
-    
-    const encodedText = encodeURIComponent(`Assalaamualaikum! I saw your offer "${deal}" on the Masjid Angullia Companion App and would like to find out more.`);
-    whatsappBtn.href = `https://wa.me/${phone}?text=${encodedText}`;
-  }
-
-  bizModal.showModal();
-}
-
-verifyPinBtn.addEventListener('click', () => {
-  if (cashierPinInput.value.length === 4) {
-    alert('Voucher successfully validated! Show this confirmation to the cashier.');
-    bizModal.close();
-  } else {
-    alert('Please enter a valid 4-digit cashier PIN.');
-  }
-});
-
-if (closeBizModalBtn) {
-  closeBizModalBtn.addEventListener('click', () => bizModal.close());
-}
-
-bizModal.addEventListener('click', (event) => {
-  const rect = bizModal.getBoundingClientRect();
-  if (
-    event.clientX < rect.left ||
-    event.clientX > rect.right ||
-    event.clientY < rect.top ||
-    event.clientY > rect.bottom
-  ) {
-    bizModal.close();
-  }
-});
-
-// Run all dynamic data functions on page load
+// Run all dynamic functions on page load
 loadDynamicCard();
 loadDailyHadith();
 loadBusinesses();
