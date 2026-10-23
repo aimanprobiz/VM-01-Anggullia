@@ -380,57 +380,20 @@ card.innerHTML = `
 
 function setupCategoryFilters() {
   const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
-  const gridContainer = document.getElementById('businessGrid');
 
   filterButtons.forEach(button => {
-    button.replaceWith(button.cloneNode(true));
-  });
+    // 1. Remove old event listeners by replacing the node
+    const newButton = button.cloneNode(true);
+    button.replaceWith(newButton);
 
-  const freshFilterButtons = document.querySelectorAll('#filterContainer .filter-btn');
+    // 2. Add clean click listener
+    newButton.addEventListener('click', () => {
+      document.querySelectorAll('#filterContainer .filter-btn').forEach(btn => btn.classList.remove('active'));
+      newButton.classList.add('active');
 
-  freshFilterButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      freshFilterButtons.forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-
-      // Reset visible limit when switching categories so it starts fresh from 10 items in that category
+      // 3. Reset limit back to 10 for the new category and trigger a clean re-render
       visibleLimit = 10;
       renderBusinessBatch();
-
-      const selectedCat = button.getAttribute('data-cat');
-      let visibleCount = 0;
-
-      const businessCards = gridContainer.querySelectorAll('.grid-card');
-
-      businessCards.forEach(card => {
-        const cardCat = card.getAttribute('data-cat');
-        
-        if (selectedCat === 'all' || cardCat === selectedCat) {
-          card.style.display = 'flex';
-          visibleCount++;
-        } else {
-          card.style.display = 'none';
-        }
-      });
-
-      // Handle empty state message and Load More button visibility for categories
-      let emptyMsg = document.getElementById('emptyCategoryMsg');
-      let loadMoreBtn = document.getElementById('loadMoreBtn');
-
-      if (visibleCount === 0) {
-        if (!emptyMsg) {
-          emptyMsg = document.createElement('div');
-          emptyMsg.id = 'emptyCategoryMsg';
-          emptyMsg.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 30px 15px; color: var(--text-muted);';
-          emptyMsg.innerHTML = '<p style="font-size: 0.9rem;">No listings found in this category.</p>';
-          gridContainer.appendChild(emptyMsg);
-        } else {
-          emptyMsg.style.display = 'block';
-        }
-        if (loadMoreBtn) loadMoreBtn.style.setProperty('display', 'none', 'important');
-      } else {
-        if (emptyMsg) emptyMsg.style.display = 'none';
-      }
     });
   });
 }
