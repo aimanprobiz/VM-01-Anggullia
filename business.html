@@ -351,7 +351,7 @@
         if (openCodeModalBtn) openCodeModalBtn.style.display = 'none';
         if (whatsappBtn) whatsappBtn.style.display = 'none';
         
-        const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim();
+const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim();
 
         if (actionType === 'claim') {
           if (openRedeemModalBtn) openRedeemModalBtn.style.display = 'flex';
@@ -382,7 +382,7 @@
             });
           }
 
-        } else if (actionType === 'whatsapp' || biz.Phone || biz.phone) {
+        } else if (actionType === 'whatsapp') {
           if (whatsappBtn) {
             whatsappBtn.style.display = 'flex';
             const refCode = `DB-${bizSlugVal.toUpperCase()}`;
@@ -412,17 +412,15 @@
             });
           }
         } else {
-          // --- FALLBACK FOR NO DIGITAL REDEMPTION ---
+          // --- DIMMED BUTTON FOR NO ACTIVE OFFER ---
           if (redemptionArea) {
             redemptionArea.innerHTML = `
-              <div style="background-color: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; text-align: center; box-shadow: var(--shadow-sm);">
-                <p style="font-size: 0.82rem; font-weight: 600; color: var(--text-main); margin-bottom: 2px;">General Business Listing</p>
-                <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">No digital coupon required. Connect via their official links below!</p>
+              <div class="action-btn-dim">
+                No Active Digital Offer — Visit Links Below ↗
               </div>
             `;
           }
         }
-
         const redeemModal = document.getElementById('redeemModal');
         const cashierPinInput = document.getElementById('cashierPin');
         let currentPin = '';
