@@ -425,11 +425,11 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
               window.location.href = whatsappUrl;
             });
           }
-        } else {
-          // --- DIMMED BUTTON FOR NO ACTIVE OFFER ---
+} else {
+          // --- PLAIN TEXT FOR NO ACTIVE OFFER ---
           if (redemptionArea) {
             redemptionArea.innerHTML = `
-              <div class="action-btn-dim" style="display: flex; align-items: center; justify-content: center; text-align: center; width: 100%; border: 1.5px solid var(--border-color);">
+              <div style="display: flex; align-items: center; justify-content: center; text-align: center; width: 100%; padding: 8px 0; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
                 — No offer available —
               </div>
             `;
