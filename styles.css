@@ -669,26 +669,27 @@ dialog::backdrop {
   transform: scale(1.05);
 }
 
-/* Swipeable Category Container */
+/* Swipeable Category Container - Bleed Layout */
 .category-swipe-viewport {
-  width: 100%;
+  width: calc(100% + 32px);
+  margin-left: -16px;
+  margin-right: -16px;
   overflow: hidden;
   position: relative;
-  touch-action: pan-y; /* Allows vertical scrolling while intercepting horizontal swipes */
+  touch-action: pan-y;
 }
 
 .category-swipe-track {
   display: flex;
-  width: 300%; /* Holds [Prev, Current, Next] side-by-side */
-  transform: translateX(-33.333%); /* Center the active category */
+  width: 300%;
+  transform: translateX(-33.333%);
   will-change: transform;
 }
 
 .category-page {
   width: 33.333%;
   flex-shrink: 0;
-  /* Ensures a clear 24px gap between adjacent category views */
-  padding: 0 12px; 
+  padding: 0 16px;
   box-sizing: border-box;
 }
 
