@@ -224,6 +224,7 @@ body {
 .business-grid-wrapper {
   display: flex;
   width: 100%;
+  gap: 20px; /* <--- Creates the space between the two category pages */
   touch-action: pan-y;
   will-change: transform;
   transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1);
@@ -238,6 +239,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   width: 100%;
+  min-width: 100%; /* <--- Ensures each grid takes up the full container width */
   flex-shrink: 0;
 }
 
