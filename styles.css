@@ -214,8 +214,31 @@ body {
 
 /* 3. SUPPORT LOCAL MUSLIM BUSINESSES */
 .business-section {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.business-grid-wrapper {
+  display: flex;
+  width: 100%;
+  touch-action: pan-y;
+  will-change: transform;
+  transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.business-grid-wrapper.dragging {
+  transition: none !important;
+}
+
+.business-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 /* Balanced Sheer Glass Category Bar */
@@ -270,20 +293,6 @@ body {
   color: #ffffff;
   font-weight: 600;
   box-shadow: 0 3px 8px rgba(15, 56, 44, 0.2);
-}
-
-/* 2-Column Visual Grid */
-.business-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  touch-action: pan-y; /* Keeps vertical page scrolling smooth while enabling horizontal touch tracking */
-  will-change: transform, opacity;
-  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease;
-}
-
-.business-grid.dragging {
-  transition: none !important; /* Disables delay during active finger drag for instant 1:1 response */
 }
 
 /* 2-Column Visual Grid Card Base */
