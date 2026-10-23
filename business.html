@@ -193,39 +193,53 @@
         const el = document.getElementById(id);
         if (el) el[property] = value;
       };
+// --- Interactive Deal Box Toast Logic ---
+const dealBox = document.getElementById('dealBox');
+const ctaToast = document.getElementById('ctaToast');
 
-      // --- Interactive Deal Box Toast & 2.8s Scroll Prompt ---
-      const dealBox = document.getElementById('dealBox');
-      const ctaToast = document.getElementById('ctaToast');
+if (dealBox) {
+  dealBox.style.cursor = 'pointer';
 
-      if (dealBox) {
-        dealBox.style.cursor = 'pointer';
+  dealBox.addEventListener('click', () => {
+    // 1. Check if there's an active CTA button (Claim, Code, or WhatsApp)
+    const activeCta = document.querySelector('#redemptionArea button[style*="flex"], #redemptionArea a[style*="flex"]');
+    const toastSpan = ctaToast ? ctaToast.querySelector('span') : null;
 
-        dealBox.addEventListener('click', () => {
-          const activeCta = document.querySelector('#redemptionArea button[style*="flex"], #redemptionArea a[style*="flex"]');
-
-          if (activeCta) {
-            activeCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            activeCta.classList.remove('cta-pulse-active');
-            void activeCta.offsetWidth; 
-            activeCta.classList.add('cta-pulse-active');
-
-            setTimeout(() => {
-              activeCta.classList.remove('cta-pulse-active');
-            }, 2800);
-          }
-
-          if (ctaToast) {
-            ctaToast.style.opacity = '1';
-            ctaToast.style.transform = 'translate(-50%, -50%) scale(1)';
-
-            setTimeout(() => {
-              ctaToast.style.opacity = '0';
-              ctaToast.style.transform = 'translate(-50%, -50%) scale(0.92)';
-            }, 2800);
-          }
-        });
+    if (activeCta) {
+      // --- HAS ACTIVE OFFER ---
+      if (toastSpan) {
+        toastSpan.textContent = 'Tap the button to claim this deal!';
       }
+
+      // Smooth scroll to CTA button & trigger pulse
+      activeCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      activeCta.classList.remove('cta-pulse-active');
+      void activeCta.offsetWidth; // Force CSS reflow
+      activeCta.classList.add('cta-pulse-active');
+
+      setTimeout(() => {
+        activeCta.classList.remove('cta-pulse-active');
+      }, 2800);
+
+    } else {
+      // --- NO ACTIVE OFFER (NONE) ---
+      if (toastSpan) {
+        toastSpan.textContent = 'No active offer available for this listing';
+      }
+    }
+
+    // 2. Show the toast notification for 2.8 seconds
+    if (ctaToast) {
+      ctaToast.style.opacity = '1';
+      ctaToast.style.transform = 'translate(-50%, -50%) scale(1)';
+
+      setTimeout(() => {
+        ctaToast.style.opacity = '0';
+        ctaToast.style.transform = 'translate(-50%, -50%) scale(0.92)';
+      }, 2800);
+    }
+  });
+}
       
       // --- Copy Link Logic ---
       const copyLinkBtn = document.getElementById('copyLinkBtn');
