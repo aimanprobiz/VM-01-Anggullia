@@ -223,24 +223,19 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
-  
   background-color: rgba(245, 242, 233, 0.35); 
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
-  
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: 8px;
   margin-bottom: 18px;
   padding: 10px 16px;
-  
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  
   margin-left: -16px;
   margin-right: -16px;
-  
   border-bottom: 1px solid rgba(226, 219, 201, 0.3);
 }
 
@@ -295,11 +290,9 @@ body {
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-  
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);
-
   transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease;
 }
 
@@ -669,18 +662,37 @@ dialog::backdrop {
   transform: scale(1.05);
 }
 
-/* --- Category Swipe Transition Animation --- */
-@keyframes categoryFadeSlide {
+/* --- Directional Slide Animations --- */
+@keyframes slideInFromRight {
   0% {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateX(40px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.grid-slide-right {
+  animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.grid-slide-left {
+  animation: slideInFromLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 .grid-card-animate {
-  animation: categoryFadeSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
