@@ -219,14 +219,6 @@ function displayHadith(hadith) {
   document.getElementById('hadith-tag').textContent = hadith.tag;
 }
 
-// Helper function for safe horizontal-only scrolling of active category pills
-function centerFilterPill(btn) {
-  const container = document.getElementById('filterContainer');
-  if (!container || !btn) return;
-  const scrollLeft = btn.offsetLeft - (container.clientWidth / 2) + (btn.clientWidth / 2);
-  container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
-}
-
 // 4. Dynamic Business Directory Loader & Category Filter
 let allBusinesses = [];
 let visibleLimit = 10;
@@ -235,7 +227,7 @@ async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
 
-  gridContainer.innerHTML = Array(10).fill(`
+gridContainer.innerHTML = Array(10).fill(`
     <div class="grid-card skeleton-card">
       <div class="skeleton-img"></div>
       <div class="grid-card-body">
@@ -279,7 +271,7 @@ async function loadBusinesses() {
   }
 }
 
-// Unified Scroll Listener for Infinite Scroll & Back-to-Top
+// Unified Scroll Listener for Infinite Scroll & Back-to-Top (Option 2)
 let lastScrollY = window.scrollY;
 
 window.addEventListener('scroll', () => {
@@ -287,6 +279,7 @@ window.addEventListener('scroll', () => {
   const currentScroll = window.scrollY;
   const distanceToBottom = scrollableHeight - currentScroll;
 
+  // 1. Infinite Scroll trigger (loads more when within 300px of the bottom)
   const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
   const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
   const targetDataset = selectedCat === 'all' 
@@ -298,6 +291,7 @@ window.addEventListener('scroll', () => {
     renderBusinessBatch();
   }
 
+  // 2. Dynamic Back-to-Top Button Logic (Option 2: Appears when scrolling UP past 300px)
   const backToTopBtn = document.getElementById('backToTopBtn');
   if (backToTopBtn) {
     const isScrollingUp = currentScroll < lastScrollY;
@@ -315,18 +309,9 @@ window.addEventListener('scroll', () => {
   lastScrollY = currentScroll;
 });
 
-function renderBusinessBatch(direction = '') {
+function renderBusinessBatch() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
-
-  gridContainer.classList.remove('grid-slide-right', 'grid-slide-left');
-  void gridContainer.offsetWidth; 
-
-  if (direction === 'right') {
-    gridContainer.classList.add('grid-slide-right');
-  } else if (direction === 'left') {
-    gridContainer.classList.add('grid-slide-left');
-  }
 
   gridContainer.innerHTML = '';
 
@@ -349,12 +334,11 @@ function renderBusinessBatch(direction = '') {
 
   const currentBatch = targetDataset.slice(0, visibleLimit);
 
-  currentBatch.forEach((biz, index) => {
+  currentBatch.forEach(biz => {
     const isFeatured = biz.IsFeatured;
     const card = document.createElement('div');
     
-    card.className = (isFeatured ? 'grid-card featured-card' : 'grid-card') + ' grid-card-animate';
-    card.style.animationDelay = `${index * 0.03}s`;
+    card.className = isFeatured ? 'grid-card featured-card' : 'grid-card';
     card.setAttribute('data-cat', biz.Category || 'all');
     card.style.cursor = 'pointer';
 
@@ -362,30 +346,34 @@ function renderBusinessBatch(direction = '') {
       window.location.href = `/business.html?slug=${biz.Slug}`;
     };
 
-    const rawDeal = biz.Deal || biz.deal || '';
-    const dealText = rawDeal.trim() !== '' ? rawDeal : 'No offer';
+// Extract deal text; if empty or missing, fallback to 'NO OFFER'
+const rawDeal = biz.Deal || biz.deal || '';
+const dealText = rawDeal.trim() !== '' ? rawDeal : 'No offer';
 
-    card.innerHTML = `
-      <div style="position: relative;">
-        <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
-        ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
-      </div>
+card.innerHTML = `
+  <div style="position: relative;">
+    <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
+    ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
+  </div>
 
-      <div class="grid-card-body">
-        <div class="vendor-details">
-          <div class="deal-badge"><span></span> ${dealText}</div>
-          <h3 class="vendor-name">${biz.Name}</h3>
-          <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
-        </div>
+  <div class="grid-card-body">
+    <div class="vendor-details">
+      <!-- Always renders the deal badge pill with the exact same colors -->
+      <div class="deal-badge"><span></span> ${dealText}</div>
 
-        <button class="action-btn" style="text-align: center;">
-          View Details
-        </button>
-      </div>
-    `;
+      <h3 class="vendor-name">${biz.Name}</h3>
+      <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
+    </div>
+
+    <button class="action-btn" style="text-align: center;">
+      View Details
+    </button>
+  </div>
+`;
     gridContainer.appendChild(card);
   });
 
+  // Automatically ensure old manual loadMoreBtn is removed if it exists
   const oldBtn = document.getElementById('loadMoreBtn');
   if (oldBtn) oldBtn.remove();
 }
@@ -400,19 +388,14 @@ function setupCategoryFilters() {
 
   const freshFilterButtons = document.querySelectorAll('#filterContainer .filter-btn');
 
-  freshFilterButtons.forEach((button, newIdx) => {
+  freshFilterButtons.forEach(button => {
     button.addEventListener('click', () => {
-      const oldActiveBtn = document.querySelector('#filterContainer .filter-btn.active');
-      const filterButtonsArr = Array.from(freshFilterButtons);
-      const oldIdx = filterButtonsArr.indexOf(oldActiveBtn);
-
       freshFilterButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
 
-      const slideDir = newIdx > oldIdx ? 'right' : 'left';
-
+      // Reset visible limit when switching categories so it starts fresh from 10 items in that category
       visibleLimit = 10;
-      renderBusinessBatch(slideDir);
+      renderBusinessBatch();
 
       const selectedCat = button.getAttribute('data-cat');
       let visibleCount = 0;
@@ -430,6 +413,7 @@ function setupCategoryFilters() {
         }
       });
 
+      // Handle empty state message and Load More button visibility for categories
       let emptyMsg = document.getElementById('emptyCategoryMsg');
       let loadMoreBtn = document.getElementById('loadMoreBtn');
 
@@ -447,176 +431,9 @@ function setupCategoryFilters() {
       } else {
         if (emptyMsg) emptyMsg.style.display = 'none';
       }
-
-      // Safe horizontal scroll without vertical jump
-      centerFilterPill(button);
     });
   });
 }
-
-// --- True Side-by-Side Real-Time Category Swiper ---
-function enableCategorySwipe() {
-  const wrapper = document.getElementById('gridWrapper');
-  const activeGrid = document.getElementById('businessGrid');
-  const filterContainer = document.getElementById('filterContainer');
-
-  if (!wrapper || !activeGrid || !filterContainer) return;
-
-  let startX = 0;
-  let startY = 0;
-  let currentX = 0;
-  let startTime = 0;
-  let isDragging = false;
-  let isHorizontalSwipe = null;
-  let adjacentGrid = null;
-
-  wrapper.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    currentX = startX;
-    startTime = Date.now();
-    isDragging = true;
-    isHorizontalSwipe = null;
-    adjacentGrid = null;
-  }, { passive: true });
-
-  wrapper.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-
-    currentX = e.touches[0].clientX;
-    const diffX = currentX - startX;
-    const diffY = e.touches[0].clientY - startY;
-
-    if (isHorizontalSwipe === null) {
-      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 4) {
-        isHorizontalSwipe = true;
-      } else if (Math.abs(diffY) > Math.abs(diffX)) {
-        isHorizontalSwipe = false;
-      }
-    }
-
-    if (isHorizontalSwipe) {
-      const filterButtons = Array.from(filterContainer.querySelectorAll('.filter-btn'));
-      const activeIndex = filterButtons.findIndex(btn => btn.classList.contains('active'));
-
-      // 1. Dynamically render adjacent page on first movement
-      if (!adjacentGrid && Math.abs(diffX) > 5) {
-        const targetIndex = diffX < 0 ? activeIndex + 1 : activeIndex - 1;
-
-        if (targetIndex >= 0 && targetIndex < filterButtons.length) {
-          const targetCat = filterButtons[targetIndex].getAttribute('data-cat');
-          
-          adjacentGrid = document.createElement('div');
-          adjacentGrid.className = 'business-grid';
-          adjacentGrid.id = 'adjacentGrid';
-
-          // Filter listings for adjacent category
-          const targetDataset = targetCat === 'all' 
-            ? allBusinesses 
-            : allBusinesses.filter(biz => (biz.Category || 'all') === targetCat);
-
-          const batch = targetDataset.slice(0, 10);
-          adjacentGrid.innerHTML = batch.map(biz => `
-            <div class="grid-card ${biz.IsFeatured ? 'featured-card' : ''}" onclick="window.location.href='/business.html?slug=${biz.Slug}'">
-              <div style="position: relative;">
-                <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
-                ${biz.IsFeatured ? '<span class="grid-featured-badge">★</span>' : ''}
-              </div>
-              <div class="grid-card-body">
-                <div class="vendor-details">
-                  <div class="deal-badge">${biz.Deal || 'No offer'}</div>
-                  <h3 class="vendor-name">${biz.Name}</h3>
-                  <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
-                </div>
-                <button class="action-btn">View Details</button>
-              </div>
-            </div>
-          `).join('');
-
-          // Append to left or right based on drag direction
-          if (diffX < 0) {
-            wrapper.appendChild(adjacentGrid);
-          } else {
-            wrapper.insertBefore(adjacentGrid, activeGrid);
-            wrapper.style.transform = `translateX(calc(-100% - 20px))`;
-          }
-        }
-      }
-
-      // 2. Real-Time Finger Tracking with gap account
-      wrapper.classList.add('dragging');
-      if (diffX < 0) {
-        wrapper.style.transform = `translateX(${diffX}px)`;
-      } else if (adjacentGrid) {
-        wrapper.style.transform = `translateX(calc(-100% - 20px + ${diffX}px))`;
-      }
-    }
-  }, { passive: true });
-
-  wrapper.addEventListener('touchend', () => {
-    if (!isDragging) return;
-    isDragging = false;
-
-    wrapper.classList.remove('dragging');
-
-    if (isHorizontalSwipe) {
-      const diffX = currentX - startX;
-      const duration = Date.now() - startTime;
-      const distanceThreshold = window.innerWidth * 0.12; 
-      const isFastFlick = duration < 250 && Math.abs(diffX) > 25;
-
-      const filterButtons = Array.from(filterContainer.querySelectorAll('.filter-btn'));
-      const activeIndex = filterButtons.findIndex(btn => btn.classList.contains('active'));
-
-      let targetIndex = activeIndex;
-
-      if ((diffX < -distanceThreshold || (isFastFlick && diffX < 0)) && activeIndex < filterButtons.length - 1) {
-        targetIndex = activeIndex + 1;
-      } else if ((diffX > distanceThreshold || (isFastFlick && diffX > 0)) && activeIndex > 0) {
-        targetIndex = activeIndex - 1;
-      }
-
-      if (targetIndex !== activeIndex && adjacentGrid) {
-        // Slide completely into adjacent page (accounting for 20px gap)
-        wrapper.style.transform = diffX < 0 ? `translateX(calc(-100% - 20px))` : `translateX(0%)`;
-
-        setTimeout(() => {
-          const targetBtn = filterButtons[targetIndex];
-          
-          // Switch active filter pill
-          filterButtons.forEach(btn => btn.classList.remove('active'));
-          targetBtn.classList.add('active');
-
-          // Clean up DOM and reset main grid to new category
-          visibleLimit = 10;
-          renderBusinessBatch();
-
-          wrapper.classList.add('dragging');
-          wrapper.style.transform = 'translateX(0)';
-          if (adjacentGrid) adjacentGrid.remove();
-
-          requestAnimationFrame(() => {
-            wrapper.classList.remove('dragging');
-          });
-
-          // Safe horizontal-only scroll (prevents vertical page jump)
-          centerFilterPill(targetBtn);
-        }, 260);
-
-      } else {
-        // Snap back to current page
-        wrapper.style.transform = adjacentGrid && diffX > 0 ? `translateX(calc(-100% - 20px))` : 'translateX(0)';
-        setTimeout(() => {
-          wrapper.style.transform = 'translateX(0)';
-          if (adjacentGrid) adjacentGrid.remove();
-        }, 260);
-      }
-    }
-  });
-}
-
-// Enable Category Swiping on Page Initialization
-enableCategorySwipe();
 
 // 5. BUSINESS MODAL ACTION LOGIC
 const bizModal = document.getElementById('businessModal');
