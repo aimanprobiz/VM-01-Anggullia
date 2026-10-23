@@ -214,33 +214,8 @@ body {
 
 /* 3. SUPPORT LOCAL MUSLIM BUSINESSES */
 .business-section {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.business-grid-wrapper {
-  display: flex;
-  width: 100%;
-  gap: 20px; /* <--- Creates the space between the two category pages */
-  touch-action: pan-y;
-  will-change: transform;
-  transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.business-grid-wrapper.dragging {
-  transition: none !important;
-}
-
-.business-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  width: 100%;
-  min-width: 100%; /* <--- Ensures each grid takes up the full container width */
-  flex-shrink: 0;
 }
 
 /* Balanced Sheer Glass Category Bar */
@@ -248,19 +223,24 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
+  
   background-color: rgba(245, 242, 233, 0.35); 
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
+  
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: 8px;
   margin-bottom: 18px;
   padding: 10px 16px;
+  
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  
   margin-left: -16px;
   margin-right: -16px;
+  
   border-bottom: 1px solid rgba(226, 219, 201, 0.3);
 }
 
@@ -297,6 +277,13 @@ body {
   box-shadow: 0 3px 8px rgba(15, 56, 44, 0.2);
 }
 
+/* 2-Column Visual Grid */
+.business-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
 /* 2-Column Visual Grid Card Base */
 .grid-card {
   background-color: var(--card-bg);
@@ -308,9 +295,11 @@ body {
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: translateZ(0);
+
   transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease;
 }
 
