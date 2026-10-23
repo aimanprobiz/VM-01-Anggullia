@@ -429,7 +429,7 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
           // --- DIMMED BUTTON FOR NO ACTIVE OFFER ---
           if (redemptionArea) {
             redemptionArea.innerHTML = `
-              <div class="action-btn-dim" style="display: flex; align-items: center; justify-content: center; text-align: center; width: 100%;">
+              <div class="action-btn-dim" style="display: flex; align-items: center; justify-content: center; text-align: center; width: 100%; border: 1.5px solid var(--border-color);">
                 — No offer available —
               </div>
             `;
