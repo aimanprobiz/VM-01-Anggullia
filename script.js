@@ -351,7 +351,7 @@ function setupCategoryFilters() {
   });
 }
 
-// 5. Touch Engine (Real-time Gesture Tracking)
+// 5. Touch Engine (High-Sensitivity Gesture Tracking)
 function initSwipeGestures() {
   const viewport = document.getElementById('categorySwipeViewport');
   const track = document.getElementById('categorySwipeTrack');
@@ -359,6 +359,7 @@ function initSwipeGestures() {
 
   let startX = 0;
   let startY = 0;
+  let startTime = 0;
   let currentDeltaX = 0;
   let isSwiping = false;
   let isHorizontalMove = null;
@@ -367,6 +368,7 @@ function initSwipeGestures() {
     const touch = e.touches[0];
     startX = touch.clientX;
     startY = touch.clientY;
+    startTime = Date.now();
     currentDeltaX = 0;
     isSwiping = true;
     isHorizontalMove = null;
@@ -390,7 +392,8 @@ function initSwipeGestures() {
 
     const viewportWidth = viewport.clientWidth;
     const baseOffsetPercent = -33.333;
-    const dragOffsetPercent = (currentDeltaX / viewportWidth) * 33.333;
+    // Multiplied by 1.25 to make the visual motion feel more responsive and snappy to thumb movement
+    const dragOffsetPercent = ((currentDeltaX * 1.25) / viewportWidth) * 33.333;
 
     track.style.transform = `translateX(${baseOffsetPercent + dragOffsetPercent}%)`;
   }, { passive: true });
@@ -405,9 +408,15 @@ function initSwipeGestures() {
     track.classList.add('animating');
 
     const viewportWidth = viewport.clientWidth;
-    const threshold = viewportWidth * 0.22;
+    const elapsedTime = Date.now() - startTime;
+    const velocity = Math.abs(currentDeltaX) / elapsedTime; // pixels per millisecond
 
-    if (currentDeltaX < -threshold) {
+    // Reduced distance threshold to 11% AND added a velocity check for fast flicks
+    const distanceThreshold = viewportWidth * 0.11;
+    const isFastFlick = velocity > 0.35 && Math.abs(currentDeltaX) > 25;
+
+    if (currentDeltaX < -distanceThreshold || isFastFlick && currentDeltaX < 0) {
+      // Swiped LEFT -> Move to NEXT Category
       track.style.transform = `translateX(-66.666%)`;
       setTimeout(() => {
         track.classList.remove('animating');
@@ -415,9 +424,10 @@ function initSwipeGestures() {
         visibleLimit = 10;
         renderCurrentCategoryView();
         track.style.transform = `translateX(-33.333%)`;
-      }, 280);
+      }, 250);
 
-    } else if (currentDeltaX > threshold) {
+    } else if (currentDeltaX > distanceThreshold || isFastFlick && currentDeltaX > 0) {
+      // Swiped RIGHT -> Move to PREVIOUS Category
       track.style.transform = `translateX(0%)`;
       setTimeout(() => {
         track.classList.remove('animating');
@@ -425,9 +435,10 @@ function initSwipeGestures() {
         visibleLimit = 10;
         renderCurrentCategoryView();
         track.style.transform = `translateX(-33.333%)`;
-      }, 280);
+      }, 250);
 
     } else {
+      // Snap back if swipe was too short or slow
       track.style.transform = `translateX(-33.333%)`;
     }
   });
