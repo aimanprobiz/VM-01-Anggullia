@@ -227,7 +227,7 @@ async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
 
-gridContainer.innerHTML = Array(10).fill(`
+  gridContainer.innerHTML = Array(10).fill(`
     <div class="grid-card skeleton-card">
       <div class="skeleton-img"></div>
       <div class="grid-card-body">
@@ -271,7 +271,7 @@ gridContainer.innerHTML = Array(10).fill(`
   }
 }
 
-// Unified Scroll Listener for Infinite Scroll & Back-to-Top (Option 2)
+// Unified Scroll Listener for Infinite Scroll & Back-to-Top
 let lastScrollY = window.scrollY;
 
 window.addEventListener('scroll', () => {
@@ -279,7 +279,6 @@ window.addEventListener('scroll', () => {
   const currentScroll = window.scrollY;
   const distanceToBottom = scrollableHeight - currentScroll;
 
-  // 1. Infinite Scroll trigger (loads more when within 300px of the bottom)
   const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
   const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
   const targetDataset = selectedCat === 'all' 
@@ -291,7 +290,6 @@ window.addEventListener('scroll', () => {
     renderBusinessBatch();
   }
 
-  // 2. Dynamic Back-to-Top Button Logic (Option 2: Appears when scrolling UP past 300px)
   const backToTopBtn = document.getElementById('backToTopBtn');
   if (backToTopBtn) {
     const isScrollingUp = currentScroll < lastScrollY;
@@ -309,9 +307,19 @@ window.addEventListener('scroll', () => {
   lastScrollY = currentScroll;
 });
 
-function renderBusinessBatch() {
+function renderBusinessBatch(direction = '') {
   const gridContainer = document.getElementById('businessGrid');
   if (!gridContainer) return;
+
+  // Clear previous animation classes and trigger reflow
+  gridContainer.classList.remove('grid-slide-right', 'grid-slide-left');
+  void gridContainer.offsetWidth; 
+
+  if (direction === 'right') {
+    gridContainer.classList.add('grid-slide-right');
+  } else if (direction === 'left') {
+    gridContainer.classList.add('grid-slide-left');
+  }
 
   gridContainer.innerHTML = '';
 
@@ -334,14 +342,11 @@ function renderBusinessBatch() {
 
   const currentBatch = targetDataset.slice(0, visibleLimit);
 
-currentBatch.forEach((biz, index) => {
+  currentBatch.forEach((biz, index) => {
     const isFeatured = biz.IsFeatured;
     const card = document.createElement('div');
     
-    // Added grid-card-animate for a smooth entrance effect
     card.className = (isFeatured ? 'grid-card featured-card' : 'grid-card') + ' grid-card-animate';
-    
-    // Stagger the animation slightly for each card in the batch for a premium cascade look
     card.style.animationDelay = `${index * 0.03}s`;
     card.setAttribute('data-cat', biz.Category || 'all');
     card.style.cursor = 'pointer';
@@ -350,34 +355,30 @@ currentBatch.forEach((biz, index) => {
       window.location.href = `/business.html?slug=${biz.Slug}`;
     };
 
-// Extract deal text; if empty or missing, fallback to 'NO OFFER'
-const rawDeal = biz.Deal || biz.deal || '';
-const dealText = rawDeal.trim() !== '' ? rawDeal : 'No offer';
+    const rawDeal = biz.Deal || biz.deal || '';
+    const dealText = rawDeal.trim() !== '' ? rawDeal : 'No offer';
 
-card.innerHTML = `
-  <div style="position: relative;">
-    <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
-    ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
-  </div>
+    card.innerHTML = `
+      <div style="position: relative;">
+        <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
+        ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
+      </div>
 
-  <div class="grid-card-body">
-    <div class="vendor-details">
-      <!-- Always renders the deal badge pill with the exact same colors -->
-      <div class="deal-badge"><span></span> ${dealText}</div>
+      <div class="grid-card-body">
+        <div class="vendor-details">
+          <div class="deal-badge"><span></span> ${dealText}</div>
+          <h3 class="vendor-name">${biz.Name}</h3>
+          <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
+        </div>
 
-      <h3 class="vendor-name">${biz.Name}</h3>
-      <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
-    </div>
-
-    <button class="action-btn" style="text-align: center;">
-      View Details
-    </button>
-  </div>
-`;
+        <button class="action-btn" style="text-align: center;">
+          View Details
+        </button>
+      </div>
+    `;
     gridContainer.appendChild(card);
   });
 
-  // Automatically ensure old manual loadMoreBtn is removed if it exists
   const oldBtn = document.getElementById('loadMoreBtn');
   if (oldBtn) oldBtn.remove();
 }
@@ -392,14 +393,19 @@ function setupCategoryFilters() {
 
   const freshFilterButtons = document.querySelectorAll('#filterContainer .filter-btn');
 
-  freshFilterButtons.forEach(button => {
+  freshFilterButtons.forEach((button, newIdx) => {
     button.addEventListener('click', () => {
+      const oldActiveBtn = document.querySelector('#filterContainer .filter-btn.active');
+      const filterButtonsArr = Array.from(freshFilterButtons);
+      const oldIdx = filterButtonsArr.indexOf(oldActiveBtn);
+
       freshFilterButtons.forEach(btn => btn.classList.remove('active'));
       button.classList.add('active');
 
-      // Reset visible limit when switching categories so it starts fresh from 10 items in that category
+      const slideDir = newIdx > oldIdx ? 'right' : 'left';
+
       visibleLimit = 10;
-      renderBusinessBatch();
+      renderBusinessBatch(slideDir);
 
       const selectedCat = button.getAttribute('data-cat');
       let visibleCount = 0;
@@ -417,7 +423,6 @@ function setupCategoryFilters() {
         }
       });
 
-      // Handle empty state message and Load More button visibility for categories
       let emptyMsg = document.getElementById('emptyCategoryMsg');
       let loadMoreBtn = document.getElementById('loadMoreBtn');
 
@@ -451,7 +456,7 @@ function enableCategorySwipe() {
   let touchEndX = 0;
   let touchEndY = 0;
 
-  const minSwipeDistance = 50; // Minimum horizontal pixel distance for a swipe
+  const minSwipeDistance = 50;
 
   gridContainer.addEventListener('touchstart', (e) => {
     touchStartX = e.changedTouches[0].screenX;
@@ -468,7 +473,6 @@ function enableCategorySwipe() {
     const deltaX = touchEndX - touchStartX;
     const deltaY = touchEndY - touchStartY;
 
-    // Ensure horizontal gesture was dominant over vertical scrolling
     if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
       const filterButtons = Array.from(filterContainer.querySelectorAll('.filter-btn'));
       const activeIndex = filterButtons.findIndex(btn => btn.classList.contains('active'));
@@ -478,12 +482,10 @@ function enableCategorySwipe() {
       let nextIndex = activeIndex;
 
       if (deltaX < 0) {
-        // Swiped Left -> Move to Next Category
         if (activeIndex < filterButtons.length - 1) {
           nextIndex = activeIndex + 1;
         }
       } else {
-        // Swiped Right -> Move to Previous Category
         if (activeIndex > 0) {
           nextIndex = activeIndex - 1;
         }
@@ -491,15 +493,33 @@ function enableCategorySwipe() {
 
       if (nextIndex !== activeIndex) {
         const targetBtn = filterButtons[nextIndex];
-        
-        // Trigger click event on the target category button
-        targetBtn.click();
+        const slideDir = deltaX < 0 ? 'right' : 'left';
 
-        // Smoothly scroll the filter pill container to keep the active category visible
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        targetBtn.classList.add('active');
+
+        visibleLimit = 10;
+        renderBusinessBatch(slideDir);
+
         targetBtn.scrollIntoView({
           behavior: 'smooth',
           inline: 'center',
           block: 'nearest'
+        });
+
+        // Trigger filter visibility update after swipe
+        const selectedCat = targetBtn.getAttribute('data-cat');
+        let visibleCount = 0;
+        const businessCards = gridContainer.querySelectorAll('.grid-card');
+
+        businessCards.forEach(card => {
+          const cardCat = card.getAttribute('data-cat');
+          if (selectedCat === 'all' || cardCat === selectedCat) {
+            card.style.display = 'flex';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
         });
       }
     }
