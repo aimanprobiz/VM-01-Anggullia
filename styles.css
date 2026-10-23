@@ -668,39 +668,3 @@ dialog::backdrop {
   color: var(--primary-color);
   transform: scale(1.05);
 }
-
-/* Horizontal Category Swipe Container */
-.category-swipe-wrapper {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  gap: 0; /* Changed to 0 so pages snap cleanly edge-to-edge */
-  margin: 0 -16px;
-  padding: 0 16px;
-  width: calc(100% + 32px);
-}
-
-.category-swipe-wrapper::-webkit-scrollbar {
-  display: none;
-}
-
-/* Individual Category Page Slide Layout Fix */
-.category-page {
-  flex: 0 0 100%;
-  width: 100%;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  box-sizing: border-box;
-  padding: 0 4px; /* Creates that nice margin space between categories you wanted! */
-}
-
-/* Ensure the business grid fills the category page container */
-.category-page .business-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  width: 100%;
-}
