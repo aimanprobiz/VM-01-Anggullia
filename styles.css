@@ -668,3 +668,28 @@ dialog::backdrop {
   color: var(--primary-color);
   transform: scale(1.05);
 }
+
+/* Horizontal Category Swipe Container */
+.category-swipe-wrapper {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  gap: 16px;
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+
+.category-swipe-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual Category Page Slide */
+.category-page {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  min-width: 100%;
+}
