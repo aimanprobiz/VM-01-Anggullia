@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   // 1. Cache response on Vercel Edge for fast performance & lower Airtable API usage
-  res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=86400');
 
   const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
   const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
