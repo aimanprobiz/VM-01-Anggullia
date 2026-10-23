@@ -218,7 +218,6 @@ function displayHadith(hadith) {
   document.getElementById('hadith-narrator').textContent = hadith.narrator;
   document.getElementById('hadith-tag').textContent = hadith.tag;
 }
-
 // 4. Dynamic Category Swipe Engine & Business Loader
 let allBusinesses = [];
 let categories = [];
@@ -285,6 +284,7 @@ function renderGridForCategory(catName) {
     `;
   }
 
+  // Active category shows up to visibleLimit items for infinite scroll
   return targetDataset.slice(0, visibleLimit).map(biz => {
     const isFeatured = biz.IsFeatured;
     const rawDeal = biz.Deal || biz.deal || '';
@@ -337,7 +337,7 @@ function renderCurrentCategoryView() {
 
 function switchCategory(newIndex) {
   if (newIndex === currentCategoryIndex) return;
-  visibleLimit = 10;
+  visibleLimit = 10; // Reset batch limit when switching categories
   currentCategoryIndex = newIndex;
   renderCurrentCategoryView();
 }
@@ -392,7 +392,6 @@ function initSwipeGestures() {
 
     const viewportWidth = viewport.clientWidth;
     const baseOffsetPercent = -33.333;
-    // Multiplied by 1.25 to make the visual motion feel more responsive and snappy to thumb movement
     const dragOffsetPercent = ((currentDeltaX * 1.25) / viewportWidth) * 33.333;
 
     track.style.transform = `translateX(${baseOffsetPercent + dragOffsetPercent}%)`;
@@ -409,14 +408,12 @@ function initSwipeGestures() {
 
     const viewportWidth = viewport.clientWidth;
     const elapsedTime = Date.now() - startTime;
-    const velocity = Math.abs(currentDeltaX) / elapsedTime; // pixels per millisecond
+    const velocity = Math.abs(currentDeltaX) / elapsedTime;
 
-    // Reduced distance threshold to 11% AND added a velocity check for fast flicks
     const distanceThreshold = viewportWidth * 0.11;
     const isFastFlick = velocity > 0.35 && Math.abs(currentDeltaX) > 25;
 
     if (currentDeltaX < -distanceThreshold || isFastFlick && currentDeltaX < 0) {
-      // Swiped LEFT -> Move to NEXT Category
       track.style.transform = `translateX(-66.666%)`;
       setTimeout(() => {
         track.classList.remove('animating');
@@ -427,7 +424,6 @@ function initSwipeGestures() {
       }, 250);
 
     } else if (currentDeltaX > distanceThreshold || isFastFlick && currentDeltaX > 0) {
-      // Swiped RIGHT -> Move to PREVIOUS Category
       track.style.transform = `translateX(0%)`;
       setTimeout(() => {
         track.classList.remove('animating');
@@ -438,19 +434,35 @@ function initSwipeGestures() {
       }, 250);
 
     } else {
-      // Snap back if swipe was too short or slow
       track.style.transform = `translateX(-33.333%)`;
     }
   });
 }
 
-// 6. Unified Scroll Listener for Back-to-Top
+// 6. Unified Scroll Listener for Infinite Scroll & Back-to-Top
 let lastScrollY = window.scrollY;
 
 window.addEventListener('scroll', () => {
   const currentScroll = window.scrollY;
+  const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const distanceToBottom = scrollableHeight - currentScroll;
+
+  // A. Infinite Scroll Trigger
+  if (categories.length > 0) {
+    const activeCat = categories[currentCategoryIndex];
+    const targetDataset = activeCat === 'all'
+      ? allBusinesses
+      : allBusinesses.filter(biz => (biz.Category || 'all') === activeCat);
+
+    // If within 350px from bottom and more items exist, load 10 more cards
+    if (distanceToBottom < 350 && visibleLimit < targetDataset.length) {
+      visibleLimit += 10;
+      renderCurrentCategoryView();
+    }
+  }
+
+  // B. Back to Top Button
   const backToTopBtn = document.getElementById('backToTopBtn');
-  
   if (backToTopBtn) {
     const isScrollingUp = currentScroll < lastScrollY;
     const isPastThreshold = currentScroll > 300;
