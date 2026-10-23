@@ -55,76 +55,7 @@
 
       <!-- Inner Content Padding Block -->
       <div style="padding: 18px 16px; display: flex; flex-direction: column; gap: 24px;">
-        const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim();
-
-        if (actionType === 'claim') {
-          if (openRedeemModalBtn) openRedeemModalBtn.style.display = 'flex';
-
-        } else if (actionType === 'code' || actionType === 'promocode') {
-          if (openCodeModalBtn) {
-            openCodeModalBtn.style.display = 'flex';
-
-            openCodeModalBtn.addEventListener('click', () => {
-              const promoCode = biz.PromoCode || biz.promocode || biz.promoCode || 'D.BARAKAHSG';
-              const storeUrl = biz.WebsiteURL || biz.websiteurl || biz.WebsiteUrl || '#';
-
-              const userChoice = confirm(`Exclusive Code for ${bizName}:\n\n👉 ${promoCode}\n\nClick OK to copy the code and visit their store!`);
-
-              if (userChoice) {
-                navigator.clipboard.writeText(promoCode);
-
-                fetch('/api/redeem', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ slug: bizSlugVal, action: 'copy' })
-                }).catch(() => {});
-
-                if (storeUrl && storeUrl !== '#') {
-                  window.open(storeUrl, '_blank');
-                }
-              }
-            });
-          }
-
-        } else if (actionType === 'whatsapp') {
-          if (whatsappBtn) {
-            whatsappBtn.style.display = 'flex';
-            const refCode = `DB-${bizSlugVal.toUpperCase()}`;
-            const rawMessage = `Assalaamualaikum! I came across ${bizName} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${bizDealText}". Let me know how to proceed, jazakallahu khair!`;
-            const phoneNum = biz.Phone || biz.phone || '';
-            const whatsappUrl = `https://wa.me/${phoneNum}?text=${encodeURIComponent(rawMessage)}`;
-            
-            whatsappBtn.href = whatsappUrl;
-
-            whatsappBtn.addEventListener('click', (e) => {
-              e.preventDefault();
-
-              const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'whatsapp' });
-
-              if (navigator.sendBeacon) {
-                navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
-              } else {
-                fetch('/api/redeem', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: trackingPayload,
-                  keepalive: true
-                }).catch(() => {});
-              }
-
-              window.location.href = whatsappUrl;
-            });
-          }
-        } else {
-          // --- DIMMED BUTTON FOR NO ACTIVE OFFER ---
-          if (redemptionArea) {
-            redemptionArea.innerHTML = `
-              <div class="action-btn-dim">
-                — No Offer Available —
-              </div>
-            `;
-          }
-        }
+        
         <!-- 2. Business Title & Subtitle -->
         <div>
           <h2 id="bizName" class="skeleton-line title" style="color: var(--primary-color); font-size: 1.35rem; font-weight: 700; margin-bottom: 4px; line-height: 1.25;"></h2>
@@ -485,7 +416,7 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
           if (redemptionArea) {
             redemptionArea.innerHTML = `
               <div class="action-btn-dim">
-                No Active Digital Offer — Visit Links Below ↗
+                — No offer available —
               </div>
             `;
           }
