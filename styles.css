@@ -686,10 +686,19 @@ dialog::backdrop {
   display: none;
 }
 
-/* Individual Category Page Slide */
+/* Individual Category Page Slide Layout Fix */
 .category-page {
   flex: 0 0 100%;
   scroll-snap-align: center;
   scroll-snap-stop: always;
   min-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ensure the business grid fills the category page container */
+.category-page .business-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
 }
