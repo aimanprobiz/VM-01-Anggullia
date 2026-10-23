@@ -277,6 +277,13 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  touch-action: pan-y; /* Keeps vertical page scrolling smooth while enabling horizontal touch tracking */
+  will-change: transform, opacity;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease;
+}
+
+.business-grid.dragging {
+  transition: none !important; /* Disables delay during active finger drag for instant 1:1 response */
 }
 
 /* 2-Column Visual Grid Card Base */
@@ -660,14 +667,4 @@ dialog::backdrop {
   background-color: var(--accent-gold);
   color: var(--primary-color);
   transform: scale(1.05);
-}
-
-/* Real-time Category Page Swiper */
-#businessGrid {
-  will-change: transform, opacity;
-  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease;
-}
-
-#businessGrid.dragging {
-  transition: none !important; /* Disables delay during active finger drag for instant response */
 }
