@@ -218,29 +218,33 @@ body {
   flex-direction: column;
 }
 
-/* Sheer Glass Category Bar with Full Touch & Mouse Scroll Support */
+/* Sheer Glass Category Bar - Smooth Touch & Drag Scrolling */
 .filter-stacked {
   position: sticky;
   top: 0;
   z-index: 10;
   
-  background-color: rgba(245, 242, 233, 0.85); 
+  background-color: rgba(245, 242, 233, 0.88); 
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   
   display: flex;
+  flex-direction: row;
   flex-wrap: nowrap;
-  overflow-x: scroll;
+  align-items: center;
+  
+  /* Enables native horizontal scrolling */
+  overflow-x: auto !important;
   overflow-y: hidden;
+  
   gap: 8px;
   margin-bottom: 18px;
-  
   padding: 10px 16px;
   
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  /* Smooth touch scrolling without snap lock */
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-x pan-y;
+  touch-action: pan-x;
+  scrollbar-width: none; /* Firefox */
   
   margin-left: -16px;
   margin-right: -16px;
@@ -249,13 +253,12 @@ body {
 }
 
 .filter-stacked::-webkit-scrollbar {
-  display: none;
+  display: none; /* Chrome, Safari, Edge */
 }
 
-/* Refined Pill Styling */
+/* Category Pill Buttons */
 .filter-btn {
-  flex: 0 0 auto;
-  scroll-snap-align: start;
+  flex: 0 0 auto !important; /* Prevents pills from shrinking */
   white-space: nowrap;
   background-color: var(--card-bg);
   border: 1.5px solid var(--border-color);
@@ -267,6 +270,7 @@ body {
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
 }
 
 .filter-btn:hover {
