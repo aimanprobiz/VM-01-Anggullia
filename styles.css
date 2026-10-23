@@ -688,7 +688,7 @@ dialog::backdrop {
   width: 33.333%;
   flex-shrink: 0;
   /* Ensures a clear 24px gap between adjacent category views */
-  padding: 0 6px; 
+  padding: 0 12px; 
   box-sizing: border-box;
 }
 
