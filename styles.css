@@ -417,7 +417,7 @@ body {
 
 .grid-card.featured-card {
   /* Increased border width from 1px to 2.5px and used full gold accent opacity */
-  border: 2.5px solid var(--accent-gold, #ddba58);
+  border: 1.5px solid var(--accent-gold, #ddba58);
   background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
   box-shadow: 0 4px 14px rgba(221, 186, 88, 0.35);
 }
