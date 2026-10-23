@@ -435,6 +435,76 @@ function setupCategoryFilters() {
   });
 }
 
+// --- Swipe Between Categories Feature ---
+function enableCategorySwipe() {
+  const gridContainer = document.getElementById('businessGrid');
+  const filterContainer = document.getElementById('filterContainer');
+  
+  if (!gridContainer || !filterContainer) return;
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+
+  const minSwipeDistance = 50; // Minimum horizontal pixel distance for a swipe
+
+  gridContainer.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  gridContainer.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleCategorySwipe();
+  }, { passive: true });
+
+  function handleCategorySwipe() {
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+
+    // Ensure horizontal gesture was dominant over vertical scrolling
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+      const filterButtons = Array.from(filterContainer.querySelectorAll('.filter-btn'));
+      const activeIndex = filterButtons.findIndex(btn => btn.classList.contains('active'));
+
+      if (activeIndex === -1) return;
+
+      let nextIndex = activeIndex;
+
+      if (deltaX < 0) {
+        // Swiped Left -> Move to Next Category
+        if (activeIndex < filterButtons.length - 1) {
+          nextIndex = activeIndex + 1;
+        }
+      } else {
+        // Swiped Right -> Move to Previous Category
+        if (activeIndex > 0) {
+          nextIndex = activeIndex - 1;
+        }
+      }
+
+      if (nextIndex !== activeIndex) {
+        const targetBtn = filterButtons[nextIndex];
+        
+        // Trigger click event on the target category button
+        targetBtn.click();
+
+        // Smoothly scroll the filter pill container to keep the active category visible
+        targetBtn.scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center',
+          block: 'nearest'
+        });
+      }
+    }
+  }
+}
+
+// Enable Category Swiping on Page Initialization
+enableCategorySwipe();
+
 // 5. BUSINESS MODAL ACTION LOGIC
 const bizModal = document.getElementById('businessModal');
 const closeBizModalBtn = document.getElementById('closeBizModalBtn');
