@@ -668,3 +668,31 @@ dialog::backdrop {
   color: var(--primary-color);
   transform: scale(1.05);
 }
+
+/* Swipeable Category Container */
+.category-swipe-viewport {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-y; /* Allows vertical scrolling while intercepting horizontal swipes */
+}
+
+.category-swipe-track {
+  display: flex;
+  width: 300%; /* Holds [Prev, Current, Next] side-by-side */
+  transform: translateX(-33.333%); /* Center the active category */
+  will-change: transform;
+}
+
+.category-page {
+  width: 33.333%;
+  flex-shrink: 0;
+  /* Ensures a clear 24px gap between adjacent category views */
+  padding: 0 12px; 
+  box-sizing: border-box;
+}
+
+/* Smooth snapping animation class */
+.category-swipe-track.animating {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
