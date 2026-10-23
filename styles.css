@@ -662,37 +662,12 @@ dialog::backdrop {
   transform: scale(1.05);
 }
 
-/* --- Directional Slide Animations --- */
-@keyframes slideInFromRight {
-  0% {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+/* Real-time Category Page Swiper */
+#businessGrid {
+  will-change: transform, opacity;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease;
 }
 
-@keyframes slideInFromLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.grid-slide-right {
-  animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.grid-slide-left {
-  animation: slideInFromLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.grid-card-animate {
-  animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+#businessGrid.dragging {
+  transition: none !important; /* Disables delay during active finger drag for instant response */
 }
