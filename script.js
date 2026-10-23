@@ -310,91 +310,111 @@ window.addEventListener('scroll', () => {
 });
 
 function renderBusinessBatch() {
-  const gridContainer = document.getElementById('businessGrid');
-  if (!gridContainer) return;
+  const track = document.getElementById('categorySwipeTrack');
+  if (!track) return;
 
-  gridContainer.innerHTML = '';
+  track.innerHTML = '';
 
-  if (allBusinesses.length === 0) {
-    gridContainer.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 1rem; font-weight: 600; color: var(--text-main);">No listings available yet</p>
-        <p style="font-size: 0.85rem; margin-top: 5px;">Check back soon for new community deals!</p>
-      </div>
-    `;
-    return;
-  }
+  // Get all unique categories defined on the buttons
+  const filterBtns = document.querySelectorAll('#filterContainer .filter-btn');
+  
+  filterBtns.forEach(btn => {
+    const cat = btn.getAttribute('data-cat');
+    const page = document.createElement('div');
+    page.className = 'category-page';
+    page.setAttribute('data-page-cat', cat);
 
-  const activeFilter = document.querySelector('#filterContainer .filter-btn.active');
-  const selectedCat = activeFilter ? activeFilter.getAttribute('data-cat') : 'all';
+    const grid = document.createElement('div');
+    grid.className = 'business-grid';
 
-  const targetDataset = selectedCat === 'all' 
-    ? allBusinesses 
-    : allBusinesses.filter(biz => (biz.Category || 'all') === selectedCat);
+    const dataset = cat === 'all' 
+      ? allBusinesses 
+      : allBusinesses.filter(b => (b.Category || 'all') === cat);
 
-  const currentBatch = targetDataset.slice(0, visibleLimit);
+    if (dataset.length === 0) {
+      grid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
+          <p style="font-size: 0.9rem;">No listings found in this category.</p>
+        </div>
+      `;
+    } else {
+      dataset.slice(0, visibleLimit).forEach(biz => {
+        const isFeatured = biz.IsFeatured;
+        const card = document.createElement('div');
+        card.className = isFeatured ? 'grid-card featured-card' : 'grid-card';
+        card.style.cursor = 'pointer';
+        card.onclick = () => window.location.href = `/business.html?slug=${biz.Slug}`;
 
-  currentBatch.forEach(biz => {
-    const isFeatured = biz.IsFeatured;
-    const card = document.createElement('div');
-    
-    card.className = isFeatured ? 'grid-card featured-card' : 'grid-card';
-    card.setAttribute('data-cat', biz.Category || 'all');
-    card.style.cursor = 'pointer';
+        const rawDeal = biz.Deal || biz.deal || '';
+        const dealText = rawDeal.trim() !== '' ? rawDeal : 'No offer';
 
-    card.onclick = function() {
-      window.location.href = `/business.html?slug=${biz.Slug}`;
-    };
+        card.innerHTML = `
+          <div style="position: relative;">
+            <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
+            ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
+          </div>
+          <div class="grid-card-body">
+            <div class="vendor-details">
+              <div class="deal-badge"><span></span> ${dealText}</div>
+              <h3 class="vendor-name">${biz.Name}</h3>
+              <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
+            </div>
+            <button class="action-btn" style="text-align: center;">View Details</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
 
-// Extract deal text; if empty or missing, fallback to 'NO OFFER'
-const rawDeal = biz.Deal || biz.deal || '';
-const dealText = rawDeal.trim() !== '' ? rawDeal : 'No offer';
-
-card.innerHTML = `
-  <div style="position: relative;">
-    <img src="${biz.ImageURL || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM'}" alt="${biz.Name}" class="card-banner">
-    ${isFeatured ? '<span class="grid-featured-badge" title="Featured Listing">★</span>' : ''}
-  </div>
-
-  <div class="grid-card-body">
-    <div class="vendor-details">
-      <!-- Always renders the deal badge pill with the exact same colors -->
-      <div class="deal-badge"><span></span> ${dealText}</div>
-
-      <h3 class="vendor-name">${biz.Name}</h3>
-      <p class="vendor-sub">${biz.SubTitle || biz.Category || ''}</p>
-    </div>
-
-    <button class="action-btn" style="text-align: center;">
-      View Details
-    </button>
-  </div>
-`;
-    gridContainer.appendChild(card);
+    page.appendChild(grid);
+    track.appendChild(page);
   });
 
-  // Automatically ensure old manual loadMoreBtn is removed if it exists
-  const oldBtn = document.getElementById('loadMoreBtn');
-  if (oldBtn) oldBtn.remove();
+  setupSwipeScrollListener();
 }
 
 function setupCategoryFilters() {
   const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
+  const track = document.getElementById('categorySwipeTrack');
 
-  filterButtons.forEach(button => {
-    // 1. Remove old event listeners by replacing the node
+  filterButtons.forEach((button, index) => {
     const newButton = button.cloneNode(true);
     button.replaceWith(newButton);
 
-    // 2. Add clean click listener
     newButton.addEventListener('click', () => {
       document.querySelectorAll('#filterContainer .filter-btn').forEach(btn => btn.classList.remove('active'));
       newButton.classList.add('active');
 
-      // 3. Reset limit back to 10 for the new category and trigger a clean re-render
-      visibleLimit = 10;
-      renderBusinessBatch();
+      // Smooth scroll the track to the selected page index
+      if (track) {
+        const pageWidth = track.clientWidth;
+        track.scrollTo({ left: pageWidth * index, behavior: 'smooth' });
+      }
     });
+  });
+}
+
+function setupSwipeScrollListener() {
+  const track = document.getElementById('categorySwipeTrack');
+  if (!track || track.dataset.hasScrollListener) return;
+
+  track.dataset.hasScrollListener = 'true';
+
+  let scrollTimeout;
+  track.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const pageWidth = track.clientWidth;
+      if (pageWidth === 0) return;
+      const activeIndex = Math.round(track.scrollLeft / pageWidth);
+
+      const buttons = document.querySelectorAll('#filterContainer .filter-btn');
+      if (buttons[activeIndex]) {
+        buttons.forEach(b => b.classList.remove('active'));
+        buttons[activeIndex].classList.add('active');
+        buttons[activeIndex].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    }, 100);
   });
 }
 
