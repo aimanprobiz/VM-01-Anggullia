@@ -334,11 +334,15 @@ function renderBusinessBatch() {
 
   const currentBatch = targetDataset.slice(0, visibleLimit);
 
-  currentBatch.forEach(biz => {
+currentBatch.forEach((biz, index) => {
     const isFeatured = biz.IsFeatured;
     const card = document.createElement('div');
     
-    card.className = isFeatured ? 'grid-card featured-card' : 'grid-card';
+    // Added grid-card-animate for a smooth entrance effect
+    card.className = (isFeatured ? 'grid-card featured-card' : 'grid-card') + ' grid-card-animate';
+    
+    // Stagger the animation slightly for each card in the batch for a premium cascade look
+    card.style.animationDelay = `${index * 0.03}s`;
     card.setAttribute('data-cat', biz.Category || 'all');
     card.style.cursor = 'pointer';
 
