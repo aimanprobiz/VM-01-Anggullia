@@ -326,7 +326,7 @@ if (dealBox) {
 
         // --- UPDATED TICKET LOGIC (DEFAULTS TO "NONE" IF EMPTY) ---
         const rawDeal = biz.Deal || biz.deal || '';
-        const bizDealText = rawDeal.trim() !== '' ? rawDeal : 'NONE';
+        const bizDealText = rawDeal.trim() !== '' ? rawDeal : '-';
         
         const dealEl = document.getElementById('bizDeal');
         const dealBox = document.getElementById('dealBox');
