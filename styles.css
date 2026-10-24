@@ -218,42 +218,52 @@ body {
   flex-direction: column;
 }
 
-/* Container adjustments for the pinned search pill */
+/* Container adjustments for the sticky header */
 .filter-stacked {
   position: sticky;
   top: 0;
   z-index: 10;
-  background-color: rgba(245, 242, 233, 0.35); 
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  background-color: rgba(245, 242, 233, 0.85); 
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   
   display: flex;
   align-items: center;
-  overflow-x: auto;
   gap: 8px;
   margin-bottom: 18px;
   padding: 10px 16px;
   
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
   margin-left: -16px;
   margin-right: -16px;
-  border-bottom: 1px solid rgba(226, 219, 201, 0.3);
+  border-bottom: 1px solid rgba(226, 219, 201, 0.4);
 }
 
-.filter-stacked::-webkit-scrollbar {
-  display: none;
-}
-
-/* Pinned search wrapper stays anchored on the left */
-.fixed-search-pill-wrapper {
+/* Fixed Search Pill pinned to the absolute left */
+.search-pill {
   position: sticky;
   left: 0;
   z-index: 5;
-  background: linear-gradient(90deg, rgba(245, 242, 233, 0.95) 70%, rgba(245, 242, 233, 0) 100%);
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  padding-right: 6px;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  cursor: pointer;
+  background-color: var(--card-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: 50%;
+  color: var(--text-muted);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.search-pill:hover,
+.search-pill.active {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: rgba(15, 56, 44, 0.05);
 }
 
 /* Scrollable container for the remaining category buttons */
@@ -264,6 +274,8 @@ body {
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  width: 100%;
+  padding-left: 2px;
 }
 
 .scrollable-pills-track::-webkit-scrollbar {
