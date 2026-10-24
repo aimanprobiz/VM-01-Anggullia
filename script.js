@@ -218,6 +218,7 @@ function displayHadith(hadith) {
   document.getElementById('hadith-narrator').textContent = hadith.narrator;
   document.getElementById('hadith-tag').textContent = hadith.tag;
 }
+
 // 4. Dynamic Category Swipe Engine & Business Loader
 let allBusinesses = [];
 let categories = [];
@@ -225,7 +226,7 @@ let currentCategoryIndex = 0;
 let visibleLimit = 10;
 
 function initCategories() {
-  const filterBtns = document.querySelectorAll('#filterContainer .filter-btn');
+  const filterBtns = document.querySelectorAll('#filterContainer .filter-btn:not(.search-pill)');
   categories = Array.from(filterBtns).map(btn => btn.getAttribute('data-cat'));
 }
 
@@ -261,6 +262,7 @@ async function loadBusinesses() {
       return (a.Name || '').localeCompare(b.Name || '');
     });
 
+    setupSearchPill();
     renderCurrentCategoryView();
     setupCategoryFilters();
     initSwipeGestures();
@@ -271,15 +273,28 @@ async function loadBusinesses() {
 }
 
 function renderGridForCategory(catName) {
-  const targetDataset = catName === 'all' 
+  const searchInput = document.getElementById('searchInput');
+  const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+  let targetDataset = catName === 'all' 
     ? allBusinesses 
     : allBusinesses.filter(biz => (biz.Category || 'all') === catName);
+
+  if (query !== '') {
+    targetDataset = targetDataset.filter(biz => {
+      const name = (biz.Name || '').toLowerCase();
+      const sub = (biz.SubTitle || '').toLowerCase();
+      const cat = (biz.Category || '').toLowerCase();
+      const deal = (biz.Deal || biz.deal || '').toLowerCase();
+      return name.includes(query) || sub.includes(query) || cat.includes(query) || deal.includes(query);
+    });
+  }
 
   if (targetDataset.length === 0) {
     return `
       <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">No listings in this category</p>
-        <p style="font-size: 0.82rem; margin-top: 4px;">Check back soon for new community deals!</p>
+        <p style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">No listings found</p>
+        <p style="font-size: 0.82rem; margin-top: 4px;">Try another search term or browse categories.</p>
       </div>
     `;
   }
@@ -325,7 +340,7 @@ function renderCurrentCategoryView() {
   document.getElementById('activeCategoryPage').innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat)}</div>`;
   document.getElementById('nextCategoryPage').innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat)}</div>`;
 
-  const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
+  const filterButtons = document.querySelectorAll('#filterContainer .filter-btn:not(.search-pill)');
   filterButtons.forEach((btn, idx) => {
     const isActive = idx === currentCategoryIndex;
     btn.classList.toggle('active', isActive);
@@ -343,7 +358,7 @@ function switchCategory(newIndex) {
 }
 
 function setupCategoryFilters() {
-  const filterButtons = document.querySelectorAll('#filterContainer .filter-btn');
+  const filterButtons = document.querySelectorAll('#filterContainer .filter-btn:not(.search-pill)');
   filterButtons.forEach((button, idx) => {
     button.addEventListener('click', () => {
       switchCategory(idx);
@@ -478,6 +493,42 @@ window.addEventListener('scroll', () => {
 
   lastScrollY = currentScroll;
 });
+
+// Setup Expandable Search Pill
+function setupSearchPill() {
+  const searchBtn = document.getElementById('searchToggleBtn');
+  const filterContainer = document.getElementById('filterContainer');
+  if (!searchBtn || !filterContainer || document.getElementById('searchInput')) return;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'search-input-wrapper';
+  wrapper.innerHTML = `
+    <input type="text" id="searchInput" class="search-input-field" placeholder="Search deals..." />
+  `;
+  searchBtn.after(wrapper);
+
+  const searchInput = wrapper.querySelector('#searchInput');
+
+  searchBtn.addEventListener('click', () => {
+    const isOpen = wrapper.classList.contains('open');
+    if (isOpen) {
+      wrapper.classList.remove('open');
+      searchBtn.classList.remove('active');
+      searchInput.value = '';
+      visibleLimit = 10;
+      renderCurrentCategoryView();
+    } else {
+      wrapper.classList.add('open');
+      searchBtn.classList.add('active');
+      setTimeout(() => searchInput.focus(), 100);
+    }
+  });
+
+  searchInput.addEventListener('input', () => {
+    visibleLimit = 10;
+    renderCurrentCategoryView();
+  });
+}
 
 // Run all dynamic functions on page load
 loadDynamicCard();
