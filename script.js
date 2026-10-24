@@ -280,13 +280,19 @@ function renderGridForCategory(catName) {
     ? allBusinesses 
     : allBusinesses.filter(biz => (biz.Category || 'all') === catName);
 
-  if (query !== '') {
+if (query !== '') {
     targetDataset = targetDataset.filter(biz => {
       const name = (biz.Name || '').toLowerCase();
       const sub = (biz.SubTitle || '').toLowerCase();
       const cat = (biz.Category || '').toLowerCase();
       const deal = (biz.Deal || biz.deal || '').toLowerCase();
-      return name.includes(query) || sub.includes(query) || cat.includes(query) || deal.includes(query);
+      const desc = (biz.Description || biz.description || '').toLowerCase(); // Added Description check
+
+      return name.includes(query) || 
+             sub.includes(query) || 
+             cat.includes(query) || 
+             deal.includes(query) || 
+             desc.includes(query);
     });
   }
 
