@@ -711,6 +711,7 @@ dialog::backdrop {
   border-radius: 20px;
   color: var(--text-muted);
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .search-pill:hover,
@@ -720,7 +721,7 @@ dialog::backdrop {
   background-color: rgba(15, 56, 44, 0.05);
 }
 
-/* Expanding Inline Search Box */
+/* Expanding Inline Search Box Container */
 .search-input-wrapper {
   display: flex;
   align-items: center;
@@ -728,15 +729,17 @@ dialog::backdrop {
   max-width: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .search-input-wrapper.open {
-  max-width: 180px;
+  max-width: 200px;
   opacity: 1;
 }
 
+/* Clear text box styling so text is fully visible */
 .search-input-field {
   width: 100%;
   padding: 6px 12px;
@@ -746,4 +749,5 @@ dialog::backdrop {
   background: var(--card-bg);
   color: var(--text-main);
   outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
