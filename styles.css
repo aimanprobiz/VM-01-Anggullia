@@ -724,11 +724,13 @@ dialog::backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 7px 10px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
   cursor: pointer;
   background-color: var(--card-bg);
   border: 1.5px solid var(--border-color);
-  border-radius: 20px;
+  border-radius: 50%; /* Makes it a clean circle matching the icon proportions */
   color: var(--text-muted);
   transition: all 0.2s ease;
   flex-shrink: 0;
