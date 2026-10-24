@@ -698,3 +698,52 @@ dialog::backdrop {
 .category-swipe-track.animating {
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Minimalist Search Pill Styling */
+.search-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  cursor: pointer;
+  background-color: var(--card-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: 20px;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.search-pill:hover,
+.search-pill.active {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: rgba(15, 56, 44, 0.05);
+}
+
+/* Expanding Inline Search Box */
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  white-space: nowrap;
+}
+
+.search-input-wrapper.open {
+  max-width: 180px;
+  opacity: 1;
+}
+
+.search-input-field {
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  border: 1.5px solid var(--primary-color);
+  border-radius: 20px;
+  background: var(--card-bg);
+  color: var(--text-main);
+  outline: none;
+}
