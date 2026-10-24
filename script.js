@@ -524,9 +524,21 @@ function setupSearchPill() {
     }
   });
 
+  // Update grids on typing WITHOUT scrolling/shifting the category filter pills
   searchInput.addEventListener('input', () => {
     visibleLimit = 10;
-    renderCurrentCategoryView();
+    
+    const activeCat = categories[currentCategoryIndex];
+    const prevCat = categories[(currentCategoryIndex - 1 + categories.length) % categories.length];
+    const nextCat = categories[(currentCategoryIndex + 1) % categories.length];
+
+    const prevPage = document.getElementById('prevCategoryPage');
+    const activePage = document.getElementById('activeCategoryPage');
+    const nextPage = document.getElementById('nextCategoryPage');
+
+    if (prevPage) prevPage.innerHTML = `<div class="business-grid">${renderGridForCategory(prevCat)}</div>`;
+    if (activePage) activePage.innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat)}</div>`;
+    if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat)}</div>`;
   });
 }
 
