@@ -276,17 +276,16 @@ function renderGridForCategory(catName) {
   const searchInput = document.getElementById('searchInput');
   const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
 
-  let targetDataset = catName === 'all' 
-    ? allBusinesses 
-    : allBusinesses.filter(biz => (biz.Category || 'all') === catName);
+  let targetDataset = [];
 
-if (query !== '') {
-    targetDataset = targetDataset.filter(biz => {
+  // GLOBAL SEARCH RULE: If user typed a query, search ALL deals regardless of active category tab
+  if (query !== '') {
+    targetDataset = allBusinesses.filter(biz => {
       const name = (biz.Name || '').toLowerCase();
       const sub = (biz.SubTitle || '').toLowerCase();
       const cat = (biz.Category || '').toLowerCase();
       const deal = (biz.Deal || biz.deal || '').toLowerCase();
-      const desc = (biz.Description || biz.description || '').toLowerCase(); // Added Description check
+      const desc = (biz.Description || biz.description || '').toLowerCase();
 
       return name.includes(query) || 
              sub.includes(query) || 
@@ -294,6 +293,11 @@ if (query !== '') {
              deal.includes(query) || 
              desc.includes(query);
     });
+  } else {
+    // Normal category filter when search is empty
+    targetDataset = catName === 'all' 
+      ? allBusinesses 
+      : allBusinesses.filter(biz => (biz.Category || 'all') === catName);
   }
 
   if (targetDataset.length === 0) {
@@ -330,6 +334,68 @@ if (query !== '') {
       </div>
     `;
   }).join('');
+}
+
+// Setup Expandable Search Pill
+function setupSearchPill() {
+  const searchBtn = document.getElementById('searchToggleBtn');
+  const filterContainer = document.getElementById('filterContainer');
+  if (!searchBtn || !filterContainer || document.getElementById('searchInput')) return;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'search-input-wrapper';
+  wrapper.innerHTML = `
+    <input type="text" id="searchInput" class="search-input-field" placeholder="Search deals..." />
+  `;
+  searchBtn.after(wrapper);
+
+  const searchInput = wrapper.querySelector('#searchInput');
+
+  // Helper to snap category container to the far left so search box is always visible
+  const scrollToFarLeft = () => {
+    filterContainer.scrollTo({ left: 0, behavior: 'smooth' });
+  };
+
+  searchBtn.addEventListener('click', () => {
+    const isOpen = wrapper.classList.contains('open');
+    if (isOpen) {
+      wrapper.classList.remove('open');
+      searchBtn.classList.remove('active');
+      searchInput.value = '';
+      visibleLimit = 10;
+      renderCurrentCategoryView();
+    } else {
+      wrapper.classList.add('open');
+      searchBtn.classList.add('active');
+      scrollToFarLeft();
+      setTimeout(() => {
+        searchInput.focus();
+        scrollToFarLeft();
+      }, 100);
+    }
+  });
+
+  // Ensure far-left alignment when keyboard opens / input gains focus
+  searchInput.addEventListener('focus', () => {
+    scrollToFarLeft();
+  });
+
+  // Update grids on typing across ALL deals
+  searchInput.addEventListener('input', () => {
+    visibleLimit = 10;
+    
+    const activeCat = categories[currentCategoryIndex];
+    const prevCat = categories[(currentCategoryIndex - 1 + categories.length) % categories.length];
+    const nextCat = categories[(currentCategoryIndex + 1) % categories.length];
+
+    const prevPage = document.getElementById('prevCategoryPage');
+    const activePage = document.getElementById('activeCategoryPage');
+    const nextPage = document.getElementById('nextCategoryPage');
+
+    if (prevPage) prevPage.innerHTML = `<div class="business-grid">${renderGridForCategory(prevCat)}</div>`;
+    if (activePage) activePage.innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat)}</div>`;
+    if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat)}</div>`;
+  });
 }
 
 function renderCurrentCategoryView() {
@@ -499,54 +565,6 @@ window.addEventListener('scroll', () => {
 
   lastScrollY = currentScroll;
 });
-
-// Setup Expandable Search Pill
-function setupSearchPill() {
-  const searchBtn = document.getElementById('searchToggleBtn');
-  const filterContainer = document.getElementById('filterContainer');
-  if (!searchBtn || !filterContainer || document.getElementById('searchInput')) return;
-
-  const wrapper = document.createElement('div');
-  wrapper.className = 'search-input-wrapper';
-  wrapper.innerHTML = `
-    <input type="text" id="searchInput" class="search-input-field" placeholder="Search deals..." />
-  `;
-  searchBtn.after(wrapper);
-
-  const searchInput = wrapper.querySelector('#searchInput');
-
-  searchBtn.addEventListener('click', () => {
-    const isOpen = wrapper.classList.contains('open');
-    if (isOpen) {
-      wrapper.classList.remove('open');
-      searchBtn.classList.remove('active');
-      searchInput.value = '';
-      visibleLimit = 10;
-      renderCurrentCategoryView();
-    } else {
-      wrapper.classList.add('open');
-      searchBtn.classList.add('active');
-      setTimeout(() => searchInput.focus(), 100);
-    }
-  });
-
-  // Update grids on typing WITHOUT scrolling/shifting the category filter pills
-  searchInput.addEventListener('input', () => {
-    visibleLimit = 10;
-    
-    const activeCat = categories[currentCategoryIndex];
-    const prevCat = categories[(currentCategoryIndex - 1 + categories.length) % categories.length];
-    const nextCat = categories[(currentCategoryIndex + 1) % categories.length];
-
-    const prevPage = document.getElementById('prevCategoryPage');
-    const activePage = document.getElementById('activeCategoryPage');
-    const nextPage = document.getElementById('nextCategoryPage');
-
-    if (prevPage) prevPage.innerHTML = `<div class="business-grid">${renderGridForCategory(prevCat)}</div>`;
-    if (activePage) activePage.innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat)}</div>`;
-    if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat)}</div>`;
-  });
-}
 
 // Run all dynamic functions on page load
 loadDynamicCard();
