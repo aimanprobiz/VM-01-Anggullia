@@ -218,14 +218,18 @@ body {
   flex-direction: column;
 }
 
-/* Container adjustments for the sticky header */
+/* Highly Transparent Frosted Glass Category Bar */
 .filter-stacked {
   position: sticky;
   top: 0;
   z-index: 10;
-  background-color: rgba(245, 242, 233, 0.85); 
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  
+  /* Increased transparency from 0.85/0.35 down to 0.12 */
+  background-color: rgba(245, 242, 233, 0.12); 
+  
+  /* Reduced blur from 6px/3px down to 1.5px for maximum clarity */
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
   
   display: flex;
   align-items: center;
@@ -235,9 +239,8 @@ body {
   
   margin-left: -16px;
   margin-right: -16px;
-  border-bottom: 1px solid rgba(226, 219, 201, 0.4);
+  border-bottom: 1px solid rgba(226, 219, 201, 0.15);
 }
-
 /* Fixed Search Pill pinned to the absolute left */
 .search-pill {
   position: sticky;
