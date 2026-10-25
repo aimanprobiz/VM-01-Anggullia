@@ -245,7 +245,7 @@ body {
   background: linear-gradient(90deg, rgba(245, 242, 233, 0.95) 75%, rgba(245, 242, 233, 0) 100%);
   display: flex;
   align-items: center;
-  padding-right: 12px;
+  padding-right: 14px; /* Increases spacing on the right of search pill */
   padding-left: 16px;
   margin-left: -16px;
 }
@@ -310,7 +310,8 @@ body {
 .scrollable-pills-track {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 8px; /* Gap between individual category pills */
+  margin-left: 6px; /* Extra offset gap before the first category pill */
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
