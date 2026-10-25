@@ -120,7 +120,6 @@
       </div>
     </section>
 
-    
     <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
     <section class="business-section">
       <h2 class="section-title">Support Local Muslim Businesses</h2>
@@ -133,4 +132,50 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-        <button class="filter-btn
+        <button class="filter-btn active" data-cat="all">All Deals</button>
+      </div>
+
+      <!-- Swipeable Category Viewport Container -->
+      <div class="category-swipe-viewport" id="categorySwipeViewport">
+        <div class="category-swipe-track" id="categorySwipeTrack">
+          <div class="category-page" id="prevCategoryPage"></div>
+          <div class="category-page" id="activeCategoryPage">
+            <div class="business-grid" id="businessGrid">
+              <!-- Rendered dynamically via script.js -->
+            </div>
+          </div>
+          <div class="category-page" id="nextCategoryPage"></div>
+        </div>
+      </div>
+      
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="text-align: center; padding: 24px 16px; font-size: 0.75rem; color: #666; border-top: 1px solid rgba(0,0,0,0.08); margin-top: 35px; width: 100%;">
+      <p style="margin: 0; font-weight: 600; color: #0f382c;">DailyBarakah SG</p>
+      <p style="margin: 4px 0 0 0; line-height: 1.4;">
+        An independent community initiative powered by 
+        <a 
+          href="https://wa.me/6588469883?text=Assalaamualaikum%20CredoVend%2C%20I%20scanned%20the%20QR%20code%20at%20Masjid%20Angullia%20and%20would%20like%20to%20enquire%20about%20the%20following:" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          style="color: #0f382c; font-weight: 700; text-decoration: underline;"
+        >
+          CredoVend
+        </a>.
+      </p>
+      <p style="margin: 4px 0 0 0; line-height: 1.4; opacity: 0.85;">
+        Partnering with local masjids to spotlight activities and support Muslim-owned businesses.
+      </p>
+    </footer>
+    
+  </div>
+
+  <script src="/script.js" defer></script>
+
+  <!-- Floating Back to Top Button -->
+  <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top" title="Back to top">
+    ↑
+  </button>
+</body>
+</html>
