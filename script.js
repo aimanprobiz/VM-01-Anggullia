@@ -221,7 +221,7 @@ function displayHadith(hadith) {
 
 // 4. Dynamic Category Swipe Engine & Business Loader
 let allBusinesses = [];
-let categories = ['all']; // Always start with 'all'
+let categories = ['all'];
 let currentCategoryIndex = 0;
 let visibleLimit = 10;
 
@@ -231,18 +231,15 @@ function initCategories() {
 
   const searchBtn = document.getElementById('searchToggleBtn');
 
-  // If allBusinesses is still empty, keep or show category skeleton placeholders
   if (!allBusinesses || allBusinesses.length === 0) {
-    return; // Leaves the initial HTML skeletons visible while waiting for fetch
+    return; 
   }
 
-  // Extract unique categories dynamically, checking both capitalized and lowercase keys
   const dynamicCategories = [...new Set(allBusinesses.map(biz => biz.Category || biz.category || '').filter(Boolean))];
   dynamicCategories.sort();
 
   categories = ['all', ...dynamicCategories];
 
-  // Clear existing buttons except search pill
   filterContainer.innerHTML = '';
   if (searchBtn) filterContainer.appendChild(searchBtn);
 
@@ -253,10 +250,8 @@ function initCategories() {
   allBtn.addEventListener('click', () => switchCategory(0));
   filterContainer.appendChild(allBtn);
 
-  // Re-inject the search input wrapper
   setupSearchPill();
 
-  // Create buttons for each dynamic category from Airtable
   dynamicCategories.forEach((cat, index) => {
     const catIndex = index + 1; 
     const btn = document.createElement('button');
@@ -275,7 +270,6 @@ function initCategories() {
 async function loadBusinesses() {
   initCategories();
 
-  // 1. Render Card Skeletons immediately
   const gridContainer = document.getElementById('businessGrid');
   if (gridContainer) {
     gridContainer.innerHTML = Array(6).fill(`
@@ -305,10 +299,7 @@ async function loadBusinesses() {
       return (a.Name || '').localeCompare(b.Name || '');
     });
 
-    // 2. Build categories dynamically once data is loaded (this removes the category skeletons)
     initCategories();
-
-    // 3. Setup search, render viewports, and swipe gestures
     setupSearchPill();
     renderCurrentCategoryView();
     initSwipeGestures();
@@ -324,7 +315,6 @@ function renderGridForCategory(catName) {
 
   let targetDataset = [];
 
-  // GLOBAL SEARCH RULE: If user typed a query, search ALL deals regardless of active category tab
   if (query !== '') {
     targetDataset = allBusinesses.filter(biz => {
       const name = (biz.Name || '').toLowerCase();
@@ -339,8 +329,7 @@ function renderGridForCategory(catName) {
              deal.includes(query) || 
              desc.includes(query);
     });
- } else {
-    // Normal category filter with safe case-insensitive matching
+  } else {
     targetDataset = catName === 'all' 
       ? allBusinesses 
       : allBusinesses.filter(biz => {
@@ -358,7 +347,6 @@ function renderGridForCategory(catName) {
     `;
   }
 
-  // Active category shows up to visibleLimit items for infinite scroll
   return targetDataset.slice(0, visibleLimit).map(biz => {
     const isFeatured = biz.IsFeatured;
     const rawDeal = biz.Deal || biz.deal || '';
@@ -385,7 +373,6 @@ function renderGridForCategory(catName) {
   }).join('');
 }
 
-// Setup Expandable Search Pill
 function setupSearchPill() {
   const searchBtn = document.getElementById('searchToggleBtn');
   const filterContainer = document.getElementById('filterContainer');
@@ -400,7 +387,6 @@ function setupSearchPill() {
 
   const searchInput = wrapper.querySelector('#searchInput');
 
-  // Helper to snap category container to the far left so search box is always visible
   const scrollToFarLeft = () => {
     filterContainer.scrollTo({ left: 0, behavior: 'smooth' });
   };
@@ -424,12 +410,10 @@ function setupSearchPill() {
     }
   });
 
-  // Ensure far-left alignment when keyboard opens / input gains focus
   searchInput.addEventListener('focus', () => {
     scrollToFarLeft();
   });
 
-  // Update grids on typing across ALL deals
   searchInput.addEventListener('input', () => {
     visibleLimit = 10;
     
@@ -473,21 +457,11 @@ function renderCurrentCategoryView() {
 
 function switchCategory(newIndex) {
   if (newIndex === currentCategoryIndex) return;
-  visibleLimit = 10; // Reset batch limit when switching categories
+  visibleLimit = 10; 
   currentCategoryIndex = newIndex;
   renderCurrentCategoryView();
 }
 
-function setupCategoryFilters() {
-  const filterButtons = document.querySelectorAll('#filterContainer .filter-btn:not(.search-pill)');
-  filterButtons.forEach((button, idx) => {
-    button.addEventListener('click', () => {
-      switchCategory(idx);
-    });
-  });
-}
-
-// 5. Touch Engine (High-Sensitivity Gesture Tracking)
 function initSwipeGestures() {
   const viewport = document.getElementById('categorySwipeViewport');
   const track = document.getElementById('categorySwipeTrack');
@@ -575,7 +549,6 @@ function initSwipeGestures() {
   });
 }
 
-// 6. Unified Scroll Listener for Infinite Scroll & Back-to-Top
 let lastScrollY = window.scrollY;
 
 window.addEventListener('scroll', () => {
@@ -583,21 +556,18 @@ window.addEventListener('scroll', () => {
   const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
   const distanceToBottom = scrollableHeight - currentScroll;
 
-  // A. Infinite Scroll Trigger
   if (categories.length > 0) {
     const activeCat = categories[currentCategoryIndex];
     const targetDataset = activeCat === 'all'
       ? allBusinesses
       : allBusinesses.filter(biz => (biz.Category || 'all') === activeCat);
 
-    // If within 350px from bottom and more items exist, load 10 more cards
     if (distanceToBottom < 350 && visibleLimit < targetDataset.length) {
       visibleLimit += 10;
       renderCurrentCategoryView();
     }
   }
 
-  // B. Back to Top Button
   const backToTopBtn = document.getElementById('backToTopBtn');
   if (backToTopBtn) {
     const isScrollingUp = currentScroll < lastScrollY;
@@ -615,7 +585,6 @@ window.addEventListener('scroll', () => {
   lastScrollY = currentScroll;
 });
 
-// Run all dynamic functions on page load
 loadDynamicCard();
 loadDailyHadith();
 loadBusinesses();
