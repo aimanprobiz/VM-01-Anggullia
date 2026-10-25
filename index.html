@@ -63,6 +63,32 @@
     </div>
   </dialog>
 
+  <!-- Search & Categories Modal -->
+  <dialog id="searchModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; width: 92%; max-width: 420px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary-color); margin: 0;">Search & Categories</h3>
+        <button id="closeSearchModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 4px 8px;">&times;</button>
+      </div>
+
+      <!-- Search Bar -->
+      <div style="position: relative;">
+        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        <input type="text" id="modalSearchInput" placeholder="Search businesses, deals..." style="width: 100%; padding: 10px 12px 10px 38px; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text-main); font-size: 0.9rem; outline: none; box-sizing: border-box;">
+      </div>
+
+      <!-- Categories Section (Hides when typing) -->
+      <div id="modalCategoriesSection">
+        <p style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase;">Explore Categories</p>
+        <div id="modalCategoriesGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-height: 240px; overflow-y: auto; padding-bottom: 4px;">
+          <!-- Dynamically populated category cards -->
+        </div>
+      </div>
+    </div>
+  </dialog>
+
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then((registration) => {
@@ -126,7 +152,7 @@
 
       <!-- Category Pills Container -->
       <div class="filter-stacked" id="filterContainer">
-        <button id="searchToggleBtn" class="filter-btn search-pill" aria-label="Search businesses">
+        <button id="searchToggleBtn" class="filter-btn search-pill" aria-label="Search & Categories" title="Search & Categories">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
