@@ -14,7 +14,6 @@ async function loadDynamicCard() {
     const cards = await response.json();
     if (!Array.isArray(cards) || cards.length === 0) return;
 
-    // A. Use the first item's image as Hadith avatar if available
     if (cards[0] && cards[0].imageUrl) {
       const hadithAvatar = document.getElementById('hadith-avatar');
       if (hadithAvatar) {
@@ -23,7 +22,6 @@ async function loadDynamicCard() {
       }
     }
 
-    // B. Build Carousel Slides & Dots dynamically, skipping the first item
     const carouselCards = cards.slice(1);
 
     if (carouselTrack && carouselIndicators && carouselCards.length > 0) {
@@ -57,7 +55,6 @@ async function loadDynamicCard() {
 
         carouselTrack.appendChild(slide);
 
-        // Build dot indicator
         const dot = document.createElement('span');
         dot.className = `dot${index === 0 ? ' active' : ''}`;
         dot.addEventListener('click', () => {
@@ -231,9 +228,7 @@ function initCategories() {
 
   const searchBtn = document.getElementById('searchToggleBtn');
 
-  if (!allBusinesses || allBusinesses.length === 0) {
-    return; 
-  }
+  if (!allBusinesses || allBusinesses.length === 0) return;
 
   const dynamicCategories = [...new Set(allBusinesses.map(biz => biz.Category || biz.category || '').filter(Boolean))];
   dynamicCategories.sort();
@@ -253,7 +248,7 @@ function initCategories() {
   setupSearchPill();
 
   dynamicCategories.forEach((cat, index) => {
-    const catIndex = index + 1; 
+    const catIndex = index + 1;
     const btn = document.createElement('button');
     btn.className = `filter-btn ${currentCategoryIndex === catIndex ? 'active' : ''}`;
     btn.setAttribute('data-cat', cat);
@@ -268,8 +263,6 @@ function initCategories() {
 }
 
 async function loadBusinesses() {
-  initCategories();
-
   const gridContainer = document.getElementById('businessGrid');
   if (gridContainer) {
     gridContainer.innerHTML = Array(6).fill(`
