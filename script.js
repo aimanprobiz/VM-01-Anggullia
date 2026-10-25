@@ -226,10 +226,10 @@ let currentCategoryIndex = 0;
 let visibleLimit = 10;
 
 function initCategories() {
-  // Extract unique categories dynamically from fetched Airtable records
-  const dynamicCategories = [...new Set(allBusinesses.map(biz => biz.Category).filter(Boolean))];
+  // Extract unique categories dynamically, checking both capitalized and lowercase keys
+  const dynamicCategories = [...new Set(allBusinesses.map(biz => biz.Category || biz.category || '').filter(Boolean))];
   
-  // Sort them alphabetically if desired, or keep them as they appear
+  // Sort them alphabetically
   dynamicCategories.sort();
 
   // Combine 'all' with the dynamic Airtable categories
@@ -238,10 +238,9 @@ function initCategories() {
   const filterContainer = document.getElementById('filterContainer');
   if (!filterContainer) return;
 
-  // Preserve the search toggle button and the 'All Deals' button
   const searchBtn = document.getElementById('searchToggleBtn');
   
-  // Clear existing buttons except search pill and 'all'
+  // Clear existing buttons except search pill
   filterContainer.innerHTML = '';
   if (searchBtn) filterContainer.appendChild(searchBtn);
 
@@ -252,12 +251,12 @@ function initCategories() {
   allBtn.addEventListener('click', () => switchCategory(0));
   filterContainer.appendChild(allBtn);
 
-  // Re-inject the search input wrapper if it was already created
+  // Re-inject the search input wrapper
   setupSearchPill();
 
   // Create buttons for each dynamic category from Airtable
   dynamicCategories.forEach((cat, index) => {
-    const catIndex = index + 1; // offset by 1 because 'all' is index 0
+    const catIndex = index + 1; 
     const btn = document.createElement('button');
     btn.className = `filter-btn ${currentCategoryIndex === catIndex ? 'active' : ''}`;
     btn.setAttribute('data-cat', cat);
@@ -322,11 +321,14 @@ function renderGridForCategory(catName) {
              deal.includes(query) || 
              desc.includes(query);
     });
-  } else {
-    // Normal category filter when search is empty
+ } else {
+    // Normal category filter with safe case-insensitive matching
     targetDataset = catName === 'all' 
       ? allBusinesses 
-      : allBusinesses.filter(biz => (biz.Category || 'all') === catName);
+      : allBusinesses.filter(biz => {
+          const bizCat = (biz.Category || biz.category || '').trim();
+          return bizCat.toLowerCase() === catName.toLowerCase();
+        });
   }
 
   if (targetDataset.length === 0) {
