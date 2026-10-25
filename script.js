@@ -274,25 +274,21 @@ function initSearchModalCategories() {
   grid.innerHTML = '';
 
   categories.forEach((cat, index) => {
-    const btn = document.createElement('div');
+    const btn = document.createElement('button');
     const displayName = cat === 'all' ? 'All Deals' : cat;
 
-    btn.className = 'modal-cat-card';
+    // Apply standard action-btn class to match "View Details" exactly
+    btn.className = 'action-btn modal-cat-card';
     btn.style.cssText = `
-      padding: 22px 12px;
-      background: var(--accent-gold-bg);
-      border: 1.5px solid var(--accent-gold);
-      border-radius: var(--radius-sm);
+      padding: 18px 10px;
       text-align: center;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--primary-color);
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
       box-sizing: border-box;
-      transition: all 0.2s ease;
+      font-size: 0.85rem;
+      font-weight: 700;
     `;
     
     btn.innerHTML = `<span style="white-space: normal; word-break: break-word; text-align: center;">${displayName}</span>`;
