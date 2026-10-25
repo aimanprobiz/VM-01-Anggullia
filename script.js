@@ -226,20 +226,22 @@ let currentCategoryIndex = 0;
 let visibleLimit = 10;
 
 function initCategories() {
-  // Extract unique categories dynamically, checking both capitalized and lowercase keys
-  const dynamicCategories = [...new Set(allBusinesses.map(biz => biz.Category || biz.category || '').filter(Boolean))];
-  
-  // Sort them alphabetically
-  dynamicCategories.sort();
-
-  // Combine 'all' with the dynamic Airtable categories
-  categories = ['all', ...dynamicCategories];
-
   const filterContainer = document.getElementById('filterContainer');
   if (!filterContainer) return;
 
   const searchBtn = document.getElementById('searchToggleBtn');
-  
+
+  // If allBusinesses is still empty, keep or show category skeleton placeholders
+  if (!allBusinesses || allBusinesses.length === 0) {
+    return; // Leaves the initial HTML skeletons visible while waiting for fetch
+  }
+
+  // Extract unique categories dynamically, checking both capitalized and lowercase keys
+  const dynamicCategories = [...new Set(allBusinesses.map(biz => biz.Category || biz.category || '').filter(Boolean))];
+  dynamicCategories.sort();
+
+  categories = ['all', ...dynamicCategories];
+
   // Clear existing buttons except search pill
   filterContainer.innerHTML = '';
   if (searchBtn) filterContainer.appendChild(searchBtn);
@@ -271,7 +273,23 @@ function initCategories() {
 }
 
 async function loadBusinesses() {
-  // ... fetch code loading skeletons ...
+  initCategories();
+
+  // 1. Render Card Skeletons immediately
+  const gridContainer = document.getElementById('businessGrid');
+  if (gridContainer) {
+    gridContainer.innerHTML = Array(6).fill(`
+      <div class="grid-card skeleton-card">
+        <div class="skeleton-img"></div>
+        <div class="grid-card-body">
+          <div class="skeleton-line title"></div>
+          <div class="skeleton-line sub"></div>
+          <div class="skeleton-line badge"></div>
+          <div class="skeleton-line btn"></div>
+        </div>
+      </div>
+    `).join('');
+  }
 
   try {
     const response = await fetch('/api/businesses?t=' + Date.now());
@@ -287,10 +305,10 @@ async function loadBusinesses() {
       return (a.Name || '').localeCompare(b.Name || '');
     });
 
-    // 1. Build categories dynamically from Airtable data first
+    // 2. Build categories dynamically once data is loaded (this removes the category skeletons)
     initCategories();
 
-    // 2. Setup search, render viewports, and swipe gestures
+    // 3. Setup search, render viewports, and swipe gestures
     setupSearchPill();
     renderCurrentCategoryView();
     initSwipeGestures();
