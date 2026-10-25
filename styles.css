@@ -754,8 +754,8 @@ dialog::backdrop {
 .search-pill:hover,
 .search-pill.active {
   border-color: var(--primary-color);
-  color: var(--primary-color);
-  background-color: rgba(15, 56, 44, 0.05);
+  color: var(--text-muted); /* Keeps the icon color unchanged */
+  background-color: var(--card-bg); /* Prevents background color change on click */
 }
 
 /* Expanding Inline Search Box Container */
