@@ -221,32 +221,58 @@ function displayHadith(hadith) {
 
 // 4. Dynamic Category Swipe Engine & Business Loader
 let allBusinesses = [];
-let categories = [];
+let categories = ['all']; // Always start with 'all'
 let currentCategoryIndex = 0;
 let visibleLimit = 10;
 
 function initCategories() {
-  const filterBtns = document.querySelectorAll('#filterContainer .filter-btn:not(.search-pill)');
-  categories = Array.from(filterBtns).map(btn => btn.getAttribute('data-cat'));
+  // Extract unique categories dynamically from fetched Airtable records
+  const dynamicCategories = [...new Set(allBusinesses.map(biz => biz.Category).filter(Boolean))];
+  
+  // Sort them alphabetically if desired, or keep them as they appear
+  dynamicCategories.sort();
+
+  // Combine 'all' with the dynamic Airtable categories
+  categories = ['all', ...dynamicCategories];
+
+  const filterContainer = document.getElementById('filterContainer');
+  if (!filterContainer) return;
+
+  // Preserve the search toggle button and the 'All Deals' button
+  const searchBtn = document.getElementById('searchToggleBtn');
+  
+  // Clear existing buttons except search pill and 'all'
+  filterContainer.innerHTML = '';
+  if (searchBtn) filterContainer.appendChild(searchBtn);
+
+  const allBtn = document.createElement('button');
+  allBtn.className = `filter-btn ${currentCategoryIndex === 0 ? 'active' : ''}`;
+  allBtn.setAttribute('data-cat', 'all');
+  allBtn.textContent = 'All Deals';
+  allBtn.addEventListener('click', () => switchCategory(0));
+  filterContainer.appendChild(allBtn);
+
+  // Re-inject the search input wrapper if it was already created
+  setupSearchPill();
+
+  // Create buttons for each dynamic category from Airtable
+  dynamicCategories.forEach((cat, index) => {
+    const catIndex = index + 1; // offset by 1 because 'all' is index 0
+    const btn = document.createElement('button');
+    btn.className = `filter-btn ${currentCategoryIndex === catIndex ? 'active' : ''}`;
+    btn.setAttribute('data-cat', cat);
+    btn.textContent = cat;
+    
+    btn.addEventListener('click', () => {
+      switchCategory(catIndex);
+    });
+    
+    filterContainer.appendChild(btn);
+  });
 }
 
 async function loadBusinesses() {
-  initCategories();
-
-  const gridContainer = document.getElementById('businessGrid');
-  if (gridContainer) {
-    gridContainer.innerHTML = Array(6).fill(`
-      <div class="grid-card skeleton-card">
-        <div class="skeleton-img"></div>
-        <div class="grid-card-body">
-          <div class="skeleton-line title"></div>
-          <div class="skeleton-line sub"></div>
-          <div class="skeleton-line badge"></div>
-          <div class="skeleton-line btn"></div>
-        </div>
-      </div>
-    `).join('');
-  }
+  // ... fetch code loading skeletons ...
 
   try {
     const response = await fetch('/api/businesses?t=' + Date.now());
@@ -262,9 +288,12 @@ async function loadBusinesses() {
       return (a.Name || '').localeCompare(b.Name || '');
     });
 
+    // 1. Build categories dynamically from Airtable data first
+    initCategories();
+
+    // 2. Setup search, render viewports, and swipe gestures
     setupSearchPill();
     renderCurrentCategoryView();
-    setupCategoryFilters();
     initSwipeGestures();
 
   } catch (error) {
