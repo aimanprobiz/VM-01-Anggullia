@@ -328,12 +328,10 @@ function setupSearchModal() {
     if (modalSearchInput) modalSearchInput.value = '';
     if (categoriesSection) categoriesSection.style.display = 'block';
     
-    // Use .show() instead of .showModal() to keep it at the bottom without centering or blurring
+    // Open modal as a non-modal bottom sheet without backdrop blur
     searchModal.show();
     
-    setTimeout(() => {
-      if (modalSearchInput) modalSearchInput.focus();
-    }, 100);
+    // NOTE: Automatic focus removed so the keypad stays down until tapped
   });
 
   if (closeSearchModalBtn) {
