@@ -277,7 +277,6 @@ function initSearchModalCategories() {
     const btn = document.createElement('button');
     const displayName = cat === 'all' ? 'All Deals' : cat;
 
-    // Apply standard action-btn class to match "View Details" exactly
     btn.className = 'action-btn modal-cat-card';
     btn.style.cssText = `
       padding: 18px 10px;
@@ -295,7 +294,10 @@ function initSearchModalCategories() {
 
     btn.addEventListener('click', () => {
       switchCategory(index);
-      if (searchModal) searchModal.close();
+      if (searchModal) {
+        searchModal.close();
+        document.body.style.overflow = ''; // Restore background scroll
+      }
       if (modalSearchInput) modalSearchInput.value = '';
       if (categoriesSection) categoriesSection.style.display = 'block';
     });
@@ -313,16 +315,26 @@ function setupSearchModal() {
 
   if (!searchBtn || !searchModal) return;
 
-  searchBtn.addEventListener('click', () => {
+  function openSearchModal() {
     if (modalSearchInput) modalSearchInput.value = '';
     if (categoriesSection) categoriesSection.style.display = 'block';
     
-    // Open modal as a non-modal bottom sheet without backdrop blur
+    // Lock main page scrolling
+    document.body.style.overflow = 'hidden';
+    
     searchModal.show();
-  });
+  }
+
+  function closeSearchModal() {
+    searchModal.close();
+    // Unlock main page scrolling
+    document.body.style.overflow = '';
+  }
+
+  searchBtn.addEventListener('click', openSearchModal);
 
   if (closeSearchModalBtn) {
-    closeSearchModalBtn.addEventListener('click', () => searchModal.close());
+    closeSearchModalBtn.addEventListener('click', closeSearchModal);
   }
 
   // Close when clicking outside modal dialog box
@@ -334,7 +346,7 @@ function setupSearchModal() {
       event.clientY < rect.top ||
       event.clientY > rect.bottom
     ) {
-      searchModal.close();
+      closeSearchModal();
     }
   });
 
@@ -342,7 +354,6 @@ function setupSearchModal() {
     modalSearchInput.addEventListener('input', () => {
       const query = modalSearchInput.value.trim();
 
-      // Automatically hide categories when user begins typing to save screen space
       if (categoriesSection) {
         categoriesSection.style.display = query !== '' ? 'none' : 'block';
       }
@@ -362,7 +373,7 @@ function setupSearchModal() {
       if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat, query)}</div>`;
     });
 
-    // Dismiss soft keyboard when user presses "Enter" / "Search"
+    // Dismiss soft keyboard on Enter / Go
     modalSearchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         modalSearchInput.blur();
