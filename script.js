@@ -323,8 +323,6 @@ function setupSearchModal() {
     
     // Open modal as a non-modal bottom sheet without backdrop blur
     searchModal.show();
-    
-    // NOTE: Automatic focus removed so the keypad stays down until tapped
   });
 
   if (closeSearchModalBtn) {
@@ -366,6 +364,13 @@ function setupSearchModal() {
       if (prevPage) prevPage.innerHTML = `<div class="business-grid">${renderGridForCategory(prevCat, query)}</div>`;
       if (activePage) activePage.innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat, query)}</div>`;
       if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat, query)}</div>`;
+    });
+
+    // Dismiss soft keyboard when user presses "Enter" / "Search"
+    modalSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        modalSearchInput.blur();
+      }
     });
   }
 }
