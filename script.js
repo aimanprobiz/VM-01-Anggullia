@@ -327,7 +327,10 @@ function setupSearchModal() {
   searchBtn.addEventListener('click', () => {
     if (modalSearchInput) modalSearchInput.value = '';
     if (categoriesSection) categoriesSection.style.display = 'block';
-    searchModal.showModal();
+    
+    // Use .show() instead of .showModal() to keep it at the bottom without centering or blurring
+    searchModal.show();
+    
     setTimeout(() => {
       if (modalSearchInput) modalSearchInput.focus();
     }, 100);
