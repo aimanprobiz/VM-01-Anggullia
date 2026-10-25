@@ -276,17 +276,16 @@ function initSearchModalCategories() {
   categories.forEach((cat, index) => {
     const btn = document.createElement('div');
     const displayName = cat === 'all' ? 'All Deals' : cat;
-    const isActive = currentCategoryIndex === index;
 
-    btn.className = `modal-cat-card ${isActive ? 'active' : ''}`;
+    btn.className = 'modal-cat-card';
     btn.style.cssText = `
-      padding: 10px 12px;
-      background: ${isActive ? 'var(--accent-gold-bg)' : 'var(--card-bg)'};
+      padding: 24px 12px;
+      background: transparent;
       border: 1.5px solid var(--accent-gold);
       border-radius: var(--radius-sm);
       text-align: center;
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 600;
       color: var(--text-main);
       display: flex;
@@ -296,7 +295,7 @@ function initSearchModalCategories() {
       transition: all 0.2s ease;
     `;
     
-    btn.innerHTML = `<span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;">${displayName}</span>`;
+    btn.innerHTML = `<span style="white-space: normal; word-break: break-word; text-align: center;">${displayName}</span>`;
 
     btn.addEventListener('click', () => {
       switchCategory(index);
