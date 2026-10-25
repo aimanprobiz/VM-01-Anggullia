@@ -276,31 +276,31 @@ function initSearchModalCategories() {
   categories.forEach((cat, index) => {
     const btn = document.createElement('div');
     const displayName = cat === 'all' ? 'All Deals' : cat;
-    btn.className = `modal-cat-card ${currentCategoryIndex === index ? 'active' : ''}`;
+    const isActive = currentCategoryIndex === index;
+
+    btn.className = `modal-cat-card ${isActive ? 'active' : ''}`;
     btn.style.cssText = `
-      padding: 12px 8px;
+      padding: 8px 10px;
       background: var(--card-bg);
-      border: 1.5px solid ${currentCategoryIndex === index ? 'var(--primary-color)' : 'var(--border-color)'};
+      border: 1.5px solid ${isActive ? 'var(--primary-color)' : 'var(--border-color)'};
       border-radius: var(--radius-sm);
-      text-align: center;
+      text-align: left;
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--text-main);
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
+      gap: 8px;
+      box-sizing: border-box;
       transition: all 0.2s ease;
     `;
     
-    // Simple icon representation for category cards
     btn.innerHTML = `
-      <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--accent-gold-bg); display: flex; align-items: center; justify-content: center; color: var(--primary-color);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <div style="width: 22px; height: 22px; border-radius: 50%; background: var(--accent-gold-bg); display: flex; align-items: center; justify-content: center; color: var(--primary-color); flex-shrink: 0;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
       </div>
-      <span>${displayName}</span>
+      <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${displayName}</span>
     `;
 
     btn.addEventListener('click', () => {
