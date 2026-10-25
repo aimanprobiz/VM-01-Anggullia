@@ -305,30 +305,50 @@ function initSearchModalCategories() {
     grid.appendChild(btn);
   });
 }
-// Setup Search Modal Trigger & Input Filtering
+// Setup Search Modal Trigger, Auto-Scroll, Backdrop Closing & Keyboard Filtering
 function setupSearchModal() {
   const searchBtn = document.getElementById('searchToggleBtn');
   const searchModal = document.getElementById('searchModal');
   const closeSearchModalBtn = document.getElementById('closeSearchModalBtn');
   const modalSearchInput = document.getElementById('modalSearchInput');
   const categoriesSection = document.getElementById('modalCategoriesSection');
+  const businessSection = document.querySelector('.business-section');
 
   if (!searchBtn || !searchModal) return;
 
   function openSearchModal() {
+    // 1. Scroll main view directly to the "Support Local Muslim Businesses" section
+    if (businessSection) {
+      businessSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     if (modalSearchInput) modalSearchInput.value = '';
     if (categoriesSection) categoriesSection.style.display = 'block';
     
-    // Lock main page scrolling
+    // Lock main page scrolling while modal is open
     document.body.style.overflow = 'hidden';
     
     searchModal.show();
+
+    // Attach click-outside listener after a short delay to avoid immediate trigger
+    setTimeout(() => {
+      window.addEventListener('click', handleOutsideClick);
+    }, 50);
   }
 
   function closeSearchModal() {
     searchModal.close();
-    // Unlock main page scrolling
-    document.body.style.overflow = '';
+    document.body.style.overflow = ''; // Restore main page scrolling
+    window.removeEventListener('click', handleOutsideClick);
+  }
+
+  // Handle click outside modal container
+  function handleOutsideClick(event) {
+    if (!searchModal.open) return;
+    const isClickInside = searchModal.contains(event.target) || searchBtn.contains(event.target);
+    if (!isClickInside) {
+      closeSearchModal();
+    }
   }
 
   searchBtn.addEventListener('click', openSearchModal);
@@ -336,19 +356,6 @@ function setupSearchModal() {
   if (closeSearchModalBtn) {
     closeSearchModalBtn.addEventListener('click', closeSearchModal);
   }
-
-  // Close when clicking outside modal dialog box
-  searchModal.addEventListener('click', (event) => {
-    const rect = searchModal.getBoundingClientRect();
-    if (
-      event.clientX < rect.left ||
-      event.clientX > rect.right ||
-      event.clientY < rect.top ||
-      event.clientY > rect.bottom
-    ) {
-      closeSearchModal();
-    }
-  });
 
   if (modalSearchInput) {
     modalSearchInput.addEventListener('input', () => {
@@ -373,7 +380,7 @@ function setupSearchModal() {
       if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat, query)}</div>`;
     });
 
-    // Dismiss soft keyboard on Enter / Go
+    // Dismiss soft keyboard when user presses "Enter" / "Search"
     modalSearchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         modalSearchInput.blur();
