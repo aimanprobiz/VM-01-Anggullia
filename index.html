@@ -63,11 +63,15 @@
     </div>
   </dialog>
 
-<!-- Search & Categories Modal (Bottom Sheet, No Backdrop Blur) -->
-  <dialog id="searchModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: 20px 20px 0 0; padding: 20px; width: 100%; max-width: 480px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); margin: 0; max-height: 80vh; overflow-y: auto;">
+<!-- Search & Categories Bottom Sheet -->
+  <dialog id="searchModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: 20px 20px 0 0; padding: 20px; width: 100%; max-width: 480px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); margin: 0; max-height: 80vh; overflow-y: auto; z-index: 9999;">
     <style>
+      #searchModal {
+        top: auto !important;
+      }
       #searchModal::backdrop {
-        background: transparent;
+        background: transparent !important;
+        backdrop-filter: none !important;
       }
     </style>
     <div style="display: flex; flex-direction: column; gap: 14px;">
