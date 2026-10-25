@@ -218,70 +218,33 @@ body {
   flex-direction: column;
 }
 
-/* Highly Transparent Frosted Glass Category Bar */
+/* Balanced Sheer Glass Category Bar */
 .filter-stacked {
   position: sticky;
   top: 0;
   z-index: 10;
   
-  /* Increased transparency from 0.85/0.35 down to 0.12 */
-  background-color: rgba(245, 242, 233, 0.12); 
-  
-  /* Reduced blur from 6px/3px down to 1.5px for maximum clarity */
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
+  background-color: rgba(245, 242, 233, 0.35); 
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   
   display: flex;
-  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   gap: 8px;
   margin-bottom: 18px;
   padding: 10px 16px;
   
-  margin-left: -16px;
-  margin-right: -16px;
-  border-bottom: 1px solid rgba(226, 219, 201, 0.15);
-}
-/* Fixed Search Pill pinned to the absolute left */
-.search-pill {
-  position: sticky;
-  left: 0;
-  z-index: 5;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  cursor: pointer;
-  background-color: var(--card-bg);
-  border: 1.5px solid var(--border-color);
-  border-radius: 50%;
-  color: var(--text-muted);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.search-pill:hover,
-.search-pill.active {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-  background-color: rgba(15, 56, 44, 0.05);
-}
-
-/* Scrollable container for the remaining category buttons */
-.scrollable-pills-track {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  width: 100%;
-  padding-left: 2px;
+  
+  margin-left: -16px;
+  margin-right: -16px;
+  
+  border-bottom: 1px solid rgba(226, 219, 201, 0.3);
 }
 
-.scrollable-pills-track::-webkit-scrollbar {
+.filter-stacked::-webkit-scrollbar {
   display: none;
 }
 
@@ -297,8 +260,7 @@ body {
   font-weight: 500;
   color: var(--text-muted);
   cursor: pointer;
-  box-shadow: none; /* Removed default subtle shadow */
-  outline: none;    /* Removes default browser focus rectangle */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -312,16 +274,9 @@ body {
   border-color: var(--primary-color);
   color: #ffffff;
   font-weight: 600;
-  box-shadow: none; /* Removed glow shadow that caused the faint rectangle */
-  outline: none;
+  box-shadow: 0 3px 8px rgba(15, 56, 44, 0.2);
 }
 
-/* Ensure tap highlights stay rounded on iOS/Android WebKit */
-.filter-btn:focus,
-.filter-btn:active {
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-}
 /* 2-Column Visual Grid */
 .business-grid {
   display: grid;
@@ -461,6 +416,7 @@ body {
 }
 
 .grid-card.featured-card {
+  /* Increased border width from 1px to 2.5px and used full gold accent opacity */
   border: 1.5px solid var(--accent-gold, #ddba58);
   background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
   box-shadow: 0 4px 14px rgba(221, 186, 88, 0.35);
@@ -679,6 +635,7 @@ dialog::backdrop {
   animation: ctaPulseGlow 2.8s ease-in-out forwards !important;
 }
 
+/* Subtle gold border for offer/deal badges inside Featured Cards only */
 .featured-card .deal-badge {
   border: 1px solid var(--accent-gold, #ddba58);
   box-shadow: 0 1px 3px rgba(221, 186, 88, 0.15);
@@ -747,13 +704,11 @@ dialog::backdrop {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  padding: 0;
+  padding: 7px 10px;
   cursor: pointer;
   background-color: var(--card-bg);
   border: 1.5px solid var(--border-color);
-  border-radius: 50%; /* Makes it a clean circle matching the icon proportions */
+  border-radius: 20px;
   color: var(--text-muted);
   transition: all 0.2s ease;
   flex-shrink: 0;
