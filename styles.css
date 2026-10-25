@@ -255,13 +255,13 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 32px; /* Matches category pill height perfectly */
+  width: 40px;          /* Increased from 36px */
+  height: 36px;         /* Increased from 32px to fit larger icon */
   padding: 0;
   cursor: pointer;
   background-color: var(--card-bg);
   border: 1.5px solid var(--border-color);
-  border-radius: 20px; /* Matches category pill corner radius */
+  border-radius: 20px;
   color: var(--text-muted);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   transition: all 0.2s ease;
