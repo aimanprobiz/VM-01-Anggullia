@@ -18,7 +18,7 @@
   --radius-sm: 8px;
 }
 
-/* Fixed universal selector */
+/* Universal selector reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -218,22 +218,17 @@ body {
   flex-direction: column;
 }
 
-/* Highly Transparent Frosted Glass Category Bar */
+/* Container adjustments for the sticky header */
 .filter-stacked {
   position: sticky;
   top: 0;
   z-index: 10;
-  
-  /* Increased transparency from 0.85/0.35 down to 0.12 */
   background-color: rgba(245, 242, 233, 0.12); 
-  
-  /* Reduced blur from 6px/3px down to 1.5px for maximum clarity */
   backdrop-filter: blur(1.5px);
   -webkit-backdrop-filter: blur(1.5px);
   
   display: flex;
   align-items: center;
-  gap: 8px;
   margin-bottom: 18px;
   padding: 10px 16px;
   
@@ -241,23 +236,34 @@ body {
   margin-right: -16px;
   border-bottom: 1px solid rgba(226, 219, 201, 0.15);
 }
-/* Fixed Search Pill pinned to the absolute left */
-.search-pill {
+
+/* Pinned Search Pill Wrapper with Frosted Gradient Mask to prevent text bleed */
+.fixed-search-pill-wrapper {
   position: sticky;
   left: 0;
   z-index: 5;
+  background: linear-gradient(90deg, rgba(245, 242, 233, 0.95) 75%, rgba(245, 242, 233, 0) 100%);
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+  padding-left: 16px;
+  margin-left: -16px;
+}
+
+/* Clean Search Pill matching category pill height & border style */
+.search-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 36px;
-  height: 36px;
+  height: 32px; /* Matches category pill height perfectly */
   padding: 0;
   cursor: pointer;
   background-color: var(--card-bg);
   border: 1.5px solid var(--border-color);
-  border-radius: 50%;
+  border-radius: 20px; /* Matches category pill corner radius */
   color: var(--text-muted);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   transition: all 0.2s ease;
   flex-shrink: 0;
 }
@@ -265,11 +271,42 @@ body {
 .search-pill:hover,
 .search-pill.active {
   border-color: var(--primary-color);
-  color: var(--primary-color);
-  background-color: rgba(15, 56, 44, 0.05);
+  color: var(--text-muted);
+  background-color: var(--card-bg);
 }
 
-/* Scrollable container for the remaining category buttons */
+/* Expanding Inline Search Box Container */
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.search-input-wrapper.open {
+  max-width: 200px;
+  opacity: 1;
+}
+
+/* Clear text box styling so text is fully visible */
+.search-input-field {
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  border: 1.5px solid var(--primary-color);
+  border-radius: 20px;
+  background: var(--card-bg);
+  color: var(--text-main);
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Scrollable container for category buttons */
 .scrollable-pills-track {
   display: flex;
   align-items: center;
@@ -278,7 +315,6 @@ body {
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   width: 100%;
-  padding-left: 2px;
 }
 
 .scrollable-pills-track::-webkit-scrollbar {
@@ -732,59 +768,4 @@ dialog::backdrop {
 /* Smooth snapping animation class */
 .category-swipe-track.animating {
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Minimalist Search Pill Styling */
-.search-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  cursor: pointer;
-  background-color: var(--card-bg);
-  border: 1.5px solid var(--border-color);
-  border-radius: 50%; /* Makes it a clean circle matching the icon proportions */
-  color: var(--text-muted);
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.search-pill:hover,
-.search-pill.active {
-  border-color: var(--primary-color);
-  color: var(--text-muted); /* Keeps the icon color unchanged */
-  background-color: var(--card-bg); /* Prevents background color change on click */
-}
-
-/* Expanding Inline Search Box Container */
-.search-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.search-input-wrapper.open {
-  max-width: 200px;
-  opacity: 1;
-}
-
-/* Clear text box styling so text is fully visible */
-.search-input-field {
-  width: 100%;
-  padding: 6px 12px;
-  font-size: 0.78rem;
-  border: 1.5px solid var(--primary-color);
-  border-radius: 20px;
-  background: var(--card-bg);
-  color: var(--text-main);
-  outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
