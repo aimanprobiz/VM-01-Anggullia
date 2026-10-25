@@ -325,7 +325,7 @@ function setupSearchModal() {
     if (modalSearchInput) modalSearchInput.value = '';
     if (categoriesSection) categoriesSection.style.display = 'block';
     
-    // Lock main page scrolling while modal is open
+    // Lock main page scrolling while modal initially opens
     document.body.style.overflow = 'hidden';
     
     searchModal.show();
@@ -380,10 +380,11 @@ function setupSearchModal() {
       if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat, query)}</div>`;
     });
 
-    // Dismiss soft keyboard when user presses "Enter" / "Search"
+    // Dismiss soft keyboard & restore scrolling when user presses "Enter" / "Search"
     modalSearchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         modalSearchInput.blur();
+        document.body.style.overflow = ''; // Allow users to scroll the main page results freely!
       }
     });
   }
