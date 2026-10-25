@@ -64,7 +64,7 @@
   </dialog>
 
 <!-- Search & Categories Bottom Sheet -->
-  <dialog id="searchModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: 20px 20px 0 0; padding: 20px; width: 100%; max-width: 480px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); margin: 0; max-height: 80vh; overflow-y: auto; z-index: 9999;">
+  <dialog id="searchModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: 20px 20px 0 0; padding: 16px 16px 20px 16px; width: 100%; max-width: 480px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); margin: 0; max-height: 85dvh; overflow-y: auto; z-index: 9999; box-sizing: border-box;">
     <style>
       #searchModal {
         top: auto !important;
@@ -74,24 +74,25 @@
         backdrop-filter: none !important;
       }
     </style>
-    <div style="display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; flex-direction: column; gap: 10px;">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--primary-color); margin: 0;">Search & Categories</h3>
-        <button id="closeSearchModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 4px 8px;">&times;</button>
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary-color); margin: 0;">Search & Categories</h3>
+        <button id="closeSearchModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 2px 6px;">&times;</button>
       </div>
 
-      <!-- Search Bar -->
+      <!-- Compact Search Bar -->
       <div style="position: relative;">
-        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted);">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); display: flex;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </span>
-        <input type="text" id="modalSearchInput" placeholder="Search businesses, deals..." style="width: 100%; padding: 10px 12px 10px 38px; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text-main); font-size: 0.9rem; outline: none; box-sizing: border-box;">
+        <input type="text" id="modalSearchInput" placeholder="Search businesses, deals..." style="width: 100%; padding: 8px 12px 8px 36px; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); background: var(--card-bg); color: var(--text-main); font-size: 0.85rem; outline: none; box-sizing: border-box;">
       </div>
 
       <!-- Categories Section (Hides when typing) -->
-      <div id="modalCategoriesSection">
-        <p style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase;">Explore Categories</p>
-        <div id="modalCategoriesGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-height: 220px; overflow-y: auto; padding-bottom: 4px;">
+      <div id="modalCategoriesSection" style="margin-top: 2px;">
+        <p style="font-size: 0.68rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase;">Explore Categories</p>
+        <!-- 2-Column Grid for optimal mobile height -->
+        <div id="modalCategoriesGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-height: 50vh; overflow-y: auto; padding-bottom: 4px;">
           <!-- Dynamically populated category cards -->
         </div>
       </div>
