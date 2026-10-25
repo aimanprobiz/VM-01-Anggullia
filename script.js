@@ -228,13 +228,16 @@ function initCategories() {
 
   const searchBtn = document.getElementById('searchToggleBtn');
 
+  // If data hasn't loaded yet, do nothing (leave HTML shimmers visible)
   if (!allBusinesses || allBusinesses.length === 0) return;
 
+  // Extract unique categories dynamically
   const dynamicCategories = [...new Set(allBusinesses.map(biz => biz.Category || biz.category || '').filter(Boolean))];
   dynamicCategories.sort();
 
   categories = ['all', ...dynamicCategories];
 
+  // Clear container, re-add search pill and "All Deals" button (this automatically wipes out the HTML skeletons)
   filterContainer.innerHTML = '';
   if (searchBtn) filterContainer.appendChild(searchBtn);
 
@@ -247,8 +250,9 @@ function initCategories() {
 
   setupSearchPill();
 
+  // Inject live Airtable categories
   dynamicCategories.forEach((cat, index) => {
-    const catIndex = index + 1;
+    const catIndex = index + 1; 
     const btn = document.createElement('button');
     btn.className = `filter-btn ${currentCategoryIndex === catIndex ? 'active' : ''}`;
     btn.setAttribute('data-cat', cat);
