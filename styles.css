@@ -297,7 +297,8 @@ body {
   font-weight: 500;
   color: var(--text-muted);
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: none; /* Removed default subtle shadow */
+  outline: none;    /* Removes default browser focus rectangle */
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -311,9 +312,16 @@ body {
   border-color: var(--primary-color);
   color: #ffffff;
   font-weight: 600;
-  box-shadow: 0 3px 8px rgba(15, 56, 44, 0.2);
+  box-shadow: none; /* Removed glow shadow that caused the faint rectangle */
+  outline: none;
 }
 
+/* Ensure tap highlights stay rounded on iOS/Android WebKit */
+.filter-btn:focus,
+.filter-btn:active {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
 /* 2-Column Visual Grid */
 .business-grid {
   display: grid;
