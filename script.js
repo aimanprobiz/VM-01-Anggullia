@@ -228,16 +228,14 @@ function initCategories() {
 
   const searchBtn = document.getElementById('searchToggleBtn');
 
-  // If data hasn't loaded yet, do nothing (leave HTML shimmers visible)
   if (!allBusinesses || allBusinesses.length === 0) return;
 
-  // Extract unique categories dynamically
   const dynamicCategories = [...new Set(allBusinesses.map(biz => biz.Category || biz.category || '').filter(Boolean))];
   dynamicCategories.sort();
 
   categories = ['all', ...dynamicCategories];
 
-  // Clear container, re-add search pill and "All Deals" button (this automatically wipes out the HTML skeletons)
+  // Clear container and rebuild horizontal category pills
   filterContainer.innerHTML = '';
   if (searchBtn) filterContainer.appendChild(searchBtn);
 
@@ -248,9 +246,6 @@ function initCategories() {
   allBtn.addEventListener('click', () => switchCategory(0));
   filterContainer.appendChild(allBtn);
 
-  setupSearchPill();
-
-  // Inject live Airtable categories
   dynamicCategories.forEach((cat, index) => {
     const catIndex = index + 1; 
     const btn = document.createElement('button');
@@ -264,6 +259,121 @@ function initCategories() {
     
     filterContainer.appendChild(btn);
   });
+
+  // Populate Categories Grid inside Search Modal
+  initSearchModalCategories();
+}
+
+function initSearchModalCategories() {
+  const grid = document.getElementById('modalCategoriesGrid');
+  const searchModal = document.getElementById('searchModal');
+  const modalSearchInput = document.getElementById('modalSearchInput');
+  const categoriesSection = document.getElementById('modalCategoriesSection');
+
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  categories.forEach((cat, index) => {
+    const btn = document.createElement('div');
+    const displayName = cat === 'all' ? 'All Deals' : cat;
+    btn.className = `modal-cat-card ${currentCategoryIndex === index ? 'active' : ''}`;
+    btn.style.cssText = `
+      padding: 12px 8px;
+      background: var(--card-bg);
+      border: 1.5px solid ${currentCategoryIndex === index ? 'var(--primary-color)' : 'var(--border-color)'};
+      border-radius: var(--radius-sm);
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    `;
+    
+    // Simple icon representation for category cards
+    btn.innerHTML = `
+      <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--accent-gold-bg); display: flex; align-items: center; justify-content: center; color: var(--primary-color);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      </div>
+      <span>${displayName}</span>
+    `;
+
+    btn.addEventListener('click', () => {
+      switchCategory(index);
+      if (searchModal) searchModal.close();
+      if (modalSearchInput) modalSearchInput.value = '';
+      if (categoriesSection) categoriesSection.style.display = 'block';
+    });
+
+    grid.appendChild(btn);
+  });
+}
+
+// Setup Search Modal Trigger & Input Filtering
+function setupSearchModal() {
+  const searchBtn = document.getElementById('searchToggleBtn');
+  const searchModal = document.getElementById('searchModal');
+  const closeSearchModalBtn = document.getElementById('closeSearchModalBtn');
+  const modalSearchInput = document.getElementById('modalSearchInput');
+  const categoriesSection = document.getElementById('modalCategoriesSection');
+
+  if (!searchBtn || !searchModal) return;
+
+  searchBtn.addEventListener('click', () => {
+    if (modalSearchInput) modalSearchInput.value = '';
+    if (categoriesSection) categoriesSection.style.display = 'block';
+    searchModal.showModal();
+    setTimeout(() => {
+      if (modalSearchInput) modalSearchInput.focus();
+    }, 100);
+  });
+
+  if (closeSearchModalBtn) {
+    closeSearchModalBtn.addEventListener('click', () => searchModal.close());
+  }
+
+  // Close when clicking outside modal dialog box
+  searchModal.addEventListener('click', (event) => {
+    const rect = searchModal.getBoundingClientRect();
+    if (
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom
+    ) {
+      searchModal.close();
+    }
+  });
+
+  if (modalSearchInput) {
+    modalSearchInput.addEventListener('input', () => {
+      const query = modalSearchInput.value.trim();
+
+      // Automatically hide categories when user begins typing to save screen space
+      if (categoriesSection) {
+        categoriesSection.style.display = query !== '' ? 'none' : 'block';
+      }
+
+      visibleLimit = 10;
+      
+      const activeCat = categories[currentCategoryIndex];
+      const prevCat = categories[(currentCategoryIndex - 1 + categories.length) % categories.length];
+      const nextCat = categories[(currentCategoryIndex + 1) % categories.length];
+
+      const prevPage = document.getElementById('prevCategoryPage');
+      const activePage = document.getElementById('activeCategoryPage');
+      const nextPage = document.getElementById('nextCategoryPage');
+
+      if (prevPage) prevPage.innerHTML = `<div class="business-grid">${renderGridForCategory(prevCat, query)}</div>`;
+      if (activePage) activePage.innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat, query)}</div>`;
+      if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat, query)}</div>`;
+    });
+  }
 }
 
 async function loadBusinesses() {
@@ -297,7 +407,7 @@ async function loadBusinesses() {
     });
 
     initCategories();
-    setupSearchPill();
+    setupSearchModal();
     renderCurrentCategoryView();
     initSwipeGestures();
 
@@ -306,9 +416,8 @@ async function loadBusinesses() {
   }
 }
 
-function renderGridForCategory(catName) {
-  const searchInput = document.getElementById('searchInput');
-  const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+function renderGridForCategory(catName, searchQuery = '') {
+  const query = searchQuery.trim().toLowerCase();
 
   let targetDataset = [];
 
@@ -370,66 +479,11 @@ function renderGridForCategory(catName) {
   }).join('');
 }
 
-function setupSearchPill() {
-  const searchBtn = document.getElementById('searchToggleBtn');
-  const filterContainer = document.getElementById('filterContainer');
-  if (!searchBtn || !filterContainer || document.getElementById('searchInput')) return;
-
-  const wrapper = document.createElement('div');
-  wrapper.className = 'search-input-wrapper';
-  wrapper.innerHTML = `
-    <input type="text" id="searchInput" class="search-input-field" placeholder="Search deals..." />
-  `;
-  searchBtn.after(wrapper);
-
-  const searchInput = wrapper.querySelector('#searchInput');
-
-  const scrollToFarLeft = () => {
-    filterContainer.scrollTo({ left: 0, behavior: 'smooth' });
-  };
-
-  searchBtn.addEventListener('click', () => {
-    const isOpen = wrapper.classList.contains('open');
-    if (isOpen) {
-      wrapper.classList.remove('open');
-      searchBtn.classList.remove('active');
-      searchInput.value = '';
-      visibleLimit = 10;
-      renderCurrentCategoryView();
-    } else {
-      wrapper.classList.add('open');
-      searchBtn.classList.add('active');
-      scrollToFarLeft();
-      setTimeout(() => {
-        searchInput.focus();
-        scrollToFarLeft();
-      }, 100);
-    }
-  });
-
-  searchInput.addEventListener('focus', () => {
-    scrollToFarLeft();
-  });
-
-  searchInput.addEventListener('input', () => {
-    visibleLimit = 10;
-    
-    const activeCat = categories[currentCategoryIndex];
-    const prevCat = categories[(currentCategoryIndex - 1 + categories.length) % categories.length];
-    const nextCat = categories[(currentCategoryIndex + 1) % categories.length];
-
-    const prevPage = document.getElementById('prevCategoryPage');
-    const activePage = document.getElementById('activeCategoryPage');
-    const nextPage = document.getElementById('nextCategoryPage');
-
-    if (prevPage) prevPage.innerHTML = `<div class="business-grid">${renderGridForCategory(prevCat)}</div>`;
-    if (activePage) activePage.innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat)}</div>`;
-    if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat)}</div>`;
-  });
-}
-
 function renderCurrentCategoryView() {
   if (categories.length === 0) return;
+
+  const modalSearchInput = document.getElementById('modalSearchInput');
+  const currentQuery = modalSearchInput ? modalSearchInput.value : '';
 
   const prevIndex = (currentCategoryIndex - 1 + categories.length) % categories.length;
   const nextIndex = (currentCategoryIndex + 1) % categories.length;
@@ -438,9 +492,9 @@ function renderCurrentCategoryView() {
   const prevCat = categories[prevIndex];
   const nextCat = categories[nextIndex];
 
-  document.getElementById('prevCategoryPage').innerHTML = `<div class="business-grid">${renderGridForCategory(prevCat)}</div>`;
-  document.getElementById('activeCategoryPage').innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat)}</div>`;
-  document.getElementById('nextCategoryPage').innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat)}</div>`;
+  document.getElementById('prevCategoryPage').innerHTML = `<div class="business-grid">${renderGridForCategory(prevCat, currentQuery)}</div>`;
+  document.getElementById('activeCategoryPage').innerHTML = `<div class="business-grid" id="businessGrid">${renderGridForCategory(activeCat, currentQuery)}</div>`;
+  document.getElementById('nextCategoryPage').innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat, currentQuery)}</div>`;
 
   const filterButtons = document.querySelectorAll('#filterContainer .filter-btn:not(.search-pill)');
   filterButtons.forEach((btn, idx) => {
@@ -450,6 +504,9 @@ function renderCurrentCategoryView() {
       btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
     }
   });
+
+  // Re-highlight active state in modal category grid if open
+  initSearchModalCategories();
 }
 
 function switchCategory(newIndex) {
@@ -555,9 +612,24 @@ window.addEventListener('scroll', () => {
 
   if (categories.length > 0) {
     const activeCat = categories[currentCategoryIndex];
-    const targetDataset = activeCat === 'all'
-      ? allBusinesses
-      : allBusinesses.filter(biz => (biz.Category || 'all') === activeCat);
+    const modalSearchInput = document.getElementById('modalSearchInput');
+    const query = modalSearchInput ? modalSearchInput.value.trim().toLowerCase() : '';
+
+    let targetDataset = [];
+    if (query !== '') {
+      targetDataset = allBusinesses.filter(biz => {
+        const name = (biz.Name || '').toLowerCase();
+        const sub = (biz.SubTitle || '').toLowerCase();
+        const cat = (biz.Category || '').toLowerCase();
+        const deal = (biz.Deal || biz.deal || '').toLowerCase();
+        const desc = (biz.Description || biz.description || '').toLowerCase();
+        return name.includes(query) || sub.includes(query) || cat.includes(query) || deal.includes(query) || desc.includes(query);
+      });
+    } else {
+      targetDataset = activeCat === 'all'
+        ? allBusinesses
+        : allBusinesses.filter(biz => (biz.Category || 'all').toLowerCase() === activeCat.toLowerCase());
+    }
 
     if (distanceToBottom < 350 && visibleLimit < targetDataset.length) {
       visibleLimit += 10;
