@@ -280,28 +280,23 @@ function initSearchModalCategories() {
 
     btn.className = `modal-cat-card ${isActive ? 'active' : ''}`;
     btn.style.cssText = `
-      padding: 8px 10px;
-      background: var(--card-bg);
-      border: 1.5px solid ${isActive ? 'var(--primary-color)' : 'var(--border-color)'};
+      padding: 10px 12px;
+      background: ${isActive ? 'var(--accent-gold-bg)' : 'var(--card-bg)'};
+      border: 1.5px solid var(--accent-gold);
       border-radius: var(--radius-sm);
-      text-align: left;
+      text-align: center;
       cursor: pointer;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--text-main);
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
       box-sizing: border-box;
       transition: all 0.2s ease;
     `;
     
-    btn.innerHTML = `
-      <div style="width: 22px; height: 22px; border-radius: 50%; background: var(--accent-gold-bg); display: flex; align-items: center; justify-content: center; color: var(--primary-color); flex-shrink: 0;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-      </div>
-      <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${displayName}</span>
-    `;
+    btn.innerHTML = `<span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;">${displayName}</span>`;
 
     btn.addEventListener('click', () => {
       switchCategory(index);
@@ -313,7 +308,6 @@ function initSearchModalCategories() {
     grid.appendChild(btn);
   });
 }
-
 // Setup Search Modal Trigger & Input Filtering
 function setupSearchModal() {
   const searchBtn = document.getElementById('searchToggleBtn');
