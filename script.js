@@ -279,15 +279,15 @@ function initSearchModalCategories() {
 
     btn.className = 'modal-cat-card';
     btn.style.cssText = `
-      padding: 24px 12px;
-      background: transparent;
+      padding: 22px 12px;
+      background: var(--accent-gold-bg);
       border: 1.5px solid var(--accent-gold);
       border-radius: var(--radius-sm);
       text-align: center;
       cursor: pointer;
       font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-main);
+      font-weight: 700;
+      color: var(--primary-color);
       display: flex;
       align-items: center;
       justify-content: center;
