@@ -24,7 +24,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields (Business Name, Category, or Owner Email).' });
   }
 
-  // Check all possible environment variable names to prevent 500 error
   const AIRTABLE_PAT = process.env.AIRTABLE_PAT || process.env.AIRTABLE_API_KEY; 
   const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || process.env.AIRTAB_BASE_ID || process.env.AIRTABLE_BASE; 
   const TABLE_NAME = 'Businesses';
@@ -34,7 +33,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Generate a clean slug and edit token safely
     const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     const editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
 
@@ -47,7 +45,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         fields: {
           Name: name.trim(),
-          SubTitle: subtitle ? subtitle.trim() : '',
+          Subtitle: subtitle ? subtitle.trim() : '',       // Exact match: Subtitle
           Category: category.trim(),
           Description: description ? description.trim() : '',
           Deal: deal ? deal.trim() : '',
@@ -57,7 +55,7 @@ export default async function handler(req, res) {
           WebsiteURL: websiteUrl ? websiteUrl.trim() : '',
           InstagramURL: instagramUrl ? instagramUrl.trim() : '',
           TikTokURL: tiktokUrl ? tiktokUrl.trim() : '',
-          ImageURL: imageUrl ? imageUrl.trim() : 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM',
+          ImageUrl: imageUrl ? imageUrl.trim() : 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM', // Exact match: ImageUrl
           OwnerEmail: ownerEmail.trim().toLowerCase(),
           Status: 'Pending',
           EditToken: editToken,
