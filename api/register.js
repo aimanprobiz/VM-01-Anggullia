@@ -24,18 +24,19 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields (Business Name, Category, or Owner Email).' });
   }
 
-  const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
+  // Check all possible environment variable names to prevent 500 error
+  const AIRTABLE_PAT = process.env.AIRTABLE_PAT || process.env.AIRTABLE_API_KEY; 
+  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || process.env.AIRTAB_BASE_ID || process.env.AIRTABLE_BASE; 
   const TABLE_NAME = 'Businesses';
 
   if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
-    return res.status(500).json({ error: 'Airtable credentials not configured on Vercel.' });
+    return res.status(500).json({ error: 'Airtable credentials not configured properly in Vercel' });
   }
 
   try {
-    // Generate a clean slug and a secure edit token for their dashboard
+    // Generate a clean slug and edit token safely
     const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const editToken = Math.random().toString(36.substring(2)) + Date.now().toString(36);
+    const editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
 
     const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
       method: 'POST',
@@ -58,7 +59,7 @@ export default async function handler(req, res) {
           TikTokURL: tiktokUrl ? tiktokUrl.trim() : '',
           ImageURL: imageUrl ? imageUrl.trim() : 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM',
           OwnerEmail: ownerEmail.trim().toLowerCase(),
-          Status: 'Pending', // Default to pending review
+          Status: 'Pending',
           EditToken: editToken,
           Slug: slug
         }
