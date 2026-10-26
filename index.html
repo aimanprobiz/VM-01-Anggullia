@@ -156,16 +156,28 @@
       </div>
     </section>
 
-    <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
+<!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
     <section class="business-section">
-      <h2 class="section-title">Support Local Muslim Businesses</h2>
+      <!-- Section Header with Title & Right-Aligned Magnifying Glass Search Button -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 class="section-title" style="margin: 0;">Support Local Muslim Businesses</h2>
+        <button id="headerSearchBtn" class="filter-btn search-pill" aria-label="Search Businesses" title="Search Businesses" style="padding: 6px 10px; border-radius: var(--radius-sm);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </div>
 
       <!-- Category Pills Container -->
       <div class="filter-stacked" id="filterContainer">
-        <button id="searchToggleBtn" class="filter-btn search-pill" aria-label="Search & Categories" title="Search & Categories">
+        <!-- Category Grid Icon Button -->
+        <button id="searchToggleBtn" class="filter-btn search-pill" aria-label="Explore Categories" title="Explore Categories">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
           </svg>
         </button>
         <button class="filter-btn active" data-cat="all">All Deals</button>
