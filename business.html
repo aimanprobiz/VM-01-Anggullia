@@ -227,6 +227,57 @@
         const el = document.getElementById(id);
         if (el) el[property] = value;
       };
+
+      // --- Report Modal & Reporting Logic ---
+      const reportModal = document.getElementById('reportModal');
+      const openReportModalBtn = document.getElementById('openReportModalBtn');
+      const closeReportModalBtn = document.getElementById('closeReportModalBtn');
+      const confirmAirtableReportBtn = document.getElementById('confirmAirtableReportBtn');
+      const reportWhatsappModalBtn = document.getElementById('reportWhatsappModalBtn');
+
+      const adminPhone = "6588469883"; // Your admin WhatsApp number
+      const refCode = `DB-${bizSlugVal.toUpperCase()}`;
+      const prefilledReportMsg = `Assalaamualaikum Admin, reporting inactive business: *${bizName}* (Ref: ${refCode}).`;
+
+      if (reportWhatsappModalBtn) {
+        reportWhatsappModalBtn.href = `https://wa.me/${adminPhone}?text=${encodeURIComponent(prefilledReportMsg)}`;
+      }
+
+      if (openReportModalBtn && reportModal) {
+        openReportModalBtn.addEventListener('click', () => {
+          reportModal.showModal();
+        });
+      }
+
+      if (closeReportModalBtn && reportModal) {
+        closeReportModalBtn.addEventListener('click', () => {
+          reportModal.close();
+        });
+      }
+
+      if (confirmAirtableReportBtn) {
+        confirmAirtableReportBtn.addEventListener('click', async () => {
+          try {
+            const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'report' });
+            
+            if (navigator.sendBeacon) {
+              navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+            } else {
+              await fetch('/api/redeem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: trackingPayload
+              });
+            }
+
+            if (reportModal) reportModal.close();
+            alert('✓ Thank you! The business has been flagged for review.');
+          } catch (err) {
+            alert('Failed to submit report. Please try again later.');
+          }
+        });
+      }
+      
 // --- Interactive Deal Box Toast Logic ---
 const dealBox = document.getElementById('dealBox');
 const ctaToast = document.getElementById('ctaToast');
