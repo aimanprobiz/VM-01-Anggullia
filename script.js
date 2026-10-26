@@ -305,16 +305,17 @@ function initSearchModalCategories() {
     grid.appendChild(btn);
   });
 }
-// Setup Search Modal Trigger, Auto-Scroll, Backdrop Closing & Keyboard Filtering
+// Setup Search Modal Triggers, Auto-Scroll, Backdrop Closing & Keyboard Filtering
 function setupSearchModal() {
   const searchBtn = document.getElementById('searchToggleBtn');
+  const headerSearchBtn = document.getElementById('headerSearchBtn');
   const searchModal = document.getElementById('searchModal');
   const closeSearchModalBtn = document.getElementById('closeSearchModalBtn');
   const modalSearchInput = document.getElementById('modalSearchInput');
   const categoriesSection = document.getElementById('modalCategoriesSection');
   const businessSection = document.querySelector('.business-section');
 
-  if (!searchBtn || !searchModal) return;
+  if (!searchModal) return;
 
   function openSearchModal() {
     // 1. Scroll main view directly to the "Support Local Muslim Businesses" section
@@ -325,12 +326,12 @@ function setupSearchModal() {
     if (modalSearchInput) modalSearchInput.value = '';
     if (categoriesSection) categoriesSection.style.display = 'block';
     
-    // Lock main page scrolling while modal initially opens
+    // Lock main page scrolling while modal opens
     document.body.style.overflow = 'hidden';
     
     searchModal.show();
 
-    // Attach click-outside listener after a short delay to avoid immediate trigger
+    // Attach click-outside listener after a short delay
     setTimeout(() => {
       window.addEventListener('click', handleOutsideClick);
     }, 50);
@@ -345,13 +346,19 @@ function setupSearchModal() {
   // Handle click outside modal container
   function handleOutsideClick(event) {
     if (!searchModal.open) return;
-    const isClickInside = searchModal.contains(event.target) || searchBtn.contains(event.target);
+    const isClickInside = 
+      searchModal.contains(event.target) || 
+      (searchBtn && searchBtn.contains(event.target)) ||
+      (headerSearchBtn && headerSearchBtn.contains(event.target));
+
     if (!isClickInside) {
       closeSearchModal();
     }
   }
 
-  searchBtn.addEventListener('click', openSearchModal);
+  // Bind both category grid pill and right-aligned header search button
+  if (searchBtn) searchBtn.addEventListener('click', openSearchModal);
+  if (headerSearchBtn) headerSearchBtn.addEventListener('click', openSearchModal);
 
   if (closeSearchModalBtn) {
     closeSearchModalBtn.addEventListener('click', closeSearchModal);
@@ -384,12 +391,11 @@ function setupSearchModal() {
     modalSearchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         modalSearchInput.blur();
-        document.body.style.overflow = ''; // Allow users to scroll the main page results freely!
+        document.body.style.overflow = ''; // Allow users to scroll search results
       }
     });
   }
 }
-
 async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (gridContainer) {
