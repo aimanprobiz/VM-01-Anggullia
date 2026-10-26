@@ -305,7 +305,6 @@ function initSearchModalCategories() {
     grid.appendChild(btn);
   });
 }
-
 // Setup Search Modal Triggers, Auto-Scroll, Backdrop Closing & Keyboard Filtering
 function setupSearchModal() {
   const searchBtn = document.getElementById('searchToggleBtn');
@@ -397,7 +396,6 @@ function setupSearchModal() {
     });
   }
 }
-
 async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (gridContainer) {
