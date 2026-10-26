@@ -57,17 +57,12 @@
               <input type="text" id="bizSub" placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
-              <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-                <option value="" disabled selected>Select a category</option>
-                <option value="Food & Beverage">Food & Beverage</option>
-                <option value="Retail & Fashion">Retail & Fashion</option>
-                <option value="Services">Services</option>
-                <option value="Health & Wellness">Health & Wellness</option>
-                <option value="Education">Education</option>
-              </select>
-            </div>
+<div>
+  <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
+  <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+    <option value="" disabled selected>Loading categories...</option>
+  </select>
+</div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description</label>
@@ -143,8 +138,56 @@
 
   </div>
 
-  <script>
-    // Live preview binding
+<script>
+    // 1. Fetch & Populate Categories Real-Time (With "Others" anchored at the bottom)
+    async function loadDynamicCategories() {
+      const categorySelect = document.getElementById('bizCategory');
+      if (!categorySelect) return;
+
+      try {
+        const response = await fetch('/api/businesses');
+        if (!response.ok) throw new Error('Failed to fetch businesses');
+
+        const businesses = await response.json();
+        
+        // Extract unique categories, ignoring empty values
+        const uniqueCategories = [...new Set(
+          businesses.map(b => (b.Category || b.category || '').trim()).filter(Boolean)
+        )];
+
+        // Sort alphabetically, but keep "Others" (case-insensitive) strictly at the bottom
+        uniqueCategories.sort((a, b) => {
+          const lowerA = a.toLowerCase();
+          const lowerB = b.toLowerCase();
+          if (lowerA === 'others') return 1;
+          if (lowerB === 'others') return -1;
+          return a.localeCompare(b);
+        });
+
+        // Rebuild the dropdown options
+        categorySelect.innerHTML = '<option value="" disabled selected>Select a category</option>';
+        
+        uniqueCategories.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          categorySelect.appendChild(option);
+        });
+
+      } catch (error) {
+        console.error('Error loading dynamic categories:', error);
+        // Fallback options if API fails
+        categorySelect.innerHTML = `
+          <option value="" disabled selected>Select a category</option>
+          <option value="Food & Beverage">Food & Beverage</option>
+          <option value="Retail & Fashion">Retail & Fashion</option>
+          <option value="Services">Services</option>
+          <option value="Others">Others</option>
+        `;
+      }
+    }
+
+    // 2. Live deal preview binding
     const bizDealInput = document.getElementById('bizDeal');
     const previewDealText = document.getElementById('previewDealText');
 
@@ -153,7 +196,7 @@
       previewDealText.textContent = val !== '' ? val.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
     });
 
-    // Toggle promo code field based on action type
+    // 3. Toggle promo code field based on action type
     const actionTypeSelect = document.getElementById('bizActionType');
     const promoCodeGroup = document.getElementById('promoCodeGroup');
 
@@ -165,7 +208,7 @@
       }
     });
 
-    // Form submission handler
+    // 4. Form submission handler
     const registerForm = document.getElementById('registerForm');
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -211,6 +254,9 @@
         submitBtn.disabled = false;
       }
     });
+
+    // Run dynamic category loading when DOM is ready
+    loadDynamicCategories();
   </script>
 </body>
 </html>
