@@ -33,21 +33,19 @@ export default async function handler(req, res) {
   }
 
   try {
-    const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     const editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
 
-    // 1. Build an object containing ONLY non-empty fields
+    // 1. Build payload object without 'Slug' (since Airtable computes it automatically)
     const fieldsToSave = {
       Name: name.trim(),
       Category: category.trim(),
       OwnerEmail: ownerEmail.trim().toLowerCase(),
       Status: 'Pending',
       EditToken: editToken,
-      Slug: slug,
       ActionType: actionType ? actionType.toLowerCase().trim() : 'whatsapp'
     };
 
-    // 2. Conditionally append optional fields if they exist
+    // 2. Conditionally append optional fields if filled in
     if (subtitle && subtitle.trim()) fieldsToSave.Subtitle = subtitle.trim();
     if (description && description.trim()) fieldsToSave.Description = description.trim();
     if (deal && deal.trim()) fieldsToSave.Deal = deal.trim();
@@ -76,7 +74,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      slug: slug,
       message: 'Business submitted successfully! Pending admin approval.'
     });
 
