@@ -1,3 +1,4 @@
+// api/businesses.js
 export default async function handler(req, res) {
   // 1. Cache response on Vercel Edge for fast performance & lower Airtable API usage
   res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=86400');
@@ -13,9 +14,13 @@ export default async function handler(req, res) {
     let allRecords = [];
     let offset = '';
 
-    // 2. Loop through all pages until every business is fetched
+    // 2. Loop through all pages until every active business is fetched
     do {
       const url = new URL(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Businesses`);
+      
+      // Filter only records where Status is 'Active'
+      url.searchParams.set('filterByFormula', "{Status} = 'Active'");
+
       if (offset) url.searchParams.set('offset', offset);
 
       const response = await fetch(url.toString(), {
