@@ -47,7 +47,8 @@ export default async function handler(req, res) {
       instagram: 'InstagramClicks',
       tiktok: 'TikTokClicks',
       social_whatsapp: 'SocialWhatsAppClicks',
-      claim: 'RedemptionsCount'
+      claim: 'RedemptionsCount',
+      report: 'ReportCount' // <-- Add this new mapping
     };
 
     const fieldToUpdate = actionMap[action] || 'RedemptionsCount';
