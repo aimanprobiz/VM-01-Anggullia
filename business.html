@@ -596,9 +596,38 @@ setupLinkButton('socialWebsite', webUrl, 'website', 'website');
 setupLinkButton('socialInstagram', igUrl, 'Instagram', 'instagram');
 setupLinkButton('socialTiktok', tiktokUrl, 'TikTok', 'tiktok');
 setupLinkButton('socialWhatsapp', phoneNum ? `https://wa.me/${phoneNum}` : '', 'WhatsApp', 'social_whatsapp');
-      } catch (error) {
-        console.error('Error loading business details:', error);
+
+// --- Report Inactive Business Logic (Placed inside try block so bizName & bizSlugVal are in scope) ---
+const reportBtn = document.getElementById('reportInactiveBtn');
+if (reportBtn) {
+  reportBtn.addEventListener('click', async () => {
+    const confirmReport = confirm(`Are you sure you want to report ${bizName} as inactive or closed?\n\nThis will notify the administrator.`);
+    
+    if (confirmReport) {
+      try {
+        const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'report' });
+        
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+        } else {
+          await fetch('/api/redeem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: trackingPayload
+          });
+        }
+
+        alert('✓ Thank you! The business has been flagged for review.');
+      } catch (err) {
+        alert('Failed to submit report. Please try again later.');
       }
+    }
+  });
+}
+
+} catch (error) {
+  console.error('Error loading business details:', error);
+}
     }
 
     loadBusinessDetail();
