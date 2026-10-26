@@ -35,17 +35,23 @@ export default async function handler(req, res) {
   try {
     const editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
 
-    // 1. Build payload object without 'Slug' (since Airtable computes it automatically)
+    // Map form actionType values to your Airtable Single Select options if needed
+    let formattedActionType = 'Enquire';
+    if (actionType === 'claim') formattedActionType = 'Clam'; // Matching your Airtable option typo/name
+    else if (actionType === 'code') formattedActionType = 'PromoCode';
+    else if (actionType === 'whatsapp') formattedActionType = 'Enquire';
+
+    // Build payload object without 'Slug' (Airtable computes it automatically)
     const fieldsToSave = {
       Name: name.trim(),
       Category: category.trim(),
       OwnerEmail: ownerEmail.trim().toLowerCase(),
       Status: 'Pending',
       EditToken: editToken,
-      ActionType: actionType ? actionType.toLowerCase().trim() : 'whatsapp'
+      ActionType: formattedActionType
     };
 
-    // 2. Conditionally append optional fields if filled in
+    // Conditionally append optional fields if filled in
     if (subtitle && subtitle.trim()) fieldsToSave.Subtitle = subtitle.trim();
     if (description && description.trim()) fieldsToSave.Description = description.trim();
     if (deal && deal.trim()) fieldsToSave.Deal = deal.trim();
@@ -56,7 +62,7 @@ export default async function handler(req, res) {
     if (tiktokUrl && tiktokUrl.trim()) fieldsToSave.TikTokURL = tiktokUrl.trim();
     if (imageUrl && imageUrl.trim()) fieldsToSave.ImageUrl = imageUrl.trim();
 
-    // 3. Send payload to Airtable
+    // Send payload to Airtable
     const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
       method: 'POST',
       headers: {
