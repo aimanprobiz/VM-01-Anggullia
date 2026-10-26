@@ -609,7 +609,7 @@ const reportWhatsappBtn = document.getElementById('reportWhatsappBtn');
 
 const adminPhone = "6588469883"; // Replace with your admin WhatsApp number if different
 const refCode = `DB-${bizSlugVal.toUpperCase()}`;
-const prefilledReportMsg = `Assalaamualaikum Admin, I would like to report that the business *${bizName}* (Ref: ${refCode}) is inactive or closed down.`;
+const prefilledReportMsg = `Assalaamualaikum Admin, I would like to report that the business *${bizName}* (Ref: ${refCode}) for the following issue:`;
 
 if (reportWhatsappBtn) {
   reportWhatsappBtn.href = `https://wa.me/${adminPhone}?text=${encodeURIComponent(prefilledReportMsg)}`;
