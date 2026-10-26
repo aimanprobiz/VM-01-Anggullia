@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merchant Dashboard - DailyBarakah SG</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <div class="mobile-container" style="padding-bottom: 40px;">
+    
+    <!-- Top Nav -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+      <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+        ← Back to App Directory
+      </a>
+    </div>
+
+    <!-- Header Title -->
+    <div style="text-align: center; margin-bottom: 16px;">
+      <h2 id="dashboardTitle" style="color: var(--primary-color); font-size: 1.35rem; font-weight: 800; margin-bottom: 2px;">Merchant Dashboard</h2>
+      <p id="dashboardStatus" style="font-size: 0.8rem; font-weight: 600; color: var(--accent-gold);">Loading your business data...</p>
+    </div>
+
+    <!-- Analytics Stats Overview -->
+    <div class="card" style="padding: 16px; margin-bottom: 16px; background: linear-gradient(135deg, #0f382c 0%, #08241c 100%); color: #ffffff; border: 1.5px solid var(--accent-gold);">
+      <h3 style="font-size: 0.85rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Live Performance Analytics</h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+        <div style="background: rgba(255,255,255,0.08); padding: 10px; border-radius: var(--radius-sm); text-align: center;">
+          <span id="statWhatsApp" style="font-size: 1.2rem; font-weight: 800; display: block; color: #ffffff;">0</span>
+          <span style="font-size: 0.7rem; color: #cbd5e1;">WhatsApp Clicks</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.08); padding: 10px; border-radius: var(--radius-sm); text-align: center;">
+          <span id="statRedemptions" style="font-size: 1.2rem; font-weight: 800; display: block; color: #ffffff;">0</span>
+          <span style="font-size: 0.7rem; color: #cbd5e1;">Redemptions / Claims</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.08); padding: 10px; border-radius: var(--radius-sm); text-align: center;">
+          <span id="statCodes" style="font-size: 1.2rem; font-weight: 800; display: block; color: #ffffff;">0</span>
+          <span style="font-size: 0.7rem; color: #cbd5e1;">Promo Code Copies</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.08); padding: 10px; border-radius: var(--radius-sm); text-align: center;">
+          <span id="statWebsite" style="font-size: 1.2rem; font-weight: 800; display: block; color: #ffffff;">0</span>
+          <span style="font-size: 0.7rem; color: #cbd5e1;">Website Visits</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Business Profile Form Card -->
+    <div class="card" style="padding: 20px 16px;">
+      <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">Edit Listing Details</h3>
+      
+      <form id="editForm" style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name</label>
+          <input type="text" id="editName" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+        </div>
+
+        <div>
+          <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Tagline</label>
+          <input type="text" id="editSub" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+        </div>
+
+        <div>
+          <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Exclusive Ummah Special Deal</label>
+          <input type="text" id="editDeal" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+        </div>
+
+        <div>
+          <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Description</label>
+          <textarea id="editDesc" rows="3" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: vertical;"></textarea>
+        </div>
+
+        <div>
+          <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL</label>
+          <input type="url" id="editImage" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+        </div>
+
+        <button type="submit" id="saveBtn" class="action-btn-primary" style="margin-top: 6px;">
+          Save Changes
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+    async function loadDashboard() {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get('token');
+
+      if (!token) {
+        document.getElementById('dashboardStatus').textContent = 'Error: Missing access token in URL.';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/vendor-dashboard?token=${token}`);
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          document.getElementById('dashboardStatus').textContent = 'Error: Invalid or unauthorized token.';
+          return;
+        }
+
+        const fields = data.fields;
+        
+        // Update header status & title
+        document.getElementById('dashboardTitle').textContent = fields.Name || 'Merchant Dashboard';
+        const statusVal = fields.Status || 'Pending';
+        document.getElementById('dashboardStatus').textContent = `Status: ${statusVal.toUpperCase()}`;
+
+        // Populate analytics stats
+        document.getElementById('statWhatsApp').textContent = fields.WhatsAppClicks || 0;
+        document.getElementById('statRedemptions').textContent = fields.RedemptionsCount || 0;
+        document.getElementById('statCodes').textContent = fields.CodeCopies || 0;
+        document.getElementById('statWebsite').textContent = fields.WebsiteClicks || 0;
+
+        // Populate form fields
+        document.getElementById('editName').value = fields.Name || '';
+        document.getElementById('editSub').value = fields.SubTitle || '';
+        document.getElementById('editDeal').value = fields.Deal || '';
+        document.getElementById('editDesc').value = fields.Description || '';
+        document.getElementById('editImage').value = fields.ImageURL || '';
+
+        // Handle form save
+        const editForm = document.getElementById('editForm');
+        editForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const saveBtn = document.getElementById('saveBtn');
+          saveBtn.textContent = 'Saving...';
+          saveBtn.disabled = true;
+
+          const updatePayload = {
+            token: token,
+            fieldsToUpdate: {
+              Name: document.getElementById('editName').value,
+              SubTitle: document.getElementById('editSub').value,
+              Deal: document.getElementById('editDeal').value,
+              Description: document.getElementById('editDesc').value,
+              ImageURL: document.getElementById('editImage').value
+            }
+          };
+
+          try {
+            const updateRes = await fetch('/api/vendor-update', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(updatePayload)
+            });
+
+            const updateResult = await updateRes.json();
+
+            if (updateRes.ok && updateResult.success) {
+              alert('✓ Changes saved successfully!');
+              window.location.reload();
+            } else {
+              alert('Error: ' + (updateResult.error || 'Failed to update.'));
+              saveBtn.textContent = 'Save Changes';
+              saveBtn.disabled = false;
+            }
+          } catch (err) {
+            alert('Network error while saving.');
+            saveBtn.textContent = 'Save Changes';
+            saveBtn.disabled = false;
+          }
+        });
+
+      } catch (err) {
+        document.getElementById('dashboardStatus').textContent = 'Failed to load dashboard data.';
+      }
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>
