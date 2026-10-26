@@ -36,32 +36,36 @@ export default async function handler(req, res) {
     const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     const editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
 
+    // 1. Build an object containing ONLY non-empty fields
+    const fieldsToSave = {
+      Name: name.trim(),
+      Category: category.trim(),
+      OwnerEmail: ownerEmail.trim().toLowerCase(),
+      Status: 'Pending',
+      EditToken: editToken,
+      Slug: slug,
+      ActionType: actionType ? actionType.toLowerCase().trim() : 'whatsapp'
+    };
+
+    // 2. Conditionally append optional fields if they exist
+    if (subtitle && subtitle.trim()) fieldsToSave.Subtitle = subtitle.trim();
+    if (description && description.trim()) fieldsToSave.Description = description.trim();
+    if (deal && deal.trim()) fieldsToSave.Deal = deal.trim();
+    if (promoCode && promoCode.trim()) fieldsToSave.PromoCode = promoCode.trim();
+    if (phone && phone.trim()) fieldsToSave.Phone = phone.trim();
+    if (websiteUrl && websiteUrl.trim()) fieldsToSave.WebsiteURL = websiteUrl.trim();
+    if (instagramUrl && instagramUrl.trim()) fieldsToSave.InstagramURL = instagramUrl.trim();
+    if (tiktokUrl && tiktokUrl.trim()) fieldsToSave.TikTokURL = tiktokUrl.trim();
+    if (imageUrl && imageUrl.trim()) fieldsToSave.ImageUrl = imageUrl.trim();
+
+    // 3. Send payload to Airtable
     const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${AIRTABLE_PAT}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        fields: {
-          Name: name.trim(),
-          Subtitle: subtitle ? subtitle.trim() : '',       // Exact match: Subtitle
-          Category: category.trim(),
-          Description: description ? description.trim() : '',
-          Deal: deal ? deal.trim() : '',
-          ActionType: actionType ? actionType.toLowerCase().trim() : 'whatsapp',
-          PromoCode: promoCode ? promoCode.trim() : '',
-          Phone: phone ? phone.trim() : '',
-          WebsiteURL: websiteUrl ? websiteUrl.trim() : '',
-          InstagramURL: instagramUrl ? instagramUrl.trim() : '',
-          TikTokURL: tiktokUrl ? tiktokUrl.trim() : '',
-          ImageUrl: imageUrl ? imageUrl.trim() : 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM', // Exact match: ImageUrl
-          OwnerEmail: ownerEmail.trim().toLowerCase(),
-          Status: 'Pending',
-          EditToken: editToken,
-          Slug: slug
-        }
-      })
+      body: JSON.stringify({ fields: fieldsToSave })
     });
 
     const data = await response.json();
