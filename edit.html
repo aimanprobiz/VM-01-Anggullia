@@ -174,17 +174,16 @@
       localStorage.setItem('db_vendor_token', currentToken);
     }
 
-    // 2. Multi-Business Dropdown Renderer
-    function renderBusinessSelector() {
-      const storedBusinesses = JSON.parse(localStorage.getItem('db_vendor_businesses') || '[]');
+    // 2. Render Business Selector Dropdown dynamically from API response
+    function renderBusinessSelector(businesses) {
       const selectorContainer = document.getElementById('businessSelectorContainer');
       const businessSelector = document.getElementById('businessSelector');
 
-      if (storedBusinesses.length > 1) {
+      if (businesses && businesses.length > 1) {
         selectorContainer.style.display = 'block';
         businessSelector.innerHTML = '';
 
-        storedBusinesses.forEach(biz => {
+        businesses.forEach(biz => {
           const option = document.createElement('option');
           option.value = biz.token;
           option.textContent = biz.name;
@@ -192,11 +191,13 @@
           businessSelector.appendChild(option);
         });
 
-        businessSelector.addEventListener('change', (e) => {
+        businessSelector.onchange = (e) => {
           const newToken = e.target.value;
           localStorage.setItem('db_vendor_token', newToken);
           window.location.href = `/edit.html?token=${newToken}`;
-        });
+        };
+      } else {
+        selectorContainer.style.display = 'none';
       }
     }
 
@@ -279,12 +280,14 @@
         if (!response.ok || !data.recordId) {
           alert(data.error || 'Failed to load listing. Your edit link may be invalid.');
           localStorage.removeItem('db_vendor_token');
-          localStorage.removeItem('db_vendor_businesses');
           window.location.href = '/login.html';
           return;
         }
 
         recordId = data.recordId;
+
+        // Render multi-listing dropdown directly from API response
+        renderBusinessSelector(data.allBusinesses);
 
         // Populate form fields
         document.getElementById('bizName').value = data.name || '';
@@ -383,13 +386,11 @@
     document.getElementById('logoutBtn').addEventListener('click', () => {
       if (confirm('Are you sure you want to log out of your vendor portal?')) {
         localStorage.removeItem('db_vendor_token');
-        localStorage.removeItem('db_vendor_businesses');
         window.location.href = '/login.html';
       }
     });
 
     // Run Initializations
-    renderBusinessSelector();
     loadBusinessDetails();
   </script>
 </body>
