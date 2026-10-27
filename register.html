@@ -104,4 +104,171 @@
 
         <!-- Section 3: Contact & Links -->
         <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color:
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">3. Contact & Owner Info</h3>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Owner Email (For your dashboard access) *</label>
+              <input type="email" id="ownerEmail" required placeholder="owner@business.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code, e.g. 6591234567)</label>
+              <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
+              <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
+              <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
+              <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="action-btn-primary" style="margin-top: 10px;">
+          Submit Listing for Review
+        </button>
+
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+    // 1. Fetch & Populate Categories Real-Time (With "Others" anchored at the bottom)
+    async function loadDynamicCategories() {
+      const categorySelect = document.getElementById('bizCategory');
+      if (!categorySelect) return;
+
+      try {
+        const response = await fetch('/api/businesses');
+        if (!response.ok) throw new Error('Failed to fetch businesses');
+
+        const businesses = await response.json();
+        
+        // Extract unique categories, ignoring empty values
+        const uniqueCategories = [...new Set(
+          businesses.map(b => (b.Category || b.category || '').trim()).filter(Boolean)
+        )];
+
+        // Sort alphabetically, but keep "Others" (case-insensitive) strictly at the bottom
+        uniqueCategories.sort((a, b) => {
+          const lowerA = a.toLowerCase();
+          const lowerB = b.toLowerCase();
+          if (lowerA === 'others') return 1;
+          if (lowerB === 'others') return -1;
+          return a.localeCompare(b);
+        });
+
+        // Rebuild the dropdown options
+        categorySelect.innerHTML = '<option value="" disabled selected>Select a category</option>';
+        
+        uniqueCategories.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          categorySelect.appendChild(option);
+        });
+
+      } catch (error) {
+        console.error('Error loading dynamic categories:', error);
+        // Fallback options if API fails
+        categorySelect.innerHTML = `
+          <option value="" disabled selected>Select a category</option>
+          <option value="Food & Beverage">Food & Beverage</option>
+          <option value="Retail & Fashion">Retail & Fashion</option>
+          <option value="Services">Services</option>
+          <option value="Others">Others</option>
+        `;
+      }
+    }
+
+    // 2. Live deal preview binding
+    const bizDealInput = document.getElementById('bizDeal');
+    const previewDealText = document.getElementById('previewDealText');
+
+    bizDealInput.addEventListener('input', () => {
+      const val = bizDealInput.value.trim();
+      previewDealText.textContent = val !== '' ? val.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
+    });
+
+    // 3. Toggle promo code field & require store website URL when Online Promo Code is chosen
+    const actionTypeSelect = document.getElementById('bizActionType');
+    const promoCodeGroup = document.getElementById('promoCodeGroup');
+    const bizWebsiteInput = document.getElementById('bizWebsite');
+    const bizWebsiteLabel = document.getElementById('bizWebsiteLabel');
+
+    actionTypeSelect.addEventListener('change', () => {
+      if (actionTypeSelect.value === 'code') {
+        promoCodeGroup.style.display = 'block';
+        bizWebsiteInput.setAttribute('required', 'true');
+        bizWebsiteLabel.innerHTML = 'Website / Store URL * <span style="font-size: 0.72rem; color: #d97706; font-weight: normal;">(Required for promo code redirection)</span>';
+      } else {
+        promoCodeGroup.style.display = 'none';
+        bizWebsiteInput.removeAttribute('required');
+        bizWebsiteLabel.innerHTML = 'Website URL';
+      }
+    });
+
+    // 4. Form submission handler
+    const registerForm = document.getElementById('registerForm');
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.textContent = 'Submitting...';
+      submitBtn.disabled = true;
+
+      const payload = {
+        name: document.getElementById('bizName').value,
+        subtitle: document.getElementById('bizSub').value,
+        category: document.getElementById('bizCategory').value,
+        description: document.getElementById('bizDesc').value,
+        deal: document.getElementById('bizDeal').value,
+        actionType: document.getElementById('bizActionType').value,
+        promoCode: document.getElementById('bizPromoCode').value,
+        phone: document.getElementById('bizPhone').value,
+        websiteUrl: document.getElementById('bizWebsite').value,
+        instagramUrl: document.getElementById('bizInstagram').value,
+        tiktokUrl: document.getElementById('bizTiktok').value,
+        imageUrl: document.getElementById('bizImage').value,
+        ownerEmail: document.getElementById('ownerEmail').value
+      };
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          alert('✓ Alhamdulillah! Your listing has been submitted successfully.\n\nOur admin team will review and publish it soon. Jazakallahu khair!');
+          window.location.href = '/';
+        } else {
+          alert('Error: ' + (result.error || 'Failed to submit listing.'));
+          submitBtn.textContent = 'Submit Listing for Review';
+          submitBtn.disabled = false;
+        }
+      } catch (err) {
+        alert('Network error. Please try again later.');
+        submitBtn.textContent = 'Submit Listing for Review';
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Run dynamic category loading when DOM is ready
+    loadDynamicCategories();
+  </script>
+</body>
+</html>
