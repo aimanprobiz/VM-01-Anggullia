@@ -53,7 +53,7 @@
   </div>
 
   <script>
-    // 1. Check if user already has an edit token stored in browser session
+    // 1. Check if user already has an active session stored in browser
     const existingToken = localStorage.getItem('db_vendor_token');
     if (existingToken) {
       window.location.href = `/edit.html?token=${existingToken}`;
@@ -78,12 +78,13 @@
 
         const result = await response.json();
 
-        if (response.ok && result.success && result.token) {
-          // Store token in browser localStorage for persistent auto-login
-          localStorage.setItem('db_vendor_token', result.token);
+        if (response.ok && result.success && result.businesses && result.businesses.length > 0) {
+          // Store primary business token and full business array in localStorage
+          localStorage.setItem('db_vendor_token', result.businesses[0].token);
+          localStorage.setItem('db_vendor_businesses', JSON.stringify(result.businesses));
           
-          // Redirect to edit page
-          window.location.href = `/edit.html?token=${result.token}`;
+          // Redirect to edit page with the first business token
+          window.location.href = `/edit.html?token=${result.businesses[0].token}`;
         } else {
           alert(result.error || 'No business found with this email.');
           loginBtn.textContent = 'Access My Portal';
