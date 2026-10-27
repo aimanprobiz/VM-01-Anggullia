@@ -57,12 +57,12 @@
               <input type="text" id="bizSub" placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
-<div>
-  <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
-  <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-    <option value="" disabled selected>Loading categories...</option>
-  </select>
-</div>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
+              <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="" disabled selected>Loading categories...</option>
+              </select>
+            </div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description</label>
@@ -126,6 +126,12 @@
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
               <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
+
+            <!-- TikTok URL Input Added Here -->
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
+              <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
           </div>
         </div>
 
@@ -138,7 +144,7 @@
 
   </div>
 
-<script>
+  <script>
     // 1. Fetch & Populate Categories Real-Time (With "Others" anchored at the bottom)
     async function loadDynamicCategories() {
       const categorySelect = document.getElementById('bizCategory');
@@ -227,6 +233,7 @@
         phone: document.getElementById('bizPhone').value,
         websiteUrl: document.getElementById('bizWebsite').value,
         instagramUrl: document.getElementById('bizInstagram').value,
+        tiktokUrl: document.getElementById('bizTiktok').value, // TikTok URL added here
         imageUrl: document.getElementById('bizImage').value,
         ownerEmail: document.getElementById('ownerEmail').value
       };
