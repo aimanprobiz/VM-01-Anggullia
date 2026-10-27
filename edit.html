@@ -26,7 +26,17 @@
       <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4;">
         Update your profile information, manage your Ummah deals, and edit contact links.
       </p>
-      <div id="statusBadge" style="display: inline-block; margin-top: 6px; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">
+
+      <!-- Multi-Business Selector Dropdown (Visible only if owner has > 1 business) -->
+      <div id="businessSelectorContainer" style="display: none; margin-top: 12px; text-align: left; background: #fffdf2; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--accent-gold);">
+        <label style="font-size: 0.75rem; font-weight: 700; color: var(--primary-color); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+          Select Business Listing to Edit:
+        </label>
+        <select id="businessSelector" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; font-weight: 700; border: 1.5px solid var(--accent-gold); border-radius: var(--radius-sm); background: #ffffff; color: var(--primary-color); outline: none;">
+        </select>
+      </div>
+
+      <div id="statusBadge" style="display: inline-block; margin-top: 10px; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">
         Loading status...
       </div>
     </div>
@@ -153,7 +163,7 @@
     let recordId = null;
     let currentToken = null;
 
-    // 1. Obtain token from URL params or localStorage
+    // 1. Retrieve token from URL params or localStorage
     const urlParams = new URLSearchParams(window.location.search);
     currentToken = urlParams.get('token') || localStorage.getItem('db_vendor_token');
 
@@ -161,11 +171,36 @@
       alert('No active edit session found. Please log in.');
       window.location.href = '/login.html';
     } else {
-      // Store token persistently for future visits
       localStorage.setItem('db_vendor_token', currentToken);
     }
 
-    // 2. Load Categories
+    // 2. Multi-Business Dropdown Renderer
+    function renderBusinessSelector() {
+      const storedBusinesses = JSON.parse(localStorage.getItem('db_vendor_businesses') || '[]');
+      const selectorContainer = document.getElementById('businessSelectorContainer');
+      const businessSelector = document.getElementById('businessSelector');
+
+      if (storedBusinesses.length > 1) {
+        selectorContainer.style.display = 'block';
+        businessSelector.innerHTML = '';
+
+        storedBusinesses.forEach(biz => {
+          const option = document.createElement('option');
+          option.value = biz.token;
+          option.textContent = biz.name;
+          if (biz.token === currentToken) option.selected = true;
+          businessSelector.appendChild(option);
+        });
+
+        businessSelector.addEventListener('change', (e) => {
+          const newToken = e.target.value;
+          localStorage.setItem('db_vendor_token', newToken);
+          window.location.href = `/edit.html?token=${newToken}`;
+        });
+      }
+    }
+
+    // 3. Load Categories
     async function loadCategories(selectedCategory) {
       const categorySelect = document.getElementById('bizCategory');
       try {
@@ -207,7 +242,7 @@
       }
     }
 
-    // 3. Dynamic ActionType & Promo URL Toggle Handler
+    // 4. Dynamic ActionType & Promo URL Toggle Handler
     const actionTypeSelect = document.getElementById('bizActionType');
     const promoCodeGroup = document.getElementById('promoCodeGroup');
     const bizWebsiteInput = document.getElementById('bizWebsite');
@@ -235,7 +270,7 @@
       previewDealText.textContent = val !== '' ? val.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
     });
 
-    // 4. Load Business Data by Token
+    // 5. Load Business Data by Token
     async function loadBusinessDetails() {
       try {
         const response = await fetch(`/api/get-business?token=${encodeURIComponent(currentToken)}`);
@@ -244,13 +279,14 @@
         if (!response.ok || !data.recordId) {
           alert(data.error || 'Failed to load listing. Your edit link may be invalid.');
           localStorage.removeItem('db_vendor_token');
+          localStorage.removeItem('db_vendor_businesses');
           window.location.href = '/login.html';
           return;
         }
 
         recordId = data.recordId;
 
-        // Populate fields
+        // Populate form fields
         document.getElementById('bizName').value = data.name || '';
         document.getElementById('bizSub').value = data.subtitle || '';
         document.getElementById('bizDesc').value = data.description || '';
@@ -274,7 +310,7 @@
         updateActionTypeUI();
         await loadCategories(data.category);
 
-        // Status Badge
+        // Status Badge UI
         const statusBadge = document.getElementById('statusBadge');
         if (data.status === 'Active') {
           statusBadge.textContent = '● Listing Status: Active (Live in Directory)';
@@ -294,7 +330,7 @@
       }
     }
 
-    // 5. Handle Save Submission
+    // 6. Handle Save Submission
     document.getElementById('editForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const saveBtn = document.getElementById('saveBtn');
@@ -347,11 +383,13 @@
     document.getElementById('logoutBtn').addEventListener('click', () => {
       if (confirm('Are you sure you want to log out of your vendor portal?')) {
         localStorage.removeItem('db_vendor_token');
+        localStorage.removeItem('db_vendor_businesses');
         window.location.href = '/login.html';
       }
     });
 
-    // Run Initial Data Load
+    // Run Initializations
+    renderBusinessSelector();
     loadBusinessDetails();
   </script>
 </body>
