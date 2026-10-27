@@ -751,3 +751,195 @@ dialog::backdrop {
   outline: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
+
+/* ================= HEADER & DRAWER STYLES ================= */
+:root {
+  --header-height: 58px;
+  --primary-color: #064e3b; /* Emerald Green */
+  --accent-gold: #d97706;   /* Warm Gold */
+  --bg-light: #faf9f5;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+}
+
+/* Fixed Header Bar */
+.app-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.header-container {
+  max-width: 500px; /* Aligns with mobile container width */
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-logo {
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  letter-spacing: -0.3px;
+}
+
+.logo-accent {
+  color: var(--accent-gold);
+}
+
+.menu-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.menu-toggle-btn:active {
+  background: #f3f4f6;
+}
+
+/* Dark Backdrop Overlay */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.drawer-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Slide-out Drawer Panel */
+.side-drawer {
+  position: fixed;
+  top: 0;
+  right: -280px; /* Off-screen by default */
+  width: 280px;
+  height: 100vh;
+  background: #ffffff;
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.side-drawer.active {
+  transform: translateX(-280px);
+}
+
+/* Drawer Header Section */
+.drawer-header {
+  padding: 20px 18px 16px;
+  background: #fdfbf7;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.drawer-title {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0 0 2px 0;
+}
+
+.drawer-tagline {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  margin: 0;
+}
+
+.close-drawer-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+/* Drawer Links Nav */
+.drawer-nav {
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.drawer-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.drawer-link:hover, .drawer-link:active {
+  background: #f7fee7;
+  color: var(--primary-color);
+}
+
+.drawer-link-cta {
+  background: #fffdf2;
+  border: 1px solid var(--accent-gold);
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.free-badge {
+  margin-left: auto;
+  background: #166534;
+  color: #ffffff;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 800;
+}
+
+.drawer-divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 8px 0;
+}
+
+.drawer-footer {
+  padding: 16px 18px;
+  border-top: 1px solid #f3f4f6;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
