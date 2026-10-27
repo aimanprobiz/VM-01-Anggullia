@@ -25,8 +25,8 @@
       </p>
     </div>
 
-    <!-- Login Card -->
-    <div class="card" style="padding: 24px 18px;">
+    <!-- State 1: Login Card -->
+    <div id="loginCard" class="card" style="padding: 24px 18px;">
       <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
         <div>
           <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 6px;">
@@ -34,14 +34,29 @@
           </label>
           <input type="email" id="loginEmail" required placeholder="owner@business.com" style="width: 100%; padding: 12px; font-size: 0.9rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
           <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">
-            Enter the email address you used when listing your business.
+            We will email you a secure, passwordless magic link to log in.
           </p>
         </div>
 
         <button type="submit" id="loginBtn" class="action-btn-primary" style="margin-top: 4px;">
-          Access My Portal
+          Send Magic Login Link 🪄
         </button>
       </form>
+    </div>
+
+    <!-- State 2: Confirmation Box (Hidden initially) -->
+    <div id="sentCard" class="card" style="padding: 24px 18px; text-align: center; display: none; background: #fffdf2; border: 1.5px solid var(--accent-gold);">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">📩</div>
+      <h3 style="color: var(--primary-color); font-size: 1.1rem; font-weight: 800; margin-bottom: 6px;">Check Your Inbox!</h3>
+      <p style="color: var(--text-main); font-size: 0.86rem; line-height: 1.5; margin-bottom: 14px;">
+        We’ve sent a magic login link to <strong id="sentEmailAddress" style="color: var(--primary-color);"></strong>.
+      </p>
+      <p style="color: var(--text-muted); font-size: 0.78rem; line-height: 1.4; margin-bottom: 16px;">
+        Click the button inside the email to access your vendor dashboard. (Don't forget to check your spam folder if it doesn't arrive shortly).
+      </p>
+      <button onclick="window.location.reload();" style="background: transparent; border: 1px solid var(--border-color); padding: 8px 14px; border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 600; color: var(--text-muted); cursor: pointer;">
+        Try another email address
+      </button>
     </div>
 
     <div style="text-align: center; margin-top: 20px;">
@@ -53,20 +68,20 @@
   </div>
 
   <script>
-    // 1. Check if user already has an active session stored in browser
+    // 1. If user already has an active edit session stored in browser, allow direct access
     const existingToken = localStorage.getItem('db_vendor_token');
     if (existingToken) {
       window.location.href = `/edit.html?token=${existingToken}`;
     }
 
-    // 2. Handle Login Submission
+    // 2. Handle Magic Link Request Submission
     const loginForm = document.getElementById('loginForm');
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const loginBtn = document.getElementById('loginBtn');
       const email = document.getElementById('loginEmail').value.trim();
 
-      loginBtn.textContent = 'Verifying...';
+      loginBtn.textContent = 'Sending Magic Link...';
       loginBtn.disabled = true;
 
       try {
@@ -78,21 +93,19 @@
 
         const result = await response.json();
 
-        if (response.ok && result.success && result.businesses && result.businesses.length > 0) {
-          // Store primary business token and full business array in localStorage
-          localStorage.setItem('db_vendor_token', result.businesses[0].token);
-          localStorage.setItem('db_vendor_businesses', JSON.stringify(result.businesses));
-          
-          // Redirect to edit page with the first business token
-          window.location.href = `/edit.html?token=${result.businesses[0].token}`;
+        if (response.ok && result.success) {
+          // Hide login form and show confirmation card
+          document.getElementById('sentEmailAddress').textContent = email;
+          document.getElementById('loginCard').style.display = 'none';
+          document.getElementById('sentCard').style.display = 'block';
         } else {
           alert(result.error || 'No business found with this email.');
-          loginBtn.textContent = 'Access My Portal';
+          loginBtn.textContent = 'Send Magic Login Link 🪄';
           loginBtn.disabled = false;
         }
       } catch (err) {
         alert('Network error. Please try again.');
-        loginBtn.textContent = 'Access My Portal';
+        loginBtn.textContent = 'Send Magic Login Link 🪄';
         loginBtn.disabled = false;
       }
     });
