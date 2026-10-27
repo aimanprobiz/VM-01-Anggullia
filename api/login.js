@@ -21,14 +21,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Search Airtable for matching OwnerEmail (case-insensitive search)
     const formula = encodeURIComponent(`LOWER({OwnerEmail}) = '${cleanEmail}'`);
     const response = await fetch(
       `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}?filterByFormula=${formula}`,
       {
-        headers: {
-          Authorization: `Bearer ${AIRTABLE_PAT}`
-        }
+        headers: { Authorization: `Bearer ${AIRTABLE_PAT}` }
       }
     );
 
@@ -39,31 +36,37 @@ export default async function handler(req, res) {
     }
 
     if (!data.records || data.records.length === 0) {
-      return res.status(444).json({ 
-        error: 'No business listing found registered under this email address. Please check your spelling or register a new business.' 
+      return res.status(404).json({ 
+        error: 'No business listing found registered under this email address.' 
       });
     }
 
-    const record = data.records[0];
-    let editToken = record.fields.EditToken;
+    // Process all matching records and ensure every record has an EditToken
+    const businesses = await Promise.all(data.records.map(async (record) => {
+      let editToken = record.fields.EditToken;
 
-    // If for any reason an older record is missing an EditToken, generate one now
-    if (!editToken) {
-      editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
-      await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${record.id}`, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${AIRTABLE_PAT}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ fields: { EditToken: editToken } })
-      });
-    }
+      if (!editToken) {
+        editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
+        await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${record.id}`, {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_PAT}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ fields: { EditToken: editToken } })
+        });
+      }
+
+      return {
+        id: record.id,
+        name: record.fields.Name || 'Unnamed Business',
+        token: editToken
+      };
+    }));
 
     return res.status(200).json({
       success: true,
-      token: editToken,
-      businessName: record.fields.Name || 'Your Business'
+      businesses: businesses // Return array of all listings
     });
 
   } catch (error) {
