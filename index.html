@@ -14,61 +14,6 @@
 </head>
 <body>
 
-  <!-- ================= TOP HEADER BAR ================= -->
-  <header class="app-header">
-    <div class="header-container">
-      <!-- Brand Logo / Title -->
-      <a href="/" class="header-logo">
-        <span class="logo-text">DailyBarakah <span class="logo-accent">SG</span></span>
-      </a>
-
-      <!-- Hamburger Menu Toggle Button -->
-      <button id="menuToggleBtn" class="menu-toggle-btn" aria-label="Open Menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- ================= BACKDROP OVERLAY ================= -->
-  <div id="drawerOverlay" class="drawer-overlay"></div>
-
-  <!-- ================= SLIDE-OUT SIDE DRAWER ================= -->
-  <aside id="sideDrawer" class="side-drawer" aria-hidden="true">
-    <div class="drawer-header">
-      <div class="drawer-brand">
-        <h3 class="drawer-title">DailyBarakah SG</h3>
-        <p class="drawer-tagline">Empowering Singapore’s Muslim Community</p>
-      </div>
-      <button id="closeDrawerBtn" class="close-drawer-btn" aria-label="Close Menu">&times;</button>
-    </div>
-
-    <nav class="drawer-nav">
-      <a href="/" class="drawer-link active">
-        <span class="nav-icon">🏠</span> Home Directory
-      </a>
-      <a href="/register.html" class="drawer-link drawer-link-cta">
-        <span class="nav-icon">➕</span> List Your Business <span class="free-badge">FREE</span>
-      </a>
-      <a href="/login.html" class="drawer-link">
-        <span class="nav-icon">🔑</span> Vendor Portal / Login
-      </a>
-      
-      <div class="drawer-divider"></div>
-
-      <a href="https://wa.me/6588469883" target="_blank" rel="noopener" class="drawer-link">
-        <span class="nav-icon">💬</span> Support & Feedback
-      </a>
-    </nav>
-
-    <div class="drawer-footer">
-      <p>© 2026 DailyBarakah SG</p>
-    </div>
-  </aside>
-
   <!-- Hadith Reference Modal -->
   <dialog id="hadithModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; width: 90%; max-width: 380px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
     <div style="display: flex; flex-direction: column; gap: 14px;">
@@ -118,7 +63,7 @@
     </div>
   </dialog>
 
-  <!-- Search & Categories Bottom Sheet -->
+<!-- Search & Categories Bottom Sheet -->
   <dialog id="searchModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--accent-gold); border-radius: 20px 20px 0 0; padding: 16px 16px 20px 16px; width: 100%; max-width: 480px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); margin: 0; max-height: 85dvh; overflow-y: auto; z-index: 9999; box-sizing: border-box;">
     <style>
       #searchModal {
@@ -135,7 +80,7 @@
         <button id="closeSearchModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 2px 6px;">&times;</button>
       </div>
 
-      <!-- Search Bar -->
+      <!-- Search Bar with Option 2 Native Fill -->
       <div style="position: relative;">
         <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); display: flex;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -146,6 +91,7 @@
       <!-- Categories Section (Hides when typing) -->
       <div id="modalCategoriesSection" style="margin-top: 2px;">
         <p style="font-size: 0.68rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase;">Explore Categories</p>
+        <!-- 2-Column Grid capped to ~6 buttons -->
         <div id="modalCategoriesGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 220px; overflow-y: auto; padding-bottom: 4px;">
           <!-- Dynamically populated category buttons -->
         </div>
@@ -202,6 +148,7 @@
             <img class="pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Loading...">
             <div class="carousel-caption">Loading masjid info...</div>
           </div>
+          <!-- Dynamically populated from Airtable 'Cards' table -->
         </div>
       </div>
       <div class="carousel-indicators" id="carouselIndicators">
@@ -209,8 +156,9 @@
       </div>
     </section>
 
-    <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
+<!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
     <section class="business-section">
+      <!-- Section Header with Title & Borderless Magnifying Glass Icon -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h2 class="section-title" style="margin: 0;">Support Local Muslim Businesses</h2>
         <button id="headerSearchBtn" aria-label="Search Businesses" title="Search Businesses" style="background: none; border: none; padding: 6px; cursor: pointer; color: var(--primary-color); outline: none; display: flex; align-items: center; justify-content: center; opacity: 0.9; transition: opacity 0.2s ease;">
@@ -223,6 +171,7 @@
 
       <!-- Category Pills Container -->
       <div class="filter-stacked" id="filterContainer">
+        <!-- Category Grid Icon Button -->
         <button id="searchToggleBtn" class="filter-btn search-pill" aria-label="Explore Categories" title="Explore Categories">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"></rect>
@@ -278,38 +227,6 @@
   </div>
 
   <script src="/script.js" defer></script>
-
-  <!-- Slide-out Drawer Script -->
-  <script>
-    const menuToggleBtn = document.getElementById('menuToggleBtn');
-    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
-    const sideDrawer = document.getElementById('sideDrawer');
-    const drawerOverlay = document.getElementById('drawerOverlay');
-
-    function openDrawer() {
-      sideDrawer.classList.add('active');
-      drawerOverlay.classList.add('active');
-      sideDrawer.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeDrawer() {
-      sideDrawer.classList.remove('active');
-      drawerOverlay.classList.remove('active');
-      sideDrawer.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
-
-    menuToggleBtn.addEventListener('click', openDrawer);
-    closeDrawerBtn.addEventListener('click', closeDrawer);
-    drawerOverlay.addEventListener('click', closeDrawer);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && sideDrawer.classList.contains('active')) {
-        closeDrawer();
-      }
-    });
-  </script>
 
   <!-- Floating Back to Top Button -->
   <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top" title="Back to top">
