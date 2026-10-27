@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Portal Login - DailyBarakah SG</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <div class="mobile-container" style="padding-bottom: 40px;">
+    
+    <!-- Top Nav -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+        ← Back to Directory
+      </a>
+    </div>
+
+    <!-- Header Title -->
+    <div style="text-align: center; margin-bottom: 24px;">
+      <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 6px;">Vendor Portal</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">
+        Manage your business profile, update deals, and stay connected with the community.
+      </p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="card" style="padding: 24px 18px;">
+      <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 6px;">
+            Registered Owner Email
+          </label>
+          <input type="email" id="loginEmail" required placeholder="owner@business.com" style="width: 100%; padding: 12px; font-size: 0.9rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">
+            Enter the email address you used when listing your business.
+          </p>
+        </div>
+
+        <button type="submit" id="loginBtn" class="action-btn-primary" style="margin-top: 4px;">
+          Access My Portal
+        </button>
+      </form>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <p style="font-size: 0.82rem; color: var(--text-muted);">
+        Don't have a listing yet? <a href="/register.html" style="color: var(--primary-color); font-weight: 600;">List your business free</a>
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    // 1. Check if user already has an edit token stored in browser session
+    const existingToken = localStorage.getItem('db_vendor_token');
+    if (existingToken) {
+      window.location.href = `/edit.html?token=${existingToken}`;
+    }
+
+    // 2. Handle Login Submission
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const loginBtn = document.getElementById('loginBtn');
+      const email = document.getElementById('loginEmail').value.trim();
+
+      loginBtn.textContent = 'Verifying...';
+      loginBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success && result.token) {
+          // Store token in browser localStorage for persistent auto-login
+          localStorage.setItem('db_vendor_token', result.token);
+          
+          // Redirect to edit page
+          window.location.href = `/edit.html?token=${result.token}`;
+        } else {
+          alert(result.error || 'No business found with this email.');
+          loginBtn.textContent = 'Access My Portal';
+          loginBtn.disabled = false;
+        }
+      } catch (err) {
+        alert('Network error. Please try again.');
+        loginBtn.textContent = 'Access My Portal';
+        loginBtn.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>
