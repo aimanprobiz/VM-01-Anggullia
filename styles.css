@@ -752,7 +752,7 @@ dialog::backdrop {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* ================= HEADER & DRAWER STYLES ================= */
+/* ================= FIXED TOP HEADER & FULL-SCREEN DRAWER ================= */
 :root {
   --header-height: 58px;
   --primary-color: #064e3b; /* Emerald Green */
@@ -762,27 +762,30 @@ dialog::backdrop {
   --text-muted: #6b7280;
 }
 
-/* Fixed Header Bar */
+/* 1. Full-Width Sticky Top Header */
 .app-header {
   position: sticky;
   top: 0;
   left: 0;
-  right: 0;
+  width: 100vw; /* Spans 100% of the screen width */
   height: var(--header-height);
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
-  z-index: 100;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
 }
 
 .header-container {
-  max-width: 500px; /* Aligns with mobile container width */
+  width: 100%;
+  max-width: 480px; /* Aligns cleanly with mobile app layout */
   height: 100%;
   margin: 0 auto;
   padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .header-logo {
@@ -807,26 +810,26 @@ dialog::backdrop {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  outline: none;
 }
 
 .menu-toggle-btn:active {
   background: #f3f4f6;
 }
 
-/* Dark Backdrop Overlay */
+/* 2. Full-Screen Backdrop Overlay */
 .drawer-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
-  z-index: 200;
+  height: 100dvh; /* Uses full dynamic viewport height */
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  z-index: 9998;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .drawer-overlay.active {
@@ -834,26 +837,28 @@ dialog::backdrop {
   visibility: visible;
 }
 
-/* Slide-out Drawer Panel */
+/* 3. Smooth Full-Height Slide-Out Drawer */
 .side-drawer {
   position: fixed;
   top: 0;
-  right: -280px; /* Off-screen by default */
-  width: 280px;
-  height: 100vh;
+  right: -80vw; /* Hidden offscreen by default */
+  width: 78vw;  /* Cover 78% of mobile width */
+  max-width: 320px;
+  height: 100dvh; /* Full mobile screen height */
   background: #ffffff;
-  z-index: 201;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: -4px 0 25px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
 }
 
 .side-drawer.active {
-  transform: translateX(-280px);
+  transform: translateX(-100%);
 }
 
-/* Drawer Header Section */
+/* Drawer Header */
 .drawer-header {
   padding: 20px 18px 16px;
   background: #fdfbf7;
@@ -893,6 +898,7 @@ dialog::backdrop {
   flex-direction: column;
   gap: 6px;
   flex: 1;
+  overflow-y: auto;
 }
 
 .drawer-link {
