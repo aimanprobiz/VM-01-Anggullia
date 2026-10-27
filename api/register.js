@@ -35,11 +35,11 @@ export default async function handler(req, res) {
   try {
     const editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
 
-    // Map form actionType values to your Airtable Single Select options
+    // Map form actionType values to exact Airtable Single Select options
     let formattedActionType = 'Enquire';
-    if (actionType === 'claim') formattedActionType = 'Clam'; 
+    if (actionType === 'claim') formattedActionType = 'Claim'; 
     else if (actionType === 'code') formattedActionType = 'PromoCode';
-    else if (actionType === 'whatsapp') formattedActionType = 'Enquire';
+    else if (actionType === 'whatsapp' || actionType === 'enquire') formattedActionType = 'Enquire';
 
     // Build payload object matching exact Airtable field names
     const fieldsToSave = {
@@ -51,8 +51,8 @@ export default async function handler(req, res) {
       ActionType: formattedActionType
     };
 
-    // Conditionally append optional fields with exact casing
-    if (subtitle && subtitle.trim()) fieldsToSave.SubTitle = subtitle.trim();       // Exact match: SubTitle
+    // Conditionally append optional fields with exact Airtable casing
+    if (subtitle && subtitle.trim()) fieldsToSave.SubTitle = subtitle.trim();
     if (description && description.trim()) fieldsToSave.Description = description.trim();
     if (deal && deal.trim()) fieldsToSave.Deal = deal.trim();
     if (promoCode && promoCode.trim()) fieldsToSave.PromoCode = promoCode.trim();
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     if (websiteUrl && websiteUrl.trim()) fieldsToSave.WebsiteURL = websiteUrl.trim();
     if (instagramUrl && instagramUrl.trim()) fieldsToSave.InstagramURL = instagramUrl.trim();
     if (tiktokUrl && tiktokUrl.trim()) fieldsToSave.TikTokURL = tiktokUrl.trim();
-    if (imageUrl && imageUrl.trim()) fieldsToSave.ImageURL = imageUrl.trim();       // Exact match: ImageURL
+    if (imageUrl && imageUrl.trim()) fieldsToSave.ImageURL = imageUrl.trim();
 
     // Send payload to Airtable
     const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
