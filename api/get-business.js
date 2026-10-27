@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Search Airtable for matching EditToken
+    // 1. Fetch current business record by token
     const formula = encodeURIComponent(`{EditToken} = '${token.trim()}'`);
     const response = await fetch(
       `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}?filterByFormula=${formula}`,
@@ -30,20 +30,36 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    if (!response.ok) {
-      return res.status(500).json({ error: 'Failed to fetch business record.', details: data });
-    }
-
-    if (!data.records || data.records.length === 0) {
+    if (!response.ok || !data.records || data.records.length === 0) {
       return res.status(404).json({ error: 'Invalid or expired edit session.' });
     }
 
-    const record = data.records[0];
-    const fields = record.fields;
+    const currentRecord = data.records[0];
+    const fields = currentRecord.fields;
+    const ownerEmail = (fields.OwnerEmail || '').trim().toLowerCase();
 
-    // Return exact field mapping expected by edit.html
+    // 2. Fetch all businesses matching this OwnerEmail to enable multi-listing switching
+    let allBusinesses = [];
+    if (ownerEmail) {
+      const allFormula = encodeURIComponent(`LOWER({OwnerEmail}) = '${ownerEmail}'`);
+      const allRes = await fetch(
+        `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}?filterByFormula=${allFormula}`,
+        {
+          headers: { Authorization: `Bearer ${AIRTABLE_PAT}` }
+        }
+      );
+      const allData = await allRes.json();
+      if (allRes.ok && allData.records) {
+        allBusinesses = allData.records.map(r => ({
+          id: r.id,
+          name: r.fields.Name || 'Unnamed Business',
+          token: r.fields.EditToken
+        })).filter(b => b.token); // ensure token exists
+      }
+    }
+
     return res.status(200).json({
-      recordId: record.id,
+      recordId: currentRecord.id,
       name: fields.Name || '',
       subtitle: fields.SubTitle || '',
       category: fields.Category || '',
@@ -57,7 +73,8 @@ export default async function handler(req, res) {
       tiktokUrl: fields.TikTokURL || '',
       imageUrl: fields.ImageURL || '',
       ownerEmail: fields.OwnerEmail || '',
-      status: fields.Status || 'Pending'
+      status: fields.Status || 'Pending',
+      allBusinesses: allBusinesses // Returns array of all listings owned by email
     });
 
   } catch (error) {
