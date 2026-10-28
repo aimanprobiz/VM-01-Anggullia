@@ -11,42 +11,54 @@
   <div class="mobile-container" style="padding-bottom: 40px;">
     
     <!-- Top Nav -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
       <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
         ← Back to Directory
       </a>
     </div>
 
     <!-- Header Title -->
-    <div style="text-align: center; margin-bottom: 10px;">
+    <div style="text-align: center; margin-bottom: 12px;">
       <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">List Your Business Free</h2>
       <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4;">
         Join DailyBarakah SG and spotlight your Muslim-owned business to the local community.
       </p>
     </div>
 
-    <!-- Live Preview Ticket Box -->
-    <div style="margin-bottom: 16px;">
-      <p style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Live Deal Preview</p>
-      <div id="previewDealBox" class="coupon-ticket" style="margin: 0; background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%); border: 1.5px solid var(--accent-gold);">
-        <div class="coupon-content">
-          <div class="coupon-header">
-            <span class="coupon-tag">UMMAH SPECIAL:</span>
-          </div>
-          <p id="previewDealText" class="coupon-deal-text" style="font-size: 1.1rem;">YOUR EXCLUSIVE DEAL HERE</p>
-        </div>
+    <!-- 3-Step Progress Indicator -->
+    <div class="step-progress-wrapper">
+      <div class="step-progress-bar" id="progressBar"></div>
+      
+      <div class="step-node active" id="node1">
+        <div class="node-circle">1</div>
+        <span class="node-label">Basic Details</span>
+      </div>
+      <div class="step-node" id="node2">
+        <div class="node-circle">2</div>
+        <span class="node-label">Contact & Socials</span>
+      </div>
+      <div class="step-node" id="node3">
+        <div class="node-circle">3</div>
+        <span class="node-label">Ummah Deal</span>
       </div>
     </div>
 
     <!-- Registration Form Card -->
     <div class="card" style="padding: 20px 16px;">
-      <form id="registerForm" style="display: flex; flex-direction: column; gap: 16px;">
+      <form id="registerForm">
         
-        <!-- Section 1: Basic Info -->
-        <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">1. Business Details</h3>
+        <!-- STEP 1: Basic Business Details -->
+        <div class="form-step active" id="step1">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+            Step 1: Business Profile
+          </h3>
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Owner Email (For dashboard access) *</label>
+              <input type="email" id="ownerEmail" required placeholder="owner@business.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name *</label>
               <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
@@ -71,47 +83,22 @@
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL</label>
-              <input type="url" id="bizImage" placeholder="https://imgur.com/... or Google Drive link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+              <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
+            <button type="button" class="action-btn-primary" onclick="goToStep(2)" style="width: 100%;">Next: Contact & Media →</button>
           </div>
         </div>
 
-        <!-- Section 2: Community Deal -->
-        <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">2. Exclusive Ummah Special Deal</h3>
+        <!-- STEP 2: Contact & Social Info -->
+        <div class="form-step" id="step2">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+            Step 2: Contact & Social Media
+          </h3>
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer text *</label>
-              <input type="text" id="bizDeal" required placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type *</label>
-              <select id="bizActionType" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
-                <option value="claim">In-Store Cashier PIN Redemption</option>
-                <option value="code">Online Promo Code</option>
-              </select>
-            </div>
-
-            <div id="promoCodeGroup" style="display: none;">
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
-              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 3: Contact & Links -->
-        <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">3. Contact & Owner Info</h3>
-          
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Owner Email (For your dashboard access) *</label>
-              <input type="email" id="ownerEmail" required placeholder="owner@business.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code, e.g. 6591234567)</label>
               <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
@@ -132,11 +119,45 @@
               <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
           </div>
+
+          <div style="margin-top: 16px; display: flex; gap: 10px;">
+            <button type="button" class="action-btn-secondary" onclick="goToStep(1)" style="flex: 1;">← Back</button>
+            <button type="button" class="action-btn-primary" onclick="goToStep(3)" style="flex: 2;">Next: Ummah Special Deal →</button>
+          </div>
         </div>
 
-        <button type="submit" id="submitBtn" class="action-btn-primary" style="margin-top: 10px;">
-          Submit Listing for Review
-        </button>
+        <!-- STEP 3: Exclusive Ummah Special Deal -->
+        <div class="form-step" id="step3">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+            Step 3: Exclusive Ummah Special Deal
+          </h3>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text *</label>
+              <input type="text" id="bizDeal" required placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type *</label>
+              <select id="bizActionType" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
+                <option value="claim">In-Store Cashier PIN Redemption</option>
+                <option value="code">Online Promo Code</option>
+              </select>
+            </div>
+
+            <div id="promoCodeGroup" style="display: none;">
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
+              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; gap: 10px;">
+            <button type="button" class="action-btn-secondary" onclick="goToStep(2)" style="flex: 1;">← Back</button>
+            <button type="submit" id="submitBtn" class="action-btn-primary" style="flex: 2;">Submit Listing for Review</button>
+          </div>
+        </div>
 
       </form>
     </div>
@@ -144,7 +165,64 @@
   </div>
 
   <script>
-    // 1. Fetch & Populate Categories Real-Time (With "Others" anchored at the bottom)
+    let currentStep = 1;
+
+    // Step Navigation Handler with Basic Field Validation
+    function goToStep(targetStep) {
+      if (targetStep > currentStep) {
+        // Validation for Step 1
+        if (currentStep === 1) {
+          const email = document.getElementById('ownerEmail');
+          const name = document.getElementById('bizName');
+          const category = document.getElementById('bizCategory');
+
+          if (!email.checkValidity()) {
+            email.reportValidity();
+            return;
+          }
+          if (!name.checkValidity()) {
+            name.reportValidity();
+            return;
+          }
+          if (!category.value) {
+            alert('Please select a category.');
+            category.focus();
+            return;
+          }
+        }
+
+        // Validation for Step 2 when actionType requires website URL
+        if (currentStep === 2 && actionTypeSelect.value === 'code') {
+          if (!bizWebsiteInput.checkValidity()) {
+            bizWebsiteInput.reportValidity();
+            return;
+          }
+        }
+      }
+
+      currentStep = targetStep;
+
+      // Toggle Active Step Form Panels
+      document.querySelectorAll('.form-step').forEach((panel, index) => {
+        panel.classList.toggle('active', index + 1 === currentStep);
+      });
+
+      // Update Step Nodes & Progress Bar Width
+      document.querySelectorAll('.step-node').forEach((node, index) => {
+        const stepNum = index + 1;
+        node.classList.toggle('active', stepNum === currentStep);
+        node.classList.toggle('completed', stepNum < currentStep);
+      });
+
+      const progressBar = document.getElementById('progressBar');
+      if (currentStep === 1) progressBar.style.width = '0%';
+      else if (currentStep === 2) progressBar.style.width = '50%';
+      else if (currentStep === 3) progressBar.style.width = '100%';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 1. Fetch & Populate Categories Real-Time
     async function loadDynamicCategories() {
       const categorySelect = document.getElementById('bizCategory');
       if (!categorySelect) return;
@@ -155,12 +233,10 @@
 
         const businesses = await response.json();
         
-        // Extract unique categories, ignoring empty values
         const uniqueCategories = [...new Set(
           businesses.map(b => (b.Category || b.category || '').trim()).filter(Boolean)
         )];
 
-        // Sort alphabetically, but keep "Others" (case-insensitive) strictly at the bottom
         uniqueCategories.sort((a, b) => {
           const lowerA = a.toLowerCase();
           const lowerB = b.toLowerCase();
@@ -169,7 +245,6 @@
           return a.localeCompare(b);
         });
 
-        // Rebuild the dropdown options
         categorySelect.innerHTML = '<option value="" disabled selected>Select a category</option>';
         
         uniqueCategories.forEach(cat => {
@@ -180,8 +255,6 @@
         });
 
       } catch (error) {
-        console.error('Error loading dynamic categories:', error);
-        // Fallback options if API fails
         categorySelect.innerHTML = `
           <option value="" disabled selected>Select a category</option>
           <option value="Food & Beverage">Food & Beverage</option>
@@ -192,16 +265,7 @@
       }
     }
 
-    // 2. Live deal preview binding
-    const bizDealInput = document.getElementById('bizDeal');
-    const previewDealText = document.getElementById('previewDealText');
-
-    bizDealInput.addEventListener('input', () => {
-      const val = bizDealInput.value.trim();
-      previewDealText.textContent = val !== '' ? val.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
-    });
-
-    // 3. Toggle promo code field & require store website URL when Online Promo Code is chosen
+    // 2. Toggle promo code field & require store website URL when Online Promo Code is chosen
     const actionTypeSelect = document.getElementById('bizActionType');
     const promoCodeGroup = document.getElementById('promoCodeGroup');
     const bizWebsiteInput = document.getElementById('bizWebsite');
@@ -219,7 +283,7 @@
       }
     });
 
-    // 4. Form submission handler
+    // 3. Form submission handler
     const registerForm = document.getElementById('registerForm');
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -267,7 +331,6 @@
       }
     });
 
-    // Run dynamic category loading when DOM is ready
     loadDynamicCategories();
   </script>
 </body>
