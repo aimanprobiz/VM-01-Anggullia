@@ -20,19 +20,52 @@
       </button>
     </div>
 
-    <!-- Header Title -->
+    <!-- Header Title & Multi-Business Preview Engine -->
     <div style="text-align: center; margin-bottom: 12px;">
       <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">Vendor Dashboard</h2>
       <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4;">
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
 
-      <!-- Multi-Business Selector Dropdown (Visible only if owner has > 1 business) -->
-      <div id="businessSelectorContainer" style="display: none; margin-top: 12px; text-align: left; background: #fffdf2; padding: 10px; border-radius: var(--radius-sm); border: 1.5px solid var(--accent-gold);">
-        <label style="font-size: 0.75rem; font-weight: 700; color: var(--primary-color); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
-          Select Business Listing to Edit:
+      <!-- LIVE INDEX CARD PREVIEW SWITCHER (Above Dropdown) -->
+      <div id="liveCardPreviewWrapper" style="display: none; margin-top: 14px; position: relative; align-items: center; justify-content: center; gap: 6px;">
+        <!-- Left Arrow -->
+        <button type="button" id="prevListingBtn" aria-label="Previous Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
+          ‹
+        </button>
+
+        <!-- Dynamic Directory Card Container (Compact Index Card Layout) -->
+        <div id="activeDirectoryCard" class="grid-card" style="margin: 0; width: 100%; max-width: 280px; text-align: left; box-shadow: var(--shadow-md);">
+          <div style="position: relative;">
+            <img id="previewCardBanner" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Listing Banner" class="card-banner" style="height: 85px;">
+            <span id="previewFeaturedBadge" class="grid-featured-badge" style="display: none;" title="Featured Listing">★</span>
+          </div>
+          <div class="grid-card-body" style="padding: 10px;">
+            <div class="vendor-details" style="margin-bottom: 6px;">
+              <div class="deal-badge" style="font-size: 0.68rem; padding: 2px 8px;">
+                <span id="previewCardDeal">No offer</span>
+              </div>
+              <h3 id="previewCardName" class="vendor-name" style="font-size: 0.88rem; margin-top: 2px;">Business Name</h3>
+              <p id="previewCardSub" class="vendor-sub" style="font-size: 0.72rem; margin-bottom: 0;">Category / Subtitle</p>
+            </div>
+            <a id="previewViewLink" href="#" target="_blank" class="action-btn" style="display: block; text-decoration: none; text-align: center; font-size: 0.74rem; padding: 6px 0;">
+              View Live Profile ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Arrow -->
+        <button type="button" id="nextListingBtn" aria-label="Next Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
+          ›
+        </button>
+      </div>
+
+      <!-- BORDERLESS SELECTOR CONTAINER -->
+      <div id="businessSelectorContainer" style="display: none; margin-top: 10px; text-align: center;">
+        <label style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">
+          Select Listing
         </label>
-        <select id="businessSelector" style="width: 100%; padding: 8px 10px; font-size: 0.88rem; font-weight: 700; border: 1.5px solid var(--accent-gold); border-radius: var(--radius-sm); background: #ffffff; color: var(--primary-color); outline: none;">
+        <select id="businessSelector" style="width: auto; max-width: 90%; padding: 4px 8px; font-size: 0.88rem; font-weight: 700; border: none; background: transparent; color: var(--primary-color); outline: none; cursor: pointer; text-align-last: center;">
         </select>
       </div>
 
@@ -128,7 +161,7 @@
               <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
-            <!-- Live Deal Preview Box inside Step 3 -->
+            <!-- Live Deal Ticket Preview -->
             <div style="margin-top: 2px;">
               <p style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Live Deal Preview</p>
               <div id="previewDealBox" class="coupon-ticket" style="margin: 0; background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%); border: 1.5px solid var(--accent-gold);">
@@ -170,6 +203,8 @@
   <script>
     let recordId = null;
     let currentToken = null;
+    let userBusinessesList = [];
+    let currentListingIndex = 0;
 
     // 1. Retrieve token from URL params or localStorage
     const urlParams = new URLSearchParams(window.location.search);
@@ -182,20 +217,76 @@
       localStorage.setItem('db_vendor_token', currentToken);
     }
 
-    // 2. Render Business Selector Dropdown dynamically from API response
+    // Update Live Index Card Preview
+    function updateLiveIndexCardPreview(biz) {
+      const cardContainer = document.getElementById('liveCardPreviewWrapper');
+      if (!cardContainer || !biz) return;
+
+      cardContainer.style.display = 'flex';
+      
+      const banner = document.getElementById('previewCardBanner');
+      const name = document.getElementById('previewCardName');
+      const sub = document.getElementById('previewCardSub');
+      const deal = document.getElementById('previewCardDeal');
+      const viewLink = document.getElementById('previewViewLink');
+      const featuredBadge = document.getElementById('previewFeaturedBadge');
+
+      banner.src = biz.imageUrl || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
+      name.textContent = biz.name || 'Business Name';
+      sub.textContent = biz.subtitle || biz.category || '';
+      deal.textContent = biz.deal ? biz.deal : 'No offer';
+      
+      if (biz.slug) {
+        viewLink.href = `/business.html?slug=${biz.slug}`;
+        viewLink.style.display = 'block';
+      } else {
+        viewLink.style.display = 'none';
+      }
+
+      if (biz.isFeatured) {
+        featuredBadge.style.display = 'inline-block';
+      } else {
+        featuredBadge.style.display = 'none';
+      }
+    }
+
+    // Switch active business by array index
+    function switchActiveListing(index) {
+      if (!userBusinessesList || userBusinessesList.length === 0) return;
+      
+      // Loop around bounds
+      if (index < 0) index = userBusinessesList.length - 1;
+      if (index >= userBusinessesList.length) index = 0;
+
+      currentListingIndex = index;
+      const targetBiz = userBusinessesList[currentListingIndex];
+
+      if (targetBiz && targetBiz.token !== currentToken) {
+        localStorage.setItem('db_vendor_token', targetBiz.token);
+        window.location.href = `/edit.html?token=${targetBiz.token}`;
+      }
+    }
+
+    // Render Dropdown Selector & Side Carousel Arrows
     function renderBusinessSelector(businesses) {
       const selectorContainer = document.getElementById('businessSelectorContainer');
       const businessSelector = document.getElementById('businessSelector');
+      const prevBtn = document.getElementById('prevListingBtn');
+      const nextBtn = document.getElementById('nextListingBtn');
 
-      if (businesses && businesses.length > 1) {
+      userBusinessesList = businesses || [];
+      currentListingIndex = userBusinessesList.findIndex(b => b.token === currentToken);
+      if (currentListingIndex === -1) currentListingIndex = 0;
+
+      if (userBusinessesList.length > 0) {
         selectorContainer.style.display = 'block';
         businessSelector.innerHTML = '';
 
-        businesses.forEach(biz => {
+        userBusinessesList.forEach((biz, idx) => {
           const option = document.createElement('option');
           option.value = biz.token;
           option.textContent = biz.name;
-          if (biz.token === currentToken) option.selected = true;
+          if (idx === currentListingIndex) option.selected = true;
           businessSelector.appendChild(option);
         });
 
@@ -204,8 +295,17 @@
           localStorage.setItem('db_vendor_token', newToken);
           window.location.href = `/edit.html?token=${newToken}`;
         };
-      } else {
-        selectorContainer.style.display = 'none';
+
+        // Arrow controls visibility
+        if (userBusinessesList.length > 1) {
+          prevBtn.style.display = 'flex';
+          nextBtn.style.display = 'flex';
+          prevBtn.onclick = () => switchActiveListing(currentListingIndex - 1);
+          nextBtn.onclick = () => switchActiveListing(currentListingIndex + 1);
+        } else {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
+        }
       }
     }
 
@@ -274,9 +374,29 @@
     // Live Deal Preview Binding
     const bizDealInput = document.getElementById('bizDeal');
     const previewDealText = document.getElementById('previewDealText');
+    const previewCardDeal = document.getElementById('previewCardDeal');
+
     bizDealInput.addEventListener('input', () => {
       const val = bizDealInput.value.trim();
-      previewDealText.textContent = val !== '' ? val.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
+      const displayVal = val !== '' ? val.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
+      previewDealText.textContent = displayVal;
+      if (previewCardDeal) previewCardDeal.textContent = val !== '' ? val : 'No offer';
+    });
+
+    // Dynamic Input Synchronization with Live Index Preview Card
+    document.getElementById('bizName').addEventListener('input', (e) => {
+      const cardName = document.getElementById('previewCardName');
+      if (cardName) cardName.textContent = e.target.value.trim() || 'Business Name';
+    });
+
+    document.getElementById('bizSub').addEventListener('input', (e) => {
+      const cardSub = document.getElementById('previewCardSub');
+      if (cardSub) cardSub.textContent = e.target.value.trim() || 'Category / Subtitle';
+    });
+
+    document.getElementById('bizImage').addEventListener('input', (e) => {
+      const cardBanner = document.getElementById('previewCardBanner');
+      if (cardBanner) cardBanner.src = e.target.value.trim() || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
     });
 
     // 5. Load Business Data by Token & Persist Global Navigation Session
@@ -300,8 +420,9 @@
         if (data.ownerEmail) localStorage.setItem('vendorEmail', data.ownerEmail);
         if (data.slug) localStorage.setItem('vendorSlug', data.slug);
 
-        // Render multi-listing dropdown directly from API response
+        // Render multi-listing dropdown & live index card switcher
         renderBusinessSelector(data.allBusinesses);
+        updateLiveIndexCardPreview(data);
 
         // Populate form fields
         document.getElementById('bizName').value = data.name || '';
