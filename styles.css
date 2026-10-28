@@ -1015,11 +1015,11 @@ dialog::backdrop {
   color: var(--primary-color);
 }
 
-/* Header Profile Icon Button */
+/* Base Profile Icon Button (Logged Out State - Muted) */
 .profile-icon-btn {
   background: transparent;
   border: 1.5px solid var(--border-color);
-  color: var(--primary-color);
+  color: var(--text-muted);
   width: 34px;
   height: 34px;
   border-radius: 50%;
@@ -1027,11 +1027,23 @@ dialog::backdrop {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .profile-icon-btn:hover,
 .profile-icon-btn:active {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Logged In Active State (Gold Ring Accent) */
+.profile-icon-btn.logged-in {
   background-color: var(--accent-gold-bg);
-  border-color: var(--accent-gold);
+  border: 2px solid var(--accent-gold);
+  color: var(--primary-color);
+  box-shadow: 0 0 8px rgba(221, 186, 88, 0.4);
+}
+
+.profile-icon-btn.logged-in:hover {
+  transform: scale(1.05);
 }
