@@ -27,15 +27,15 @@
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
 
-      <!-- LIVE PROFILE CARD PREVIEW (Image -> Centered Name -> View Link) -->
-      <div id="liveCardPreviewWrapper" style="display: none; margin-bottom: 14px; position: relative; align-items: center; justify-content: center; gap: 4px;">
-        <!-- Left Arrow -->
-        <button type="button" id="prevListingBtn" aria-label="Previous Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
+      <!-- LIVE PROFILE CARD PREVIEW (Swipeable Image Section + Clean Arrows) -->
+      <div id="liveCardPreviewWrapper" style="display: none; margin-bottom: 14px; position: relative; align-items: center; justify-content: center; gap: 8px;">
+        <!-- Left Arrow (No border, larger) -->
+        <button type="button" id="prevListingBtn" aria-label="Previous Listing" style="background: transparent; border: none; color: var(--primary-color); font-size: 1.5rem; font-weight: 800; cursor: pointer; padding: 0 4px; z-index: 2;">
           ‹
         </button>
 
-        <!-- Profile Card Container -->
-        <div style="margin: 0; width: 100%; max-width: 300px; text-align: left; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 10px; background: #faf9f5; box-shadow: var(--shadow-sm);">
+        <!-- Profile Card Container (Swipeable Viewport) -->
+        <div id="swipeableViewport" style="margin: 0; width: 100%; max-width: 290px; text-align: left; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 10px; background: #faf9f5; box-shadow: var(--shadow-sm); overflow: hidden; touch-action: pan-y;">
           <div style="position: relative; margin-bottom: 8px;">
             <img id="previewCardBanner" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Profile Banner" style="width: 100%; height: auto; max-height: 140px; object-fit: cover; border-radius: var(--radius-sm); display: block;">
             <span id="previewFeaturedBadge" class="grid-featured-badge" style="display: none;" title="Featured Listing">★</span>
@@ -44,24 +44,24 @@
           <!-- Business Name Horizontally Center Aligned -->
           <h4 id="previewCardName" style="font-size: 0.95rem; font-weight: 800; color: var(--primary-color); text-align: center; margin-bottom: 6px;">Business Name</h4>
 
-          <!-- View Live Business Page Link -->
-          <a id="previewViewLink" href="#" target="_blank" style="display: block; text-decoration: none; text-align: center; font-size: 0.74rem; padding: 6px 0; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-weight: 700; color: var(--primary-color);">
+          <!-- View Live Business Page (Using App's Signature action-btn style) -->
+          <a id="previewViewLink" href="#" target="_blank" class="action-btn" style="display: block; text-decoration: none; text-align: center; font-size: 0.76rem; padding: 8px 0; margin-top: 4px;">
             View Live Business Page ↗
           </a>
         </div>
 
-        <!-- Right Arrow -->
-        <button type="button" id="nextListingBtn" aria-label="Next Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
+        <!-- Right Arrow (No border, larger) -->
+        <button type="button" id="nextListingBtn" aria-label="Next Listing" style="background: transparent; border: none; color: var(--primary-color); font-size: 1.5rem; font-weight: 800; cursor: pointer; padding: 0 4px; z-index: 2;">
           ›
         </button>
       </div>
 
-      <!-- SELECT LISTING WITH PILL-OUTLINE DROPDOWN -->
+      <!-- SELECT LISTING WITH SIGNATURE GREEN PILL DROPDOWN -->
       <div id="businessSelectorContainer" style="display: none; margin-bottom: 10px; align-items: center; justify-content: center; gap: 8px;">
         <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
           Select Listing:
         </span>
-        <select id="businessSelector" style="padding: 6px 12px; font-size: 0.82rem; font-weight: 700; border: 1.5px solid var(--border-color); border-radius: 20px; background: #ffffff; color: var(--primary-color); outline: none; cursor: pointer;">
+        <select id="businessSelector" style="padding: 6px 14px; font-size: 0.82rem; font-weight: 700; border: 1.5px solid var(--primary-color); border-radius: 20px; background: #ffffff; color: var(--primary-color); outline: none; cursor: pointer;">
         </select>
       </div>
 
@@ -289,15 +289,50 @@
         };
 
         if (userBusinessesList.length > 1) {
-          prevBtn.style.display = 'flex';
-          nextBtn.style.display = 'flex';
+          prevBtn.style.display = 'block';
+          nextBtn.style.display = 'block';
           prevBtn.onclick = () => switchActiveListing(currentListingIndex - 1);
           nextBtn.onclick = () => switchActiveListing(currentListingIndex + 1);
         } else {
           prevBtn.style.display = 'none';
-          nextBtn.style.display = 'none';
+          prevBtn.style.display = 'none';
         }
       }
+    }
+
+    // Initialize Touch Swipe Gestures for the Preview Card
+    function initCardSwipeGestures() {
+      const viewport = document.getElementById('swipeableViewport');
+      if (!viewport) return;
+
+      let startX = 0;
+      let startY = 0;
+      let startTime = 0;
+
+      viewport.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        startTime = Date.now();
+      }, { passive: true });
+
+      viewport.addEventListener('touchend', (e) => {
+        const touch = e.changedTouches[0];
+        const deltaX = touch.clientX - startX;
+        const deltaY = touch.clientY - startY;
+        const elapsedTime = Date.now() - startTime;
+
+        // Ensure horizontal swipe is dominant and quick enough (> 40px delta)
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40 && elapsedTime < 400) {
+          if (deltaX < 0) {
+            // Swiped Left -> Next Listing
+            switchActiveListing(currentListingIndex + 1);
+          } else {
+            // Swiped Right -> Previous Listing
+            switchActiveListing(currentListingIndex - 1);
+          }
+        }
+      }, { passive: true });
     }
 
     // 3. Load Categories
@@ -406,6 +441,7 @@
         // Render multi-listing dropdown & live profile card switcher
         renderBusinessSelector(data.allBusinesses);
         updateLiveProfileCardPreview(data);
+        initCardSwipeGestures();
 
         // Populate form fields
         document.getElementById('bizName').value = data.name || '';
