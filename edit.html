@@ -94,7 +94,7 @@
       Loading your business details...
     </div>
 
-    <!-- Edit Form Card with Tabs -->
+    <!-- Edit Form Card with Swipeable Tabs -->
     <div id="editCard" class="card" style="padding: 16px; display: none;">
       
       <!-- Tab Navigation Buttons -->
@@ -104,96 +104,100 @@
         <button type="button" class="tab-btn" onclick="switchTab(3)" style="flex: 1; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; background: transparent; border: none; border-bottom: 2.5px solid transparent; color: var(--text-muted); cursor: pointer; text-align: center;">3. Deals</button>
       </div>
 
-      <form id="editForm" style="display: flex; flex-direction: column; gap: 16px;">
-        
-        <!-- TAB 1: Business Profile -->
-        <div id="tabContent1" class="tab-content" style="display: flex; flex-direction: column; gap: 12px;">
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
-            <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+      <!-- Swipeable Tab Content Container -->
+      <div id="tabSwipeContainer" style="touch-action: pan-y;">
+        <form id="editForm" style="display: flex; flex-direction: column; gap: 16px;">
+          
+          <!-- TAB 1: Business Profile -->
+          <div id="tabContent1" class="tab-content" style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
+              <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
+              <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
+              <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="" disabled selected>Loading categories...</option>
+              </select>
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
+              <textarea id="bizDesc" rows="3" required placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: none; overflow: hidden;"></textarea>
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
+              <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div style="margin-top: 8px;">
+              <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
+            </div>
           </div>
 
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
-            <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          <!-- TAB 2: Contact & Social Media -->
+          <div id="tabContent2" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
+              <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
+              <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
+              <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
+              <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div style="margin-top: 8px;">
+              <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
+            </div>
           </div>
 
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
-            <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-              <option value="" disabled selected>Loading categories...</option>
-            </select>
+          <!-- TAB 3: Exclusive Ummah Special Deal -->
+          <div id="tabContent3" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
+              <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
+              <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
+                <option value="claim">In-Store Cashier PIN Redemption</option>
+                <option value="code">Online Promo Code</option>
+              </select>
+            </div>
+
+            <div id="promoCodeGroup" style="display: none;">
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
+              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div style="margin-top: 8px;">
+              <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
+            </div>
           </div>
 
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
-            <textarea id="bizDesc" rows="3" required placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: vertical;"></textarea>
-          </div>
+        </form>
+      </div>
 
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
-            <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-          </div>
-
-          <div style="margin-top: 8px;">
-            <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
-          </div>
-        </div>
-
-        <!-- TAB 2: Contact & Social Media -->
-        <div id="tabContent2" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
-            <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-          </div>
-
-          <div>
-            <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
-            <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-          </div>
-
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
-            <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-          </div>
-
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
-            <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-          </div>
-
-          <div style="margin-top: 8px;">
-            <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
-          </div>
-        </div>
-
-        <!-- TAB 3: Exclusive Ummah Special Deal -->
-        <div id="tabContent3" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
-            <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-          </div>
-
-          <div>
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
-            <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-              <option value="whatsapp">Enquire / Claim via WhatsApp</option>
-              <option value="claim">In-Store Cashier PIN Redemption</option>
-              <option value="code">Online Promo Code</option>
-            </select>
-          </div>
-
-          <div id="promoCodeGroup" style="display: none;">
-            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
-            <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-          </div>
-
-          <div style="margin-top: 8px;">
-            <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
-          </div>
-        </div>
-
-      </form>
     </div>
 
   </div>
@@ -203,6 +207,7 @@
     let currentToken = null;
     let userBusinessesList = [];
     let currentListingIndex = 0;
+    let activeTab = 1;
 
     // 1. Retrieve token from URL params or localStorage
     const urlParams = new URLSearchParams(window.location.search);
@@ -217,6 +222,7 @@
 
     // Tab Switching Logic
     function switchTab(tabNumber) {
+      activeTab = tabNumber;
       document.querySelectorAll('.tab-content').forEach((el, idx) => {
         el.style.display = (idx + 1) === tabNumber ? 'flex' : 'none';
       });
@@ -227,6 +233,48 @@
         btn.style.color = isActive ? 'var(--primary-color)' : 'var(--text-muted)';
       });
     }
+
+    // Initialize Swipe Gestures for Switching Tabs
+    function initTabSwipeGestures() {
+      const container = document.getElementById('tabSwipeContainer');
+      if (!container) return;
+
+      let startX = 0;
+      let startY = 0;
+      let startTime = 0;
+
+      container.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        startTime = Date.now();
+      }, { passive: true });
+
+      container.addEventListener('touchend', (e) => {
+        const touch = e.changedTouches[0];
+        const deltaX = touch.clientX - startX;
+        const deltaY = touch.clientY - startY;
+        const elapsedTime = Date.now() - startTime;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40 && elapsedTime < 400) {
+          if (deltaX < 0) {
+            // Swipe Left -> Next Tab
+            if (activeTab < 3) switchTab(activeTab + 1);
+          } else {
+            // Swipe Right -> Previous Tab
+            if (activeTab > 1) switchTab(activeTab - 1);
+          }
+        }
+      }, { passive: true });
+    }
+
+    // Auto-expanding Full Description Textarea
+    const descTextarea = document.getElementById('bizDesc');
+    function autoResizeTextarea() {
+      descTextarea.style.height = 'auto';
+      descTextarea.style.height = (descTextarea.scrollHeight + 4) + 'px';
+    }
+    descTextarea.addEventListener('input', autoResizeTextarea);
 
     // Trigger Shimmering Placeholder during card updates/switching
     function setCardShimmerState(isShimmering) {
@@ -497,11 +545,14 @@
         renderBusinessSelector(data.allBusinesses);
         updateLiveProfileCardPreview(data);
         initCardSwipeGestures();
+        initTabSwipeGestures();
 
         // Populate form fields
         document.getElementById('bizName').value = data.name || '';
         document.getElementById('bizSub').value = data.subtitle || '';
         document.getElementById('bizDesc').value = data.description || '';
+        autoResizeTextarea();
+        
         document.getElementById('bizImage').value = data.imageUrl || '';
         document.getElementById('bizDeal').value = data.deal || '';
 
