@@ -117,37 +117,68 @@
 
   <div class="mobile-container">
 
-    <!-- App Top Header Bar -->
+<!-- App Top Header Bar (Flushed to top) -->
 <header class="app-header">
-  <div class="header-brand">
-    <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
-    <span class="header-title">DailyBarakah SG</span>
-  </div>
-  
-  <nav class="header-nav">
-    <!-- Links to About (placeholder anchor / smooth scroll or alert) -->
-    <a href="#about" class="nav-link" id="navAboutBtn">About</a>
+  <div class="header-left">
+    <!-- Hamburger Menu Toggle Button -->
+    <button id="menuToggleBtn" class="menu-icon-btn" aria-label="Open Navigation Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
     
-    <!-- My Listing dropdown or direct portal link -->
-    <div class="nav-dropdown">
-      <button class="nav-link dropdown-toggle" id="listingDropdownBtn">
-        My Listing
-        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M1 1L5 5L9 1"/>
-        </svg>
-      </button>
-      
-      <div class="dropdown-menu" id="listingDropdownMenu">
-        <a href="/login.html" class="dropdown-item">
-          <span>🔑</span> Vendor Login
-        </a>
-        <a href="/register.html" class="dropdown-item">
-          <span>✨</span> Register Business
-        </a>
-      </div>
+    <!-- Branding -->
+    <div class="header-brand">
+      <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
+      <span class="header-title">DailyBarakah SG</span>
     </div>
-  </nav>
+  </div>
 </header>
+
+<!-- Side Drawer Navigation Overlay -->
+<div id="navDrawerOverlay" class="drawer-overlay"></div>
+<aside id="navDrawer" class="nav-drawer">
+  <div class="drawer-header">
+    <div class="header-brand">
+      <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
+      <span class="header-title">DailyBarakah SG</span>
+    </div>
+    <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu">
+      &times;
+    </button>
+  </div>
+
+  <nav class="drawer-menu">
+    <!-- 1. About Link (Points to about.html) -->
+    <a href="/about.html" class="drawer-item">
+      <span class="drawer-item-icon">ℹ️</span>
+      <div class="drawer-item-text">
+        <span class="drawer-item-title">About Us</span>
+        <span class="drawer-item-sub">Learn more about our community mission</span>
+      </div>
+    </a>
+
+    <!-- 2. My Listing / Vendor Portal -->
+    <a href="/login.html" class="drawer-item">
+      <span class="drawer-item-icon">🔑</span>
+      <div class="drawer-item-text">
+        <span class="drawer-item-title">My Listing / Login</span>
+        <span class="drawer-item-sub">Manage your business profile & deals</span>
+      </div>
+    </a>
+
+    <!-- Quick Register Link -->
+    <a href="/register.html" class="drawer-item highlight">
+      <span class="drawer-item-icon">✨</span>
+      <div class="drawer-item-text">
+        <span class="drawer-item-title">List Your Business</span>
+        <span class="drawer-item-sub">Join for free & support the Ummah</span>
+      </div>
+    </a>
+  </nav>
+</aside>
 
     <!-- 1. HADITH OF THE DAY CARD -->
     <section>
