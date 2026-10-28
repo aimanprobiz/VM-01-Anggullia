@@ -1013,3 +1013,25 @@ dialog::backdrop {
 .action-btn-secondary:active {
   background-color: var(--border-color);
 }
+
+/* Clickable Step Nodes */
+.step-node {
+  cursor: pointer;
+}
+
+/* Subtle Back Text Button */
+.action-btn-text {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 4px;
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.action-btn-text:hover {
+  color: var(--primary-color);
+}
