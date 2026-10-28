@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage Business Listing - DailyBarakah SG</title>
   <link rel="stylesheet" href="/styles.css">
+  <style>
+    /* Shimmer Loading Animation */
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .shimmer-bg {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+  </style>
 </head>
 <body>
 
@@ -27,7 +39,7 @@
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
 
-      <!-- SELECT LISTING WITH SIGNATURE GREEN PILL DROPDOWN (Moved to Top) -->
+      <!-- SELECT LISTING WITH SIGNATURE GREEN PILL DROPDOWN -->
       <div id="businessSelectorContainer" style="display: none; margin-bottom: 14px; align-items: center; justify-content: center; gap: 8px;">
         <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
           Select Listing:
@@ -36,7 +48,7 @@
         </select>
       </div>
 
-      <!-- LIVE PROFILE CARD PREVIEW (Swipeable Image Section + Relocated Status Badge + Dots) -->
+      <!-- LIVE PROFILE CARD PREVIEW (Swipeable + Shimmer Support) -->
       <div id="liveCardPreviewWrapper" style="display: none; margin-bottom: 14px; position: relative; align-items: center; justify-content: center; gap: 8px; flex-direction: column;">
         <div style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
           <!-- Left Arrow -->
@@ -47,17 +59,17 @@
           <!-- Profile Card Container (Swipeable Viewport) -->
           <div id="swipeableViewport" style="margin: 0; width: 100%; max-width: 290px; text-align: left; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 10px; background: #faf9f5; box-shadow: var(--shadow-sm); overflow: hidden; touch-action: pan-y;">
             <div style="position: relative; margin-bottom: 6px;">
-              <img id="previewCardBanner" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Profile Banner" style="width: 100%; height: auto; max-height: 140px; object-fit: cover; border-radius: var(--radius-sm); display: block;">
+              <img id="previewCardBanner" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Profile Banner" style="width: 100%; height: 130px; object-fit: cover; border-radius: var(--radius-sm); display: block;" class="">
               <span id="previewFeaturedBadge" class="grid-featured-badge" style="display: none;" title="Featured Listing">★</span>
             </div>
 
-            <!-- Status Badge (Relocated right below the image) -->
-            <div style="text-align: center; margin-bottom: 8px;">
+            <!-- Status Badge -->
+            <div style="text-align: center; margin-bottom: 6px;">
               <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Status: </span>
               <span id="statusBadge" style="font-size: 0.74rem; font-weight: 700;">Loading...</span>
             </div>
 
-            <!-- Business Name Horizontally Center Aligned -->
+            <!-- Business Name -->
             <h4 id="previewCardName" style="font-size: 0.95rem; font-weight: 800; color: var(--primary-color); text-align: center; margin-bottom: 6px;">Business Name</h4>
 
             <!-- View Live Business Page -->
@@ -73,9 +85,7 @@
         </div>
 
         <!-- Swipe Indicator Pagination Dots -->
-        <div id="swipePaginationDots" style="display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 4px;">
-          <!-- Dynamically populated dots -->
-        </div>
+        <div id="swipePaginationDots" style="display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 4px;"></div>
       </div>
     </div>
 
@@ -84,119 +94,103 @@
       Loading your business details...
     </div>
 
-    <!-- Edit Form Card -->
-    <div id="editCard" class="card" style="padding: 20px 16px; display: none;">
+    <!-- Edit Form Card with Tabs -->
+    <div id="editCard" class="card" style="padding: 16px; display: none;">
+      
+      <!-- Tab Navigation Buttons -->
+      <div style="display: flex; border-bottom: 1.5px solid var(--border-color); margin-bottom: 16px; gap: 4px;">
+        <button type="button" class="tab-btn active" onclick="switchTab(1)" style="flex: 1; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; background: transparent; border: none; border-bottom: 2.5px solid var(--primary-color); color: var(--primary-color); cursor: pointer; text-align: center;">1. Profile</button>
+        <button type="button" class="tab-btn" onclick="switchTab(2)" style="flex: 1; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; background: transparent; border: none; border-bottom: 2.5px solid transparent; color: var(--text-muted); cursor: pointer; text-align: center;">2. Contact</button>
+        <button type="button" class="tab-btn" onclick="switchTab(3)" style="flex: 1; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; background: transparent; border: none; border-bottom: 2.5px solid transparent; color: var(--text-muted); cursor: pointer; text-align: center;">3. Deals</button>
+      </div>
+
       <form id="editForm" style="display: flex; flex-direction: column; gap: 16px;">
         
-        <!-- SECTION 1: Business Details -->
-        <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
-            1. Business Profile
-          </h3>
-          
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
-              <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
+        <!-- TAB 1: Business Profile -->
+        <div id="tabContent1" class="tab-content" style="display: flex; flex-direction: column; gap: 12px;">
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
+            <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          </div>
 
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
-              <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
+            <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          </div>
 
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
-              <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-                <option value="" disabled selected>Loading categories...</option>
-              </select>
-            </div>
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
+            <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+              <option value="" disabled selected>Loading categories...</option>
+            </select>
+          </div>
 
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
-              <textarea id="bizDesc" rows="3" required placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: vertical;"></textarea>
-            </div>
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
+            <textarea id="bizDesc" rows="3" required placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: vertical;"></textarea>
+          </div>
 
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
-              <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
+            <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          </div>
+
+          <button type="button" class="action-btn-primary" onclick="switchTab(2)" style="margin-top: 8px; width: 100%; padding: 12px;">Next: Contact & Socials →</button>
+        </div>
+
+        <!-- TAB 2: Contact & Social Media -->
+        <div id="tabContent2" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
+            <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          </div>
+
+          <div>
+            <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
+            <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          </div>
+
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
+            <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          </div>
+
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
+            <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button type="button" class="action-btn" onclick="switchTab(1)" style="flex: 1; padding: 12px; text-align: center;">← Back</button>
+            <button type="button" class="action-btn-primary" onclick="switchTab(3)" style="flex: 1; padding: 12px;">Next: Deals →</button>
           </div>
         </div>
 
-        <!-- SECTION 2: Contact & Social Info -->
-        <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
-            2. Contact & Social Media <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
-          </h3>
-          
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
-              <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <div>
-              <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
-              <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
-              <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
-              <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
+        <!-- TAB 3: Exclusive Ummah Special Deal -->
+        <div id="tabContent3" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
+            <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
           </div>
-        </div>
 
-        <!-- SECTION 3: Exclusive Ummah Special Deal -->
-        <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
-            3. Exclusive Ummah Special Deal <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
-          </h3>
-          
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
-              <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <!-- Live Deal Ticket Preview -->
-            <div style="margin-top: 2px;">
-              <p style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Live Deal Preview</p>
-              <div id="previewDealBox" class="coupon-ticket" style="margin: 0; background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%); border: 1.5px solid var(--accent-gold);">
-                <div class="coupon-content">
-                  <div class="coupon-header">
-                    <span class="coupon-tag">UMMAH SPECIAL:</span>
-                  </div>
-                  <p id="previewDealText" class="coupon-deal-text" style="font-size: 1.05rem;">YOUR EXCLUSIVE DEAL HERE</p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
-              <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
-                <option value="claim">In-Store Cashier PIN Redemption</option>
-                <option value="code">Online Promo Code</option>
-              </select>
-            </div>
-
-            <div id="promoCodeGroup" style="display: none;">
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
-              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
+          <div>
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
+            <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+              <option value="whatsapp">Enquire / Claim via WhatsApp</option>
+              <option value="claim">In-Store Cashier PIN Redemption</option>
+              <option value="code">Online Promo Code</option>
+            </select>
           </div>
-        </div>
 
-        <!-- Save Button -->
-        <div style="margin-top: 8px;">
-          <button type="submit" id="saveBtn" class="action-btn-primary" style="width: 100%; padding: 12px;">Save Profile Changes</button>
+          <div id="promoCodeGroup" style="display: none;">
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
+            <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button type="button" class="action-btn" onclick="switchTab(2)" style="flex: 1; padding: 12px; text-align: center;">← Back</button>
+            <button type="submit" id="saveBtn" class="action-btn-primary" style="flex: 2; padding: 12px;">Save Profile Changes</button>
+          </div>
         </div>
 
       </form>
@@ -221,12 +215,45 @@
       localStorage.setItem('db_vendor_token', currentToken);
     }
 
+    // Tab Switching Logic
+    function switchTab(tabNumber) {
+      document.querySelectorAll('.tab-content').forEach((el, idx) => {
+        el.style.display = (idx + 1) === tabNumber ? 'flex' : 'none';
+      });
+
+      document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+        const isActive = (idx + 1) === tabNumber;
+        btn.style.borderBottomColor = isActive ? 'var(--primary-color)' : 'transparent';
+        btn.style.color = isActive ? 'var(--primary-color)' : 'var(--text-muted)';
+      });
+    }
+
+    // Trigger Shimmering Placeholder during card updates/switching
+    function setCardShimmerState(isShimmering) {
+      const banner = document.getElementById('previewCardBanner');
+      const name = document.getElementById('previewCardName');
+      
+      if (isShimmering) {
+        banner.classList.add('shimmer-bg');
+        banner.style.opacity = '0.5';
+        name.classList.add('shimmer-bg');
+        name.style.color = 'transparent';
+        name.style.borderRadius = '4px';
+      } else {
+        banner.classList.remove('shimmer-bg');
+        banner.style.opacity = '1';
+        name.classList.remove('shimmer-bg');
+        name.style.color = 'var(--primary-color)';
+      }
+    }
+
     // Update Live Profile Card Preview & Pagination Dots
     function updateLiveProfileCardPreview(biz) {
       const cardContainer = document.getElementById('liveCardPreviewWrapper');
       if (!cardContainer || !biz) return;
 
       cardContainer.style.display = 'flex';
+      setCardShimmerState(false);
       
       const banner = document.getElementById('previewCardBanner');
       const name = document.getElementById('previewCardName');
@@ -281,7 +308,7 @@
       });
     }
 
-    // Switch active business by array index
+    // Switch active business by array index with shimmer effect
     function switchActiveListing(index) {
       if (!userBusinessesList || userBusinessesList.length === 0) return;
       
@@ -292,6 +319,7 @@
       const targetBiz = userBusinessesList[currentListingIndex];
 
       if (targetBiz && targetBiz.token !== currentToken) {
+        setCardShimmerState(true);
         localStorage.setItem('db_vendor_token', targetBiz.token);
         window.location.href = `/edit.html?token=${targetBiz.token}`;
       }
@@ -322,6 +350,7 @@
 
         businessSelector.onchange = (e) => {
           const newToken = e.target.value;
+          setCardShimmerState(true);
           localStorage.setItem('db_vendor_token', newToken);
           window.location.href = `/edit.html?token=${newToken}`;
         };
@@ -432,16 +461,7 @@
 
     actionTypeSelect.addEventListener('change', updateActionTypeUI);
 
-    // Live Deal Preview & Form Input Synchronizers
-    const bizDealInput = document.getElementById('bizDeal');
-    const previewDealText = document.getElementById('previewDealText');
-
-    bizDealInput.addEventListener('input', () => {
-      const val = bizDealInput.value.trim();
-      const displayVal = val !== '' ? val.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
-      previewDealText.textContent = displayVal;
-    });
-
+    // Live Form Input Synchronizers
     document.getElementById('bizName').addEventListener('input', (e) => {
       const cardName = document.getElementById('previewCardName');
       if (cardName) cardName.textContent = e.target.value.trim() || 'Business Name';
@@ -484,7 +504,6 @@
         document.getElementById('bizDesc').value = data.description || '';
         document.getElementById('bizImage').value = data.imageUrl || '';
         document.getElementById('bizDeal').value = data.deal || '';
-        previewDealText.textContent = data.deal ? data.deal.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
 
         // Map ActionType option safely
         let actionVal = (data.actionType || '').toLowerCase();
@@ -502,7 +521,7 @@
         updateActionTypeUI();
         await loadCategories(data.category);
 
-        // Status Badge UI (Relocated right below the image)
+        // Status Badge UI
         const statusBadge = document.getElementById('statusBadge');
         const statusVal = (data.status || 'Pending').toLowerCase();
         
