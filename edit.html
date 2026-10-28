@@ -521,7 +521,7 @@
       if (cardBanner) cardBanner.src = e.target.value.trim() || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
     });
 
-    // Remove shimmering state & enable form fields once loaded
+    // Remove shimmering state & enable form fields once loaded (Preserving loaded values!)
     function removeFormShimmer() {
       const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'bizImage', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'bizDeal', 'bizActionType', 'bizPromoCode'];
       fields.forEach(id => {
@@ -565,7 +565,7 @@
         initCardSwipeGestures();
         initTabSwipeGestures();
 
-        // Populate form fields properly matching the correct HTML IDs
+        // Populate form fields properly BEFORE removing shimmer so values are locked in
         document.getElementById('bizName').value = data.name || '';
         document.getElementById('bizSub').value = data.subtitle || '';
         document.getElementById('bizDesc').value = data.description || '';
@@ -580,7 +580,6 @@
         else if (actionVal === 'claim') actionVal = 'claim';
         else actionVal = 'whatsapp';
         
-        actionTypeSelect.value = actionVal;
         document.getElementById('bizPromoCode').value = data.promoCode || '';
         document.getElementById('bizPhone').value = data.phone || '';
         document.getElementById('bizWebsite').value = data.websiteUrl || '';
