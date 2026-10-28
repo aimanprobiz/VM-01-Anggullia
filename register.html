@@ -25,19 +25,19 @@
       </p>
     </div>
 
-    <!-- 3-Step Progress Indicator -->
+    <!-- 3-Step Clickable Progress Indicator -->
     <div class="step-progress-wrapper">
       <div class="step-progress-bar" id="progressBar"></div>
       
-      <div class="step-node active" id="node1">
+      <div class="step-node active" id="node1" onclick="goToStep(1)">
         <div class="node-circle">1</div>
         <span class="node-label">Basic Details</span>
       </div>
-      <div class="step-node" id="node2">
+      <div class="step-node" id="node2" onclick="goToStep(2)">
         <div class="node-circle">2</div>
         <span class="node-label">Contact & Socials</span>
       </div>
-      <div class="step-node" id="node3">
+      <div class="step-node" id="node3" onclick="goToStep(3)">
         <div class="node-circle">3</div>
         <span class="node-label">Ummah Deal</span>
       </div>
@@ -55,18 +55,18 @@
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Owner Email (For dashboard access) *</label>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Owner Email (Compulsory) *</label>
               <input type="email" id="ownerEmail" required placeholder="owner@business.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name *</label>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
               <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline</label>
-              <input type="text" id="bizSub" placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
+              <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
             <div>
@@ -77,12 +77,12 @@
             </div>
 
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description</label>
-              <textarea id="bizDesc" rows="3" placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: vertical;"></textarea>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
+              <textarea id="bizDesc" rows="3" required placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: vertical;"></textarea>
             </div>
 
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL</label>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
               <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
           </div>
@@ -95,12 +95,12 @@
         <!-- STEP 2: Contact & Social Info -->
         <div class="form-step" id="step2">
           <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
-            Step 2: Contact & Social Media
+            Step 2: Contact & Social Media <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
           </h3>
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code, e.g. 6591234567)</label>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
               <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
@@ -120,27 +120,27 @@
             </div>
           </div>
 
-          <div style="margin-top: 16px; display: flex; gap: 10px;">
-            <button type="button" class="action-btn-secondary" onclick="goToStep(1)" style="flex: 1;">← Back</button>
-            <button type="button" class="action-btn-primary" onclick="goToStep(3)" style="flex: 2;">Next: Ummah Special Deal →</button>
+          <div style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between;">
+            <button type="button" class="action-btn-text" onclick="goToStep(1)">← Back</button>
+            <button type="button" class="action-btn-primary" onclick="goToStep(3)" style="width: auto; padding: 10px 24px;">Next: Ummah Deal →</button>
           </div>
         </div>
 
         <!-- STEP 3: Exclusive Ummah Special Deal -->
         <div class="form-step" id="step3">
           <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
-            Step 3: Exclusive Ummah Special Deal
+            Step 3: Exclusive Ummah Special Deal <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
           </h3>
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text *</label>
-              <input type="text" id="bizDeal" required placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
+              <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type *</label>
-              <select id="bizActionType" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
+              <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
                 <option value="whatsapp">Enquire / Claim via WhatsApp</option>
                 <option value="claim">In-Store Cashier PIN Redemption</option>
                 <option value="code">Online Promo Code</option>
@@ -153,13 +153,24 @@
             </div>
           </div>
 
-          <div style="margin-top: 16px; display: flex; gap: 10px;">
-            <button type="button" class="action-btn-secondary" onclick="goToStep(2)" style="flex: 1;">← Back</button>
-            <button type="submit" id="submitBtn" class="action-btn-primary" style="flex: 2;">Submit Listing for Review</button>
+          <div style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between;">
+            <button type="button" class="action-btn-text" onclick="goToStep(2)">← Back</button>
+            <button type="submit" id="submitBtn" class="action-btn-primary" style="width: auto; padding: 10px 24px;">Submit Listing for Review</button>
           </div>
         </div>
 
       </form>
+
+      <!-- SUCCESS CONFIRMATION STATE (Hidden by default) -->
+      <div id="successState" style="display: none; text-align: center; padding: 20px 10px;">
+        <div style="font-size: 3rem; margin-bottom: 10px;">⏳</div>
+        <h3 style="color: var(--primary-color); font-size: 1.2rem; font-weight: 800; margin-bottom: 8px;">Alhamdulillah, Submission Received!</h3>
+        <p style="color: var(--text-main); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">
+          Jazakallahu khair for listing your business with DailyBarakah SG. Your application has been successfully submitted and is currently <strong>pending admin approval</strong>. We will review your details and publish your profile to the community shortly, Insha'Allah!
+        </p>
+        <a href="/" class="action-btn-primary" style="display: inline-block; text-decoration: none;">Return to Home Directory</a>
+      </div>
+
     </div>
 
   </div>
@@ -167,31 +178,23 @@
   <script>
     let currentStep = 1;
 
-    // Step Navigation Handler with Basic Field Validation
+    // Step Navigation Handler with Validation for Step 1
     function goToStep(targetStep) {
       if (targetStep > currentStep) {
-        // Validation for Step 1
         if (currentStep === 1) {
           const email = document.getElementById('ownerEmail');
           const name = document.getElementById('bizName');
+          const sub = document.getElementById('bizSub');
           const category = document.getElementById('bizCategory');
+          const desc = document.getElementById('bizDesc');
 
-          if (!email.checkValidity()) {
-            email.reportValidity();
-            return;
-          }
-          if (!name.checkValidity()) {
-            name.reportValidity();
-            return;
-          }
-          if (!category.value) {
-            alert('Please select a category.');
-            category.focus();
-            return;
-          }
+          if (!email.checkValidity()) { email.reportValidity(); return; }
+          if (!name.checkValidity()) { name.reportValidity(); return; }
+          if (!sub.checkValidity()) { sub.reportValidity(); return; }
+          if (!category.value) { alert('Please select a category.'); category.focus(); return; }
+          if (!desc.checkValidity()) { desc.reportValidity(); return; }
         }
 
-        // Validation for Step 2 when actionType requires website URL
         if (currentStep === 2 && actionTypeSelect.value === 'code') {
           if (!bizWebsiteInput.checkValidity()) {
             bizWebsiteInput.reportValidity();
@@ -283,7 +286,7 @@
       }
     });
 
-    // 3. Form submission handler
+    // 3. Form submission handler with Success State
     const registerForm = document.getElementById('registerForm');
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -317,8 +320,11 @@
         const result = await response.json();
 
         if (response.ok && result.success) {
-          alert('✓ Alhamdulillah! Your listing has been submitted successfully.\n\nOur admin team will review and publish it soon. Jazakallahu khair!');
-          window.location.href = '/';
+          // Hide form, progress bar, and show pending approval message card
+          registerForm.style.display = 'none';
+          document.querySelector('.step-progress-wrapper').style.display = 'none';
+          document.getElementById('successState').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           alert('Error: ' + (result.error || 'Failed to submit listing.'));
           submitBtn.textContent = 'Submit Listing for Review';
