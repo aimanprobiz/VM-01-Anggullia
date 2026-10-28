@@ -1014,3 +1014,24 @@ dialog::backdrop {
 .action-btn-text:hover {
   color: var(--primary-color);
 }
+
+/* Header Profile Icon Button */
+.profile-icon-btn {
+  background: transparent;
+  border: 1.5px solid var(--border-color);
+  color: var(--primary-color);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.profile-icon-btn:hover,
+.profile-icon-btn:active {
+  background-color: var(--accent-gold-bg);
+  border-color: var(--accent-gold);
+}
