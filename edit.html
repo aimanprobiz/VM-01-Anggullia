@@ -63,12 +63,6 @@
               <span id="previewFeaturedBadge" class="grid-featured-badge" style="display: none;" title="Featured Listing">★</span>
             </div>
 
-            <!-- Status Badge -->
-            <div style="text-align: center; margin-bottom: 6px;">
-              <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Status: </span>
-              <span id="statusBadge" style="font-size: 0.74rem; font-weight: 700;">Loading...</span>
-            </div>
-
             <!-- Business Name -->
             <h4 id="previewCardName" style="font-size: 0.95rem; font-weight: 800; color: var(--primary-color); text-align: center; margin-bottom: 6px;">Business Name</h4>
 
@@ -85,7 +79,13 @@
         </div>
 
         <!-- Swipe Indicator Pagination Dots -->
-        <div id="swipePaginationDots" style="display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 4px;"></div>
+        <div id="swipePaginationDots" style="display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 6px;"></div>
+
+        <!-- Status Badge -->
+        <div style="text-align: center; margin-top: 4px;">
+          <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;">Status: </span>
+          <span id="statusBadge" style="font-size: 0.76rem; font-weight: 700;">Loading...</span>
+        </div>
       </div>
     </div>
 
@@ -135,7 +135,9 @@
             <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
           </div>
 
-          <button type="button" class="action-btn-primary" onclick="switchTab(2)" style="margin-top: 8px; width: 100%; padding: 12px;">Next: Contact & Socials →</button>
+          <div style="margin-top: 8px;">
+            <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
+          </div>
         </div>
 
         <!-- TAB 2: Contact & Social Media -->
@@ -160,9 +162,8 @@
             <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
           </div>
 
-          <div style="display: flex; gap: 8px; margin-top: 8px;">
-            <button type="button" class="action-btn" onclick="switchTab(1)" style="flex: 1; padding: 12px; text-align: center;">← Back</button>
-            <button type="button" class="action-btn-primary" onclick="switchTab(3)" style="flex: 1; padding: 12px;">Next: Deals →</button>
+          <div style="margin-top: 8px;">
+            <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
           </div>
         </div>
 
@@ -187,9 +188,8 @@
             <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
           </div>
 
-          <div style="display: flex; gap: 8px; margin-top: 8px;">
-            <button type="button" class="action-btn" onclick="switchTab(2)" style="flex: 1; padding: 12px; text-align: center;">← Back</button>
-            <button type="submit" id="saveBtn" class="action-btn-primary" style="flex: 2; padding: 12px;">Save Profile Changes</button>
+          <div style="margin-top: 8px;">
+            <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
           </div>
         </div>
 
@@ -545,9 +545,11 @@
     // 6. Handle Save Submission
     document.getElementById('editForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const saveBtn = document.getElementById('saveBtn');
-      saveBtn.textContent = 'Saving Changes...';
-      saveBtn.disabled = true;
+      const saveButtons = document.querySelectorAll('.save-btn');
+      saveButtons.forEach(btn => {
+        btn.textContent = 'Saving Changes...';
+        btn.disabled = true;
+      });
 
       const payload = {
         recordId: recordId,
@@ -577,17 +579,16 @@
 
         if (response.ok && result.success) {
           alert('✓ Alhamdulillah! Your listing changes have been updated successfully.');
-          saveBtn.textContent = 'Save Profile Changes';
-          saveBtn.disabled = false;
         } else {
           alert('Error: ' + (result.error || 'Failed to update profile.'));
-          saveBtn.textContent = 'Save Profile Changes';
-          saveBtn.disabled = false;
         }
       } catch (err) {
         alert('Network error. Please try again later.');
-        saveBtn.textContent = 'Save Profile Changes';
-        saveBtn.disabled = false;
+      } finally {
+        saveButtons.forEach(btn => {
+          btn.textContent = 'Save Profile Changes';
+          btn.disabled = false;
+        });
       }
     });
 
