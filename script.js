@@ -26,18 +26,26 @@ function initHeaderNav() {
   if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
   if (overlay) overlay.addEventListener('click', closeDrawer);
 
-  // Profile Button Click Handler
-  if (profileBtn) {
-    profileBtn.addEventListener('click', () => {
-      // Check if owner email or session token exists in local storage
-      const ownerEmail = localStorage.getItem('vendorEmail');
-      const vendorSlug = localStorage.getItem('vendorSlug');
+  // Check Active Session & Style Profile Icon Dynamically
+  const ownerEmail = localStorage.getItem('vendorEmail');
+  const vendorSlug = localStorage.getItem('vendorSlug');
+  const isLoggedIn = Boolean(ownerEmail && vendorSlug);
 
-      if (ownerEmail && vendorSlug) {
-        // Redirect directly to vendor's live listing page or dashboard
+  if (profileBtn) {
+    if (isLoggedIn) {
+      // Apply active logged-in styling (Gold Ring Accent)
+      profileBtn.classList.add('logged-in');
+      profileBtn.setAttribute('title', 'My Active Business Profile');
+    } else {
+      profileBtn.classList.remove('logged-in');
+      profileBtn.setAttribute('title', 'Vendor Login / List Business');
+    }
+
+    // Handle Profile Button Click
+    profileBtn.addEventListener('click', () => {
+      if (isLoggedIn) {
         window.location.href = `/business.html?slug=${vendorSlug}`;
       } else {
-        // Redirect to login page if no active listing session found
         window.location.href = '/login.html';
       }
     });
@@ -46,8 +54,6 @@ function initHeaderNav() {
 
 document.addEventListener('DOMContentLoaded', initHeaderNav);
 
-// Call on load
-document.addEventListener('DOMContentLoaded', initHeaderNav);
 // 1. Dynamic Carousel & Hadith Avatar Loader
 let currentIndex = 0;
 let autoScrollInterval = null;
@@ -285,7 +291,6 @@ function initCategories() {
 
   categories = ['all', ...dynamicCategories];
 
-  // Clear container and rebuild horizontal category pills
   filterContainer.innerHTML = '';
   if (searchBtn) filterContainer.appendChild(searchBtn);
 
@@ -310,7 +315,6 @@ function initCategories() {
     filterContainer.appendChild(btn);
   });
 
-  // Populate Categories Grid inside Search Modal
   initSearchModalCategories();
 }
 
@@ -346,7 +350,7 @@ function initSearchModalCategories() {
       switchCategory(index);
       if (searchModal) {
         searchModal.close();
-        document.body.style.overflow = ''; // Restore background scroll
+        document.body.style.overflow = '';
       }
       if (modalSearchInput) modalSearchInput.value = '';
       if (categoriesSection) categoriesSection.style.display = 'block';
@@ -355,6 +359,7 @@ function initSearchModalCategories() {
     grid.appendChild(btn);
   });
 }
+
 // Setup Search Modal Triggers, Auto-Scroll, Backdrop Closing & Keyboard Filtering
 function setupSearchModal() {
   const searchBtn = document.getElementById('searchToggleBtn');
@@ -368,7 +373,6 @@ function setupSearchModal() {
   if (!searchModal) return;
 
   function openSearchModal() {
-    // 1. Scroll main view directly to the "Support Local Muslim Businesses" section
     if (businessSection) {
       businessSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -376,12 +380,9 @@ function setupSearchModal() {
     if (modalSearchInput) modalSearchInput.value = '';
     if (categoriesSection) categoriesSection.style.display = 'block';
     
-    // Lock main page scrolling while modal opens
     document.body.style.overflow = 'hidden';
-    
     searchModal.show();
 
-    // Attach click-outside listener after a short delay
     setTimeout(() => {
       window.addEventListener('click', handleOutsideClick);
     }, 50);
@@ -389,11 +390,10 @@ function setupSearchModal() {
 
   function closeSearchModal() {
     searchModal.close();
-    document.body.style.overflow = ''; // Restore main page scrolling
+    document.body.style.overflow = '';
     window.removeEventListener('click', handleOutsideClick);
   }
 
-  // Handle click outside modal container
   function handleOutsideClick(event) {
     if (!searchModal.open) return;
     const isClickInside = 
@@ -406,7 +406,6 @@ function setupSearchModal() {
     }
   }
 
-  // Bind both category grid pill and right-aligned header search button
   if (searchBtn) searchBtn.addEventListener('click', openSearchModal);
   if (headerSearchBtn) headerSearchBtn.addEventListener('click', openSearchModal);
 
@@ -437,15 +436,15 @@ function setupSearchModal() {
       if (nextPage) nextPage.innerHTML = `<div class="business-grid">${renderGridForCategory(nextCat, query)}</div>`;
     });
 
-    // Dismiss soft keyboard & restore scrolling when user presses "Enter" / "Search"
     modalSearchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         modalSearchInput.blur();
-        document.body.style.overflow = ''; // Allow users to scroll search results
+        document.body.style.overflow = '';
       }
     });
   }
 }
+
 async function loadBusinesses() {
   const gridContainer = document.getElementById('businessGrid');
   if (gridContainer) {
@@ -575,7 +574,6 @@ function renderCurrentCategoryView() {
     }
   });
 
-  // Re-highlight active state in modal category grid if open
   initSearchModalCategories();
 }
 
