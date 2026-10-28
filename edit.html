@@ -580,11 +580,12 @@
         document.getElementById('bizImage').value = data.imageUrl || '';
         document.getElementById('bizDeal').value = data.deal || '';
 
-        // Map ActionType option safely
+// Map ActionType option safely
         let actionVal = (data.actionType || '').toLowerCase();
         if (actionVal === 'promocode' || actionVal === 'code') actionVal = 'code';
         else if (actionVal === 'claim') actionVal = 'claim';
-        else actionVal = 'whatsapp';
+        else if (actionVal === 'enquire' || actionVal === 'whatsapp') actionVal = 'enquire';
+        else actionVal = 'enquire'; // default fallback
         
         document.getElementById('bizPromoCode').value = data.promoCode || '';
         document.getElementById('bizPhone').value = data.phone || '';
@@ -594,7 +595,7 @@
 
         updateActionTypeUI();
         
-        // Re-populate redemption options safely
+// Re-populate redemption options safely
         actionTypeSelect.innerHTML = `
           <option value="enquire">Enquire / Claim via WhatsApp</option>
           <option value="claim">In-Store Cashier PIN Redemption</option>
