@@ -1,3 +1,34 @@
+// Dropdown Toggle & Header Logic
+function initHeaderNav() {
+  const dropdownBtn = document.getElementById('listingDropdownBtn');
+  const navDropdown = dropdownBtn ? dropdownBtn.closest('.nav-dropdown') : null;
+  const aboutBtn = document.getElementById('navAboutBtn');
+
+  // 1. Toggle "My Listing" Dropdown Menu
+  if (dropdownBtn && navDropdown) {
+    dropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navDropdown.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!navDropdown.contains(event.target)) {
+        navDropdown.classList.remove('open');
+      }
+    });
+  }
+
+  // 2. About Link Handler (Placeholder state)
+  if (aboutBtn) {
+    aboutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert("DailyBarakah SG is a community-first directory supporting local Muslim businesses and masjid activities in Singapore.\n\nFull About page coming soon!");
+    });
+  }
+}
+
+// Call on load
+document.addEventListener('DOMContentLoaded', initHeaderNav);
 // 1. Dynamic Carousel & Hadith Avatar Loader
 let currentIndex = 0;
 let autoScrollInterval = null;
