@@ -1,15 +1,16 @@
-// Side Drawer Navigation Handler
+// Side Drawer & Profile Navigation Handler
 function initHeaderNav() {
   const menuBtn = document.getElementById('menuToggleBtn');
   const closeBtn = document.getElementById('closeDrawerBtn');
   const drawer = document.getElementById('navDrawer');
   const overlay = document.getElementById('navDrawerOverlay');
+  const profileBtn = document.getElementById('headerProfileBtn');
 
   function openDrawer() {
     if (drawer && overlay) {
       drawer.classList.add('open');
       overlay.classList.add('open');
-      document.body.style.overflow = 'hidden'; // Lock background scrolling
+      document.body.style.overflow = 'hidden';
     }
   }
 
@@ -24,7 +25,26 @@ function initHeaderNav() {
   if (menuBtn) menuBtn.addEventListener('click', openDrawer);
   if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
   if (overlay) overlay.addEventListener('click', closeDrawer);
+
+  // Profile Button Click Handler
+  if (profileBtn) {
+    profileBtn.addEventListener('click', () => {
+      // Check if owner email or session token exists in local storage
+      const ownerEmail = localStorage.getItem('vendorEmail');
+      const vendorSlug = localStorage.getItem('vendorSlug');
+
+      if (ownerEmail && vendorSlug) {
+        // Redirect directly to vendor's live listing page or dashboard
+        window.location.href = `/business.html?slug=${vendorSlug}`;
+      } else {
+        // Redirect to login page if no active listing session found
+        window.location.href = '/login.html';
+      }
+    });
+  }
 }
+
+document.addEventListener('DOMContentLoaded', initHeaderNav);
 
 // Call on load
 document.addEventListener('DOMContentLoaded', initHeaderNav);
