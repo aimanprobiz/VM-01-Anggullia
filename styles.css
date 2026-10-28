@@ -416,7 +416,6 @@ body {
 }
 
 .grid-card.featured-card {
-  /* Increased border width from 1px to 2.5px and used full gold accent opacity */
   border: 1.5px solid var(--accent-gold, #ddba58);
   background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
   box-shadow: 0 4px 14px rgba(221, 186, 88, 0.35);
@@ -905,37 +904,46 @@ dialog::backdrop {
   color: var(--text-muted);
 }
 
+/* Multi-Step Registration Container & Steps */
+.form-step {
+  display: none !important; /* Forces non-active steps to hide */
+}
+
+.form-step.active {
+  display: block !important; /* Displays only the active step */
+}
+
 /* Multi-Step Registration Progress Bar */
 .step-progress-wrapper {
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0 20px 0;
-  padding: 0 20px; /* Aligns nodes cleanly inside card margins */
+  margin: 10px 0 24px 0;
+  padding: 0 16px; /* Constrains progress bar within card padding */
 }
 
-/* Base Grey Line connecting nodes */
+/* Grey Background Line connecting nodes */
 .step-progress-wrapper::before {
   content: '';
   position: absolute;
   top: 15px;
-  left: 35px;
-  right: 35px;
+  left: 36px;
+  right: 36px;
   height: 2px;
   background-color: var(--border-color);
   z-index: 1;
 }
 
-/* Active Progress Line Fill */
+/* Green Active Fill Line (Contrained strictly between first and last node) */
 .step-progress-bar {
   position: absolute;
   top: 15px;
-  left: 35px;
-  right: 35px; /* Fixed right anchor to prevent overflow */
+  left: 36px;
   height: 2px;
   background-color: var(--primary-color);
   width: 0%;
+  max-width: calc(100% - 72px); /* Ensures it never shoots past node 3 */
   transition: width 0.3s ease;
   z-index: 2;
 }
@@ -965,14 +973,14 @@ dialog::backdrop {
   transition: all 0.25s ease;
 }
 
-/* Active Node: Primary Dark Green Circle */
+/* Active Node Circle (Current Step) */
 .step-node.active .node-circle {
   border-color: var(--primary-color);
   background-color: var(--primary-color);
   color: #ffffff;
 }
 
-/* Reached/Completed Node: Gold Accent Circle */
+/* Reached/Completed Node Circle (Gold) */
 .step-node.completed .node-circle {
   border-color: var(--accent-gold);
   background-color: var(--accent-gold);
@@ -990,7 +998,7 @@ dialog::backdrop {
   font-weight: 700;
 }
 
-/* Subtle Back Text Button (No underline) */
+/* Clean Back Button (No Underline) */
 .action-btn-text {
   background: none;
   border: none;
@@ -999,7 +1007,7 @@ dialog::backdrop {
   font-weight: 600;
   cursor: pointer;
   padding: 6px 4px;
-  text-decoration: none; /* No underline */
+  text-decoration: none;
   transition: color 0.15s ease;
 }
 
