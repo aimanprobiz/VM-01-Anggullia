@@ -27,37 +27,8 @@
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
 
-      <!-- LIVE PROFILE CARD PREVIEW (Swipeable Image Section + Clean Arrows) -->
-      <div id="liveCardPreviewWrapper" style="display: none; margin-bottom: 14px; position: relative; align-items: center; justify-content: center; gap: 8px;">
-        <!-- Left Arrow (No border, larger) -->
-        <button type="button" id="prevListingBtn" aria-label="Previous Listing" style="background: transparent; border: none; color: var(--primary-color); font-size: 1.5rem; font-weight: 800; cursor: pointer; padding: 0 4px; z-index: 2;">
-          ‹
-        </button>
-
-        <!-- Profile Card Container (Swipeable Viewport) -->
-        <div id="swipeableViewport" style="margin: 0; width: 100%; max-width: 290px; text-align: left; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 10px; background: #faf9f5; box-shadow: var(--shadow-sm); overflow: hidden; touch-action: pan-y;">
-          <div style="position: relative; margin-bottom: 8px;">
-            <img id="previewCardBanner" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Profile Banner" style="width: 100%; height: auto; max-height: 140px; object-fit: cover; border-radius: var(--radius-sm); display: block;">
-            <span id="previewFeaturedBadge" class="grid-featured-badge" style="display: none;" title="Featured Listing">★</span>
-          </div>
-
-          <!-- Business Name Horizontally Center Aligned -->
-          <h4 id="previewCardName" style="font-size: 0.95rem; font-weight: 800; color: var(--primary-color); text-align: center; margin-bottom: 6px;">Business Name</h4>
-
-          <!-- View Live Business Page (Using App's Signature action-btn style) -->
-          <a id="previewViewLink" href="#" target="_blank" class="action-btn" style="display: block; text-decoration: none; text-align: center; font-size: 0.76rem; padding: 8px 0; margin-top: 4px;">
-            View Live Business Page ↗
-          </a>
-        </div>
-
-        <!-- Right Arrow (No border, larger) -->
-        <button type="button" id="nextListingBtn" aria-label="Next Listing" style="background: transparent; border: none; color: var(--primary-color); font-size: 1.5rem; font-weight: 800; cursor: pointer; padding: 0 4px; z-index: 2;">
-          ›
-        </button>
-      </div>
-
-      <!-- SELECT LISTING WITH SIGNATURE GREEN PILL DROPDOWN -->
-      <div id="businessSelectorContainer" style="display: none; margin-bottom: 10px; align-items: center; justify-content: center; gap: 8px;">
+      <!-- SELECT LISTING WITH SIGNATURE GREEN PILL DROPDOWN (Moved to Top) -->
+      <div id="businessSelectorContainer" style="display: none; margin-bottom: 14px; align-items: center; justify-content: center; gap: 8px;">
         <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
           Select Listing:
         </span>
@@ -65,10 +36,46 @@
         </select>
       </div>
 
-      <!-- Listing Status Badge (No background fill, no bullet point, colored text) -->
-      <div>
-        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Status: </span>
-        <span id="statusBadge" style="font-size: 0.78rem; font-weight: 700;">Loading...</span>
+      <!-- LIVE PROFILE CARD PREVIEW (Swipeable Image Section + Relocated Status Badge + Dots) -->
+      <div id="liveCardPreviewWrapper" style="display: none; margin-bottom: 14px; position: relative; align-items: center; justify-content: center; gap: 8px; flex-direction: column;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+          <!-- Left Arrow -->
+          <button type="button" id="prevListingBtn" aria-label="Previous Listing" style="background: transparent; border: none; color: var(--primary-color); font-size: 1.5rem; font-weight: 800; cursor: pointer; padding: 0 4px; z-index: 2;">
+            ‹
+          </button>
+
+          <!-- Profile Card Container (Swipeable Viewport) -->
+          <div id="swipeableViewport" style="margin: 0; width: 100%; max-width: 290px; text-align: left; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 10px; background: #faf9f5; box-shadow: var(--shadow-sm); overflow: hidden; touch-action: pan-y;">
+            <div style="position: relative; margin-bottom: 6px;">
+              <img id="previewCardBanner" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Profile Banner" style="width: 100%; height: auto; max-height: 140px; object-fit: cover; border-radius: var(--radius-sm); display: block;">
+              <span id="previewFeaturedBadge" class="grid-featured-badge" style="display: none;" title="Featured Listing">★</span>
+            </div>
+
+            <!-- Status Badge (Relocated right below the image) -->
+            <div style="text-align: center; margin-bottom: 8px;">
+              <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Status: </span>
+              <span id="statusBadge" style="font-size: 0.74rem; font-weight: 700;">Loading...</span>
+            </div>
+
+            <!-- Business Name Horizontally Center Aligned -->
+            <h4 id="previewCardName" style="font-size: 0.95rem; font-weight: 800; color: var(--primary-color); text-align: center; margin-bottom: 6px;">Business Name</h4>
+
+            <!-- View Live Business Page -->
+            <a id="previewViewLink" href="#" target="_blank" class="action-btn" style="display: block; text-decoration: none; text-align: center; font-size: 0.76rem; padding: 8px 0; margin-top: 4px;">
+              View Live Business Page ↗
+            </a>
+          </div>
+
+          <!-- Right Arrow -->
+          <button type="button" id="nextListingBtn" aria-label="Next Listing" style="background: transparent; border: none; color: var(--primary-color); font-size: 1.5rem; font-weight: 800; cursor: pointer; padding: 0 4px; z-index: 2;">
+            ›
+          </button>
+        </div>
+
+        <!-- Swipe Indicator Pagination Dots -->
+        <div id="swipePaginationDots" style="display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 4px;">
+          <!-- Dynamically populated dots -->
+        </div>
       </div>
     </div>
 
@@ -214,7 +221,7 @@
       localStorage.setItem('db_vendor_token', currentToken);
     }
 
-    // Update Live Profile Card Preview
+    // Update Live Profile Card Preview & Pagination Dots
     function updateLiveProfileCardPreview(biz) {
       const cardContainer = document.getElementById('liveCardPreviewWrapper');
       if (!cardContainer || !biz) return;
@@ -241,6 +248,37 @@
       } else {
         featuredBadge.style.display = 'none';
       }
+
+      renderPaginationDots();
+    }
+
+    // Render Swipe Pagination Dots
+    function renderPaginationDots() {
+      const dotsContainer = document.getElementById('swipePaginationDots');
+      if (!dotsContainer) return;
+
+      dotsContainer.innerHTML = '';
+      if (userBusinessesList.length <= 1) {
+        dotsContainer.style.display = 'none';
+        return;
+      }
+
+      dotsContainer.style.display = 'flex';
+      userBusinessesList.forEach((_, idx) => {
+        const dot = document.createElement('span');
+        const isActive = idx === currentListingIndex;
+        dot.style.cssText = `
+          width: ${isActive ? '16px' : '6px'};
+          height: 6px;
+          border-radius: 3px;
+          background-color: ${isActive ? 'var(--primary-color)' : 'var(--border-color)'};
+          transition: all 0.25s ease;
+          display: inline-block;
+          cursor: pointer;
+        `;
+        dot.onclick = () => switchActiveListing(idx);
+        dotsContainer.appendChild(dot);
+      });
     }
 
     // Switch active business by array index
@@ -295,7 +333,7 @@
           nextBtn.onclick = () => switchActiveListing(currentListingIndex + 1);
         } else {
           prevBtn.style.display = 'none';
-          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
         }
       }
     }
@@ -322,13 +360,10 @@
         const deltaY = touch.clientY - startY;
         const elapsedTime = Date.now() - startTime;
 
-        // Ensure horizontal swipe is dominant and quick enough (> 40px delta)
         if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40 && elapsedTime < 400) {
           if (deltaX < 0) {
-            // Swiped Left -> Next Listing
             switchActiveListing(currentListingIndex + 1);
           } else {
-            // Swiped Right -> Previous Listing
             switchActiveListing(currentListingIndex - 1);
           }
         }
@@ -467,7 +502,7 @@
         updateActionTypeUI();
         await loadCategories(data.category);
 
-        // Status Badge UI (No background, colored text based on state)
+        // Status Badge UI (Relocated right below the image)
         const statusBadge = document.getElementById('statusBadge');
         const statusVal = (data.status || 'Pending').toLowerCase();
         
