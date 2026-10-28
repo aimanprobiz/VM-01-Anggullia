@@ -11,24 +11,24 @@
   <div class="mobile-container" style="padding-bottom: 40px;">
     
     <!-- Top Nav -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
       <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
         ← Back to Directory
       </a>
-      <button id="logoutBtn" style="background: transparent; border: none; font-size: 0.8rem; color: #dc2626; font-weight: 600; cursor: pointer;">
+      <button id="logoutBtn" style="background: transparent; border: none; font-size: 0.8rem; color: #dc2626; font-weight: 600; cursor: pointer; padding: 4px 8px;">
         Log Out
       </button>
     </div>
 
     <!-- Header Title -->
-    <div style="text-align: center; margin-bottom: 14px;">
+    <div style="text-align: center; margin-bottom: 12px;">
       <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">Vendor Dashboard</h2>
       <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4;">
-        Update your profile information, manage your Ummah deals, and edit contact links.
+        Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
 
       <!-- Multi-Business Selector Dropdown (Visible only if owner has > 1 business) -->
-      <div id="businessSelectorContainer" style="display: none; margin-top: 12px; text-align: left; background: #fffdf2; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--accent-gold);">
+      <div id="businessSelectorContainer" style="display: none; margin-top: 12px; text-align: left; background: #fffdf2; padding: 10px; border-radius: var(--radius-sm); border: 1.5px solid var(--accent-gold);">
         <label style="font-size: 0.75rem; font-weight: 700; color: var(--primary-color); display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
           Select Business Listing to Edit:
         </label>
@@ -36,33 +36,36 @@
         </select>
       </div>
 
-      <div id="statusBadge" style="display: inline-block; margin-top: 10px; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">
+      <!-- Listing Status Badge -->
+      <div id="statusBadge" style="display: inline-block; margin-top: 10px; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">
         Loading status...
       </div>
     </div>
 
-    <!-- Loading Overlay -->
+    <!-- Loading State Box -->
     <div id="loadingBox" style="text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 0.9rem;">
       Loading your business details...
     </div>
 
-    <!-- Edit Form Card (Hidden until loaded) -->
+    <!-- Edit Form Card -->
     <div id="editCard" class="card" style="padding: 20px 16px; display: none;">
       <form id="editForm" style="display: flex; flex-direction: column; gap: 16px;">
         
-        <!-- Section 1: Basic Info -->
+        <!-- SECTION 1: Business Details -->
         <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">1. Business Details</h3>
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+            1. Business Profile
+          </h3>
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name *</label>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
               <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline</label>
-              <input type="text" id="bizSub" placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
+              <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
             <div>
@@ -73,63 +76,26 @@
             </div>
 
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description</label>
-              <textarea id="bizDesc" rows="3" placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: vertical;"></textarea>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
+              <textarea id="bizDesc" rows="3" required placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: vertical;"></textarea>
             </div>
 
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL</label>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
               <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
           </div>
         </div>
 
-        <!-- Live Deal Preview Ticket Box -->
-        <div style="margin-top: 4px;">
-          <p style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Live Deal Preview</p>
-          <div id="previewDealBox" class="coupon-ticket" style="margin: 0; background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%); border: 1.5px solid var(--accent-gold);">
-            <div class="coupon-content">
-              <div class="coupon-header">
-                <span class="coupon-tag">UMMAH SPECIAL:</span>
-              </div>
-              <p id="previewDealText" class="coupon-deal-text" style="font-size: 1.1rem;">YOUR EXCLUSIVE DEAL HERE</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 2: Community Deal -->
+        <!-- SECTION 2: Contact & Social Info -->
         <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">2. Exclusive Ummah Special Deal</h3>
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+            2. Contact & Social Media <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
+          </h3>
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer text *</label>
-              <input type="text" id="bizDeal" required placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type *</label>
-              <select id="bizActionType" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
-                <option value="claim">In-Store Cashier PIN Redemption</option>
-                <option value="code">Online Promo Code</option>
-              </select>
-            </div>
-
-            <div id="promoCodeGroup" style="display: none;">
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
-              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-          </div>
-        </div>
-
-        <!-- Section 3: Contact & Links -->
-        <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">3. Contact & Media Links</h3>
-          
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code, e.g. 6591234567)</label>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
               <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
@@ -150,9 +116,51 @@
           </div>
         </div>
 
-        <button type="submit" id="saveBtn" class="action-btn-primary" style="margin-top: 10px;">
-          Save Profile Changes
-        </button>
+        <!-- SECTION 3: Exclusive Ummah Special Deal -->
+        <div>
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+            3. Exclusive Ummah Special Deal <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
+          </h3>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
+              <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <!-- Live Deal Preview Box inside Step 3 -->
+            <div style="margin-top: 2px;">
+              <p style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Live Deal Preview</p>
+              <div id="previewDealBox" class="coupon-ticket" style="margin: 0; background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%); border: 1.5px solid var(--accent-gold);">
+                <div class="coupon-content">
+                  <div class="coupon-header">
+                    <span class="coupon-tag">UMMAH SPECIAL:</span>
+                  </div>
+                  <p id="previewDealText" class="coupon-deal-text" style="font-size: 1.05rem;">YOUR EXCLUSIVE DEAL HERE</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
+              <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
+                <option value="claim">In-Store Cashier PIN Redemption</option>
+                <option value="code">Online Promo Code</option>
+              </select>
+            </div>
+
+            <div id="promoCodeGroup" style="display: none;">
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
+              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="margin-top: 8px;">
+          <button type="submit" id="saveBtn" class="action-btn-primary" style="width: 100%; padding: 12px;">Save Profile Changes</button>
+        </div>
 
       </form>
     </div>
