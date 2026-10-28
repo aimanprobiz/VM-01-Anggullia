@@ -565,7 +565,7 @@
         initCardSwipeGestures();
         initTabSwipeGestures();
 
-        // Populate form fields
+        // Populate form fields properly matching the correct HTML IDs
         document.getElementById('bizName').value = data.name || '';
         document.getElementById('bizSub').value = data.subtitle || '';
         document.getElementById('bizDesc').value = data.description || '';
@@ -588,6 +588,15 @@
         document.getElementById('bizTiktok').value = data.tiktokUrl || '';
 
         updateActionTypeUI();
+        
+        // Re-populate redemption options safely
+        actionTypeSelect.innerHTML = `
+          <option value="whatsapp">Enquire / Claim via WhatsApp</option>
+          <option value="claim">In-Store Cashier PIN Redemption</option>
+          <option value="code">Online Promo Code</option>
+        `;
+        actionTypeSelect.value = actionVal;
+
         await loadCategories(data.category);
         removeFormShimmer();
 
