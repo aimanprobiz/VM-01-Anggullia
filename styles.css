@@ -1,1037 +1,337 @@
-/* Import Plus Jakarta Sans from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-:root {
-  --bg-color: #f5f2e9;
-  --card-bg: #ffffff;
-  --text-main: #0c2b22;
-  --text-muted: #485952;
-  --primary-color: #0f382c;
-  --primary-hover: #08241c;
-  --accent-gold: #ddba58;
-  --accent-gold-bg: rgba(221, 186, 88, 0.15);
-  --border-color: #e2dbc9;
-  --shadow-sm: 0 1px 3px rgba(12, 43, 34, 0.06);
-  --shadow-md: 0 6px 16px -2px rgba(12, 43, 34, 0.08);
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --radius-sm: 8px;
-}
-
-/* Fixed universal selector */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  -webkit-tap-highlight-color: transparent;
-}
-
-@keyframes pulseEffect {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.98); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.pulsing-placeholder {
-  animation: pulseEffect 1.5s infinite ease-in-out;
-}
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-main);
-  display: flex;
-  justify-content: center;
-  padding: 20px 0;
-  min-height: 100vh;
-}
-
-.mobile-container {
-  width: 100%;
-  max-width: 414px;
-  background-color: var(--bg-color);
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  padding: 16px;
-}
-
-.section-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 12px;
-  letter-spacing: -0.01em;
-}
-
-/* 1. Hadith Card */
-.card {
-  background-color: var(--card-bg);
-  border-radius: var(--radius-lg);
-  padding: 18px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.card-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1.5px solid var(--accent-gold);
-  flex-shrink: 0;
-}
-
-.card-title-group {
-  flex: 1;
-  min-width: 0;
-}
-
-.card-title-group h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-main);
-  word-break: break-word;
-}
-
-.card-title-group p {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-.card-body {
-  font-size: 0.92rem;
-  color: var(--text-main);
-  line-height: 1.55;
-  font-style: italic;
-  padding-left: 12px;
-  border-left: 3px solid var(--accent-gold);
-}
-
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 10px;
-  border-top: 1px solid var(--border-color);
-}
-
-.card-tag {
-  background-color: var(--accent-gold-bg);
-  color: var(--primary-color);
-  border: 1px solid rgba(221, 186, 88, 0.4);
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 20px;
-}
-
-/* 2. Image Carousel */
-.carousel-section {
-  display: flex;
-  flex-direction: column;
-}
-
-.carousel-wrapper {
-  position: relative;
-  width: 100%;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-color);
-}
-
-.carousel-track {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.carousel-track::-webkit-scrollbar {
-  display: none;
-}
-
-.carousel-slide {
-  flex: 0 0 100%;
-  scroll-snap-align: start;
-  position: relative;
-  aspect-ratio: 16 / 9;
-}
-
-.carousel-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.carousel-caption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 24px 16px 12px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-  color: #ffffff;
-  font-size: 0.88rem;
-  font-weight: 600;
-}
-
-.carousel-indicators {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  margin-top: 12px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #cbd5e1;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-}
-
-.dot.active {
-  background-color: var(--accent-gold);
-  width: 22px;
-  border-radius: 4px;
-}
-
-/* 3. SUPPORT LOCAL MUSLIM BUSINESSES */
-.business-section {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Balanced Sheer Glass Category Bar */
-.filter-stacked {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  
-  background-color: rgba(245, 242, 233, 0.35); 
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  gap: 8px;
-  margin-bottom: 18px;
-  padding: 10px 16px;
-  
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  
-  margin-left: -16px;
-  margin-right: -16px;
-  
-  border-bottom: 1px solid rgba(226, 219, 201, 0.3);
-}
-
-.filter-stacked::-webkit-scrollbar {
-  display: none;
-}
-
-/* Refined Pill Styling */
-.filter-btn {
-  flex: 0 0 auto;
-  white-space: nowrap;
-  background-color: var(--card-bg);
-  border: 1.5px solid var(--border-color);
-  padding: 7px 14px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.filter-btn:hover {
-  border-color: var(--accent-gold);
-  color: var(--text-main);
-}
-
-.filter-btn.active {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  color: #ffffff;
-  font-weight: 600;
-  box-shadow: 0 3px 8px rgba(15, 56, 44, 0.2);
-}
-
-/* 2-Column Visual Grid */
-.business-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-/* 2-Column Visual Grid Card Base */
-.grid-card {
-  background-color: var(--card-bg);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease;
-}
-
-.grid-card:hover {
-  transform: translateY(-4px); 
-  box-shadow: 0 10px 20px -3px rgba(12, 43, 34, 0.12), 0 4px 6px -2px rgba(12, 43, 34, 0.05);
-  border-color: rgba(221, 186, 88, 0.6);
-}
-
-.grid-card:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
-}
-
-.card-banner {
-  width: 100%;
-  height: 105px;
-  object-fit: cover;
-  background-color: var(--border-color);
-}
-
-.grid-card-body {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  justify-content: space-between;
-}
-
-.vendor-details {
-  margin-bottom: 8px;
-}
-
-.vendor-name {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 2px;
-  line-height: 1.25;
-}
-
-.vendor-sub {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  line-height: 1.35;
-  min-height: 1.95rem;
-}
-
-.deal-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background-color: rgba(15, 56, 44, 0.08);
-  color: var(--primary-color, #0f382c);
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 20px;
-  border: none;
-  margin-top: 6px;
-  margin-bottom: 6px;
-  line-height: 1.2;
-}
-
-.action-btn {
-  width: 100%;
-  background-color: var(--primary-color, #0f382c);
-  color: #ffffff;
-  border: 1.5px solid var(--accent-gold, #ddba58);
-  padding: 8px 0;
-  border-radius: var(--radius-sm);
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  box-sizing: border-box;
-  margin-top: 6px;
-  box-shadow: 0 2px 6px rgba(15, 56, 44, 0.15);
-}
-
-.action-btn:hover,
-.action-btn:active {
-  background-color: var(--accent-gold, #ddba58);
-  color: var(--primary-color, #0f382c);
-  border-color: var(--primary-color, #0f382c);
-}
-
-.grid-featured-badge {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background: var(--accent-gold);
-  color: var(--primary-color);
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.95rem;
-  font-weight: bold;
-  z-index: 2;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  border: 1px solid #ffffff;
-}
-
-.grid-card.featured-card {
-  /* Increased border width from 1px to 2.5px and used full gold accent opacity */
-  border: 1.5px solid var(--accent-gold, #ddba58);
-  background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
-  box-shadow: 0 4px 14px rgba(221, 186, 88, 0.35);
-}
-
-.grid-card.featured-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 28px -4px rgba(15, 56, 44, 0.2);
-  border-color: var(--accent-gold);
-}
-
-.grid-card.featured-card:active {
-  transform: translateY(0);
-}
-
-dialog::backdrop {
-  background-color: rgba(12, 43, 34, 0.4);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-}
-
-.pin-input {
-  width: 100%;
-  padding: 10px;
-  font-size: 1.2rem;
-  letter-spacing: 6px;
-  text-align: center;
-  border: 1.5px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  margin: 10px 0;
-  outline: none;
-}
-
-.pin-input:focus {
-  border-color: var(--primary-color);
-}
-
-@keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: 200px 0; }
-}
-
-.skeleton-card {
-  pointer-events: none;
-}
-
-.skeleton-img, .skeleton-line {
-  background: linear-gradient(90deg, #e2dbc9 25%, #f5f2e9 50%, #e2dbc9 75%);
-  background-size: 400px 100%;
-  animation: shimmer 1.4s infinite ease-in-out;
-  border-radius: 4px;
-}
-
-.skeleton-img {
-  width: 100%;
-  height: 105px;
-}
-
-.skeleton-line {
-  height: 12px;
-  margin-bottom: 8px;
-}
-
-.skeleton-line.title { width: 80%; height: 14px; }
-.skeleton-line.sub { width: 60%; }
-.skeleton-line.badge { width: 50%; height: 18px; margin-top: 4px; }
-.skeleton-line.btn { width: 100%; height: 32px; margin-top: 8px; border-radius: var(--radius-sm); }
-
-.coupon-ticket {
-  position: relative;
-  background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%);
-  border: 1.5px solid var(--accent-gold, #c29a38);
-  border-radius: var(--radius-md, 12px);
-  padding: 14px 18px;
-  margin: 12px 0;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
-}
-
-.coupon-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 2px;
-}
-
-.coupon-tag {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: #000000;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.coupon-deal-text {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #000000;
-  line-height: 1.25;
-  margin: 2px 0 0 0;
-}
-
-.action-btn-primary {
-  width: 100%;
-  background-color: var(--primary-color, #0f382c);
-  color: #ffffff;
-  border: 1.5px solid var(--accent-gold, #ddba58);
-  padding: 12px 0;
-  border-radius: var(--radius-md, 12px);
-  font-size: 0.92rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
-  transition: transform 0.15s ease, background-color 0.2s ease;
-}
-
-.action-btn-primary:active {
-  transform: scale(0.98);
-}
-
-#bizSub {
-  color: #2c3e35;
-  font-weight: 500;
-}
-
-.social-btn {
-  flex: 1;
-  height: 38px;
-  background-color: var(--card-bg);
-  color: var(--primary-color);
-  border: 1.5px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
-  text-decoration: none;
-}
-
-.social-btn:hover {
-  border-color: var(--accent-gold);
-  background-color: var(--accent-gold-bg);
-}
-
-.share-btn {
-  background: transparent;
-  color: var(--primary-color);
-  border: none;
-  padding: 5px 8px;
-  border-radius: var(--radius-sm);
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  transition: opacity 0.2s ease;
-}
-
-.share-btn:hover,
-.share-btn:active {
-  opacity: 0.7;
-  background: transparent;
-  border: none;
-}
-
-.minimal-icon-btn {
-  background: transparent;
-  color: var(--primary-color);
-  border: none;
-  padding: 4px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.2s ease;
-}
-
-.minimal-icon-btn:hover,
-.minimal-icon-btn:active {
-  opacity: 0.6;
-}
-
-@keyframes ctaPulseGlow {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
-  }
-  20% {
-    transform: scale(1.03);
-    box-shadow: 0 0 16px rgba(221, 186, 88, 0.85);
-  }
-  40% {
-    transform: scale(1);
-    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
-  }
-  60% {
-    transform: scale(1.03);
-    box-shadow: 0 0 16px rgba(221, 186, 88, 0.85);
-  }
-  80% {
-    transform: scale(1);
-    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
-  }
-}
-
-.cta-pulse-active {
-  animation: ctaPulseGlow 2.8s ease-in-out forwards !important;
-}
-
-/* Subtle gold border for offer/deal badges inside Featured Cards only */
-.featured-card .deal-badge {
-  border: 1px solid var(--accent-gold, #ddba58);
-  box-shadow: 0 1px 3px rgba(221, 186, 88, 0.15);
-}
-
-/* Floating Back to Top Button */
-#backToTopBtn {
-  position: fixed;
-  bottom: 24px;
-  right: 20px;
-  width: 42px;
-  height: 42px;
-  background-color: var(--primary-color);
-  color: #ffffff;
-  border: 1.5px solid var(--accent-gold);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 14px rgba(12, 43, 34, 0.25);
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease, background-color 0.2s ease;
-  z-index: 999;
-}
-
-#backToTopBtn:hover,
-#backToTopBtn:active {
-  background-color: var(--accent-gold);
-  color: var(--primary-color);
-  transform: scale(1.05);
-}
-
-/* Swipeable Category Container - Bleed Layout */
-.category-swipe-viewport {
-  width: calc(100% + 32px);
-  margin-left: -16px;
-  margin-right: -16px;
-  overflow: hidden;
-  position: relative;
-  touch-action: pan-y;
-}
-
-.category-swipe-track {
-  display: flex;
-  width: 300%;
-  transform: translateX(-33.333%);
-  will-change: transform;
-}
-
-.category-page {
-  width: 33.333%;
-  flex-shrink: 0;
-  padding: 0 16px;
-  box-sizing: border-box;
-}
-
-/* Smooth snapping animation class */
-.category-swipe-track.animating {
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Minimalist Search Pill Styling */
-.search-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 7px 10px;
-  cursor: pointer;
-  background-color: var(--card-bg);
-  border: 1.5px solid var(--border-color);
-  border-radius: 20px;
-  color: var(--text-muted);
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.search-pill:hover,
-.search-pill.active {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-  background-color: rgba(15, 56, 44, 0.05);
-}
-
-/* Expanding Inline Search Box Container */
-.search-input-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.search-input-wrapper.open {
-  max-width: 200px;
-  opacity: 1;
-}
-
-/* Clear text box styling so text is fully visible */
-.search-input-field {
-  width: 100%;
-  padding: 6px 12px;
-  font-size: 0.78rem;
-  border: 1.5px solid var(--primary-color);
-  border-radius: 20px;
-  background: var(--card-bg);
-  color: var(--text-main);
-  outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* Flushed Mobile Top Header */
-.app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 6px 4px 10px 4px; /* Minimal padding to flush to the top */
-  margin-top: -6px; /* Moves header close to top edge */
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 16px;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.menu-icon-btn {
-  background: none;
-  border: none;
-  color: var(--primary-color);
-  font-size: 1.4rem;
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-sm);
-}
-
-.menu-icon-btn:active {
-  background-color: var(--accent-gold-bg);
-}
-
-.header-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.header-logo {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 1px solid var(--accent-gold);
-  object-fit: cover;
-}
-
-.header-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--primary-color);
-  letter-spacing: -0.01em;
-}
-
-/* Side Drawer Overlay Backdrop */
-.drawer-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(12, 43, 34, 0.4);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: 10000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-
-.drawer-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Side Drawer Container */
-.nav-drawer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 280px;
-  max-width: 80vw;
-  height: 100%;
-  background-color: var(--card-bg);
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-  z-index: 10001;
-  transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-drawer.open {
-  transform: translateX(0);
-}
-
-.drawer-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 16px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.drawer-menu {
-  display: flex;
-  flex-direction: column;
-  padding: 12px;
-  gap: 8px;
-}
-
-.drawer-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  color: var(--text-main);
-  transition: background 0.15s ease;
-}
-
-.drawer-item:hover,
-.drawer-item:active {
-  background-color: var(--bg-color);
-}
-
-.drawer-item.highlight {
-  background-color: var(--accent-gold-bg);
-  border: 1px solid rgba(221, 186, 88, 0.4);
-}
-
-.drawer-item-icon {
-  font-size: 1.2rem;
-}
-
-.drawer-item-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.drawer-item-title {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.drawer-item-sub {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-}
-
-/* Multi-Step Registration Progress Bar */
-.step-progress-wrapper {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px 0 20px 0;
-  padding: 0 10px;
-}
-
-.step-progress-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 15px;
-  left: 30px;
-  right: 30px;
-  height: 2px;
-  background-color: var(--border-color);
-  z-index: 1;
-}
-
-.step-progress-bar {
-  position: absolute;
-  top: 15px;
-  left: 30px;
-  height: 2px;
-  background-color: var(--primary-color);
-  width: 0%;
-  transition: width 0.3s ease;
-  z-index: 2;
-}
-
-.step-node {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.node-circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: var(--card-bg);
-  border: 2px solid var(--border-color);
-  color: var(--text-muted);
-  font-size: 0.82rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.25s ease;
-}
-
-.step-node.active .node-circle {
-  border-color: var(--primary-color);
-  background-color: var(--primary-color);
-  color: #ffffff;
-}
-
-.step-node.completed .node-circle {
-  border-color: var(--accent-gold);
-  background-color: var(--accent-gold);
-  color: var(--primary-color);
-}
-
-.node-label {
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-.step-node.active .node-label {
-  color: var(--primary-color);
-  font-weight: 700;
-}
-
-/* Step Panel Visibility */
-.form-step {
-  display: none;
-}
-
-.form-step.active {
-  display: block;
-}
-
-/* Secondary Action Button */
-.action-btn-secondary {
-  width: 100%;
-  background-color: transparent;
-  color: var(--text-muted);
-  border: 1.5px solid var(--border-color);
-  padding: 10px 0;
-  border-radius: var(--radius-md);
-  font-size: 0.88rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-
-.action-btn-secondary:active {
-  background-color: var(--border-color);
-}
-
-/* Clickable Step Nodes */
-.step-node {
-  cursor: pointer;
-}
-
-/* Subtle Back Text Button */
-.action-btn-text {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 6px 4px;
-  text-decoration: underline;
-  transition: color 0.15s ease;
-}
-
-.action-btn-text:hover {
-  color: var(--primary-color);
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>List Your Business - DailyBarakah SG</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <div class="mobile-container" style="padding-bottom: 40px;">
+    
+    <!-- Top Nav -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <a href="/" style="font-size: 0.85rem; color: var(--primary-color); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+        ← Back to Directory
+      </a>
+    </div>
+
+    <!-- Header Title -->
+    <div style="text-align: center; margin-bottom: 12px;">
+      <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">List Your Business Free</h2>
+      <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4;">
+        Join DailyBarakah SG and spotlight your Muslim-owned business to the local community.
+      </p>
+    </div>
+
+    <!-- 3-Step Clickable Progress Indicator -->
+    <div class="step-progress-wrapper">
+      <div class="step-progress-bar" id="progressBar"></div>
+      
+      <div class="step-node active" id="node1" onclick="goToStep(1)">
+        <div class="node-circle">1</div>
+        <span class="node-label">Basic Details</span>
+      </div>
+      <div class="step-node" id="node2" onclick="goToStep(2)">
+        <div class="node-circle">2</div>
+        <span class="node-label">Contact & Socials</span>
+      </div>
+      <div class="step-node" id="node3" onclick="goToStep(3)">
+        <div class="node-circle">3</div>
+        <span class="node-label">Ummah Deal</span>
+      </div>
+    </div>
+
+    <!-- Registration Form Card -->
+    <div class="card" style="padding: 20px 16px;">
+      <form id="registerForm">
+        
+        <!-- STEP 1: Basic Business Details -->
+        <div class="form-step active" id="step1">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+            Step 1: Business Profile
+          </h3>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Owner Email (Compulsory) *</label>
+              <input type="email" id="ownerEmail" required placeholder="owner@business.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
+              <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
+              <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
+              <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="" disabled selected>Loading categories...</option>
+              </select>
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
+              <textarea id="bizDesc" rows="3" required placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: vertical;"></textarea>
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
+              <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
+            <button type="button" class="action-btn-primary" onclick="goToStep(2)" style="width: 100%;">Next: Contact & Media →</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Contact & Social Info -->
+        <div class="form-step" id="step2">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+            Step 2: Contact & Social Media <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
+          </h3>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
+              <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
+              <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
+              <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
+              <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between;">
+            <button type="button" class="action-btn-text" onclick="goToStep(1)">← Back</button>
+            <button type="button" class="action-btn-primary" onclick="goToStep(3)" style="width: auto; padding: 10px 24px;">Ummah Deal →</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Exclusive Ummah Special Deal -->
+        <div class="form-step" id="step3">
+          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
+            Step 3: Exclusive Ummah Special Deal <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
+          </h3>
+          
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
+              <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
+              <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
+                <option value="claim">In-Store Cashier PIN Redemption</option>
+                <option value="code">Online Promo Code</option>
+              </select>
+            </div>
+
+            <div id="promoCodeGroup" style="display: none;">
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
+              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between;">
+            <button type="button" class="action-btn-text" onclick="goToStep(2)">← Back</button>
+            <button type="submit" id="submitBtn" class="action-btn-primary" style="width: auto; padding: 10px 24px;">Submit Listing for Review</button>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- SUCCESS CONFIRMATION STATE -->
+      <div id="successState" style="display: none; text-align: center; padding: 20px 10px;">
+        <div style="font-size: 3rem; margin-bottom: 10px;">⏳</div>
+        <h3 style="color: var(--primary-color); font-size: 1.2rem; font-weight: 800; margin-bottom: 8px;">Alhamdulillah, Submission Received!</h3>
+        <p style="color: var(--text-main); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">
+          Jazakallahu khair for listing your business with DailyBarakah SG. Your application has been successfully submitted and is currently <strong>pending admin approval</strong>. We will review your details and publish your profile to the community shortly, Insha'Allah!
+        </p>
+        <a href="/" class="action-btn-primary" style="display: inline-block; text-decoration: none;">Return to Home Directory</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    let currentStep = 1;
+
+    function goToStep(targetStep) {
+      if (targetStep > currentStep) {
+        if (currentStep === 1) {
+          const email = document.getElementById('ownerEmail');
+          const name = document.getElementById('bizName');
+          const sub = document.getElementById('bizSub');
+          const category = document.getElementById('bizCategory');
+          const desc = document.getElementById('bizDesc');
+
+          if (!email.checkValidity()) { email.reportValidity(); return; }
+          if (!name.checkValidity()) { name.reportValidity(); return; }
+          if (!sub.checkValidity()) { sub.reportValidity(); return; }
+          if (!category.value) { alert('Please select a category.'); category.focus(); return; }
+          if (!desc.checkValidity()) { desc.reportValidity(); return; }
+        }
+
+        if (currentStep === 2 && actionTypeSelect.value === 'code') {
+          if (!bizWebsiteInput.checkValidity()) {
+            bizWebsiteInput.reportValidity();
+            return;
+          }
+        }
+      }
+
+      currentStep = targetStep;
+
+      // Toggle Form Steps
+      document.querySelectorAll('.form-step').forEach((panel, index) => {
+        panel.classList.toggle('active', index + 1 === currentStep);
+      });
+
+      // Update Node Circles & Highlight Current/Completed
+      document.querySelectorAll('.step-node').forEach((node, index) => {
+        const stepNum = index + 1;
+        node.classList.toggle('active', stepNum === currentStep);
+        node.classList.toggle('completed', stepNum <= currentStep);
+      });
+
+      // Adjust Progress Bar Fill to match exact circle centers
+      const progressBar = document.getElementById('progressBar');
+      if (currentStep === 1) progressBar.style.width = '0%';
+      else if (currentStep === 2) progressBar.style.width = '50%';
+      else if (currentStep === 3) progressBar.style.width = '100%';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function loadDynamicCategories() {
+      const categorySelect = document.getElementById('bizCategory');
+      if (!categorySelect) return;
+
+      try {
+        const response = await fetch('/api/businesses');
+        if (!response.ok) throw new Error('Failed to fetch businesses');
+
+        const businesses = await response.json();
+        const uniqueCategories = [...new Set(
+          businesses.map(b => (b.Category || b.category || '').trim()).filter(Boolean)
+        )];
+
+        uniqueCategories.sort((a, b) => {
+          const lowerA = a.toLowerCase();
+          const lowerB = b.toLowerCase();
+          if (lowerA === 'others') return 1;
+          if (lowerB === 'others') return -1;
+          return a.localeCompare(b);
+        });
+
+        categorySelect.innerHTML = '<option value="" disabled selected>Select a category</option>';
+        uniqueCategories.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          categorySelect.appendChild(option);
+        });
+
+      } catch (error) {
+        categorySelect.innerHTML = `
+          <option value="" disabled selected>Select a category</option>
+          <option value="Food & Beverage">Food & Beverage</option>
+          <option value="Retail & Fashion">Retail & Fashion</option>
+          <option value="Services">Services</option>
+          <option value="Others">Others</option>
+        `;
+      }
+    }
+
+    const actionTypeSelect = document.getElementById('bizActionType');
+    const promoCodeGroup = document.getElementById('promoCodeGroup');
+    const bizWebsiteInput = document.getElementById('bizWebsite');
+    const bizWebsiteLabel = document.getElementById('bizWebsiteLabel');
+
+    actionTypeSelect.addEventListener('change', () => {
+      if (actionTypeSelect.value === 'code') {
+        promoCodeGroup.style.display = 'block';
+        bizWebsiteInput.setAttribute('required', 'true');
+        bizWebsiteLabel.innerHTML = 'Website / Store URL * <span style="font-size: 0.72rem; color: #d97706; font-weight: normal;">(Required for promo code redirection)</span>';
+      } else {
+        promoCodeGroup.style.display = 'none';
+        bizWebsiteInput.removeAttribute('required');
+        bizWebsiteLabel.innerHTML = 'Website URL';
+      }
+    });
+
+    const registerForm = document.getElementById('registerForm');
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.textContent = 'Submitting...';
+      submitBtn.disabled = true;
+
+      const payload = {
+        name: document.getElementById('bizName').value,
+        subtitle: document.getElementById('bizSub').value,
+        category: document.getElementById('bizCategory').value,
+        description: document.getElementById('bizDesc').value,
+        deal: document.getElementById('bizDeal').value,
+        actionType: document.getElementById('bizActionType').value,
+        promoCode: document.getElementById('bizPromoCode').value,
+        phone: document.getElementById('bizPhone').value,
+        websiteUrl: document.getElementById('bizWebsite').value,
+        instagramUrl: document.getElementById('bizInstagram').value,
+        tiktokUrl: document.getElementById('bizTiktok').value,
+        imageUrl: document.getElementById('bizImage').value,
+        ownerEmail: document.getElementById('ownerEmail').value
+      };
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          registerForm.style.display = 'none';
+          document.querySelector('.step-progress-wrapper').style.display = 'none';
+          document.getElementById('successState').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          alert('Error: ' + (result.error || 'Failed to submit listing.'));
+          submitBtn.textContent = 'Submit Listing for Review';
+          submitBtn.disabled = false;
+        }
+      } catch (err) {
+        alert('Network error. Please try again later.');
+        submitBtn.textContent = 'Submit Listing for Review';
+        submitBtn.disabled = false;
+      }
+    });
+
+    loadDynamicCategories();
+  </script>
+</body>
+</html>
