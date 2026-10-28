@@ -35,16 +35,21 @@ function initHeaderNav() {
     if (isLoggedIn) {
       // Apply active logged-in styling (Gold Ring Accent)
       profileBtn.classList.add('logged-in');
-      profileBtn.setAttribute('title', 'My Active Business Profile');
+      profileBtn.setAttribute('title', 'My Vendor Dashboard');
     } else {
       profileBtn.classList.remove('logged-in');
       profileBtn.setAttribute('title', 'Vendor Login / List Business');
     }
 
-    // Handle Profile Button Click
+    // Handle Profile Button Click -> Directs to Vendor Dashboard (edit.html)
     profileBtn.addEventListener('click', () => {
       if (isLoggedIn) {
-        window.location.href = `/business.html?slug=${vendorSlug}`;
+        const savedToken = localStorage.getItem('db_vendor_token');
+        if (savedToken) {
+          window.location.href = `/edit.html?token=${savedToken}`;
+        } else {
+          window.location.href = '/edit.html';
+        }
       } else {
         window.location.href = '/login.html';
       }
