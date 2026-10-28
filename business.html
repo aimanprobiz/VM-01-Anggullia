@@ -413,7 +413,7 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
             });
           }
 
-        } else if (actionType === 'whatsapp') {
+        } else if (actionType === 'enquire' || (actionType === '' && phoneNum)) {
           if (whatsappBtn) {
             whatsappBtn.style.display = 'flex';
             const refCode = `DB-${bizSlugVal.toUpperCase()}`;
