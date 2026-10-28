@@ -20,62 +20,55 @@
       </button>
     </div>
 
-    <!-- Header Title & Multi-Business Profile Engine -->
+    <!-- Header Title & Polished Preview Engine -->
     <div style="text-align: center; margin-bottom: 12px;">
       <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">Vendor Dashboard</h2>
-      <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4;">
+      <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4; margin-bottom: 12px;">
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
 
-      <!-- LIVE BUSINESS PROFILE PREVIEW SWITCHER (replicates business.html layout) -->
-      <div id="liveCardPreviewWrapper" style="display: none; margin-top: 14px; position: relative; align-items: center; justify-content: center; gap: 6px;">
+      <!-- LIVE PROFILE CARD PREVIEW (Image -> Centered Name -> View Link) -->
+      <div id="liveCardPreviewWrapper" style="display: none; margin-bottom: 14px; position: relative; align-items: center; justify-content: center; gap: 4px;">
         <!-- Left Arrow -->
-        <button type="button" id="prevListingBtn" aria-label="Previous Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
+        <button type="button" id="prevListingBtn" aria-label="Previous Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
           ‹
         </button>
 
-        <!-- Dynamic Profile Card Container (business.html matching style) -->
-        <div id="activeProfileCard" style="margin: 0; width: 100%; max-width: 310px; text-align: left; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; background: #faf9f5; box-shadow: var(--shadow-sm);">
+        <!-- Profile Card Container -->
+        <div style="margin: 0; width: 100%; max-width: 300px; text-align: left; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 10px; background: #faf9f5; box-shadow: var(--shadow-sm);">
           <div style="position: relative; margin-bottom: 8px;">
             <img id="previewCardBanner" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Profile Banner" style="width: 100%; height: auto; max-height: 140px; object-fit: cover; border-radius: var(--radius-sm); display: block;">
             <span id="previewFeaturedBadge" class="grid-featured-badge" style="display: none;" title="Featured Listing">★</span>
           </div>
 
-          <h4 id="previewCardName" style="font-size: 0.92rem; font-weight: 800; color: var(--primary-color); margin-bottom: 2px;">Business Name</h4>
-          <p id="previewCardSub" style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 8px;">Category / Subtitle</p>
+          <!-- Business Name Horizontally Center Aligned -->
+          <h4 id="previewCardName" style="font-size: 0.95rem; font-weight: 800; color: var(--primary-color); text-align: center; margin-bottom: 6px;">Business Name</h4>
 
-          <div style="background-color: var(--accent-gold-bg); padding: 8px; border-radius: var(--radius-sm); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 8px;">
-            <p style="font-size: 0.68rem; font-weight: 700; color: var(--primary-color); margin-bottom: 2px;">COMMUNITY DEAL:</p>
-            <p id="previewCardDeal" style="font-size: 0.78rem; font-weight: 700; color: var(--text-main);">YOUR EXCLUSIVE DEAL HERE</p>
-          </div>
-
-          <p id="previewCardDesc" style="font-size: 0.74rem; color: var(--text-main); line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            Full description story...
-          </p>
-
+          <!-- View Live Business Page Link -->
           <a id="previewViewLink" href="#" target="_blank" style="display: block; text-decoration: none; text-align: center; font-size: 0.74rem; padding: 6px 0; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-weight: 700; color: var(--primary-color);">
             View Live Business Page ↗
           </a>
         </div>
 
         <!-- Right Arrow -->
-        <button type="button" id="nextListingBtn" aria-label="Next Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
+        <button type="button" id="nextListingBtn" aria-label="Next Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
           ›
         </button>
       </div>
 
-      <!-- BORDERLESS SELECTOR CONTAINER -->
-      <div id="businessSelectorContainer" style="display: none; margin-top: 10px; text-align: center;">
-        <label style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;">
-          Select Listing
-        </label>
-        <select id="businessSelector" style="width: auto; max-width: 90%; padding: 4px 8px; font-size: 0.88rem; font-weight: 700; border: none; background: transparent; color: var(--primary-color); outline: none; cursor: pointer; text-align-last: center;">
+      <!-- SELECT LISTING WITH PILL-OUTLINE DROPDOWN -->
+      <div id="businessSelectorContainer" style="display: none; margin-bottom: 10px; align-items: center; justify-content: center; gap: 8px;">
+        <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
+          Select Listing:
+        </span>
+        <select id="businessSelector" style="padding: 6px 12px; font-size: 0.82rem; font-weight: 700; border: 1.5px solid var(--border-color); border-radius: 20px; background: #ffffff; color: var(--primary-color); outline: none; cursor: pointer;">
         </select>
       </div>
 
-      <!-- Listing Status Badge -->
-      <div id="statusBadge" style="display: inline-block; margin-top: 10px; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">
-        Loading status...
+      <!-- Listing Status Badge (No background fill, no bullet point, colored text) -->
+      <div>
+        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Status: </span>
+        <span id="statusBadge" style="font-size: 0.78rem; font-weight: 700;">Loading...</span>
       </div>
     </div>
 
@@ -133,410 +126,4 @@
           <div style="display: flex; flex-direction: column; gap: 12px;">
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
-              <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <div>
-              <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
-              <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
-              <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
-              <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION 3: Exclusive Ummah Special Deal -->
-        <div>
-          <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
-            3. Exclusive Ummah Special Deal <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
-          </h3>
-          
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
-              <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-
-            <!-- Live Deal Ticket Preview -->
-            <div style="margin-top: 2px;">
-              <p style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">Live Deal Preview</p>
-              <div id="previewDealBox" class="coupon-ticket" style="margin: 0; background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%); border: 1.5px solid var(--accent-gold);">
-                <div class="coupon-content">
-                  <div class="coupon-header">
-                    <span class="coupon-tag">UMMAH SPECIAL:</span>
-                  </div>
-                  <p id="previewDealText" class="coupon-deal-text" style="font-size: 1.05rem;">YOUR EXCLUSIVE DEAL HERE</p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
-              <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
-                <option value="claim">In-Store Cashier PIN Redemption</option>
-                <option value="code">Online Promo Code</option>
-              </select>
-            </div>
-
-            <div id="promoCodeGroup" style="display: none;">
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
-              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
-          </div>
-        </div>
-
-        <!-- Save Button -->
-        <div style="margin-top: 8px;">
-          <button type="submit" id="saveBtn" class="action-btn-primary" style="width: 100%; padding: 12px;">Save Profile Changes</button>
-        </div>
-
-      </form>
-    </div>
-
-  </div>
-
-  <script>
-    let recordId = null;
-    let currentToken = null;
-    let userBusinessesList = [];
-    let currentListingIndex = 0;
-
-    // 1. Retrieve token from URL params or localStorage
-    const urlParams = new URLSearchParams(window.location.search);
-    currentToken = urlParams.get('token') || localStorage.getItem('db_vendor_token');
-
-    if (!currentToken) {
-      alert('No active edit session found. Please log in.');
-      window.location.href = '/login.html';
-    } else {
-      localStorage.setItem('db_vendor_token', currentToken);
-    }
-
-    // Update Live Business Profile Preview (Matching business.html)
-    function updateLiveProfileCardPreview(biz) {
-      const cardContainer = document.getElementById('liveCardPreviewWrapper');
-      if (!cardContainer || !biz) return;
-
-      cardContainer.style.display = 'flex';
-      
-      const banner = document.getElementById('previewCardBanner');
-      const name = document.getElementById('previewCardName');
-      const sub = document.getElementById('previewCardSub');
-      const deal = document.getElementById('previewCardDeal');
-      const desc = document.getElementById('previewCardDesc');
-      const viewLink = document.getElementById('previewViewLink');
-      const featuredBadge = document.getElementById('previewFeaturedBadge');
-
-      banner.src = biz.imageUrl || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
-      name.textContent = biz.name || 'Business Name';
-      sub.textContent = biz.subtitle || biz.category || '';
-      deal.textContent = biz.deal ? biz.deal : 'NO EXCLUSIVE OFFER YET';
-      desc.textContent = biz.description || 'Business story and profile details...';
-      
-      if (biz.slug) {
-        viewLink.href = `/business.html?slug=${biz.slug}`;
-        viewLink.style.display = 'block';
-      } else {
-        viewLink.style.display = 'none';
-      }
-
-      if (biz.isFeatured) {
-        featuredBadge.style.display = 'inline-block';
-      } else {
-        featuredBadge.style.display = 'none';
-      }
-    }
-
-    // Switch active business by array index
-    function switchActiveListing(index) {
-      if (!userBusinessesList || userBusinessesList.length === 0) return;
-      
-      if (index < 0) index = userBusinessesList.length - 1;
-      if (index >= userBusinessesList.length) index = 0;
-
-      currentListingIndex = index;
-      const targetBiz = userBusinessesList[currentListingIndex];
-
-      if (targetBiz && targetBiz.token !== currentToken) {
-        localStorage.setItem('db_vendor_token', targetBiz.token);
-        window.location.href = `/edit.html?token=${targetBiz.token}`;
-      }
-    }
-
-    // Render Dropdown Selector & Side Carousel Arrows
-    function renderBusinessSelector(businesses) {
-      const selectorContainer = document.getElementById('businessSelectorContainer');
-      const businessSelector = document.getElementById('businessSelector');
-      const prevBtn = document.getElementById('prevListingBtn');
-      const nextBtn = document.getElementById('nextListingBtn');
-
-      userBusinessesList = businesses || [];
-      currentListingIndex = userBusinessesList.findIndex(b => b.token === currentToken);
-      if (currentListingIndex === -1) currentListingIndex = 0;
-
-      if (userBusinessesList.length > 0) {
-        selectorContainer.style.display = 'block';
-        businessSelector.innerHTML = '';
-
-        userBusinessesList.forEach((biz, idx) => {
-          const option = document.createElement('option');
-          option.value = biz.token;
-          option.textContent = biz.name;
-          if (idx === currentListingIndex) option.selected = true;
-          businessSelector.appendChild(option);
-        });
-
-        businessSelector.onchange = (e) => {
-          const newToken = e.target.value;
-          localStorage.setItem('db_vendor_token', newToken);
-          window.location.href = `/edit.html?token=${newToken}`;
-        };
-
-        if (userBusinessesList.length > 1) {
-          prevBtn.style.display = 'flex';
-          nextBtn.style.display = 'flex';
-          prevBtn.onclick = () => switchActiveListing(currentListingIndex - 1);
-          nextBtn.onclick = () => switchActiveListing(currentListingIndex + 1);
-        } else {
-          prevBtn.style.display = 'none';
-          nextBtn.style.display = 'none';
-        }
-      }
-    }
-
-    // 3. Load Categories
-    async function loadCategories(selectedCategory) {
-      const categorySelect = document.getElementById('bizCategory');
-      try {
-        const response = await fetch('/api/businesses');
-        let uniqueCategories = [];
-        if (response.ok) {
-          const businesses = await response.json();
-          uniqueCategories = [...new Set(
-            businesses.map(b => (b.Category || b.category || '').trim()).filter(Boolean)
-          )];
-        }
-
-        if (selectedCategory && !uniqueCategories.includes(selectedCategory)) {
-          uniqueCategories.push(selectedCategory);
-        }
-
-        uniqueCategories.sort((a, b) => {
-          if (a.toLowerCase() === 'others') return 1;
-          if (b.toLowerCase() === 'others') return -1;
-          return a.localeCompare(b);
-        });
-
-        categorySelect.innerHTML = '<option value="" disabled>Select a category</option>';
-        uniqueCategories.forEach(cat => {
-          const opt = document.createElement('option');
-          opt.value = cat;
-          opt.textContent = cat;
-          if (cat === selectedCategory) opt.selected = true;
-          categorySelect.appendChild(opt);
-        });
-      } catch (err) {
-        categorySelect.innerHTML = `
-          <option value="Food & Beverage">Food & Beverage</option>
-          <option value="Retail & Fashion">Retail & Fashion</option>
-          <option value="Services">Services</option>
-          <option value="Others">Others</option>
-        `;
-        if (selectedCategory) categorySelect.value = selectedCategory;
-      }
-    }
-
-    // 4. Dynamic ActionType & Promo URL Toggle Handler
-    const actionTypeSelect = document.getElementById('bizActionType');
-    const promoCodeGroup = document.getElementById('promoCodeGroup');
-    const bizWebsiteInput = document.getElementById('bizWebsite');
-    const bizWebsiteLabel = document.getElementById('bizWebsiteLabel');
-
-    function updateActionTypeUI() {
-      if (actionTypeSelect.value === 'code') {
-        promoCodeGroup.style.display = 'block';
-        bizWebsiteInput.setAttribute('required', 'true');
-        bizWebsiteLabel.innerHTML = 'Website / Store URL * <span style="font-size: 0.72rem; color: #d97706; font-weight: normal;">(Required for promo code redirection)</span>';
-      } else {
-        promoCodeGroup.style.display = 'none';
-        bizWebsiteInput.removeAttribute('required');
-        bizWebsiteLabel.innerHTML = 'Website URL';
-      }
-    }
-
-    actionTypeSelect.addEventListener('change', updateActionTypeUI);
-
-    // Live Deal Preview & Form Input Synchronizers
-    const bizDealInput = document.getElementById('bizDeal');
-    const previewDealText = document.getElementById('previewDealText');
-    const previewCardDeal = document.getElementById('previewCardDeal');
-
-    bizDealInput.addEventListener('input', () => {
-      const val = bizDealInput.value.trim();
-      const displayVal = val !== '' ? val.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
-      previewDealText.textContent = displayVal;
-      if (previewCardDeal) previewCardDeal.textContent = val !== '' ? val : 'NO EXCLUSIVE OFFER YET';
-    });
-
-    document.getElementById('bizName').addEventListener('input', (e) => {
-      const cardName = document.getElementById('previewCardName');
-      if (cardName) cardName.textContent = e.target.value.trim() || 'Business Name';
-    });
-
-    document.getElementById('bizSub').addEventListener('input', (e) => {
-      const cardSub = document.getElementById('previewCardSub');
-      if (cardSub) cardSub.textContent = e.target.value.trim() || 'Category / Subtitle';
-    });
-
-    document.getElementById('bizDesc').addEventListener('input', (e) => {
-      const cardDesc = document.getElementById('previewCardDesc');
-      if (cardDesc) cardDesc.textContent = e.target.value.trim() || 'Business story and profile details...';
-    });
-
-    document.getElementById('bizImage').addEventListener('input', (e) => {
-      const cardBanner = document.getElementById('previewCardBanner');
-      if (cardBanner) cardBanner.src = e.target.value.trim() || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
-    });
-
-    // 5. Load Business Data by Token & Persist Global Navigation Session
-    async function loadBusinessDetails() {
-      try {
-        const response = await fetch(`/api/get-business?token=${encodeURIComponent(currentToken)}`);
-        const data = await response.json();
-
-        if (!response.ok || !data.recordId) {
-          alert(data.error || 'Failed to load listing. Your edit link may be invalid.');
-          localStorage.removeItem('db_vendor_token');
-          localStorage.removeItem('vendorEmail');
-          localStorage.removeItem('vendorSlug');
-          window.location.href = '/login.html';
-          return;
-        }
-
-        recordId = data.recordId;
-
-        // SAVE SESSION FOR PROFILE ICON RING (script.js)
-        if (data.ownerEmail) localStorage.setItem('vendorEmail', data.ownerEmail);
-        if (data.slug) localStorage.setItem('vendorSlug', data.slug);
-
-        // Render multi-listing dropdown & live profile card switcher
-        renderBusinessSelector(data.allBusinesses);
-        updateLiveProfileCardPreview(data);
-
-        // Populate form fields
-        document.getElementById('bizName').value = data.name || '';
-        document.getElementById('bizSub').value = data.subtitle || '';
-        document.getElementById('bizDesc').value = data.description || '';
-        document.getElementById('bizImage').value = data.imageUrl || '';
-        document.getElementById('bizDeal').value = data.deal || '';
-        previewDealText.textContent = data.deal ? data.deal.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
-
-        // Map ActionType option safely
-        let actionVal = (data.actionType || '').toLowerCase();
-        if (actionVal === 'promocode' || actionVal === 'code') actionVal = 'code';
-        else if (actionVal === 'claim') actionVal = 'claim';
-        else actionVal = 'whatsapp';
-        
-        actionTypeSelect.value = actionVal;
-        document.getElementById('bizPromoCode').value = data.promoCode || '';
-        document.getElementById('bizPhone').value = data.phone || '';
-        document.getElementById('bizWebsite').value = data.websiteUrl || '';
-        document.getElementById('bizInstagram').value = data.instagramUrl || '';
-        document.getElementById('bizTiktok').value = data.tiktokUrl || '';
-
-        updateActionTypeUI();
-        await loadCategories(data.category);
-
-        // Status Badge UI
-        const statusBadge = document.getElementById('statusBadge');
-        if (data.status === 'Active') {
-          statusBadge.textContent = '● Listing Status: Active (Live in Directory)';
-          statusBadge.style.background = '#dcfce7';
-          statusBadge.style.color = '#15803d';
-        } else {
-          statusBadge.textContent = '● Listing Status: Pending Admin Review';
-          statusBadge.style.background = '#fef3c7';
-          statusBadge.style.color = '#b45309';
-        }
-
-        document.getElementById('loadingBox').style.display = 'none';
-        document.getElementById('editCard').style.display = 'block';
-
-      } catch (err) {
-        alert('Error connecting to server.');
-      }
-    }
-
-    // 6. Handle Save Submission
-    document.getElementById('editForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const saveBtn = document.getElementById('saveBtn');
-      saveBtn.textContent = 'Saving Changes...';
-      saveBtn.disabled = true;
-
-      const payload = {
-        recordId: recordId,
-        token: currentToken,
-        name: document.getElementById('bizName').value,
-        subtitle: document.getElementById('bizSub').value,
-        category: document.getElementById('bizCategory').value,
-        description: document.getElementById('bizDesc').value,
-        deal: document.getElementById('bizDeal').value,
-        actionType: document.getElementById('bizActionType').value,
-        promoCode: document.getElementById('bizPromoCode').value,
-        phone: document.getElementById('bizPhone').value,
-        websiteUrl: document.getElementById('bizWebsite').value,
-        instagramUrl: document.getElementById('bizInstagram').value,
-        tiktokUrl: document.getElementById('bizTiktok').value,
-        imageUrl: document.getElementById('bizImage').value
-      };
-
-      try {
-        const response = await fetch('/api/update-business', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-          alert('✓ Alhamdulillah! Your listing changes have been updated successfully.');
-          saveBtn.textContent = 'Save Profile Changes';
-          saveBtn.disabled = false;
-        } else {
-          alert('Error: ' + (result.error || 'Failed to update profile.'));
-          saveBtn.textContent = 'Save Profile Changes';
-          saveBtn.disabled = false;
-        }
-      } catch (err) {
-        alert('Network error. Please try again later.');
-        saveBtn.textContent = 'Save Profile Changes';
-        saveBtn.disabled = false;
-      }
-    });
-
-    // Logout Button Handler
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      if (confirm('Are you sure you want to log out of your vendor portal?')) {
-        localStorage.removeItem('db_vendor_token');
-        localStorage.removeItem('vendorEmail');
-        localStorage.removeItem('vendorSlug');
-        window.location.href = '/login.html';
-      }
-    });
-
-    // Run Initializations
-    loadBusinessDetails();
-  </script>
-</body>
-</html>
+              <input type="text" id="bizPhone" placeholder="658
