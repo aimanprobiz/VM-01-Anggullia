@@ -16,6 +16,12 @@
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
+    .shimmer-placeholder {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      color: transparent !important;
+    }
 
     /* Muted Unselected Tabs */
     .tab-btn {
@@ -116,29 +122,29 @@
           <div id="tabContent1" class="tab-content" style="display: flex; flex-direction: column; gap: 12px;">
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
-              <input type="text" id="bizName" required placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
             </div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
-              <input type="text" id="bizSub" required placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
             </div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
-              <select id="bizCategory" required class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <select id="bizCategory" required class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
                 <option value="" disabled selected>Loading categories...</option>
               </select>
             </div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
-              <textarea id="bizDesc" rows="4" required placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; resize: vertical; min-height: 100px; line-height: 1.4; color: transparent;" disabled></textarea>
+              <textarea id="bizDesc" rows="4" required placeholder="Tell the community about your business story and offerings..." class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; resize: vertical; min-height: 100px; line-height: 1.4;" disabled></textarea>
             </div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
-              <input type="url" id="bizImage" placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
             </div>
 
             <div style="margin-top: 8px;">
@@ -150,22 +156,22 @@
           <div id="tabContent2" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
-              <input type="text" id="bizPhone" placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <input type="text" id="bizPhone" placeholder="6588469883" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
             </div>
 
             <div>
               <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
-              <input type="url" id="bizWebsite" placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
             </div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
-              <input type="url" id="bizInstagram" placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
             </div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
-              <input type="url" id="bizTiktok" placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
             </div>
 
             <div style="margin-top: 8px;">
@@ -177,19 +183,19 @@
           <div id="tabContent3" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
-              <input type="text" id="bizDeal" placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
             </div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
-              <select id="bizActionType" class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <select id="bizActionType" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
                 <option value="" disabled selected>Loading...</option>
               </select>
             </div>
 
             <div id="promoCodeGroup" style="display: none;">
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
-              <input type="text" id="bizPromoCode" placeholder="Loading..." class="shimmer-bg" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; color: transparent;" disabled>
+              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
             </div>
 
             <div style="margin-top: 8px;">
@@ -521,13 +527,13 @@
       if (cardBanner) cardBanner.src = e.target.value.trim() || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
     });
 
-    // Remove shimmering state & enable form fields once loaded (Preserving loaded values!)
+    // Remove shimmering state & enable form fields once loaded
     function removeFormShimmer() {
       const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'bizImage', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'bizDeal', 'bizActionType', 'bizPromoCode'];
       fields.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
-          el.classList.remove('shimmer-bg');
+          el.classList.remove('shimmer-placeholder');
           el.style.color = 'var(--text-main)';
           el.disabled = false;
         }
@@ -565,7 +571,7 @@
         initCardSwipeGestures();
         initTabSwipeGestures();
 
-        // Populate form fields properly BEFORE removing shimmer so values are locked in
+        // Populate form fields (if data is empty/null, leave input blank so the placeholder example shows!)
         document.getElementById('bizName').value = data.name || '';
         document.getElementById('bizSub').value = data.subtitle || '';
         document.getElementById('bizDesc').value = data.description || '';
@@ -594,7 +600,7 @@
           <option value="claim">In-Store Cashier PIN Redemption</option>
           <option value="code">Online Promo Code</option>
         `;
-        actionTypeSelect.value = actionVal;
+        if (actionVal) actionTypeSelect.value = actionVal;
 
         await loadCategories(data.category);
         removeFormShimmer();
