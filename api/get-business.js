@@ -54,7 +54,7 @@ export default async function handler(req, res) {
           id: r.id,
           name: r.fields.Name || 'Unnamed Business',
           token: r.fields.EditToken
-        })).filter(b => b.token); // ensure token exists
+        })).filter(b => b.token);
       }
     }
 
@@ -73,8 +73,9 @@ export default async function handler(req, res) {
       tiktokUrl: fields.TikTokURL || '',
       imageUrl: fields.ImageURL || '',
       ownerEmail: fields.OwnerEmail || '',
+      slug: fields.Slug || '', // <-- Added this field!
       status: fields.Status || 'Pending',
-      allBusinesses: allBusinesses // Returns array of all listings owned by email
+      allBusinesses: allBusinesses
     });
 
   } catch (error) {
