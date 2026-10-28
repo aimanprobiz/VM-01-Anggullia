@@ -16,52 +16,6 @@
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
-
-    /* Paper Folder Tab Styles */
-    .folder-tabs-container {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 0;
-      padding: 0 4px;
-      position: relative;
-      z-index: 2;
-    }
-    .folder-tab {
-      flex: 1;
-      padding: 10px 6px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      background: #eae6db;
-      border: 1.5px solid var(--border-color);
-      border-bottom: none;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-      color: var(--text-muted);
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s ease;
-      box-shadow: 0 -2px 4px rgba(0,0,0,0.02);
-    }
-    .folder-tab.active {
-      background: #faf9f5;
-      color: var(--primary-color);
-      border-color: var(--primary-color);
-      border-bottom: 2px solid #faf9f5; /* Blends seamlessly into card body */
-      padding-top: 12px;
-      font-weight: 800;
-      box-shadow: 0 -3px 6px rgba(0,0,0,0.04);
-      z-index: 3;
-    }
-    .folder-card-body {
-      background: #faf9f5;
-      border: 1.5px solid var(--primary-color);
-      border-radius: var(--radius-md);
-      border-top-left-radius: 0;
-      padding: 16px;
-      box-shadow: var(--shadow-sm);
-      position: relative;
-      z-index: 1;
-    }
   </style>
 </head>
 <body>
@@ -140,110 +94,108 @@
       Loading your business details...
     </div>
 
-    <!-- Edit Form Container with Folder Tabs -->
-    <div id="editCard" style="display: none;">
+    <!-- Edit Form Card with Clean Tabs -->
+    <div id="editCard" class="card" style="padding: 16px; display: none;">
       
-      <!-- Folder Tab Navigation Buttons -->
-      <div class="folder-tabs-container">
-        <button type="button" class="folder-tab active" onclick="switchTab(1)">1. Profile</button>
-        <button type="button" class="folder-tab" onclick="switchTab(2)">2. Contact</button>
-        <button type="button" class="folder-tab" onclick="switchTab(3)">3. Deals</button>
+      <!-- Clean Tab Navigation Buttons -->
+      <div style="display: flex; border-bottom: 1.5px solid var(--border-color); margin-bottom: 16px; gap: 4px;">
+        <button type="button" class="tab-btn active" onclick="switchTab(1)" style="flex: 1; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; background: transparent; border: none; border-bottom: 2.5px solid var(--primary-color); color: var(--primary-color); cursor: pointer; text-align: center;">1. Profile</button>
+        <button type="button" class="tab-btn" onclick="switchTab(2)" style="flex: 1; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; background: transparent; border: none; border-bottom: 2.5px solid transparent; color: var(--text-muted); cursor: pointer; text-align: center;">2. Contact</button>
+        <button type="button" class="tab-btn" onclick="switchTab(3)" style="flex: 1; padding: 10px 4px; font-size: 0.78rem; font-weight: 700; background: transparent; border: none; border-bottom: 2.5px solid transparent; color: var(--text-muted); cursor: pointer; text-align: center;">3. Deals</button>
       </div>
 
-      <!-- Folder Card Body -->
-      <div class="folder-card-body">
-        <div id="tabSwipeContainer" style="touch-action: pan-y;">
-          <form id="editForm" style="display: flex; flex-direction: column; gap: 16px;">
-            
-            <!-- TAB 1: Business Profile -->
-            <div id="tabContent1" class="tab-content" style="display: flex; flex-direction: column; gap: 12px;">
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
-                <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
-              </div>
-
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
-                <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
-              </div>
-
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
-                <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff; color: var(--text-main);">
-                  <option value="" disabled selected>Loading categories...</option>
-                </select>
-              </div>
-
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
-                <textarea id="bizDesc" rows="4" required placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff; resize: none; overflow: hidden; line-height: 1.4;"></textarea>
-              </div>
-
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
-                <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
-              </div>
-
-              <div style="margin-top: 8px;">
-                <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
-              </div>
+      <!-- Swipeable Tab Content Container -->
+      <div id="tabSwipeContainer" style="touch-action: pan-y;">
+        <form id="editForm" style="display: flex; flex-direction: column; gap: 16px;">
+          
+          <!-- TAB 1: Business Profile -->
+          <div id="tabContent1" class="tab-content" style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Business Name (Compulsory) *</label>
+              <input type="text" id="bizName" required placeholder="e.g. Barakah Bakery SG" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
-            <!-- TAB 2: Contact & Social Media -->
-            <div id="tabContent2" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
-                <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
-              </div>
-
-              <div>
-                <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
-                <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
-              </div>
-
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
-                <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
-              </div>
-
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
-                <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
-              </div>
-
-              <div style="margin-top: 8px;">
-                <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
-              </div>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Subtitle / Short Tagline (Compulsory) *</label>
+              <input type="text" id="bizSub" required placeholder="e.g. Halal Artisan Sourdough & Pastries" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
-            <!-- TAB 3: Exclusive Ummah Special Deal -->
-            <div id="tabContent3" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
-                <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
-              </div>
-
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
-                <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff; color: var(--text-main);">
-                  <option value="whatsapp">Enquire / Claim via WhatsApp</option>
-                  <option value="claim">In-Store Cashier PIN Redemption</option>
-                  <option value="code">Online Promo Code</option>
-                </select>
-              </div>
-
-              <div id="promoCodeGroup" style="display: none;">
-                <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
-                <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
-              </div>
-
-              <div style="margin-top: 8px;">
-                <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
-              </div>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
+              <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="" disabled selected>Loading categories...</option>
+              </select>
             </div>
 
-          </form>
-        </div>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Full Description (Compulsory) *</label>
+              <textarea id="bizDesc" rows="5" required placeholder="Tell the community about your business story and offerings..." style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; resize: none; overflow: hidden; line-height: 1.4;"></textarea>
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
+              <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div style="margin-top: 8px;">
+              <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
+            </div>
+          </div>
+
+          <!-- TAB 2: Contact & Social Media -->
+          <div id="tabContent2" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
+              <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
+              <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Instagram URL</label>
+              <input type="url" id="bizInstagram" placeholder="https://instagram.com/yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">TikTok URL</label>
+              <input type="url" id="bizTiktok" placeholder="https://tiktok.com/@yourbusiness" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div style="margin-top: 8px;">
+              <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
+            </div>
+          </div>
+
+          <!-- TAB 3: Exclusive Ummah Special Deal -->
+          <div id="tabContent3" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
+              <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
+              <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
+                <option value="claim">In-Store Cashier PIN Redemption</option>
+                <option value="code">Online Promo Code</option>
+              </select>
+            </div>
+
+            <div id="promoCodeGroup" style="display: none;">
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
+              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+            </div>
+
+            <div style="margin-top: 8px;">
+              <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px;">Save Profile Changes</button>
+            </div>
+          </div>
+
+        </form>
       </div>
 
     </div>
@@ -268,16 +220,17 @@
       localStorage.setItem('db_vendor_token', currentToken);
     }
 
-    // Tab Switching Logic with Folder Styling
+    // Tab Switching Logic
     function switchTab(tabNumber) {
       activeTab = tabNumber;
       document.querySelectorAll('.tab-content').forEach((el, idx) => {
         el.style.display = (idx + 1) === tabNumber ? 'flex' : 'none';
       });
 
-      document.querySelectorAll('.folder-tab').forEach((btn, idx) => {
+      document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
         const isActive = (idx + 1) === tabNumber;
-        btn.classList.toggle('active', isActive);
+        btn.style.borderBottomColor = isActive ? 'var(--primary-color)' : 'transparent';
+        btn.style.color = isActive ? 'var(--primary-color)' : 'var(--text-muted)';
       });
     }
 
