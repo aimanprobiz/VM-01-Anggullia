@@ -220,7 +220,7 @@
     </section>
 
 <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
-    <section class="business-section">
+    <section class="business-section" id="businessSection">
       <!-- Section Header with Title & Borderless Magnifying Glass Icon -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h2 class="section-title" style="margin: 0;">Support Local Muslim Businesses</h2>
@@ -290,10 +290,10 @@
   </div>
 
   <script src="/script.js" defer></script>
-
-  <!-- Floating Back to Top Button -->
-  <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top" title="Back to top">
-    ↑
-  </button>
+  
+<!-- Floating Back to Top / Section Button -->
+<button id="backToTopBtn" onclick="document.getElementById('businessSection').scrollIntoView({behavior: 'smooth', block: 'start'})" aria-label="Back to Business Section" title="Back to Businesses">
+  ↑
+</button>
 </body>
 </html>
