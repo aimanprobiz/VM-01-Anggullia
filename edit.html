@@ -20,42 +20,46 @@
       </button>
     </div>
 
-    <!-- Header Title & Multi-Business Preview Engine -->
+    <!-- Header Title & Multi-Business Profile Engine -->
     <div style="text-align: center; margin-bottom: 12px;">
       <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">Vendor Dashboard</h2>
       <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4;">
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
 
-      <!-- LIVE INDEX CARD PREVIEW SWITCHER (Above Dropdown) -->
+      <!-- LIVE BUSINESS PROFILE PREVIEW SWITCHER (replicates business.html layout) -->
       <div id="liveCardPreviewWrapper" style="display: none; margin-top: 14px; position: relative; align-items: center; justify-content: center; gap: 6px;">
         <!-- Left Arrow -->
-        <button type="button" id="prevListingBtn" aria-label="Previous Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
+        <button type="button" id="prevListingBtn" aria-label="Previous Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
           ‹
         </button>
 
-        <!-- Dynamic Directory Card Container (Compact Index Card Layout) -->
-        <div id="activeDirectoryCard" class="grid-card" style="margin: 0; width: 100%; max-width: 280px; text-align: left; box-shadow: var(--shadow-md);">
-          <div style="position: relative;">
-            <img id="previewCardBanner" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Listing Banner" class="card-banner" style="height: 85px;">
+        <!-- Dynamic Profile Card Container (business.html matching style) -->
+        <div id="activeProfileCard" style="margin: 0; width: 100%; max-width: 310px; text-align: left; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; background: #faf9f5; box-shadow: var(--shadow-sm);">
+          <div style="position: relative; margin-bottom: 8px;">
+            <img id="previewCardBanner" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Profile Banner" style="width: 100%; height: auto; max-height: 140px; object-fit: cover; border-radius: var(--radius-sm); display: block;">
             <span id="previewFeaturedBadge" class="grid-featured-badge" style="display: none;" title="Featured Listing">★</span>
           </div>
-          <div class="grid-card-body" style="padding: 10px;">
-            <div class="vendor-details" style="margin-bottom: 6px;">
-              <div class="deal-badge" style="font-size: 0.68rem; padding: 2px 8px;">
-                <span id="previewCardDeal">No offer</span>
-              </div>
-              <h3 id="previewCardName" class="vendor-name" style="font-size: 0.88rem; margin-top: 2px;">Business Name</h3>
-              <p id="previewCardSub" class="vendor-sub" style="font-size: 0.72rem; margin-bottom: 0;">Category / Subtitle</p>
-            </div>
-            <a id="previewViewLink" href="#" target="_blank" class="action-btn" style="display: block; text-decoration: none; text-align: center; font-size: 0.74rem; padding: 6px 0;">
-              View Live Profile ↗
-            </a>
+
+          <h4 id="previewCardName" style="font-size: 0.92rem; font-weight: 800; color: var(--primary-color); margin-bottom: 2px;">Business Name</h4>
+          <p id="previewCardSub" style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 8px;">Category / Subtitle</p>
+
+          <div style="background-color: var(--accent-gold-bg); padding: 8px; border-radius: var(--radius-sm); border: 1px solid rgba(221, 186, 88, 0.4); margin-bottom: 8px;">
+            <p style="font-size: 0.68rem; font-weight: 700; color: var(--primary-color); margin-bottom: 2px;">COMMUNITY DEAL:</p>
+            <p id="previewCardDeal" style="font-size: 0.78rem; font-weight: 700; color: var(--text-main);">YOUR EXCLUSIVE DEAL HERE</p>
           </div>
+
+          <p id="previewCardDesc" style="font-size: 0.74rem; color: var(--text-main); line-height: 1.4; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            Full description story...
+          </p>
+
+          <a id="previewViewLink" href="#" target="_blank" style="display: block; text-decoration: none; text-align: center; font-size: 0.74rem; padding: 6px 0; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-weight: 700; color: var(--primary-color);">
+            View Live Business Page ↗
+          </a>
         </div>
 
         <!-- Right Arrow -->
-        <button type="button" id="nextListingBtn" aria-label="Next Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
+        <button type="button" id="nextListingBtn" aria-label="Next Listing" style="background: var(--card-bg); border: 1.5px solid var(--border-color); color: var(--primary-color); width: 34px; height: 34px; border-radius: 50%; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; shrink: 0; box-shadow: var(--shadow-sm); z-index: 2;">
           ›
         </button>
       </div>
@@ -217,8 +221,8 @@
       localStorage.setItem('db_vendor_token', currentToken);
     }
 
-    // Update Live Index Card Preview
-    function updateLiveIndexCardPreview(biz) {
+    // Update Live Business Profile Preview (Matching business.html)
+    function updateLiveProfileCardPreview(biz) {
       const cardContainer = document.getElementById('liveCardPreviewWrapper');
       if (!cardContainer || !biz) return;
 
@@ -228,13 +232,15 @@
       const name = document.getElementById('previewCardName');
       const sub = document.getElementById('previewCardSub');
       const deal = document.getElementById('previewCardDeal');
+      const desc = document.getElementById('previewCardDesc');
       const viewLink = document.getElementById('previewViewLink');
       const featuredBadge = document.getElementById('previewFeaturedBadge');
 
       banner.src = biz.imageUrl || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
       name.textContent = biz.name || 'Business Name';
       sub.textContent = biz.subtitle || biz.category || '';
-      deal.textContent = biz.deal ? biz.deal : 'No offer';
+      deal.textContent = biz.deal ? biz.deal : 'NO EXCLUSIVE OFFER YET';
+      desc.textContent = biz.description || 'Business story and profile details...';
       
       if (biz.slug) {
         viewLink.href = `/business.html?slug=${biz.slug}`;
@@ -254,7 +260,6 @@
     function switchActiveListing(index) {
       if (!userBusinessesList || userBusinessesList.length === 0) return;
       
-      // Loop around bounds
       if (index < 0) index = userBusinessesList.length - 1;
       if (index >= userBusinessesList.length) index = 0;
 
@@ -296,7 +301,6 @@
           window.location.href = `/edit.html?token=${newToken}`;
         };
 
-        // Arrow controls visibility
         if (userBusinessesList.length > 1) {
           prevBtn.style.display = 'flex';
           nextBtn.style.display = 'flex';
@@ -371,7 +375,7 @@
 
     actionTypeSelect.addEventListener('change', updateActionTypeUI);
 
-    // Live Deal Preview Binding
+    // Live Deal Preview & Form Input Synchronizers
     const bizDealInput = document.getElementById('bizDeal');
     const previewDealText = document.getElementById('previewDealText');
     const previewCardDeal = document.getElementById('previewCardDeal');
@@ -380,10 +384,9 @@
       const val = bizDealInput.value.trim();
       const displayVal = val !== '' ? val.toUpperCase() : 'YOUR EXCLUSIVE DEAL HERE';
       previewDealText.textContent = displayVal;
-      if (previewCardDeal) previewCardDeal.textContent = val !== '' ? val : 'No offer';
+      if (previewCardDeal) previewCardDeal.textContent = val !== '' ? val : 'NO EXCLUSIVE OFFER YET';
     });
 
-    // Dynamic Input Synchronization with Live Index Preview Card
     document.getElementById('bizName').addEventListener('input', (e) => {
       const cardName = document.getElementById('previewCardName');
       if (cardName) cardName.textContent = e.target.value.trim() || 'Business Name';
@@ -392,6 +395,11 @@
     document.getElementById('bizSub').addEventListener('input', (e) => {
       const cardSub = document.getElementById('previewCardSub');
       if (cardSub) cardSub.textContent = e.target.value.trim() || 'Category / Subtitle';
+    });
+
+    document.getElementById('bizDesc').addEventListener('input', (e) => {
+      const cardDesc = document.getElementById('previewCardDesc');
+      if (cardDesc) cardDesc.textContent = e.target.value.trim() || 'Business story and profile details...';
     });
 
     document.getElementById('bizImage').addEventListener('input', (e) => {
@@ -420,9 +428,9 @@
         if (data.ownerEmail) localStorage.setItem('vendorEmail', data.ownerEmail);
         if (data.slug) localStorage.setItem('vendorSlug', data.slug);
 
-        // Render multi-listing dropdown & live index card switcher
+        // Render multi-listing dropdown & live profile card switcher
         renderBusinessSelector(data.allBusinesses);
-        updateLiveIndexCardPreview(data);
+        updateLiveProfileCardPreview(data);
 
         // Populate form fields
         document.getElementById('bizName').value = data.name || '';
