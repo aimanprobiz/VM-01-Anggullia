@@ -547,6 +547,10 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
         const tiktokUrl = biz.TikTokURL || biz.tiktokurl || biz.TikTok || '';
         const phoneNum = biz.Phone || biz.phone || '';
 
+        // General WhatsApp enquiry message for the social media icon row
+const generalWaMessage = `Assalaamualaikum! I found ${bizName} on DailyBarakah SG and would like to enquire about your business.`;
+const generalWaUrl = phoneNum ? `https://wa.me/${phoneNum}?text=${encodeURIComponent(generalWaMessage)}` : '';
+
         const socialToast = document.getElementById('socialToast');
         const socialToastMsg = document.getElementById('socialToastMsg');
         let socialToastTimeout = null;
