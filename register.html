@@ -105,7 +105,7 @@
             </div>
 
             <div>
-              <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
               <input type="url" id="bizWebsite" placeholder="https://yourbusiness.com" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
             </div>
 
@@ -129,28 +129,41 @@
         <!-- STEP 3: Exclusive Ummah Special Deal -->
         <div class="form-step" id="step3">
           <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--primary-color); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
-            Step 3: Exclusive Ummah Special Deal <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Optional)</span>
+            Step 3: Ummah Special Offer & Partnership
           </h3>
-          
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
-              <input type="text" id="bizDeal" placeholder="e.g. 10% OFF TOTAL BILL FOR FRIDAY WORSHIPPERS" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+
+          <div class="form-group" style="background: #faf9f5; border: 1.5px solid var(--accent-gold, #c29a38); border-radius: var(--radius-md); padding: 18px 16px; margin-bottom: 20px;">
+            
+            <label style="font-size: 1rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+              🌟 Feature an "Ummah Special" Offer?
+            </label>
+            
+            <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.5; margin-bottom: 12px;">
+              Listings with exclusive deals (discount codes, cashier PIN redemptions, or special rates) are highlighted with a prominent offer badge, driving significantly more customer views.
+            </p>
+
+            <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 14px; font-style: italic;">
+              🤝 <strong>Win-Win Community Support:</strong> Through our flexible affiliate partner model, vendors who gain sales through this feature can support our platform with a small, highly negotiable commission.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.88rem; font-weight: 600; color: var(--text-main); cursor: pointer;">
+                <input type="radio" name="affiliateInterest" value="Yes" checked style="margin-top: 3px; accent-color: var(--primary-color);">
+                <span>
+                  <strong>Yes, I'm interested!</strong><br>
+                  <span style="font-size: 0.78rem; font-weight: 400; color: var(--text-muted);">An admin will contact you via WhatsApp to discuss your deal & terms.</span>
+                </span>
+              </label>
+
+              <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.88rem; font-weight: 600; color: var(--text-main); cursor: pointer;">
+                <input type="radio" name="affiliateInterest" value="No" style="margin-top: 3px; accent-color: var(--primary-color);">
+                <span>
+                  <strong>No, standard listing for now</strong><br>
+                  <span style="font-size: 0.78rem; font-weight: 400; color: var(--text-muted);">List your business without a special deal badge.</span>
+                </span>
+              </label>
             </div>
 
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Redemption Type</label>
-              <select id="bizActionType" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-                <option value="whatsapp">Enquire / Claim via WhatsApp</option>
-                <option value="claim">In-Store Cashier PIN Redemption</option>
-                <option value="code">Online Promo Code</option>
-              </select>
-            </div>
-
-            <div id="promoCodeGroup" style="display: none;">
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
-              <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
           </div>
 
           <div style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between;">
@@ -228,13 +241,6 @@
           if (!sub.checkValidity()) { sub.reportValidity(); return; }
           if (!category.value) { alert('Please select a category.'); category.focus(); return; }
           if (!desc.checkValidity()) { desc.reportValidity(); return; }
-        }
-
-        if (currentStep === 2 && actionTypeSelect.value === 'code') {
-          if (!bizWebsiteInput.checkValidity()) {
-            bizWebsiteInput.reportValidity();
-            return;
-          }
         }
       }
 
@@ -330,23 +336,6 @@
       }
     }
 
-    const actionTypeSelect = document.getElementById('bizActionType');
-    const promoCodeGroup = document.getElementById('promoCodeGroup');
-    const bizWebsiteInput = document.getElementById('bizWebsite');
-    const bizWebsiteLabel = document.getElementById('bizWebsiteLabel');
-
-    actionTypeSelect.addEventListener('change', () => {
-      if (actionTypeSelect.value === 'code') {
-        promoCodeGroup.style.display = 'block';
-        bizWebsiteInput.setAttribute('required', 'true');
-        bizWebsiteLabel.innerHTML = 'Website / Store URL * <span style="font-size: 0.72rem; color: #d97706; font-weight: normal;">(Required for promo code redirection)</span>';
-      } else {
-        promoCodeGroup.style.display = 'none';
-        bizWebsiteInput.removeAttribute('required');
-        bizWebsiteLabel.innerHTML = 'Website URL';
-      }
-    });
-
     const registerForm = document.getElementById('registerForm');
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -354,20 +343,21 @@
       submitBtn.textContent = 'Submitting...';
       submitBtn.disabled = true;
 
+      // Grab the selected affiliate radio value
+      const selectedAffiliate = document.querySelector('input[name="affiliateInterest"]:checked');
+
       const payload = {
         name: document.getElementById('bizName').value,
         subtitle: document.getElementById('bizSub').value,
         category: document.getElementById('bizCategory').value,
         description: document.getElementById('bizDesc').value,
-        deal: document.getElementById('bizDeal').value,
-        actionType: document.getElementById('bizActionType').value,
-        promoCode: document.getElementById('bizPromoCode').value,
         phone: document.getElementById('bizPhone').value,
         websiteUrl: document.getElementById('bizWebsite').value,
         instagramUrl: document.getElementById('bizInstagram').value,
         tiktokUrl: document.getElementById('bizTiktok').value,
         imageUrl: document.getElementById('bizImage').value,
-        ownerEmail: document.getElementById('ownerEmail').value
+        ownerEmail: document.getElementById('ownerEmail').value,
+        affiliateInterest: selectedAffiliate ? selectedAffiliate.value : 'No'
       };
 
       try {
