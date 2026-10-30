@@ -41,7 +41,7 @@
       </p>
 
       <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.65; margin-bottom: 22px;">
-        I have poured a lot of personal time, effort, and some funds into creating and running this platform from scratch, and I plan to keep it live and free for the community as long as I am able.
+        I have poured a lot of personal time, effort, and funds into creating and running this platform from scratch, and I plan to keep it live and free for the community as long as I am able.
       </p>
 
       <hr style="border: 0; border-top: 1.5px solid var(--border-color); margin: 24px 0;">
@@ -62,9 +62,9 @@
         <!-- PayNow Interactive Card (Solid Gold Border Styling) -->
         <div style="background: #ffffff; border: 1.5px solid var(--accent-gold, #c29a38); border-radius: 16px; padding: 18px 16px; text-align: center; margin-top: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
           
-          <!-- Supported Payment Badge -->
-          <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 12px;">
-            <span style="background: var(--primary-color, #0f382c); color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; letter-spacing: 0.8px;">
+          <!-- Plain Bold PAYNOW Text -->
+          <div style="margin-bottom: 12px;">
+            <span style="font-size: 0.85rem; font-weight: 800; color: var(--primary-color, #0f382c); letter-spacing: 1px;">
               PAYNOW
             </span>
           </div>
@@ -74,9 +74,9 @@
             <img id="paynowQrImage" src="/images/paynow-qr.jpg" alt="PayNow QR Code" style="width: 180px; height: 180px; object-fit: contain; border-radius: 8px; display: block; margin: 0 auto;">
           </div>
 
-          <!-- Download QR Code Button (Gold Trim Theme) -->
+          <!-- Download QR Code Button (Exact Green Button with Gold Trim Theme) -->
           <div style="margin-bottom: 14px;">
-            <a href="/images/paynow-qr.jpg" download="DailyBarakah-PayNow-QR.jpg" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%); color: var(--primary-color, #0f382c); border: 1.5px solid var(--accent-gold, #c29a38); font-size: 0.82rem; font-weight: 700; padding: 9px 18px; border-radius: 20px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+            <a href="/images/paynow-qr.jpg" download="DailyBarakah-PayNow-QR.jpg" style="display: inline-flex; align-items: center; gap: 6px; background: var(--primary-color, #0f382c); color: #ffffff; border: 1.5px solid var(--accent-gold, #c29a38); font-size: 0.85rem; font-weight: 700; padding: 10px 20px; border-radius: 20px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
@@ -98,8 +98,8 @@
               +65 8846 9883
             </span>
             
-            <!-- One-Tap Copy Button (Gold Trim Theme) -->
-            <button type="button" id="copyPaynowNumBtn" style="background: #fffdf2; border: 1.5px solid var(--accent-gold, #c29a38); color: var(--primary-color, #0f382c); font-size: 0.75rem; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+            <!-- One-Tap Copy Button (Exact Green Button with Gold Trim Theme) -->
+            <button type="button" id="copyPaynowNumBtn" style="background: var(--primary-color, #0f382c); border: 1.5px solid var(--accent-gold, #c29a38); color: #ffffff; font-size: 0.78rem; font-weight: 700; padding: 6px 14px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -154,14 +154,10 @@
           await navigator.clipboard.writeText('88469883');
           const origText = copyBtn.innerHTML;
           copyBtn.innerHTML = '✓ Copied!';
-          copyBtn.style.background = '#dcfce7';
-          copyBtn.style.borderColor = '#86efac';
-          copyBtn.style.color = '#15803d';
+          copyBtn.style.background = '#15803d'; // Success green feedback
           setTimeout(() => {
             copyBtn.innerHTML = origText;
-            copyBtn.style.background = '#fffdf2';
-            copyBtn.style.borderColor = 'var(--accent-gold, #c29a38)';
-            copyBtn.style.color = 'var(--primary-color, #0f382c)';
+            copyBtn.style.background = 'var(--primary-color, #0f382c)';
           }, 2200);
         } catch (err) {
           alert('Mobile Number: 88469883');
