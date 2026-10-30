@@ -472,9 +472,11 @@
       }, { passive: true });
     }
 
-    // 3. Load Categories
+// 3. Load Categories with Pinned "Others" and Search Filter Support
     async function loadCategories(selectedCategory) {
       const categorySelect = document.getElementById('bizCategory');
+      if (!categorySelect) return;
+
       try {
         const response = await fetch('/api/businesses');
         let uniqueCategories = [];
@@ -485,17 +487,48 @@
           )];
         }
 
+        // Ensure 'Others' is always included as an option
+        if (!uniqueCategories.some(c => c.toLowerCase() === 'others')) {
+          uniqueCategories.push('Others');
+        }
+
         if (selectedCategory && !uniqueCategories.includes(selectedCategory)) {
           uniqueCategories.push(selectedCategory);
         }
 
+        // Sort alphabetically, but pin 'Others' strictly to the top
         uniqueCategories.sort((a, b) => {
-          if (a.toLowerCase() === 'others') return 1;
-          if (b.toLowerCase() === 'others') return -1;
+          const lowerA = a.toLowerCase();
+          const lowerB = b.toLowerCase();
+          if (lowerA === 'others') return -1; // Pin to top
+          if (lowerB === 'others') return 1;  // Pin to top
           return a.localeCompare(b);
         });
 
-        categorySelect.innerHTML = '<option value="" disabled>Select a category</option>';
+        // Insert Search Input Filter Pill right above or inject container if not present
+        let container = categorySelect.parentElement;
+        let searchInput = document.getElementById('categorySearchInput');
+        if (!searchInput) {
+          const searchWrapper = document.createElement('div');
+          searchWrapper.style.cssText = 'margin-bottom: 6px;';
+          searchWrapper.innerHTML = `
+            <input type="text" id="categorySearchInput" placeholder="🔍 Search categories..." style="width: 100%; padding: 8px 10px; font-size: 0.82rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
+          `;
+          container.insertBefore(searchWrapper, categorySelect);
+          searchInput = document.getElementById('categorySearchInput');
+
+          searchInput.addEventListener('input', (e) => {
+            const filter = e.target.value.toLowerCase();
+            const options = categorySelect.querySelectorAll('option');
+            options.forEach(opt => {
+              if (opt.value === "") return; // Skip placeholder
+              const text = opt.textContent.toLowerCase();
+              opt.style.display = text.includes(filter) ? '' : 'none';
+            });
+          });
+        }
+
+        categorySelect.innerHTML = '<option value="" disabled selected>Select a category</option>';
         uniqueCategories.forEach(cat => {
           const opt = document.createElement('option');
           opt.value = cat;
@@ -505,10 +538,11 @@
         });
       } catch (err) {
         categorySelect.innerHTML = `
+          <option value="" disabled selected>Select a category</option>
+          <option value="Others">Others</option>
           <option value="Food & Beverage">Food & Beverage</option>
           <option value="Retail & Fashion">Retail & Fashion</option>
           <option value="Services">Services</option>
-          <option value="Others">Others</option>
         `;
         if (selectedCategory) categorySelect.value = selectedCategory;
       }
