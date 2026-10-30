@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>List Your Business - DailyBarakah SG</title>
   <link rel="stylesheet" href="/styles.css">
-</head>f
+</head>
 <body>
 
   <div class="mobile-container" style="padding-bottom: 40px;">
@@ -70,9 +70,9 @@
             </div>
 
             <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category *</label>
-              <select id="bizCategory" required style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
-                <option value="" disabled selected>Loading categories...</option>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Category <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
+              <select id="bizCategory" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5; color: var(--text-main);">
+                <option value="" selected>Select a category (Optional)...</option>
               </select>
             </div>
 
@@ -233,13 +233,11 @@
           const email = document.getElementById('ownerEmail');
           const name = document.getElementById('bizName');
           const sub = document.getElementById('bizSub');
-          const category = document.getElementById('bizCategory');
           const desc = document.getElementById('bizDesc');
 
           if (!email.checkValidity()) { email.reportValidity(); return; }
           if (!name.checkValidity()) { name.reportValidity(); return; }
           if (!sub.checkValidity()) { sub.reportValidity(); return; }
-          if (!category.value) { alert('Please select a category.'); category.focus(); return; }
           if (!desc.checkValidity()) { desc.reportValidity(); return; }
         }
       }
@@ -296,11 +294,10 @@
       });
     }
 
-async function loadDynamicCategories() {
+    async function loadDynamicCategories() {
       const categorySelect = document.getElementById('bizCategory');
       if (!categorySelect) return;
 
-      // Make category non-mandatory
       categorySelect.removeAttribute('required');
 
       try {
@@ -313,12 +310,10 @@ async function loadDynamicCategories() {
           )];
         }
 
-        // Ensure 'Others' is always present
         if (!uniqueCategories.some(c => c.toLowerCase() === 'others')) {
           uniqueCategories.push('Others');
         }
 
-        // Sort alphabetically, pinning 'Others' to the top
         uniqueCategories.sort((a, b) => {
           const lowerA = a.toLowerCase();
           const lowerB = b.toLowerCase();
@@ -328,13 +323,13 @@ async function loadDynamicCategories() {
         });
 
         categorySelect.innerHTML = `
-          <option value="" selected>🔍 Search or select a category (Optional)...</option>
+          <option value="" selected>Select a category (Optional)...</option>
           ${uniqueCategories.map(cat => `<option value="${cat}">${cat}</option>`).join('')}
         `;
 
       } catch (error) {
         categorySelect.innerHTML = `
-          <option value="" selected>🔍 Search or select a category (Optional)...</option>
+          <option value="" selected>Select a category (Optional)...</option>
           <option value="Others">Others</option>
           <option value="Food & Beverage">Food & Beverage</option>
           <option value="Retail & Fashion">Retail & Fashion</option>
@@ -350,7 +345,6 @@ async function loadDynamicCategories() {
       submitBtn.textContent = 'Submitting...';
       submitBtn.disabled = true;
 
-      // Grab the selected affiliate radio value
       const selectedAffiliate = document.querySelector('input[name="affiliateInterest"]:checked');
 
       const payload = {
