@@ -179,7 +179,7 @@
             </div>
           </div>
 
-<!-- TAB 3: Exclusive Ummah Special Deal & Partnership -->
+          <!-- TAB 3: Exclusive Ummah Special Deal & Partnership -->
           <div id="tabContent3" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
             
             <!-- Ummah Special & Partner Interest Section -->
@@ -297,10 +297,11 @@
     // Auto-expanding Full Description Textarea (Starts compact at ~4 lines, expands smoothly as you type)
     const descTextarea = document.getElementById('bizDesc');
     function autoResizeTextarea() {
+      if (!descTextarea) return;
       descTextarea.style.height = 'auto';
       descTextarea.style.height = (descTextarea.scrollHeight + 4) + 'px';
     }
-    descTextarea.addEventListener('input', autoResizeTextarea);
+    if (descTextarea) descTextarea.addEventListener('input', autoResizeTextarea);
 
     // Trigger Shimmering Placeholder during card updates/switching
     function setCardShimmerState(isShimmering) {
@@ -513,26 +514,6 @@
       }
     }
 
-    // 4. Dynamic ActionType & Promo URL Toggle Handler
-    const actionTypeSelect = document.getElementById('bizActionType');
-    const promoCodeGroup = document.getElementById('promoCodeGroup');
-    const bizWebsiteInput = document.getElementById('bizWebsite');
-    const bizWebsiteLabel = document.getElementById('bizWebsiteLabel');
-
-    function updateActionTypeUI() {
-      if (actionTypeSelect.value === 'code') {
-        promoCodeGroup.style.display = 'block';
-        bizWebsiteInput.setAttribute('required', 'true');
-        bizWebsiteLabel.innerHTML = 'Website / Store URL * <span style="font-size: 0.72rem; color: #d97706; font-weight: normal;">(Required for promo code redirection)</span>';
-      } else {
-        promoCodeGroup.style.display = 'none';
-        bizWebsiteInput.removeAttribute('required');
-        bizWebsiteLabel.innerHTML = 'Website URL';
-      }
-    }
-
-    actionTypeSelect.addEventListener('change', updateActionTypeUI);
-
     // Live Form Input Synchronizers
     document.getElementById('bizName').addEventListener('input', (e) => {
       const cardName = document.getElementById('previewCardName');
@@ -546,7 +527,7 @@
 
     // Remove shimmering state & enable form fields once loaded
     function removeFormShimmer() {
-      const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'bizImage', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'bizDeal', 'bizActionType', 'bizPromoCode', 'affiliateYes', 'affiliateNo'];
+      const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'bizImage', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'affiliateYes', 'affiliateNo'];
       fields.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -595,38 +576,20 @@
         autoResizeTextarea(); // Dynamically resize height to fit loaded text without scrolling!
         
         document.getElementById('bizImage').value = data.imageUrl || '';
-        document.getElementById('bizDeal').value = data.deal || '';
-
-        // Map ActionType option safely
-        let actionVal = (data.actionType || '').toLowerCase();
-        if (actionVal === 'promocode' || actionVal === 'code') actionVal = 'code';
-        else if (actionVal === 'claim') actionVal = 'claim';
-        else if (actionVal === 'enquire' || actionVal === 'whatsapp') actionVal = 'enquire';
-        else actionVal = 'enquire'; // default fallback
-        
-        document.getElementById('bizPromoCode').value = data.promoCode || '';
         document.getElementById('bizPhone').value = data.phone || '';
         document.getElementById('bizWebsite').value = data.websiteUrl || '';
         document.getElementById('bizInstagram').value = data.instagramUrl || '';
         document.getElementById('bizTiktok').value = data.tiktokUrl || '';
 
-        // Populate Affiliate Interest Radio
+        // Populate Affiliate Interest Radio safely
         const affiliateVal = (data.affiliateInterest || 'No').trim();
         if (affiliateVal.toLowerCase().startsWith('yes')) {
-          document.getElementById('affiliateYes').checked = true;
+          const radioYes = document.getElementById('affiliateYes');
+          if (radioYes) radioYes.checked = true;
         } else {
-          document.getElementById('affiliateNo').checked = true;
+          const radioNo = document.getElementById('affiliateNo');
+          if (radioNo) radioNo.checked = true;
         }
-
-        updateActionTypeUI();
-        
-        // Re-populate redemption options safely
-        actionTypeSelect.innerHTML = `
-          <option value="enquire">Enquire / Claim via WhatsApp</option>
-          <option value="claim">In-Store Cashier PIN Redemption</option>
-          <option value="code">Online Promo Code</option>
-        `;
-        if (actionVal) actionTypeSelect.value = actionVal;
 
         await loadCategories(data.category);
         removeFormShimmer();
@@ -667,9 +630,6 @@
         subtitle: document.getElementById('bizSub').value,
         category: document.getElementById('bizCategory').value,
         description: document.getElementById('bizDesc').value,
-        deal: document.getElementById('bizDeal').value,
-        actionType: document.getElementById('bizActionType').value,
-        promoCode: document.getElementById('bizPromoCode').value,
         phone: document.getElementById('bizPhone').value,
         websiteUrl: document.getElementById('bizWebsite').value,
         instagramUrl: document.getElementById('bizInstagram').value,
