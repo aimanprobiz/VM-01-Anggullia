@@ -49,7 +49,7 @@
 
     <!-- Header Title & Polished Preview Engine -->
     <div style="text-align: center; margin-bottom: 12px;">
-      <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">Vendor Dashboard</h2>
+      <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">My listing</h2>
       <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4; margin-bottom: 12px;">
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
@@ -179,7 +179,7 @@
             </div>
           </div>
 
-          <!-- TAB 3: Exclusive Ummah Special Deal -->
+          <!-- TAB 3: Exclusive Ummah Special Deal & Partnership -->
           <div id="tabContent3" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Deal Offer Text</label>
@@ -196,6 +196,39 @@
             <div id="promoCodeGroup" style="display: none;">
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Promo Code</label>
               <input type="text" id="bizPromoCode" placeholder="e.g. BARAKAH10" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
+            </div>
+
+            <!-- Ummah Special & Partner Interest Section -->
+            <div class="form-group" style="background: #faf9f5; border: 1.5px solid var(--accent-gold, #c29a38); border-radius: var(--radius-md); padding: 14px 12px; margin-top: 4px;">
+              <label style="font-size: 0.9rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                🌟 Feature an "Ummah Special" Offer?
+              </label>
+              
+              <p style="font-size: 0.82rem; color: var(--text-main); line-height: 1.45; margin-bottom: 10px;">
+                Listings with exclusive deals are highlighted with a prominent offer badge, driving more views.
+              </p>
+
+              <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 10px; font-style: italic;">
+                🤝 <strong>Community Support:</strong> Support our platform through a flexible, highly negotiable commission per sale.
+              </p>
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.82rem; font-weight: 600; color: var(--text-main); cursor: pointer;">
+                  <input type="radio" name="affiliateInterest" value="Yes" id="affiliateYes" style="margin-top: 2px; accent-color: var(--primary-color);">
+                  <span>
+                    <strong>Yes, I'm interested!</strong><br>
+                    <span style="font-size: 0.74rem; font-weight: 400; color: var(--text-muted);">Admin will contact you via WhatsApp to discuss terms.</span>
+                  </span>
+                </label>
+
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.82rem; font-weight: 600; color: var(--text-main); cursor: pointer;">
+                  <input type="radio" name="affiliateInterest" value="No" id="affiliateNo" style="margin-top: 2px; accent-color: var(--primary-color);">
+                  <span>
+                    <strong>No, standard listing for now</strong><br>
+                    <span style="font-size: 0.74rem; font-weight: 400; color: var(--text-muted);">List without a special deal badge.</span>
+                  </span>
+                </label>
+              </div>
             </div>
 
             <div style="margin-top: 8px;">
@@ -529,7 +562,7 @@
 
     // Remove shimmering state & enable form fields once loaded
     function removeFormShimmer() {
-      const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'bizImage', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'bizDeal', 'bizActionType', 'bizPromoCode'];
+      const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'bizImage', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'bizDeal', 'bizActionType', 'bizPromoCode', 'affiliateYes', 'affiliateNo'];
       fields.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -580,7 +613,7 @@
         document.getElementById('bizImage').value = data.imageUrl || '';
         document.getElementById('bizDeal').value = data.deal || '';
 
-// Map ActionType option safely
+        // Map ActionType option safely
         let actionVal = (data.actionType || '').toLowerCase();
         if (actionVal === 'promocode' || actionVal === 'code') actionVal = 'code';
         else if (actionVal === 'claim') actionVal = 'claim';
@@ -593,9 +626,17 @@
         document.getElementById('bizInstagram').value = data.instagramUrl || '';
         document.getElementById('bizTiktok').value = data.tiktokUrl || '';
 
+        // Populate Affiliate Interest Radio
+        const affiliateVal = (data.affiliateInterest || 'No').trim();
+        if (affiliateVal.toLowerCase().startsWith('yes')) {
+          document.getElementById('affiliateYes').checked = true;
+        } else {
+          document.getElementById('affiliateNo').checked = true;
+        }
+
         updateActionTypeUI();
         
-// Re-populate redemption options safely
+        // Re-populate redemption options safely
         actionTypeSelect.innerHTML = `
           <option value="enquire">Enquire / Claim via WhatsApp</option>
           <option value="claim">In-Store Cashier PIN Redemption</option>
@@ -633,6 +674,8 @@
         btn.disabled = true;
       });
 
+      const selectedAffiliate = document.querySelector('input[name="affiliateInterest"]:checked');
+
       const payload = {
         recordId: recordId,
         token: currentToken,
@@ -647,7 +690,8 @@
         websiteUrl: document.getElementById('bizWebsite').value,
         instagramUrl: document.getElementById('bizInstagram').value,
         tiktokUrl: document.getElementById('bizTiktok').value,
-        imageUrl: document.getElementById('bizImage').value
+        imageUrl: document.getElementById('bizImage').value,
+        affiliateInterest: selectedAffiliate ? selectedAffiliate.value : 'No'
       };
 
       try {
