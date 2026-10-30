@@ -58,23 +58,25 @@ export default async function handler(req, res) {
       }
     }
 
+    // Map Airtable's "Affiliate Interest" selection to short form ('Yes' or 'No') for the radio buttons
+    let rawAffiliate = fields["Affiliate Interest"] || 'No';
+    let formattedAffiliate = rawAffiliate.toLowerCase().startsWith('yes') ? 'Yes' : 'No';
+
     return res.status(200).json({
       recordId: currentRecord.id,
       name: fields.Name || '',
       subtitle: fields.SubTitle || '',
       category: fields.Category || '',
       description: fields.Description || '',
-      deal: fields.Deal || '',
-      actionType: fields.ActionType || 'Enquire',
-      promoCode: fields.PromoCode || '',
       phone: fields.Phone || '',
       websiteUrl: fields.WebsiteURL || '',
       instagramUrl: fields.InstagramURL || '',
       tiktokUrl: fields.TikTokURL || '',
       imageUrl: fields.ImageURL || '',
       ownerEmail: fields.OwnerEmail || '',
-      slug: fields.Slug || '', // <-- Added this field!
+      slug: fields.Slug || '',
       status: fields.Status || 'Pending',
+      affiliateInterest: formattedAffiliate, // <-- Crucial: Added this so edit.html reads it correctly!
       allBusinesses: allBusinesses
     });
 
