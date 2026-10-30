@@ -50,34 +50,86 @@
         Ways You Can Support This Platform:
       </h3>
 
-      <!-- Option 1: Direct Personal Token of Support -->
-      <div style="background: #faf9f5; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px;">
-        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">
-          1. Personal Financial Contribution 💳
-        </h4>
-        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 14px;">
-          If you find value in this platform and wish to send a personal token of support, it would mean the world to me. Contributions go straight toward my daily living expenses and time spent running this project.
-        </p>
+<!-- PayNow & Google Pay Modern Interactive Card -->
+<div style="background: #ffffff; border: 1.5px dashed var(--primary-color); border-radius: 16px; padding: 18px 16px; text-align: center; margin-top: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+  
+  <!-- Supported Payment Method Badges -->
+  <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;">
+    <span style="background: #0284c7; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px;">
+      PAYNOW
+    </span>
+    <span style="background: #ea580c; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px;">
+      GOOGLE PAY
+    </span>
+    <span style="background: #15803d; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px;">
+      PAYLAH!
+    </span>
+  </div>
 
-        <!-- PayNow & Google Pay Box -->
-        <div style="background: #ffffff; border: 1.5px dashed var(--primary-color); border-radius: 12px; padding: 14px; text-align: center;">
-          <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
-            <span style="background: #e0f2fe; color: #0369a1; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 12px;">PAYNOW</span>
-            <span style="background: #fef3c7; color: #b45309; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 12px;">GOOGLE PAY</span>
-            <span style="background: #f1f5f9; color: #475569; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 12px;">PAYLAH!</span>
-          </div>
+  <!-- QR Code Display Box -->
+  <div style="background: #faf9f5; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; display: inline-block; margin-bottom: 12px;">
+    <!-- Replace '/images/paynow-qr.jpg' with your actual exported PayNow QR code image path -->
+    <img id="paynowQrImage" src="/images/paynow-qr.jpg" alt="PayNow QR Code" style="width: 180px; height: 180px; object-fit: contain; border-radius: 8px; display: block; margin: 0 auto;">
+  </div>
 
-          <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 2px;">
-            Send via Mobile Number:
-          </span>
-          <p style="font-size: 1.25rem; font-weight: 800; color: var(--primary-color); letter-spacing: 0.5px; margin: 2px 0;">
-            +65 8846 9883
-          </p>
-          <span style="font-size: 0.74rem; color: var(--text-muted); display: block; margin-top: 4px;">
-            (Enter this number into your local banking app)
-          </span>
-        </div>
-      </div>
+  <!-- Download QR Code Button -->
+  <div style="margin-bottom: 14px;">
+    <a href="/images/paynow-qr.jpg" download="DailyBarakah-PayNow-QR.jpg" style="display: inline-flex; align-items: center; gap: 6px; background: var(--primary-color); color: #ffffff; font-size: 0.82rem; font-weight: 700; padding: 9px 16px; border-radius: 20px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.12);">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      Save QR to Photos
+    </a>
+  </div>
+
+  <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 12px 0;">
+
+  <!-- Mobile Number Copy Section -->
+  <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">
+    Or enter Mobile Number manually:
+  </span>
+
+  <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px;">
+    <span style="font-size: 1.2rem; font-weight: 800; color: var(--primary-color); letter-spacing: 0.5px;">
+      +65 8846 9883
+    </span>
+    
+    <!-- One-Tap Copy Number Button -->
+    <button type="button" id="copyPaynowNumBtn" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: var(--text-main); font-size: 0.75rem; font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+      Copy
+    </button>
+  </div>
+
+</div>
+
+<!-- Copy JavaScript Handler -->
+<script>
+  const copyBtn = document.getElementById('copyPaynowNumBtn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText('88469883');
+        const origText = copyBtn.innerHTML;
+        copyBtn.innerHTML = '✓ Copied!';
+        copyBtn.style.background = '#dcfce7';
+        copyBtn.style.color = '#15803d';
+        setTimeout(() => {
+          copyBtn.innerHTML = origText;
+          copyBtn.style.background = '#f1f5f9';
+          copyBtn.style.color = 'var(--text-main)';
+        }, 2200);
+      } catch (err) {
+        alert('Mobile Number: 88469883');
+      }
+    });
+  }
+</script>
 
       <!-- Option 2: Shop & Use Promo Codes -->
       <div style="background: #faf9f5; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px;">
