@@ -9,15 +9,13 @@ export default async function handler(req, res) {
     subtitle,
     category,
     description,
-    deal,
-    actionType,
-    promoCode,
     phone,
     websiteUrl,
     instagramUrl,
     tiktokUrl,
     imageUrl,
-    ownerEmail
+    ownerEmail,
+    affiliateInterest
   } = req.body || {};
 
   if (!name || !ownerEmail || !category) {
@@ -35,11 +33,8 @@ export default async function handler(req, res) {
   try {
     const editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
 
-    // Map form actionType values to exact Airtable Single Select options
-    let formattedActionType = 'Enquire';
-    if (actionType === 'claim') formattedActionType = 'Claim'; 
-    else if (actionType === 'code') formattedActionType = 'PromoCode';
-    else if (actionType === 'whatsapp' || actionType === 'enquire') formattedActionType = 'Enquire';
+    // Map incoming interest selection to exact Airtable Single Select options
+    const formattedAffiliateInterest = (affiliateInterest === 'Yes') ? 'Yes - Interested' : 'No - Standard Listing';
 
     // Build payload object matching exact Airtable field names
     const fieldsToSave = {
@@ -48,14 +43,12 @@ export default async function handler(req, res) {
       OwnerEmail: ownerEmail.trim().toLowerCase(),
       Status: 'Pending',
       EditToken: editToken,
-      ActionType: formattedActionType
+      "Affiliate Interest": formattedAffiliateInterest
     };
 
     // Conditionally append optional fields with exact Airtable casing
     if (subtitle && subtitle.trim()) fieldsToSave.SubTitle = subtitle.trim();
     if (description && description.trim()) fieldsToSave.Description = description.trim();
-    if (deal && deal.trim()) fieldsToSave.Deal = deal.trim();
-    if (promoCode && promoCode.trim()) fieldsToSave.PromoCode = promoCode.trim();
     if (phone && phone.trim()) fieldsToSave.Phone = phone.trim();
     if (websiteUrl && websiteUrl.trim()) fieldsToSave.WebsiteURL = websiteUrl.trim();
     if (instagramUrl && instagramUrl.trim()) fieldsToSave.InstagramURL = instagramUrl.trim();
