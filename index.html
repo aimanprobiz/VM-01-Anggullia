@@ -63,7 +63,7 @@
     </div>
   </dialog>
 
-<!-- Search & Categories Bottom Sheet -->
+  <!-- Search & Categories Bottom Sheet -->
   <dialog id="searchModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--accent-gold); border-radius: 20px 20px 0 0; padding: 16px 16px 20px 16px; width: 100%; max-width: 480px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); margin: 0; max-height: 85dvh; overflow-y: auto; z-index: 9999; box-sizing: border-box;">
     <style>
       #searchModal {
@@ -80,7 +80,7 @@
         <button id="closeSearchModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 2px 6px;">&times;</button>
       </div>
 
-      <!-- Search Bar with Option 2 Native Fill -->
+      <!-- Search Bar -->
       <div style="position: relative;">
         <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); display: flex;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -88,10 +88,9 @@
         <input type="text" id="modalSearchInput" placeholder="Search businesses, deals..." style="width: 100%; padding: 8px 12px 8px 36px; border: 1.5px solid var(--accent-gold); border-radius: var(--radius-sm); background: rgba(0, 0, 0, 0.03); color: var(--text-main); font-size: 0.85rem; outline: none; box-sizing: border-box;">
       </div>
 
-      <!-- Categories Section (Hides when typing) -->
+      <!-- Categories Section -->
       <div id="modalCategoriesSection" style="margin-top: 2px;">
         <p style="font-size: 0.68rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase;">Explore Categories</p>
-        <!-- 2-Column Grid capped to ~6 buttons -->
         <div id="modalCategoriesGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 220px; overflow-y: auto; padding-bottom: 4px;">
           <!-- Dynamically populated category buttons -->
         </div>
@@ -117,76 +116,85 @@
 
   <div class="mobile-container">
 
-<!-- App Top Header Bar (Flushed to top) -->
-<header class="app-header">
-  <div class="header-left">
-    <!-- Hamburger Menu Toggle Button -->
-    <button id="menuToggleBtn" class="menu-icon-btn" aria-label="Open Navigation Menu">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
-      </svg>
-    </button>
-    
-    <!-- Branding -->
-    <div class="header-brand">
-      <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
-      <span class="header-title">DailyBarakah SG</span>
-    </div>
-  </div>
-
-  <!-- Right-Aligned Profile / Account Button -->
-  <button id="headerProfileBtn" class="profile-icon-btn" aria-label="Vendor Portal / Profile" title="My Business Listing">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-      <circle cx="12" cy="7" r="4"></circle>
-    </svg>
-  </button>
-</header>
-
-<!-- Side Drawer Navigation Overlay -->
-<div id="navDrawerOverlay" class="drawer-overlay"></div>
-<aside id="navDrawer" class="nav-drawer">
-  <div class="drawer-header">
-    <div class="header-brand">
-      <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
-      <span class="header-title">DailyBarakah SG</span>
-    </div>
-    <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu">
-      &times;
-    </button>
-  </div>
-
-  <nav class="drawer-menu">
-    <!-- 1. About Link (Points to about.html) -->
-    <a href="/about.html" class="drawer-item">
-      <span class="drawer-item-icon">ℹ️</span>
-      <div class="drawer-item-text">
-        <span class="drawer-item-title">About Us</span>
-        <span class="drawer-item-sub">Learn more about our community mission</span>
+    <!-- App Top Header Bar (Flushed to top) -->
+    <header class="app-header">
+      <div class="header-left">
+        <!-- Hamburger Menu Toggle Button -->
+        <button id="menuToggleBtn" class="menu-icon-btn" aria-label="Open Navigation Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        
+        <!-- Branding -->
+        <div class="header-brand">
+          <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
+          <span class="header-title">DailyBarakah SG</span>
+        </div>
       </div>
-    </a>
 
-    <!-- 2. My Listing / Vendor Portal -->
-    <a href="/login.html" class="drawer-item">
-      <span class="drawer-item-icon">🔑</span>
-      <div class="drawer-item-text">
-        <span class="drawer-item-title">My Listing / Login</span>
-        <span class="drawer-item-sub">Manage your business profile & deals</span>
-      </div>
-    </a>
+      <!-- Right-Aligned Profile / Account Button -->
+      <button id="headerProfileBtn" class="profile-icon-btn" aria-label="Vendor Portal / Profile" title="My Business Listing">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
+    </header>
 
-    <!-- Quick Register Link -->
-    <a href="/register.html" class="drawer-item highlight">
-      <span class="drawer-item-icon">✨</span>
-      <div class="drawer-item-text">
-        <span class="drawer-item-title">List Your Business</span>
-        <span class="drawer-item-sub">Join for free & support the Ummah</span>
+    <!-- Side Drawer Navigation Overlay -->
+    <div id="navDrawerOverlay" class="drawer-overlay"></div>
+    <aside id="navDrawer" class="nav-drawer">
+      <div class="drawer-header">
+        <div class="header-brand">
+          <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
+          <span class="header-title">DailyBarakah SG</span>
+        </div>
+        <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu">
+          &times;
+        </button>
       </div>
-    </a>
-  </nav>
-</aside>
+
+      <nav class="drawer-menu">
+        <!-- 1. About Link (Points to about.html) -->
+        <a href="/about.html" class="drawer-item">
+          <span class="drawer-item-icon">ℹ️</span>
+          <div class="drawer-item-text">
+            <span class="drawer-item-title">About Us</span>
+            <span class="drawer-item-sub">Learn more about our community mission</span>
+          </div>
+        </a>
+
+        <!-- 2. Support Us / Contribute Link (Points to support.html) -->
+        <a href="/support.html" class="drawer-item">
+          <span class="drawer-item-icon">❤️</span>
+          <div class="drawer-item-text">
+            <span class="drawer-item-title">Support Our Platform</span>
+            <span class="drawer-item-sub">Help sustain our vision & daily efforts</span>
+          </div>
+        </a>
+
+        <!-- 3. My Listing / Vendor Portal -->
+        <a href="/login.html" class="drawer-item">
+          <span class="drawer-item-icon">🔑</span>
+          <div class="drawer-item-text">
+            <span class="drawer-item-title">My Listing / Login</span>
+            <span class="drawer-item-sub">Manage your business profile & deals</span>
+          </div>
+        </a>
+
+        <!-- Quick Register Link -->
+        <a href="/register.html" class="drawer-item highlight">
+          <span class="drawer-item-icon">✨</span>
+          <div class="drawer-item-text">
+            <span class="drawer-item-title">List Your Business</span>
+            <span class="drawer-item-sub">Join for free & support the Ummah</span>
+          </div>
+        </a>
+      </nav>
+    </aside>
 
     <!-- 1. HADITH OF THE DAY CARD -->
     <section>
@@ -219,7 +227,6 @@
             <img class="pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Loading...">
             <div class="carousel-caption">Loading masjid info...</div>
           </div>
-          <!-- Dynamically populated from Airtable 'Cards' table -->
         </div>
       </div>
       <div class="carousel-indicators" id="carouselIndicators">
@@ -227,9 +234,8 @@
       </div>
     </section>
 
-<!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
+    <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
     <section class="business-section" id="businessSection">
-      <!-- Section Header with Title & Borderless Magnifying Glass Icon -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h2 class="section-title" style="margin: 0;">Support Local Muslim Businesses</h2>
         <button id="headerSearchBtn" aria-label="Search Businesses" title="Search Businesses" style="background: none; border: none; padding: 6px; cursor: pointer; color: var(--primary-color); outline: none; display: flex; align-items: center; justify-content: center; opacity: 0.9; transition: opacity 0.2s ease;">
@@ -242,7 +248,6 @@
 
       <!-- Category Pills Container -->
       <div class="filter-stacked" id="filterContainer">
-        <!-- Category Grid Icon Button -->
         <button id="searchToggleBtn" class="filter-btn search-pill" aria-label="Explore Categories" title="Explore Categories">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"></rect>
@@ -299,9 +304,9 @@
 
   <script src="/script.js" defer></script>
   
-<!-- Floating Back to Top / Section Button -->
-<button id="backToTopBtn" onclick="document.getElementById('businessSection').scrollIntoView({behavior: 'smooth', block: 'start'})" aria-label="Back to Business Section" title="Back to Businesses">
-  ↑
-</button>
+  <!-- Floating Back to Top / Section Button -->
+  <button id="backToTopBtn" onclick="document.getElementById('businessSection').scrollIntoView({behavior: 'smooth', block: 'start'})" aria-label="Back to Business Section" title="Back to Businesses">
+    ↑
+  </button>
 </body>
 </html>
