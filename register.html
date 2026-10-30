@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>List Your Business - DailyBarakah SG</title>
   <link rel="stylesheet" href="/styles.css">
-</head>
+</head>f
 <body>
 
   <div class="mobile-container" style="padding-bottom: 40px;">
@@ -296,26 +296,56 @@
       });
     }
 
-    async function loadDynamicCategories() {
+async function loadDynamicCategories() {
       const categorySelect = document.getElementById('bizCategory');
       if (!categorySelect) return;
 
       try {
         const response = await fetch('/api/businesses');
-        if (!response.ok) throw new Error('Failed to fetch businesses');
+        let uniqueCategories = [];
+        if (response.ok) {
+          const businesses = await response.json();
+          uniqueCategories = [...new Set(
+            businesses.map(b => (b.Category || b.category || '').trim()).filter(Boolean)
+          )];
+        }
 
-        const businesses = await response.json();
-        const uniqueCategories = [...new Set(
-          businesses.map(b => (b.Category || b.category || '').trim()).filter(Boolean)
-        )];
+        // Ensure 'Others' is always present
+        if (!uniqueCategories.some(c => c.toLowerCase() === 'others')) {
+          uniqueCategories.push('Others');
+        }
 
+        // Sort alphabetically, pinning 'Others' to the top
         uniqueCategories.sort((a, b) => {
           const lowerA = a.toLowerCase();
           const lowerB = b.toLowerCase();
-          if (lowerA === 'others') return 1;
-          if (lowerB === 'others') return -1;
+          if (lowerA === 'others') return -1;
+          if (lowerB === 'others') return 1;
           return a.localeCompare(b);
         });
+
+        // Insert Search Input Filter Pill
+        let container = categorySelect.parentElement;
+        let searchInput = document.getElementById('categorySearchInput');
+        if (!searchInput) {
+          const searchWrapper = document.createElement('div');
+          searchWrapper.style.cssText = 'margin-bottom: 6px;';
+          searchWrapper.innerHTML = `
+            <input type="text" id="categorySearchInput" placeholder="🔍 Search categories..." style="width: 100%; padding: 8px 10px; font-size: 0.82rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;">
+          `;
+          container.insertBefore(searchWrapper, categorySelect);
+          searchInput = document.getElementById('categorySearchInput');
+
+          searchInput.addEventListener('input', (e) => {
+            const filter = e.target.value.toLowerCase();
+            const options = categorySelect.querySelectorAll('option');
+            options.forEach(opt => {
+              if (opt.value === "") return;
+              const text = opt.textContent.toLowerCase();
+              opt.style.display = text.includes(filter) ? '' : 'none';
+            });
+          });
+        }
 
         categorySelect.innerHTML = '<option value="" disabled selected>Select a category</option>';
         uniqueCategories.forEach(cat => {
@@ -328,10 +358,10 @@
       } catch (error) {
         categorySelect.innerHTML = `
           <option value="" disabled selected>Select a category</option>
+          <option value="Others">Others</option>
           <option value="Food & Beverage">Food & Beverage</option>
           <option value="Retail & Fashion">Retail & Fashion</option>
           <option value="Services">Services</option>
-          <option value="Others">Others</option>
         `;
       }
     }
