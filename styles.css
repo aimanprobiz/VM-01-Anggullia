@@ -859,29 +859,33 @@ dialog::backdrop {
 .drawer-menu {
   display: flex;
   flex-direction: column;
-  padding: 12px;
-  gap: 8px;
+  padding: 16px 12px;
+  gap: 10px; /* Space between each tab card */
 }
 
+/* Option B: Outlined Tab Style */
 .drawer-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 14px;
+  padding: 14px 14px;
   border-radius: var(--radius-md);
   text-decoration: none;
   color: var(--text-main);
-  transition: background 0.15s ease;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color); /* Faint separating line around each tab */
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .drawer-item:hover,
 .drawer-item:active {
   background-color: var(--bg-color);
+  border-color: rgba(0, 0, 0, 0.15); /* Slightly darker border on tap */
 }
 
 .drawer-item.highlight {
   background-color: var(--accent-gold-bg);
-  border: 1px solid rgba(221, 186, 88, 0.4);
+  border: 1px solid rgba(221, 186, 88, 0.5);
 }
 
 .drawer-item-icon {
