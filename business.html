@@ -413,7 +413,7 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
             });
           }
 
-        } else if (actionType === 'enquire' || (actionType === '' && phoneNum)) {
+        } else if (actionType === 'enquire') {
           if (whatsappBtn) {
             whatsappBtn.style.display = 'flex';
             const refCode = `DB-${bizSlugVal.toUpperCase()}`;
@@ -442,8 +442,13 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
               window.location.href = whatsappUrl;
             });
           }
-} else {
-          // --- PLAIN TEXT FOR NO ACTIVE OFFER ---
+
+        } else {
+          // --- PLAIN TEXT FOR NO ACTIVE OFFER (Triggered when blank or empty) ---
+          if (openRedeemModalBtn) openRedeemModalBtn.style.display = 'none';
+          if (openCodeModalBtn) openCodeModalBtn.style.display = 'none';
+          if (whatsappBtn) whatsappBtn.style.display = 'none';
+
           if (redemptionArea) {
             redemptionArea.innerHTML = `
               <div style="display: flex; align-items: center; justify-content: center; text-align: center; width: 100%; padding: 8px 0; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
