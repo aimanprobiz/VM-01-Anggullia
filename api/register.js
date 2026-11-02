@@ -18,8 +18,8 @@ export default async function handler(req, res) {
     affiliateInterest
   } = req.body || {};
 
-  if (!name || !ownerEmail || !category) {
-    return res.status(400).json({ error: 'Missing required fields (Business Name, Category, or Owner Email).' });
+  if (!name || !ownerEmail) {
+    return res.status(400).json({ error: 'Missing required fields (Business Name or Owner Email).' });
   }
 
   const AIRTABLE_PAT = process.env.AIRTABLE_PAT || process.env.AIRTABLE_API_KEY; 
