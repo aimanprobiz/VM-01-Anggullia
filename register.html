@@ -107,10 +107,27 @@
           </h3>
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
-              <input type="text" id="bizPhone" placeholder="6588469883" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-            </div>
+<div>
+  <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">
+    WhatsApp Phone Number <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span>
+  </label>
+  <div style="display: flex; gap: 6px;">
+    <select id="bizCountryCode" style="width: 32%; min-width: 95px; padding: 10px 6px; font-size: 0.85rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); background: #faf9f5; color: var(--text-main); outline: none;">
+      <option value="+65" selected>🇸🇬 +65</option>
+      <option value="+60">🇲🇾 +60</option>
+      <option value="+62">🇮🇩 +62</option>
+      <option value="+673">🇧🇳 +673</option>
+      <option value="+66">🇹🇭 +66</option>
+      <option value="+63">🇵🇭 +63</option>
+      <option value="+44">🇬🇧 +44</option>
+      <option value="+1">🇺🇸 +1</option>
+      <option value="+61">🇦🇺 +61</option>
+      <option value="+971">🇦🇪 +971</option>
+      <option value="+966">🇸🇦 +966</option>
+    </select>
+    <input type="tel" id="bizPhone" placeholder="88469883" style="flex: 1; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+  </div>
+</div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
