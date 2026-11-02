@@ -58,13 +58,16 @@
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
 
-      <!-- SELECT LISTING WITH SIGNATURE GREEN PILL DROPDOWN -->
-      <div id="businessSelectorContainer" style="display: none; margin-bottom: 14px; align-items: center; justify-content: center; gap: 8px;">
+      <!-- SELECT LISTING WITH SIGNATURE GREEN PILL DROPDOWN & ADD BUSINESS BUTTON -->
+      <div id="businessSelectorContainer" style="display: none; margin-bottom: 14px; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
         <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
-          Select Listing:
+          Listing:
         </span>
         <select id="businessSelector" style="padding: 6px 14px; font-size: 0.82rem; font-weight: 700; border: 1.5px solid var(--primary-color); border-radius: 20px; background: #ffffff; color: var(--primary-color); outline: none; cursor: pointer;">
         </select>
+        <button type="button" id="addNewListingPromptBtn" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 700; border: 1.5px dashed var(--primary-color); border-radius: 20px; background: transparent; color: var(--primary-color); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+          + Add Business
+        </button>
       </div>
 
       <!-- LIVE PROFILE CARD PREVIEW (Swipeable + Shimmer Support) -->
@@ -158,65 +161,65 @@
 
           <!-- TAB 2: Contact & Social Media -->
           <div id="tabContent2" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
-<div>
-  <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">
-    WhatsApp Phone Number
-  </label>
-  <div style="display: flex; gap: 6px;">
-    <select id="bizCountryCode" onchange="checkCustomCountryCode(this)" class="shimmer-placeholder" style="width: 35%; min-width: 110px; padding: 10px 6px; font-size: 0.85rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;" disabled>
-      <option value="+65" selected>🇸🇬 +65 (SG)</option>
-      <option value="CUSTOM">Custom Code...</option>
-      <option value="+60">🇲🇾 +60 (MY)</option>
-      <option value="+62">🇮🇩 +62 (ID)</option>
-      <option value="+673">🇧🇳 +673 (BN)</option>
-      <option value="+66">🇹🇭 +66 (TH)</option>
-      <option value="+63">🇵🇭 +63 (PH)</option>
-      <option value="+93">🇦🇫 +93 (AF)</option>
-      <option value="+355">🇦🇱 +355 (AL)</option>
-      <option value="+213">🇩🇿 +213 (DZ)</option>
-      <option value="+54">🇦🇷 +54 (AR)</option>
-      <option value="+61">🇦🇺 +61 (AU)</option>
-      <option value="+43">🇦🇹 +43 (AT)</option>
-      <option value="+973">🇧🇭 +973 (BH)</option>
-      <option value="+880">🇧🇩 +880 (BD)</option>
-      <option value="+32">🇧🇪 +32 (BE)</option>
-      <option value="+55">🇧🇷 +55 (BR)</option>
-      <option value="+1">🇨🇦/🇺🇸 +1 (US/CA)</option>
-      <option value="+86">🇨🇳 +86 (CN)</option>
-      <option value="+20">🇪🇬 +20 (EG)</option>
-      <option value="+33">🇫🇷 +33 (FR)</option>
-      <option value="+49">🇩🇪 +49 (DE)</option>
-      <option value="+852">🇭🇰 +852 (HK)</option>
-      <option value="+91">🇮🇳 +91 (IN)</option>
-      <option value="+353">🇮🇪 +353 (IE)</option>
-      <option value="+972">🇮🇱 +972 (IL)</option>
-      <option value="+39">🇮🇹 +39 (IT)</option>
-      <option value="+81">🇯🇵 +81 (JP)</option>
-      <option value="+962">🇯🇴 +962 (JO)</option>
-      <option value="+965">🇰🇼 +965 (KW)</option>
-      <option value="+31">🇳🇱 +31 (NL)</option>
-      <option value="+64">🇳🇿 +64 (NZ)</option>
-      <option value="+92">🇵🇰 +92 (PK)</option>
-      <option value="+974">🇶🇦 +974 (QA)</option>
-      <option value="+966">🇸🇦 +966 (SA)</option>
-      <option value="+27">🇿🇦 +27 (ZA)</option>
-      <option value="+82">🇰🇷 +82 (KR)</option>
-      <option value="+34">🇪🇸 +34 (ES)</option>
-      <option value="+46">🇸🇪 +46 (SE)</option>
-      <option value="+41">🇨🇭 +41 (CH)</option>
-      <option value="+886">🇹🇼 +886 (TW)</option>
-      <option value="+90">🇹🇷 +90 (TR)</option>
-      <option value="+971">🇦🇪 +971 (AE)</option>
-      <option value="+44">🇬🇧 +44 (UK)</option>
-      <option value="+84">🇻🇳 +84 (VN)</option>
-    </select>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">
+                WhatsApp Phone Number
+              </label>
+              <div style="display: flex; gap: 6px;">
+                <select id="bizCountryCode" onchange="checkCustomCountryCode(this)" class="shimmer-placeholder" style="width: 35%; min-width: 110px; padding: 10px 6px; font-size: 0.85rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;" disabled>
+                  <option value="+65" selected>🇸🇬 +65 (SG)</option>
+                  <option value="CUSTOM">Custom Code...</option>
+                  <option value="+60">🇲🇾 +60 (MY)</option>
+                  <option value="+62">🇮🇩 +62 (ID)</option>
+                  <option value="+673">🇧🇳 +673 (BN)</option>
+                  <option value="+66">🇹🇭 +66 (TH)</option>
+                  <option value="+63">🇵🇭 +63 (PH)</option>
+                  <option value="+93">🇦🇫 +93 (AF)</option>
+                  <option value="+355">🇦🇱 +355 (AL)</option>
+                  <option value="+213">🇩🇿 +213 (DZ)</option>
+                  <option value="+54">🇦🇷 +54 (AR)</option>
+                  <option value="+61">🇦🇺 +61 (AU)</option>
+                  <option value="+43">🇦🇹 +43 (AT)</option>
+                  <option value="+973">🇧🇭 +973 (BH)</option>
+                  <option value="+880">🇧🇩 +880 (BD)</option>
+                  <option value="+32">🇧🇪 +32 (BE)</option>
+                  <option value="+55">🇧🇷 +55 (BR)</option>
+                  <option value="+1">🇨🇦/🇺🇸 +1 (US/CA)</option>
+                  <option value="+86">🇨🇳 +86 (CN)</option>
+                  <option value="+20">🇪🇬 +20 (EG)</option>
+                  <option value="+33">🇫🇷 +33 (FR)</option>
+                  <option value="+49">🇩🇪 +49 (DE)</option>
+                  <option value="+852">🇭🇰 +852 (HK)</option>
+                  <option value="+91">🇮🇳 +91 (IN)</option>
+                  <option value="+353">🇮🇪 +353 (IE)</option>
+                  <option value="+972">🇮🇱 +972 (IL)</option>
+                  <option value="+39">🇮🇹 +39 (IT)</option>
+                  <option value="+81">🇯🇵 +81 (JP)</option>
+                  <option value="+962">🇯🇴 +962 (JO)</option>
+                  <option value="+965">🇰🇼 +965 (KW)</option>
+                  <option value="+31">🇳🇱 +31 (NL)</option>
+                  <option value="+64">🇳🇿 +64 (NZ)</option>
+                  <option value="+92">🇵🇰 +92 (PK)</option>
+                  <option value="+974">🇶🇦 +974 (QA)</option>
+                  <option value="+966">🇸🇦 +966 (SA)</option>
+                  <option value="+27">🇿🇦 +27 (ZA)</option>
+                  <option value="+82">🇰🇷 +82 (KR)</option>
+                  <option value="+34">🇪🇸 +34 (ES)</option>
+                  <option value="+46">🇸🇪 +46 (SE)</option>
+                  <option value="+41">🇨🇭 +41 (CH)</option>
+                  <option value="+886">🇹🇼 +886 (TW)</option>
+                  <option value="+90">🇹🇷 +90 (TR)</option>
+                  <option value="+971">🇦🇪 +971 (AE)</option>
+                  <option value="+44">🇬🇧 +44 (UK)</option>
+                  <option value="+84">🇻🇳 +84 (VN)</option>
+                </select>
 
-    <!-- Hidden custom country code input that shows if "Custom Code..." is selected -->
-    <input type="text" id="customCountryCode" placeholder="+XX" class="shimmer-placeholder" style="display: none; width: 75px; padding: 10px 4px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;" disabled />
+                <!-- Hidden custom country code input that shows if "Custom Code..." is selected -->
+                <input type="text" id="customCountryCode" placeholder="+XX" class="shimmer-placeholder" style="display: none; width: 75px; padding: 10px 4px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;" disabled />
 
-    <input type="tel" id="bizPhone" placeholder="88469883" class="shimmer-placeholder" style="flex: 1; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
-  </div>
-</div>
+                <input type="tel" id="bizPhone" placeholder="88469883" class="shimmer-placeholder" style="flex: 1; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
+              </div>
+            </div>
 
             <div>
               <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
@@ -285,6 +288,31 @@
     </div>
 
   </div>
+
+  <!-- ADD NEW LISTING CLARIFICATION MODAL -->
+  <dialog id="addNewListingModal" style="background: var(--card-bg, #ffffff); color: var(--text-main, #333); border: 1.5px solid var(--border-color, #e5e7eb); border-radius: var(--radius-lg, 12px); padding: 20px; width: 92%; max-width: 380px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; outline: none;">
+    <div style="display: flex; flex-direction: column; gap: 12px; text-align: center;">
+      <div style="font-size: 2.2rem;">🏢</div>
+      <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--primary-color, #15803d); margin: 0;">Add a New Business</h3>
+      
+      <p style="font-size: 0.86rem; color: var(--text-main, #374151); line-height: 1.5; margin: 0;">
+        Please note that you are listing a <strong>new business profile</strong> as a whole, and not individual products or items.
+      </p>
+      
+      <p style="font-size: 0.8rem; color: var(--text-muted, #6b7280); line-height: 1.4; margin: 0; font-style: italic;">
+        DailyBarakah SG is designed as a community directory for local businesses, brands, and establishments.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+        <button type="button" id="proceedRegisterBtn" class="action-btn-primary" style="width: 100%; padding: 10px; font-weight: 700; cursor: pointer;">
+          I Understand, Continue to Register →
+        </button>
+        <button type="button" id="cancelModalBtn" style="background: transparent; border: none; font-size: 0.82rem; color: var(--text-muted); font-weight: 600; cursor: pointer; padding: 6px;">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </dialog>
 
   <script>
     let recordId = null;
@@ -829,6 +857,44 @@
         window.location.href = '/login.html';
       }
     });
+
+    // Add New Listing Modal Trigger Logic
+    const addNewModal = document.getElementById('addNewListingModal');
+    const addNewBtn = document.getElementById('addNewListingPromptBtn');
+    const cancelModalBtn = document.getElementById('cancelModalBtn');
+    const proceedRegisterBtn = document.getElementById('proceedRegisterBtn');
+
+    if (addNewBtn && addNewModal) {
+      addNewBtn.addEventListener('click', () => {
+        addNewModal.showModal();
+      });
+    }
+
+    if (cancelModalBtn && addNewModal) {
+      cancelModalBtn.addEventListener('click', () => {
+        addNewModal.close();
+      });
+    }
+
+    if (proceedRegisterBtn) {
+      proceedRegisterBtn.addEventListener('click', () => {
+        window.location.href = '/register.html';
+      });
+    }
+
+    if (addNewModal) {
+      addNewModal.addEventListener('click', (e) => {
+        const rect = addNewModal.getBoundingClientRect();
+        if (
+          e.clientX < rect.left ||
+          e.clientX > rect.right ||
+          e.clientY < rect.top ||
+          e.clientY > rect.bottom
+        ) {
+          addNewModal.close();
+        }
+      });
+    }
 
     // Run Initializations
     loadBusinessDetails();
