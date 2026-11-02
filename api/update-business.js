@@ -23,8 +23,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing record ID or security token.' });
   }
 
-  if (!name || !category) {
-    return res.status(400).json({ error: 'Business Name and Category are required.' });
+  // Removed `!category` so it's no longer compulsory during edits
+  if (!name) {
+    return res.status(400).json({ error: 'Business Name is required.' });
   }
 
   const AIRTABLE_PAT = process.env.AIRTABLE_PAT || process.env.AIRTABLE_API_KEY;
@@ -52,7 +53,6 @@ export default async function handler(req, res) {
     // 3. Prepare field updates with exact Airtable casing
     const fieldsToUpdate = {
       Name: name.trim(),
-      Category: category.trim(),
       SubTitle: subtitle ? subtitle.trim() : '',
       Description: description ? description.trim() : '',
       Phone: phone ? phone.trim() : '',
@@ -62,6 +62,13 @@ export default async function handler(req, res) {
       ImageURL: imageUrl ? imageUrl.trim() : '',
       "Affiliate Interest": formattedAffiliateInterest
     };
+
+    // Conditionally include or clear Category if provided/blank
+    if (category && category.trim()) {
+      fieldsToUpdate.Category = category.trim();
+    } else {
+      fieldsToUpdate.Category = null; 
+    }
 
     // 4. Update row in Airtable
     const updateRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${recordId}`, {
