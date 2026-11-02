@@ -671,14 +671,18 @@
     });
 
     // Logout Button Handler
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      if (confirm('Are you sure you want to log out of your vendor portal?')) {
-        localStorage.removeItem('db_vendor_token');
-        localStorage.removeItem('vendorEmail');
-        localStorage.removeItem('vendorSlug');
-        window.location.href = '/login.html';
-      }
-    });
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  const confirmLogout = confirm(
+    "Did you know? You don't need to log out! \n\nYour session is safe, and staying logged in lets you quickly update your listing anytime.\n\nIf you log out, you will need to request a new magic link via email to access your account again.\n\nAre you sure you want to log out?"
+  );
+
+  if (confirmLogout) {
+    localStorage.removeItem('db_vendor_token');
+    localStorage.removeItem('vendorEmail');
+    localStorage.removeItem('vendorSlug');
+    window.location.href = '/login.html';
+  }
+});
 
     // Run Initializations
     loadBusinessDetails();
