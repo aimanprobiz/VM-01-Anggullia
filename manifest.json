@@ -1,6 +1,13 @@
 {
   "short_name": "DailyBarakah",
-  "name": "DailyBarakah SG - Community & Local Business Hub",
+  "name": "DailyBarakah SG - Community & Business Directory",
+  "description": "Discover Muslim-owned businesses and manage your vendor listing on DailyBarakah SG.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f382c",
+  "theme_color": "#0f382c",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -12,9 +19,5 @@
       "type": "image/png",
       "sizes": "512x512"
     }
-  ],
-  "start_url": "/",
-  "background_color": "#0f382c",
-  "theme_color": "#0f382c",
-  "display": "standalone"
+  ]
 }
