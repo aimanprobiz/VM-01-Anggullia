@@ -18,8 +18,9 @@ export default async function handler(req, res) {
     affiliateInterest
   } = req.body || {};
 
-  if (!name || !ownerEmail || !category) {
-    return res.status(400).json({ error: 'Missing required fields (Business Name, Category, or Owner Email).' });
+  // 1. Removed `!category` so it's no longer compulsory
+  if (!name || !ownerEmail) {
+    return res.status(400).json({ error: 'Missing required fields (Business Name or Owner Email).' });
   }
 
   const AIRTABLE_PAT = process.env.AIRTABLE_PAT || process.env.AIRTABLE_API_KEY; 
@@ -36,17 +37,17 @@ export default async function handler(req, res) {
     // Map incoming interest selection to exact Airtable Single Select options
     const formattedAffiliateInterest = (affiliateInterest === 'Yes') ? 'Yes - Interested' : 'No - Standard Listing';
 
-    // Build payload object matching exact Airtable field names
+    // Build payload object matching exact Airtable field names (Only required fields here)
     const fieldsToSave = {
       Name: name.trim(),
-      Category: category.trim(),
       OwnerEmail: ownerEmail.trim().toLowerCase(),
       Status: 'Pending',
       EditToken: editToken,
       "Affiliate Interest": formattedAffiliateInterest
     };
 
-    // Conditionally append optional fields with exact Airtable casing
+    // 2. Conditionally append category along with other optional fields
+    if (category && category.trim()) fieldsToSave.Category = category.trim();
     if (subtitle && subtitle.trim()) fieldsToSave.SubTitle = subtitle.trim();
     if (description && description.trim()) fieldsToSave.Description = description.trim();
     if (phone && phone.trim()) fieldsToSave.Phone = phone.trim();
