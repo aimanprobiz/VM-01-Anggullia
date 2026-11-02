@@ -147,19 +147,30 @@
     </header>
 
     <!-- Side Drawer Navigation Overlay -->
+
     <div id="navDrawerOverlay" class="drawer-overlay"></div>
     <aside id="navDrawer" class="nav-drawer">
       <div class="drawer-header">
-        <div class="header-brand">
+        <!-- Turned header-brand into an <a> link -->
+        <a href="/" class="header-brand" style="text-decoration: none; color: inherit; cursor: pointer;">
           <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
           <span class="header-title">DailyBarakah SG</span>
-        </div>
+        </a>
         <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu">
           &times;
         </button>
       </div>
-
       <nav class="drawer-menu">
+
+                <!-- 0. My Listing / Vendor Portal -->
+        <a href="/login.html" class="drawer-item">
+          <span class="drawer-item-icon"></span>
+          <div class="drawer-item-text">
+            <span class="drawer-item-title">Register / Login</span>
+            <span class="drawer-item-sub">List and manage your business profile</span>
+          </div>
+        </a>
+        
         <!-- 1. About Link (Points to about.html) -->
         <a href="/about.html" class="drawer-item">
           <span class="drawer-item-icon"></span>
@@ -178,14 +189,6 @@
           </div>
         </a>
 
-        <!-- 3. My Listing / Vendor Portal -->
-        <a href="/login.html" class="drawer-item">
-          <span class="drawer-item-icon"></span>
-          <div class="drawer-item-text">
-            <span class="drawer-item-title">Register / Login</span>
-            <span class="drawer-item-sub">List and manage your business profile</span>
-          </div>
-        </a>
 
       </nav>
     </aside>
