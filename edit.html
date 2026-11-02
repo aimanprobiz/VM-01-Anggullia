@@ -158,10 +158,65 @@
 
           <!-- TAB 2: Contact & Social Media -->
           <div id="tabContent2" class="tab-content" style="display: none; flex-direction: column; gap: 12px;">
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">WhatsApp Phone Number (with country code)</label>
-              <input type="text" id="bizPhone" placeholder="6588469883" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
-            </div>
+<div>
+  <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">
+    WhatsApp Phone Number
+  </label>
+  <div style="display: flex; gap: 6px;">
+    <select id="bizCountryCode" onchange="checkCustomCountryCode(this)" class="shimmer-placeholder" style="width: 35%; min-width: 110px; padding: 10px 6px; font-size: 0.85rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;" disabled>
+      <option value="+65" selected>🇸🇬 +65 (SG)</option>
+      <option value="CUSTOM">Custom Code...</option>
+      <option value="+60">🇲🇾 +60 (MY)</option>
+      <option value="+62">🇮🇩 +62 (ID)</option>
+      <option value="+673">🇧🇳 +673 (BN)</option>
+      <option value="+66">🇹🇭 +66 (TH)</option>
+      <option value="+63">🇵🇭 +63 (PH)</option>
+      <option value="+93">🇦🇫 +93 (AF)</option>
+      <option value="+355">🇦🇱 +355 (AL)</option>
+      <option value="+213">🇩🇿 +213 (DZ)</option>
+      <option value="+54">🇦🇷 +54 (AR)</option>
+      <option value="+61">🇦🇺 +61 (AU)</option>
+      <option value="+43">🇦🇹 +43 (AT)</option>
+      <option value="+973">🇧🇭 +973 (BH)</option>
+      <option value="+880">🇧🇩 +880 (BD)</option>
+      <option value="+32">🇧🇪 +32 (BE)</option>
+      <option value="+55">🇧🇷 +55 (BR)</option>
+      <option value="+1">🇨🇦/🇺🇸 +1 (US/CA)</option>
+      <option value="+86">🇨🇳 +86 (CN)</option>
+      <option value="+20">🇪🇬 +20 (EG)</option>
+      <option value="+33">🇫🇷 +33 (FR)</option>
+      <option value="+49">🇩🇪 +49 (DE)</option>
+      <option value="+852">🇭🇰 +852 (HK)</option>
+      <option value="+91">🇮🇳 +91 (IN)</option>
+      <option value="+353">🇮🇪 +353 (IE)</option>
+      <option value="+972">🇮🇱 +972 (IL)</option>
+      <option value="+39">🇮🇹 +39 (IT)</option>
+      <option value="+81">🇯🇵 +81 (JP)</option>
+      <option value="+962">🇯🇴 +962 (JO)</option>
+      <option value="+965">🇰🇼 +965 (KW)</option>
+      <option value="+31">🇳🇱 +31 (NL)</option>
+      <option value="+64">🇳🇿 +64 (NZ)</option>
+      <option value="+92">🇵🇰 +92 (PK)</option>
+      <option value="+974">🇶🇦 +974 (QA)</option>
+      <option value="+966">🇸🇦 +966 (SA)</option>
+      <option value="+27">🇿🇦 +27 (ZA)</option>
+      <option value="+82">🇰🇷 +82 (KR)</option>
+      <option value="+34">🇪🇸 +34 (ES)</option>
+      <option value="+46">🇸🇪 +46 (SE)</option>
+      <option value="+41">🇨🇭 +41 (CH)</option>
+      <option value="+886">🇹🇼 +886 (TW)</option>
+      <option value="+90">🇹🇷 +90 (TR)</option>
+      <option value="+971">🇦🇪 +971 (AE)</option>
+      <option value="+44">🇬🇧 +44 (UK)</option>
+      <option value="+84">🇻🇳 +84 (VN)</option>
+    </select>
+
+    <!-- Hidden custom country code input that shows if "Custom Code..." is selected -->
+    <input type="text" id="customCountryCode" placeholder="+XX" class="shimmer-placeholder" style="display: none; width: 75px; padding: 10px 4px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #ffffff;" disabled />
+
+    <input type="tel" id="bizPhone" placeholder="88469883" class="shimmer-placeholder" style="flex: 1; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
+  </div>
+</div>
 
             <div>
               <label id="bizWebsiteLabel" style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
@@ -249,6 +304,95 @@
       localStorage.setItem('db_vendor_token', currentToken);
     }
 
+    // Custom Country Code Toggle Logic
+    function checkCustomCountryCode(selectEl) {
+      const customInput = document.getElementById('customCountryCode');
+      if (selectEl.value === 'CUSTOM') {
+        customInput.style.display = 'block';
+        customInput.focus();
+      } else {
+        customInput.style.display = 'none';
+      }
+    }
+
+    // Helper to get the correct country code (dropdown or custom input)
+    function getSelectedCountryCode() {
+      const select = document.getElementById('bizCountryCode');
+      if (select.value === 'CUSTOM') {
+        let custom = document.getElementById('customCountryCode').value.trim();
+        if (!custom.startsWith('+')) custom = '+' + custom;
+        return custom;
+      }
+      return select.value;
+    }
+
+    // Helper to construct the full E.164 phone number for saving
+    function getFullPhoneNumber() {
+      const code = getSelectedCountryCode();
+      let rawPhone = document.getElementById('bizPhone').value.trim();
+
+      if (!rawPhone) return '';
+
+      rawPhone = rawPhone.replace(/^\+/, '');
+      const cleanCode = code.replace('+', '');
+      if (rawPhone.startsWith(cleanCode)) {
+        rawPhone = rawPhone.slice(cleanCode.length);
+      }
+      rawPhone = rawPhone.replace(/^0+/, '');
+
+      return `${code}${rawPhone}`;
+    }
+
+    // Helper to parse saved Airtable phone (+6588469883) back into dropdown & input
+    function setParsedPhoneNumber(savedPhone) {
+      const codeSelect = document.getElementById('bizCountryCode');
+      const customInput = document.getElementById('customCountryCode');
+      const phoneInput = document.getElementById('bizPhone');
+      if (!phoneInput || !codeSelect) return;
+
+      if (!savedPhone) {
+        codeSelect.value = '+65';
+        phoneInput.value = '';
+        customInput.style.display = 'none';
+        return;
+      }
+
+      let cleanPhone = savedPhone.trim();
+      const optionValues = Array.from(codeSelect.options).map(opt => opt.value).filter(v => v !== 'CUSTOM');
+      
+      let matchedCode = '+65';
+      optionValues.sort((a, b) => b.length - a.length);
+
+      let foundMatch = false;
+      for (const code of optionValues) {
+        if (cleanPhone.startsWith(code)) {
+          matchedCode = code;
+          cleanPhone = cleanPhone.slice(code.length);
+          foundMatch = true;
+          break;
+        }
+      }
+
+      if (foundMatch) {
+        codeSelect.value = matchedCode;
+        customInput.style.display = 'none';
+      } else {
+        if (cleanPhone.startsWith('+')) {
+          const matchCustom = cleanPhone.match(/^\+(\d+)/);
+          if (matchCustom) {
+            matchedCode = '+' + matchCustom[1];
+            cleanPhone = cleanPhone.slice(matchedCode.length);
+            codeSelect.value = 'CUSTOM';
+            customInput.style.display = 'block';
+            customInput.value = matchedCode;
+          }
+        }
+      }
+
+      cleanPhone = cleanPhone.replace(/^\+/, '').replace(/^0+/, '');
+      phoneInput.value = cleanPhone;
+    }
+
     // Tab Switching Logic with Muted Unselected Tab Indicator
     function switchTab(tabNumber) {
       activeTab = tabNumber;
@@ -288,17 +432,15 @@
 
         if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40 && elapsedTime < 400) {
           if (deltaX < 0) {
-            // Swipe Left -> Next Tab
             if (activeTab < 3) switchTab(activeTab + 1);
           } else {
-            // Swipe Right -> Previous Tab
             if (activeTab > 1) switchTab(activeTab - 1);
           }
         }
       }, { passive: true });
     }
 
-    // Auto-expanding Full Description Textarea (Starts compact at ~4 lines, expands smoothly as you type)
+    // Auto-expanding Full Description Textarea
     const descTextarea = document.getElementById('bizDesc');
     function autoResizeTextarea() {
       if (!descTextarea) return;
@@ -539,7 +681,7 @@
 
     // Remove shimmering state & enable form fields once loaded
     function removeFormShimmer() {
-      const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'bizImage', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'affiliateYes', 'affiliateNo'];
+      const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'bizImage', 'bizCountryCode', 'customCountryCode', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'affiliateYes', 'affiliateNo'];
       fields.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -588,7 +730,7 @@
         autoResizeTextarea(); // Dynamically resize height to fit loaded text without scrolling!
         
         document.getElementById('bizImage').value = data.imageUrl || '';
-        document.getElementById('bizPhone').value = data.phone || '';
+        setParsedPhoneNumber(data.phone || ''); // Parses and sets the country code and phone number!
         document.getElementById('bizWebsite').value = data.websiteUrl || '';
         document.getElementById('bizInstagram').value = data.instagramUrl || '';
         document.getElementById('bizTiktok').value = data.tiktokUrl || '';
@@ -642,7 +784,7 @@
         subtitle: document.getElementById('bizSub').value,
         category: document.getElementById('bizCategory').value,
         description: document.getElementById('bizDesc').value,
-        phone: document.getElementById('bizPhone').value,
+        phone: getFullPhoneNumber(), // Combines dropdown + phone input into E.164 format!
         websiteUrl: document.getElementById('bizWebsite').value,
         instagramUrl: document.getElementById('bizInstagram').value,
         tiktokUrl: document.getElementById('bizTiktok').value,
@@ -675,18 +817,18 @@
     });
 
     // Logout Button Handler
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  const confirmLogout = confirm(
-    "Did you know? You don't need to log out! \n\nYour session is safe, and staying logged in lets you quickly update your listing anytime.\n\nIf you log out, you will need to request a new magic link via email to access your account again.\n\nAre you sure you want to log out?"
-  );
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      const confirmLogout = confirm(
+        "Did you know? You don't need to log out! \n\nYour session is safe, and staying logged in lets you quickly update your listing anytime.\n\nIf you log out, you will need to request a new magic link via email to access your account again.\n\nAre you sure you want to log out?"
+      );
 
-  if (confirmLogout) {
-    localStorage.removeItem('db_vendor_token');
-    localStorage.removeItem('vendorEmail');
-    localStorage.removeItem('vendorSlug');
-    window.location.href = '/login.html';
-  }
-});
+      if (confirmLogout) {
+        localStorage.removeItem('db_vendor_token');
+        localStorage.removeItem('vendorEmail');
+        localStorage.removeItem('vendorSlug');
+        window.location.href = '/login.html';
+      }
+    });
 
     // Run Initializations
     loadBusinessDetails();
