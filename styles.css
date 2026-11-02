@@ -53,7 +53,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 28px;
-  padding: 0 16px 16px 16px; /* Remove top padding completely */
+  padding: 20px 16px 40px 16px;
 }
 
 .section-title {
