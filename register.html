@@ -107,79 +107,65 @@
           </h3>
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
-<div>
-  <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">
-    WhatsApp Phone Number <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span>
-  </label>
-  <div style="display: flex; gap: 6px;">
-    <select id="bizCountryCode" onchange="checkCustomCountryCode(this)" style="width: 35%; min-width: 110px; padding: 10px 6px; font-size: 0.85rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); background: #faf9f5; color: var(--text-main); outline: none;">
-      <option value="+65" selected>🇸🇬 +65 (SG)</option>
-      <option value="CUSTOM">Custom Code...</option>
-      <option value="+60">🇲🇾 +60 (MY)</option>
-      <option value="+62">🇮🇩 +62 (ID)</option>
-      <option value="+673">🇧🇳 +673 (BN)</option>
-      <option value="+66">🇹🇭 +66 (TH)</option>
-      <option value="+63">🇵🇭 +63 (PH)</option>
-      <option value="+93">🇦🇫 +93 (AF)</option>
-      <option value="+355">🇦🇱 +355 (AL)</option>
-      <option value="+213">🇩🇿 +213 (DZ)</option>
-      <option value="+54">🇦🇷 +54 (AR)</option>
-      <option value="+61">🇦🇺 +61 (AU)</option>
-      <option value="+43">🇦🇹 +43 (AT)</option>
-      <option value="+973">🇧🇭 +973 (BH)</option>
-      <option value="+880">🇧🇩 +880 (BD)</option>
-      <option value="+32">🇧🇪 +32 (BE)</option>
-      <option value="+55">🇧🇷 +55 (BR)</option>
-      <option value="+1">🇨🇦/🇺🇸 +1 (US/CA)</option>
-      <option value="+86">🇨🇳 +86 (CN)</option>
-      <option value="+20">🇪🇬 +20 (EG)</option>
-      <option value="+33">🇫🇷 +33 (FR)</option>
-      <option value="+49">🇩🇪 +49 (DE)</option>
-      <option value="+852">🇭🇰 +852 (HK)</option>
-      <option value="+91">🇮🇳 +91 (IN)</option>
-      <option value="+353">🇮🇪 +353 (IE)</option>
-      <option value="+972">🇮🇱 +972 (IL)</option>
-      <option value="+39">🇮🇹 +39 (IT)</option>
-      <option value="+81">🇯🇵 +81 (JP)</option>
-      <option value="+962">🇯🇴 +962 (JO)</option>
-      <option value="+965">🇰🇼 +965 (KW)</option>
-      <option value="+60">🇲🇾 +60 (MY)</option>
-      <option value="+31">🇳🇱 +31 (NL)</option>
-      <option value="+64">🇳🇿 +64 (NZ)</option>
-      <option value="+92">🇵🇰 +92 (PK)</option>
-      <option value="+974">🇶🇦 +974 (QA)</option>
-      <option value="+966">🇸🇦 +966 (SA)</option>
-      <option value="+27">🇿🇦 +27 (ZA)</option>
-      <option value="+82">🇰🇷 +82 (KR)</option>
-      <option value="+34">🇪🇸 +34 (ES)</option>
-      <option value="+46">🇸🇪 +46 (SE)</option>
-      <option value="+41">🇨🇭 +41 (CH)</option>
-      <option value="+886">🇹🇼 +886 (TW)</option>
-      <option value="+66">🇹🇭 +66 (TH)</option>
-      <option value="+90">🇹🇷 +90 (TR)</option>
-      <option value="+971">🇦🇪 +971 (AE)</option>
-      <option value="+44">🇬🇧 +44 (UK)</option>
-      <option value="+84">🇻🇳 +84 (VN)</option>
-    </select>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">
+                WhatsApp Phone Number <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span>
+              </label>
+              <div style="display: flex; gap: 6px;">
+                <select id="bizCountryCode" onchange="checkCustomCountryCode(this)" style="width: 35%; min-width: 110px; padding: 10px 6px; font-size: 0.85rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); background: #faf9f5; color: var(--text-main); outline: none;">
+                  <option value="+65" selected>🇸🇬 +65 (SG)</option>
+                  <option value="CUSTOM">Custom Code...</option>
+                  <option value="+60">🇲🇾 +60 (MY)</option>
+                  <option value="+62">🇮🇩 +62 (ID)</option>
+                  <option value="+673">🇧🇳 +673 (BN)</option>
+                  <option value="+66">🇹🇭 +66 (TH)</option>
+                  <option value="+63">🇵🇭 +63 (PH)</option>
+                  <option value="+93">🇦🇫 +93 (AF)</option>
+                  <option value="+355">🇦🇱 +355 (AL)</option>
+                  <option value="+213">🇩🇿 +213 (DZ)</option>
+                  <option value="+54">🇦🇷 +54 (AR)</option>
+                  <option value="+61">🇦🇺 +61 (AU)</option>
+                  <option value="+43">🇦🇹 +43 (AT)</option>
+                  <option value="+973">🇧🇭 +973 (BH)</option>
+                  <option value="+880">🇧🇩 +880 (BD)</option>
+                  <option value="+32">🇧🇪 +32 (BE)</option>
+                  <option value="+55">🇧🇷 +55 (BR)</option>
+                  <option value="+1">🇨🇦/🇺🇸 +1 (US/CA)</option>
+                  <option value="+86">🇨🇳 +86 (CN)</option>
+                  <option value="+20">🇪🇬 +20 (EG)</option>
+                  <option value="+33">🇫🇷 +33 (FR)</option>
+                  <option value="+49">🇩🇪 +49 (DE)</option>
+                  <option value="+852">🇭🇰 +852 (HK)</option>
+                  <option value="+91">🇮🇳 +91 (IN)</option>
+                  <option value="+353">🇮🇪 +353 (IE)</option>
+                  <option value="+972">🇮🇱 +972 (IL)</option>
+                  <option value="+39">🇮🇹 +39 (IT)</option>
+                  <option value="+81">🇯🇵 +81 (JP)</option>
+                  <option value="+962">🇯🇴 +962 (JO)</option>
+                  <option value="+965">🇰🇼 +965 (KW)</option>
+                  <option value="+31">🇳🇱 +31 (NL)</option>
+                  <option value="+64">🇳🇿 +64 (NZ)</option>
+                  <option value="+92">🇵🇰 +92 (PK)</option>
+                  <option value="+974">🇶🇦 +974 (QA)</option>
+                  <option value="+966">🇸🇦 +966 (SA)</option>
+                  <option value="+27">🇿🇦 +27 (ZA)</option>
+                  <option value="+82">🇰🇷 +82 (KR)</option>
+                  <option value="+34">🇪🇸 +34 (ES)</option>
+                  <option value="+46">🇸🇪 +46 (SE)</option>
+                  <option value="+41">🇨🇭 +41 (CH)</option>
+                  <option value="+886">🇹🇼 +886 (TW)</option>
+                  <option value="+90">🇹🇷 +90 (TR)</option>
+                  <option value="+971">🇦🇪 +971 (AE)</option>
+                  <option value="+44">🇬🇧 +44 (UK)</option>
+                  <option value="+84">🇻🇳 +84 (VN)</option>
+                </select>
 
-    <!-- Hidden custom country code input that shows if "Custom Code..." is selected -->
-    <input type="text" id="customCountryCode" placeholder="+XX" style="display: none; width: 75px; padding: 10px 4px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;" />
+                <!-- Hidden custom country code input that shows if "Custom Code..." is selected -->
+                <input type="text" id="customCountryCode" placeholder="+XX" style="display: none; width: 75px; padding: 10px 4px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;" />
 
-    <input type="tel" id="bizPhone" placeholder="88469883" style="flex: 1; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
-  </div>
-</div>
-
-<script>
-  function checkCustomCountryCode(selectEl) {
-    const customInput = document.getElementById('customCountryCode');
-    if (selectEl.value === 'CUSTOM') {
-      customInput.style.display = 'block';
-      customInput.focus();
-    } else {
-      customInput.style.display = 'none';
-    }
-  }
-</script>
+                <input type="tel" id="bizPhone" placeholder="88469883" style="flex: 1; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; background: #faf9f5;">
+              </div>
+            </div>
 
             <div>
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Website URL</label>
@@ -254,7 +240,7 @@
       <!-- UNIVERSAL EXAMPLE PREVIEW LINK -->
       <div id="exampleTriggerBox" style="text-align: center; margin-top: 18px; padding-top: 12px; border-top: 1px dashed var(--border-color);">
         <button type="button" id="openExampleBtn" class="action-btn-text" style="color: var(--primary-color); font-weight: 700; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
-          👁️ See example of how your listing & profile will look
+          👁️ See example sample listing
         </button>
       </div>
 
@@ -371,6 +357,46 @@
       });
     }
 
+    // Custom Country Code Toggle Logic
+    function checkCustomCountryCode(selectEl) {
+      const customInput = document.getElementById('customCountryCode');
+      if (selectEl.value === 'CUSTOM') {
+        customInput.style.display = 'block';
+        customInput.focus();
+      } else {
+        customInput.style.display = 'none';
+      }
+    }
+
+    // Helper to get the correct country code (dropdown or custom input)
+    function getSelectedCountryCode() {
+      const select = document.getElementById('bizCountryCode');
+      if (select.value === 'CUSTOM') {
+        let custom = document.getElementById('customCountryCode').value.trim();
+        if (!custom.startsWith('+')) custom = '+' + custom;
+        return custom;
+      }
+      return select.value;
+    }
+
+    // Helper to construct the full E.164 phone number
+    function getFullPhoneNumber() {
+      const code = getSelectedCountryCode();
+      let rawPhone = document.getElementById('bizPhone').value.trim();
+
+      if (!rawPhone) return '';
+
+      // Clean up formatting
+      rawPhone = rawPhone.replace(/^\+/, '');
+      const cleanCode = code.replace('+', '');
+      if (rawPhone.startsWith(cleanCode)) {
+        rawPhone = rawPhone.slice(cleanCode.length);
+      }
+      rawPhone = rawPhone.replace(/^0+/, '');
+
+      return `${code}${rawPhone}`;
+    }
+
     async function loadDynamicCategories() {
       const categorySelect = document.getElementById('bizCategory');
       if (!categorySelect) return;
@@ -429,7 +455,7 @@
         subtitle: document.getElementById('bizSub').value,
         category: document.getElementById('bizCategory').value,
         description: document.getElementById('bizDesc').value,
-        phone: document.getElementById('bizPhone').value,
+        phone: getFullPhoneNumber(), // Uses the combined country code + number!
         websiteUrl: document.getElementById('bizWebsite').value,
         instagramUrl: document.getElementById('bizInstagram').value,
         tiktokUrl: document.getElementById('bizTiktok').value,
