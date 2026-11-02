@@ -114,6 +114,7 @@
   <div style="display: flex; gap: 6px;">
     <select id="bizCountryCode" onchange="checkCustomCountryCode(this)" style="width: 35%; min-width: 110px; padding: 10px 6px; font-size: 0.85rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); background: #faf9f5; color: var(--text-main); outline: none;">
       <option value="+65" selected>🇸🇬 +65 (SG)</option>
+      <option value="CUSTOM">Custom Code...</option>
       <option value="+60">🇲🇾 +60 (MY)</option>
       <option value="+62">🇮🇩 +62 (ID)</option>
       <option value="+673">🇧🇳 +673 (BN)</option>
@@ -159,7 +160,6 @@
       <option value="+971">🇦🇪 +971 (AE)</option>
       <option value="+44">🇬🇧 +44 (UK)</option>
       <option value="+84">🇻🇳 +84 (VN)</option>
-      <option value="CUSTOM">Custom Code...</option>
     </select>
 
     <!-- Hidden custom country code input that shows if "Custom Code..." is selected -->
