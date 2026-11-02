@@ -118,115 +118,118 @@
 
   <div class="mobile-container">
 
-<!-- App Top Header Bar (Flushed to top) -->
-    <header class="app-header">
-      <div class="header-left">
-        <!-- Clickable Area for Menu Toggle (Includes Icon & Title) -->
-        <button id="menuToggleBtn" class="menu-icon-btn" aria-label="Open Navigation Menu" style="display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; padding: 0; text-align: left; width: auto;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
+    <!-- Scrollable Top Section Container -->
+    <div class="scrollable-top-flow">
+      <!-- App Top Header Bar (Flushed to top) -->
+      <header class="app-header">
+        <div class="header-left">
+          <!-- Clickable Area for Menu Toggle (Includes Icon & Title) -->
+          <button id="menuToggleBtn" class="menu-icon-btn" aria-label="Open Navigation Menu" style="display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; padding: 0; text-align: left; width: auto;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            
+            <!-- Branding -->
+            <div class="header-brand" style="display: flex; align-items: center; gap: 8px;">
+              <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
+              <span class="header-title">DailyBarakah SG</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Right-Aligned Profile / Account Button -->
+        <button id="headerProfileBtn" class="profile-icon-btn" aria-label="Vendor Portal / Profile" title="My Business Listing">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          
-          <!-- Branding -->
-          <div class="header-brand" style="display: flex; align-items: center; gap: 8px;">
+        </button>
+      </header>
+
+      <!-- Side Drawer Navigation Overlay -->
+      <div id="navDrawerOverlay" class="drawer-overlay"></div>
+      <aside id="navDrawer" class="nav-drawer">
+        <div class="drawer-header">
+          <div class="header-brand">
             <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
             <span class="header-title">DailyBarakah SG</span>
           </div>
-        </button>
-      </div>
-
-      <!-- Right-Aligned Profile / Account Button -->
-      <button id="headerProfileBtn" class="profile-icon-btn" aria-label="Vendor Portal / Profile" title="My Business Listing">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-      </button>
-    </header>
-
-    <!-- Side Drawer Navigation Overlay -->
-    <div id="navDrawerOverlay" class="drawer-overlay"></div>
-    <aside id="navDrawer" class="nav-drawer">
-      <div class="drawer-header">
-        <div class="header-brand">
-          <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
-          <span class="header-title">DailyBarakah SG</span>
+          <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu">
+            &times;
+          </button>
         </div>
-        <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu">
-          &times;
-        </button>
-      </div>
 
-      <nav class="drawer-menu">
-        <!-- 1. About Link (Points to about.html) -->
-        <a href="/about.html" class="drawer-item">
-          <span class="drawer-item-icon"></span>
-          <div class="drawer-item-text">
-            <span class="drawer-item-title">About Us</span>
-            <span class="drawer-item-sub">Learn more about our community mission</span>
+        <nav class="drawer-menu">
+          <!-- 1. About Link (Points to about.html) -->
+          <a href="/about.html" class="drawer-item">
+            <span class="drawer-item-icon"></span>
+            <div class="drawer-item-text">
+              <span class="drawer-item-title">About Us</span>
+              <span class="drawer-item-sub">Learn more about our community mission</span>
+            </div>
+          </a>
+
+          <!-- 2. Support Us / Contribute Link (Points to support.html) -->
+          <a href="/support.html" class="drawer-item">
+            <span class="drawer-item-icon"></span>
+            <div class="drawer-item-text">
+              <span class="drawer-item-title">Support Our Platform</span>
+              <span class="drawer-item-sub">Help sustain our vision & daily efforts</span>
+            </div>
+          </a>
+
+          <!-- 3. My Listing / Vendor Portal -->
+          <a href="/login.html" class="drawer-item">
+            <span class="drawer-item-icon"></span>
+            <div class="drawer-item-text">
+              <span class="drawer-item-title">Register / Login</span>
+              <span class="drawer-item-sub">List and manage your business profile</span>
+            </div>
+          </a>
+
+        </nav>
+      </aside>
+
+      <!-- 1. HADITH OF THE DAY CARD -->
+      <section>
+        <h2 class="section-title">Hadith of the Day</h2>
+        <div class="card">
+          <div class="card-header">
+            <img id="hadith-avatar" class="card-avatar pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
+            <div class="card-title-group">
+              <h3 id="hadith-narrator">Loading wisdom...</h3>
+              <p>Daily Prophetic Wisdom</p>
+            </div>
           </div>
-        </a>
-
-        <!-- 2. Support Us / Contribute Link (Points to support.html) -->
-        <a href="/support.html" class="drawer-item">
-          <span class="drawer-item-icon"></span>
-          <div class="drawer-item-text">
-            <span class="drawer-item-title">Support Our Platform</span>
-            <span class="drawer-item-sub">Help sustain our vision & daily efforts</span>
+          <div class="card-body" id="hadith-text">
+            Loading today's Hadith...
           </div>
-        </a>
-
-        <!-- 3. My Listing / Vendor Portal -->
-        <a href="/login.html" class="drawer-item">
-          <span class="drawer-item-icon"></span>
-          <div class="drawer-item-text">
-            <span class="drawer-item-title">Register / Login</span>
-            <span class="drawer-item-sub">List and manage your business profile</span>
-          </div>
-        </a>
-
-      </nav>
-    </aside>
-
-    <!-- 1. HADITH OF THE DAY CARD -->
-    <section>
-      <h2 class="section-title">Hadith of the Day</h2>
-      <div class="card">
-        <div class="card-header">
-          <img id="hadith-avatar" class="card-avatar pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
-          <div class="card-title-group">
-            <h3 id="hadith-narrator">Loading wisdom...</h3>
-            <p>Daily Prophetic Wisdom</p>
+          <div class="card-footer">
+            <span class="card-tag" id="hadith-tag" style="cursor: pointer;" title="Click to view details">...</span>
+            <span id="update-status" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;" title="Tap for random Hadith">Updated Today</span>
           </div>
         </div>
-        <div class="card-body" id="hadith-text">
-          Loading today's Hadith...
-        </div>
-        <div class="card-footer">
-          <span class="card-tag" id="hadith-tag" style="cursor: pointer;" title="Click to view details">...</span>
-          <span id="update-status" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;" title="Tap for random Hadith">Updated Today</span>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 2. MASJID ANGULLIA ACTIVITIES CAROUSEL -->
-    <section class="carousel-section">
-      <h2 class="section-title">Masjid Angullia Activities</h2>
-      <div class="carousel-wrapper">
-        <div class="carousel-track" id="carouselTrack">
-          <!-- Initial Pulsing Loading State -->
-          <div class="carousel-slide">
-            <img class="pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Loading...">
-            <div class="carousel-caption">Loading masjid info...</div>
+      <!-- 2. MASJID ANGULLIA ACTIVITIES CAROUSEL -->
+      <section class="carousel-section">
+        <h2 class="section-title">Masjid Angullia Activities</h2>
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="carouselTrack">
+            <!-- Initial Pulsing Loading State -->
+            <div class="carousel-slide">
+              <img class="pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Loading...">
+              <div class="carousel-caption">Loading masjid info...</div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="carousel-indicators" id="carouselIndicators">
-        <!-- Dynamically populated dots -->
-      </div>
-    </section>
+        <div class="carousel-indicators" id="carouselIndicators">
+          <!-- Dynamically populated dots -->
+        </div>
+      </section>
+    </div>
 
     <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
     <section class="business-section" id="businessSection">
