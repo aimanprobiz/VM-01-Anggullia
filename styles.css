@@ -806,27 +806,6 @@ dialog::backdrop {
   letter-spacing: -0.01em;
 }
 
-/* Side Drawer Overlay Backdrop */
-.drawer-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(12, 43, 34, 0.4);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: 10000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-}
-
-.drawer-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
 /* Side Drawer Container */
 .nav-drawer {
   position: fixed;
@@ -859,8 +838,56 @@ dialog::backdrop {
 .drawer-menu {
   display: flex;
   flex-direction: column;
-  padding: 16px 12px;
-  gap: 10px; /* Space between each tab card */
+  padding: 0 16px; /* Horizontal padding only */
+  gap: 0; /* Gap set to 0 so divider lines sit flush */
+}
+
+/* Option A: Flat Divider Lines Style */
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 4px; /* Slightly higher vertical padding for tap area */
+  border-radius: 0; /* Flat edges so lines look seamless */
+  text-decoration: none;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color); /* Faint line beneath each item */
+  transition: background-color 0.15s ease;
+}
+
+/* Remove the line from the last menu item */
+.drawer-item:last-child {
+  border-bottom: none;
+}
+
+.drawer-item:hover,
+.drawer-item:active {
+  background-color: var(--bg-color);
+}
+
+.drawer-item.highlight {
+  background-color: var(--accent-gold-bg);
+  border-bottom-color: rgba(221, 186, 88, 0.4);
+}
+
+.drawer-item-icon {
+  font-size: 1.2rem;
+}
+
+.drawer-item-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-item-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.drawer-item-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
 }
 
 /* Option B: Outlined Tab Style */
