@@ -751,18 +751,15 @@ dialog::backdrop {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-/* Flushed Mobile Top Header */
+/* Ensure the app header starts instantly at the very top */
 .app-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  margin-top: -16px; /* Flushed to top container edge */
-  margin-left: -16px;
-  margin-right: -16px;
-  background-color: var(--primary-color, #0f382c); /* Signature Green */
-  border-bottom: 1px solid rgba(221, 186, 88, 0.3); /* Subtle Gold Accent Border */
-  margin-bottom: 16px;
+  padding: 12px 16px 12px 16px; /* Adjust top padding to sit nicely under status bar */
+  margin: 0 -16px 16px -16px; /* Negative horizontal margins make it stretch edge-to-edge of the container */
+  background-color: var(--primary-color, #0f382c);
+  border-bottom: 1px solid rgba(221, 186, 88, 0.3);
   box-shadow: 0 2px 8px rgba(12, 43, 34, 0.15);
 }
 
