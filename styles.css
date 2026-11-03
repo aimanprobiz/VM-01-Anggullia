@@ -1206,29 +1206,3 @@ dialog::backdrop {
   stroke: var(--primary-color, #0f382c); /* Signature Green */
   stroke-width: 2.3;
 }
-
-/* Header Action Icon Button Styles */
-.header-icon-action-btn {
-  background: transparent;
-  border: none;
-  padding: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: opacity 0.2s ease, transform 0.15s ease;
-}
-
-.header-icon-action-btn:active {
-  transform: scale(0.92);
-  opacity: 0.7;
-}
-
-/* Lucide Search Icon Color (Signature Gold) */
-.header-lucide-search {
-  width: 20px;
-  height: 20px;
-  stroke: var(--accent-gold, #ddba58);
-  stroke-width: 2.2;
-}
