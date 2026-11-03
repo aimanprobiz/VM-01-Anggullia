@@ -1140,3 +1140,14 @@ dialog::backdrop {
 .profile-icon-btn.logged-in:hover {
   transform: scale(1.05);
 }
+
+/* Lucide Drawer Icons */
+.drawer-icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--accent-gold, #ddba58); /* Signature Gold stroke */
+  stroke-width: 2;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
