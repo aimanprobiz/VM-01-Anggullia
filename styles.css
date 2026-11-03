@@ -998,8 +998,8 @@ dialog::backdrop {
 
 /* Lucide Icon Inside Gold CTA */
 .cta-icon {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   stroke: var(--primary-color, #0f382c); /* Dark Green Stroke for contrast on Gold */
   stroke-width: 2.2;
   flex-shrink: 0;
