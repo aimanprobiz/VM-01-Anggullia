@@ -116,27 +116,32 @@
     </div>
 
     <!-- Drawer Navigation Links -->
-    <nav class="drawer-menu">
+ <nav class="drawer-menu">
+      <!-- 1. About Us (Info Icon) -->
       <a href="/about.html" class="drawer-item">
-        <span class="drawer-item-icon">ℹ️</span>
+        <i data-lucide="info" class="drawer-icon"></i>
         <div class="drawer-item-text">
           <span class="drawer-item-title">About Us</span>
           <span class="drawer-item-sub">Learn more about our community mission</span>
         </div>
       </a>
 
+      <!-- 2. Support Our Platform (Handshake / Heart Icon) -->
       <a href="/support.html" class="drawer-item">
-        <span class="drawer-item-icon">🤝</span>
+        <i data-lucide="heart-handshake" class="drawer-icon"></i>
         <div class="drawer-item-text">
           <span class="drawer-item-title">Support Our Platform</span>
           <span class="drawer-item-sub">Help sustain our vision & daily efforts</span>
         </div>
       </a>
 
-      <!-- Pinned Bottom Gold CTA Button -->
+      <!-- 3. Pinned Bottom Gold CTA Button (User / Sparkles Icon) -->
       <a href="/login.html" class="drawer-item drawer-cta">
         <div class="drawer-cta-content">
-          <span class="drawer-cta-title">Register / Login ✨</span>
+          <span class="drawer-cta-title" style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <i data-lucide="user-plus" style="width: 18px; height: 18px; stroke: #0f382c; stroke-width: 2.2;"></i>
+            Register / Login
+          </span>
           <span class="drawer-cta-sub">List and manage your business profile</span>
         </div>
       </a>
