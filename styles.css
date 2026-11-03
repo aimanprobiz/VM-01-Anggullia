@@ -836,7 +836,7 @@ dialog::backdrop {
   pointer-events: auto;
 }
 
-/* Side Drawer Container - Signature Green Theme */
+/* Drawer Container Flex Setup */
 .nav-drawer {
   position: fixed;
   top: 0;
@@ -844,90 +844,73 @@ dialog::backdrop {
   width: 280px;
   max-width: 80vw;
   height: 100%;
-  background-color: var(--primary-color, #0f382c); /* Signature Green Background */
+  background-color: var(--primary-color, #0f382c);
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
   z-index: 10001;
   transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgba(221, 186, 88, 0.3); /* Subtle Signature Gold Trim */
-}
-
-.nav-drawer.open {
-  transform: translateX(0);
-}
-
-.drawer-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 16px;
-  border-bottom: 1px solid rgba(221, 186, 88, 0.2);
-}
-
-/* Explicit Fix for Drawer Title Color */
-.drawer-header .header-brand .header-title {
-  color: #ffffff; /* Signature White */
-  font-weight: 800;
-}
-
-/* Close Button in Signature Gold */
-.drawer-header .menu-icon-btn {
-  color: var(--accent-gold, #ddba58);
-  font-size: 1.6rem;
+  border-right: 1px solid rgba(221, 186, 88, 0.3);
 }
 
 .drawer-menu {
   display: flex;
   flex-direction: column;
-  padding: 12px;
-  gap: 8px;
+  padding: 16px;
+  gap: 12px;
+  flex: 1; /* Fills remaining height to allow pushing CTA to bottom */
 }
 
-/* Side Drawer Menu Cards */
+/* Clean Standard Items - Subtle & Borderless */
 .drawer-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 14px;
+  padding: 10px 8px;
   border-radius: var(--radius-md);
   text-decoration: none;
   color: #ffffff;
-  transition: all 0.15s ease;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: opacity 0.15s ease;
+  background-color: transparent; /* Removes card box */
+  border: none; /* Removes button outline */
 }
 
 .drawer-item:hover,
 .drawer-item:active {
-  background-color: rgba(221, 186, 88, 0.15); /* Signature Gold Glow on Tap */
-  border-color: rgba(221, 186, 88, 0.3);
-}
-
-.drawer-item.highlight {
-  background-color: rgba(221, 186, 88, 0.2);
-  border: 1px solid var(--accent-gold, #ddba58);
-}
-
-.drawer-item-icon {
-  font-size: 1.2rem;
-}
-
-.drawer-item-text {
-  display: flex;
-  flex-direction: column;
+  opacity: 0.8;
 }
 
 .drawer-item-title {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #ffffff; /* Signature White */
+  color: #ffffff;
 }
 
 .drawer-item-sub {
   font-size: 0.72rem;
-  color: #cbd5e1; /* Soft Muted Slate */
+  color: #cbd5e1;
+}
+
+/* Pinned Signature Gold CTA Button at the Bottom */
+.drawer-item.drawer-cta {
+  margin-top: auto; /* Magic line that locks it to the bottom of the drawer */
+  background: var(--accent-gold, #ddba58); /* Signature Gold Fill */
+  border: 1.5px solid var(--accent-gold, #ddba58);
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.drawer-item.drawer-cta:active {
+  transform: scale(0.98);
+}
+
+.drawer-item.drawer-cta .drawer-item-title {
+  color: var(--primary-color, #0f382c); /* Dark Green Text for contrast on Gold */
+  font-weight: 800;
 }
 
 /* Multi-Step Registration Container & Steps */
