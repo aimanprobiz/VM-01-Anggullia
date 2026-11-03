@@ -100,6 +100,48 @@
     </div>
   </dialog>
 
+  <!-- Side Drawer Navigation Overlay (Fixed Root Level) -->
+  <div id="navDrawerOverlay" class="drawer-overlay"></div>
+  <aside id="navDrawer" class="nav-drawer">
+    <!-- Header Row with Left Margin & Aligned Close Button -->
+    <div class="drawer-header">
+      <div class="header-brand" style="display: flex; align-items: center; gap: 10px; margin-left: 4px;">
+        <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
+        <span class="header-title" style="color: #ffffff; font-size: 1rem; font-weight: 800;">DailyBarakah SG</span>
+      </div>
+      <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu">
+        &times;
+      </button>
+    </div>
+
+    <!-- Drawer Navigation Links -->
+    <nav class="drawer-menu">
+      <a href="/about.html" class="drawer-item">
+        <span class="drawer-item-icon">ℹ️</span>
+        <div class="drawer-item-text">
+          <span class="drawer-item-title">About Us</span>
+          <span class="drawer-item-sub">Learn more about our community mission</span>
+        </div>
+      </a>
+
+      <a href="/support.html" class="drawer-item">
+        <span class="drawer-item-icon">🤝</span>
+        <div class="drawer-item-text">
+          <span class="drawer-item-title">Support Our Platform</span>
+          <span class="drawer-item-sub">Help sustain our vision & daily efforts</span>
+        </div>
+      </a>
+
+      <!-- Pinned Bottom Gold CTA Button -->
+      <a href="/login.html" class="drawer-item drawer-cta">
+        <div class="drawer-item-text" style="text-align: center; width: 100%; display: flex; flex-direction: column;">
+          <span class="drawer-item-title" style="font-size: 0.92rem; font-weight: 800;">Register / Login ✨</span>
+          <span class="drawer-item-sub" style="color: rgba(15, 56, 44, 0.85); font-weight: 600; margin-top: 2px;">List and manage your business profile</span>
+        </div>
+      </a>
+    </nav>
+  </aside>
+
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then((registration) => {
@@ -146,45 +188,6 @@
       </button>
     </header>
 
-<aside id="navDrawer" class="nav-drawer">
-      <!-- Drawer Header with Proper Margin & Aligned Close Button -->
-      <div class="drawer-header" style="display: flex; align-items: center; justify-content: space-between; padding: 18px 16px; border-bottom: 1px solid rgba(221, 186, 88, 0.3);">
-        <div class="header-brand" style="display: flex; align-items: center; gap: 10px; margin-left: 4px;">
-          <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
-          <span class="header-title" style="color: #ffffff; font-size: 1rem; font-weight: 800;">DailyBarakah SG</span>
-        </div>
-        <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--accent-gold); padding: 4px 8px; outline: none;">
-          &times;
-        </button>
-      </div>
-
-      <nav class="drawer-menu">
-        <!-- Clean Standard Items -->
-        <a href="/about.html" class="drawer-item">
-          <span class="drawer-item-icon">ℹ️</span>
-          <div class="drawer-item-text">
-            <span class="drawer-item-title">About Us</span>
-            <span class="drawer-item-sub">Learn more about our community mission</span>
-          </div>
-        </a>
-
-        <a href="/support.html" class="drawer-item">
-          <span class="drawer-item-icon">🤝</span>
-          <div class="drawer-item-text">
-            <span class="drawer-item-title">Support Our Platform</span>
-            <span class="drawer-item-sub">Help sustain our vision & daily efforts</span>
-          </div>
-        </a>
-
-        <!-- Pinned Bottom Gold CTA Button -->
-        <a href="/login.html" class="drawer-item drawer-cta">
-          <div class="drawer-item-text" style="text-align: center; width: 100%;">
-            <span class="drawer-item-title" style="font-size: 0.92rem; font-weight: 800;">Register / Login ✨</span>
-            <span class="drawer-item-sub" style="color: rgba(15, 56, 44, 0.85); font-weight: 600;">List and manage your business profile</span>
-          </div>
-        </a>
-      </nav>
-    </aside>
     <!-- 1. HADITH OF THE DAY CARD -->
     <section>
       <h2 class="section-title">Hadith of the Day</h2>
