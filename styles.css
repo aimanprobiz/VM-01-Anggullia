@@ -836,7 +836,10 @@ dialog::backdrop {
   pointer-events: auto;
 }
 
-/* Drawer Container Flex Setup */
+/* ==========================================================================
+   SIDE DRAWER SYSTEM (FIXED LAYOUT & ROW ALIGNMENT)
+   ========================================================================== */
+
 .nav-drawer {
   position: fixed;
   top: 0;
@@ -847,54 +850,124 @@ dialog::backdrop {
   background-color: var(--primary-color, #0f382c);
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
   z-index: 10001;
-  transform: translateX(-100%); /* Starts hidden off-screen to the left */
+  transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   border-right: 1px solid rgba(221, 186, 88, 0.3);
 }
 
-/* THIS LINE IS WHAT MAKES IT SLIDE IN WHEN OPENED */
 .nav-drawer.open {
-  transform: translateX(0) !important; 
+  transform: translateX(0) !important;
+}
+
+/* Header Row Layout - Logo on Left, Close X on Right */
+.drawer-header {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 18px 16px !important;
+  border-bottom: 1px solid rgba(221, 186, 88, 0.3) !important; /* Signature Gold Divider Line */
+  width: 100%;
+}
+
+.drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.drawer-header .header-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff !important;
+}
+
+/* Close 'X' Button Aligned to Right */
+.close-drawer-btn {
+  background: none !important;
+  border: none !important;
+  color: var(--accent-gold, #ddba58) !important;
+  font-size: 1.6rem !important;
+  line-height: 1 !important;
+  cursor: pointer;
+  padding: 4px 8px;
 }
 
 .drawer-menu {
   display: flex;
   flex-direction: column;
   padding: 16px;
-  gap: 12px;
-  flex: 1; /* Fills remaining height to allow pushing CTA to bottom */
+  gap: 16px;
+  flex: 1;
 }
 
-/* Clean Standard Items - Subtle & Borderless */
+/* Navigation Link Containers */
 .drawer-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
-  padding: 10px 8px;
-  border-radius: var(--radius-md);
+  padding: 8px 4px;
   text-decoration: none;
-  color: #ffffff;
-  transition: opacity 0.15s ease;
-  background-color: transparent; /* Removes card box */
-  border: none; /* Removes button outline */
+  background-color: transparent !important;
+  border: none !important;
 }
 
-.drawer-item:hover,
-.drawer-item:active {
-  opacity: 0.8;
+/* Force Text & Subtitle to Stack Vertically on Separate Lines */
+.drawer-item-text {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 3px !important;
 }
 
 .drawer-item-title {
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #ffffff !important;
+  display: block !important;
 }
 
 .drawer-item-sub {
+  font-size: 0.74rem;
+  color: #cbd5e1 !important;
+  display: block !important;
+  line-height: 1.3;
+}
+
+/* Locked Bottom CTA Button */
+.drawer-item.drawer-cta {
+  margin-top: auto !important;
+  background: var(--accent-gold, #ddba58) !important;
+  border: 1.5px solid var(--accent-gold, #ddba58) !important;
+  padding: 14px 16px !important;
+  border-radius: var(--radius-md, 12px) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.drawer-cta-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  gap: 2px;
+}
+
+.drawer-cta-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--primary-color, #0f382c);
+}
+
+.drawer-cta-sub {
   font-size: 0.72rem;
-  color: #cbd5e1;
+  font-weight: 600;
+  color: rgba(15, 56, 44, 0.85);
 }
 
 /* Pinned Signature Gold CTA Button at the Bottom */
