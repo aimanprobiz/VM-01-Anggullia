@@ -889,10 +889,16 @@ dialog::backdrop {
   background: none !important;
   border: none !important;
   color: var(--accent-gold, #ddba58) !important;
-  font-size: 1.6rem !important;
+  font-size: 1.5rem !important;
   line-height: 1 !important;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 4px 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* THIS LINE fine-tunes alignment to match the text center line */
+  margin-top: 2px; 
 }
 
 .drawer-menu {
