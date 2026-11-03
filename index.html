@@ -163,7 +163,7 @@
 
   <div class="mobile-container">
 
-    <!-- App Top Header Bar (Flushed to top) -->
+<!-- App Top Header Bar (Flushed to top) -->
     <header class="app-header">
       <div class="header-left">
         <!-- Clickable Area for Menu Toggle (Includes Icon & Title) -->
@@ -182,13 +182,21 @@
         </button>
       </div>
 
-      <!-- Right-Aligned Profile / Account Button -->
-      <button id="headerProfileBtn" class="profile-icon-btn" aria-label="Vendor Portal / Profile" title="My Business Listing">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-      </button>
+      <!-- Right-Aligned Action Group (Search + Profile) -->
+      <div class="header-right-actions" style="display: flex; align-items: center; gap: 4px;">
+        <!-- New Header Search Button with Lucide Icon -->
+        <button id="headerSearchIconBtn" class="header-icon-action-btn" aria-label="Search Businesses" title="Search Businesses">
+          <i data-lucide="search" class="header-lucide-search"></i>
+        </button>
+
+        <!-- Right-Aligned Profile / Account Button -->
+        <button id="headerProfileBtn" class="profile-icon-btn" aria-label="Vendor Portal / Profile" title="My Business Listing">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </button>
+      </div>
     </header>
 
     <!-- 1. HADITH OF THE DAY CARD -->
