@@ -730,3 +730,5 @@ window.addEventListener('scroll', () => {
 loadDynamicCard();
 loadDailyHadith();
 loadBusinesses();
+// Render all Lucide icons on page load
+lucide.createIcons();
