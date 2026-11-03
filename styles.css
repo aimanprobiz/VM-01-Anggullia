@@ -861,20 +861,20 @@ dialog::backdrop {
   transform: translateX(0) !important;
 }
 
-/* Header Row Layout - Logo & Title on Left, Close X Aligned to Text Baseline */
+/* Header Row Layout - Logo on Left, Close X on Right */
 .drawer-header {
   display: flex !important;
   flex-direction: row !important;
-  align-items: center !important; /* Keeps row vertically centered */
+  align-items: center !important;
   justify-content: space-between !important;
-  padding: 16px 16px !important;
+  padding: 18px 16px !important;
   border-bottom: 1px solid rgba(221, 186, 88, 0.3) !important; /* Signature Gold Divider Line */
   width: 100%;
 }
 
 .drawer-brand {
   display: flex;
-  align-items: center; /* Centers logo and text horizontally together */
+  align-items: center;
   gap: 10px;
 }
 
@@ -882,22 +882,17 @@ dialog::backdrop {
   font-size: 1.05rem;
   font-weight: 800;
   color: #ffffff !important;
-  line-height: 1; /* Tightens line-height to eliminate invisible text padding */
 }
 
-/* Close 'X' Button Optically Aligned to Title Text */
+/* Close 'X' Button Aligned to Right */
 .close-drawer-btn {
   background: none !important;
   border: none !important;
   color: var(--accent-gold, #ddba58) !important;
-  font-size: 1.5rem !important;
-  line-height: 1 !important; /* Removes font line-height gap */
+  font-size: 1.6rem !important;
+  line-height: 1 !important;
   cursor: pointer;
-  padding: 2px 6px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin-top: 1px; /* Subtle pixel offset to lock it right onto the text center line */
+  padding: 4px 8px;
 }
 
 .drawer-menu {
