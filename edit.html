@@ -53,7 +53,7 @@
 
     <!-- Header Title & Polished Preview Engine -->
     <div style="text-align: center; margin-bottom: 12px;">
-      <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">My listing</h2>
+      <h2 style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">My listings</h2>
       <p style="color: var(--text-muted); font-size: 0.84rem; line-height: 1.4; margin-bottom: 12px;">
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
@@ -291,10 +291,15 @@
 
   </div>
 
-  <!-- ADD NEW LISTING CLARIFICATION MODAL -->
+<!-- ADD NEW LISTING CLARIFICATION MODAL -->
   <dialog id="addNewListingModal" style="background: var(--card-bg, #ffffff); color: var(--text-main, #333); border: 1.5px solid var(--border-color, #e5e7eb); border-radius: var(--radius-lg, 12px); padding: 20px; width: 92%; max-width: 380px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; outline: none;">
-    <div style="display: flex; flex-direction: column; gap: 12px; text-align: center;">
-      <div style="font-size: 2.2rem;">🏢</div>
+    <div style="display: flex; flex-direction: column; gap: 12px; text-align: center; align-items: center;">
+      
+      <!-- Sleek Lucide Store / Building Icon Container -->
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(15, 56, 44, 0.08); display: flex; align-items: center; justify-content: center; margin-bottom: 2px;">
+        <i data-lucide="store" style="width: 24px; height: 24px; stroke: var(--primary-color, #0f382c); stroke-width: 2.2;"></i>
+      </div>
+
       <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--primary-color, #15803d); margin: 0;">Add a New Business Listing</h3>
       
       <p style="font-size: 0.86rem; color: var(--text-main, #374151); line-height: 1.5; margin: 0;">
@@ -305,7 +310,7 @@
         DailyBarakah SG is designed as a community directory for local businesses, brands, and establishments.
       </p>
 
-      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px; width: 100%;">
         <button type="button" id="proceedRegisterBtn" class="action-btn-primary" style="width: 100%; padding: 10px; font-weight: 700; cursor: pointer;">
           I Understand
         </button>
