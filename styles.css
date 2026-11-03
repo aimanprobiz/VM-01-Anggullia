@@ -836,7 +836,7 @@ dialog::backdrop {
   pointer-events: auto;
 }
 
-/* Side Drawer Container */
+/* Side Drawer Container - Signature Green Theme */
 .nav-drawer {
   position: fixed;
   top: 0;
@@ -844,13 +844,14 @@ dialog::backdrop {
   width: 280px;
   max-width: 80vw;
   height: 100%;
-  background-color: var(--card-bg);
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  background-color: var(--primary-color, #0f382c); /* Signature Green Background */
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
   z-index: 10001;
   transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
+  border-right: 1px solid rgba(221, 186, 88, 0.3); /* Subtle Signature Gold Trim */
 }
 
 .nav-drawer.open {
@@ -862,7 +863,19 @@ dialog::backdrop {
   align-items: center;
   justify-content: space-between;
   padding: 18px 16px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(221, 186, 88, 0.2);
+}
+
+/* Explicit Fix for Drawer Title Color */
+.drawer-header .header-brand .header-title {
+  color: #ffffff; /* Signature White */
+  font-weight: 800;
+}
+
+/* Close Button in Signature Gold */
+.drawer-header .menu-icon-btn {
+  color: var(--accent-gold, #ddba58);
+  font-size: 1.6rem;
 }
 
 .drawer-menu {
@@ -872,6 +885,7 @@ dialog::backdrop {
   gap: 8px;
 }
 
+/* Side Drawer Menu Cards */
 .drawer-item {
   display: flex;
   align-items: center;
@@ -879,18 +893,21 @@ dialog::backdrop {
   padding: 12px 14px;
   border-radius: var(--radius-md);
   text-decoration: none;
-  color: var(--text-main);
-  transition: background 0.15s ease;
+  color: #ffffff;
+  transition: all 0.15s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .drawer-item:hover,
 .drawer-item:active {
-  background-color: var(--bg-color);
+  background-color: rgba(221, 186, 88, 0.15); /* Signature Gold Glow on Tap */
+  border-color: rgba(221, 186, 88, 0.3);
 }
 
 .drawer-item.highlight {
-  background-color: var(--accent-gold-bg);
-  border: 1px solid rgba(221, 186, 88, 0.4);
+  background-color: rgba(221, 186, 88, 0.2);
+  border: 1px solid var(--accent-gold, #ddba58);
 }
 
 .drawer-item-icon {
@@ -905,12 +922,12 @@ dialog::backdrop {
 .drawer-item-title {
   font-size: 0.88rem;
   font-weight: 700;
-  color: var(--primary-color);
+  color: #ffffff; /* Signature White */
 }
 
 .drawer-item-sub {
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: #cbd5e1; /* Soft Muted Slate */
 }
 
 /* Multi-Step Registration Container & Steps */
