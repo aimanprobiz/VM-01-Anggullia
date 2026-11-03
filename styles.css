@@ -976,15 +976,19 @@ dialog::backdrop {
   color: rgba(15, 56, 44, 0.85);
 }
 
-/* Pinned Signature Gold CTA Button at the Bottom */
+/* Pinned Signature Gold CTA Button at Bottom */
 .drawer-item.drawer-cta {
-  margin-top: auto; /* Magic line that locks it to the bottom of the drawer */
-  background: var(--accent-gold, #ddba58); /* Signature Gold Fill */
-  border: 1.5px solid var(--accent-gold, #ddba58);
-  padding: 14px 16px;
-  border-radius: var(--radius-md);
+  margin-top: auto !important;
+  background: var(--accent-gold, #ddba58) !important;
+  border: 1.5px solid var(--accent-gold, #ddba58) !important;
+  padding: 14px 16px !important;
+  border-radius: var(--radius-md, 12px) !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important; /* Align everything flush to the left */
+  gap: 12px !important;
+  text-decoration: none;
   transition: transform 0.15s ease, background-color 0.2s ease;
 }
 
@@ -992,11 +996,37 @@ dialog::backdrop {
   transform: scale(0.98);
 }
 
-.drawer-item.drawer-cta .drawer-item-title {
-  color: var(--primary-color, #0f382c); /* Dark Green Text for contrast on Gold */
-  font-weight: 800;
+/* Lucide Icon Inside Gold CTA */
+.cta-icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--primary-color, #0f382c); /* Dark Green Stroke for contrast on Gold */
+  stroke-width: 2.2;
+  flex-shrink: 0;
 }
 
+/* Text Container Stacked & Left-Aligned */
+.drawer-cta-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important; /* Left align title & subtitle */
+  text-align: left !important;
+  gap: 2px !important;
+}
+
+.drawer-cta-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--primary-color, #0f382c);
+  line-height: 1.2;
+}
+
+.drawer-cta-sub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(15, 56, 44, 0.85);
+  line-height: 1.2;
+}
 /* Multi-Step Registration Container & Steps */
 .form-step {
   display: none !important; /* Forces non-active steps to hide */
