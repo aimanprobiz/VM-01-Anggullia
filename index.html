@@ -100,16 +100,17 @@
     </div>
   </dialog>
 
-  <!-- Side Drawer Navigation Overlay (Fixed Root Level) -->
+<!-- Side Drawer Navigation -->
   <div id="navDrawerOverlay" class="drawer-overlay"></div>
   <aside id="navDrawer" class="nav-drawer">
-    <!-- Header Row with Left Margin & Aligned Close Button -->
+    
+    <!-- Drawer Header Row -->
     <div class="drawer-header">
-      <div class="header-brand" style="display: flex; align-items: center; gap: 10px; margin-left: 4px;">
+      <div class="drawer-brand">
         <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
-        <span class="header-title" style="color: #ffffff; font-size: 1rem; font-weight: 800;">DailyBarakah SG</span>
+        <span class="header-title">DailyBarakah SG</span>
       </div>
-      <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu">
+      <button id="closeDrawerBtn" class="close-drawer-btn" aria-label="Close Navigation Menu">
         &times;
       </button>
     </div>
@@ -134,14 +135,13 @@
 
       <!-- Pinned Bottom Gold CTA Button -->
       <a href="/login.html" class="drawer-item drawer-cta">
-        <div class="drawer-item-text" style="text-align: center; width: 100%; display: flex; flex-direction: column;">
-          <span class="drawer-item-title" style="font-size: 0.92rem; font-weight: 800;">Register / Login ✨</span>
-          <span class="drawer-item-sub" style="color: rgba(15, 56, 44, 0.85); font-weight: 600; margin-top: 2px;">List and manage your business profile</span>
+        <div class="drawer-cta-content">
+          <span class="drawer-cta-title">Register / Login ✨</span>
+          <span class="drawer-cta-sub">List and manage your business profile</span>
         </div>
       </a>
     </nav>
   </aside>
-
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').then((registration) => {
