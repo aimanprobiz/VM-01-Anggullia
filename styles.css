@@ -898,7 +898,7 @@ dialog::backdrop {
   justify-content: center !important;
   
   /* THIS LINE fine-tunes alignment to match the text center line */
-  margin-top: -20px; 
+  margin-top: -7px; 
 }
 
 .drawer-menu {
