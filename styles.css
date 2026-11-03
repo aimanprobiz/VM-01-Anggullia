@@ -1181,3 +1181,28 @@ dialog::backdrop {
   display: inline-block;
   vertical-align: middle;
 }
+
+/* Sleek Add Listing Lucide Icon Button */
+.add-listing-icon-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.add-listing-icon-btn:active {
+  transform: scale(0.92);
+  opacity: 0.7;
+}
+
+.add-listing-lucide-icon {
+  width: 22px;
+  height: 22px;
+  stroke: var(--primary-color, #0f382c); /* Signature Green */
+  stroke-width: 2.3;
+}
