@@ -1,303 +1,1058 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DailyBarakah SG - Masjid Angullia Companion</title>
+/* Import Plus Jakarta Sans from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-  <!-- Web App Manifest & iOS Home Screen Support -->
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#0f382c">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="DailyBarakah">
-  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM">
+:root {
+  --bg-color: #f5f2e9;
+  --card-bg: #ffffff;
+  --text-main: #0c2b22;
+  --text-muted: #485952;
+  --primary-color: #0f382c;
+  --primary-hover: #08241c;
+  --accent-gold: #ddba58;
+  --accent-gold-bg: rgba(221, 186, 88, 0.15);
+  --border-color: #e2dbc9;
+  --shadow-sm: 0 1px 3px rgba(12, 43, 34, 0.06);
+  --shadow-md: 0 6px 16px -2px rgba(12, 43, 34, 0.08);
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+}
 
-  <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
+/* Fixed universal selector */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  <!-- Hadith Reference Modal -->
-  <dialog id="hadithModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; width: 90%; max-width: 380px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
-    <div style="display: flex; flex-direction: column; gap: 14px;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-          <h3 style="font-size: 1rem; font-weight: 600; color: var(--primary-color);">Hadith Reference</h3>
-          <p id="modalHadithTag" style="font-size: 0.78rem; font-weight: 600; color: var(--accent-gold); margin-top: 2px;"></p>
-        </div>
-        <button id="closeModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 4px 8px;">&times;</button>
-      </div>
-      <div id="modalHadithText" style="font-size: 0.9rem; font-style: italic; color: var(--text-main); line-height: 1.5; border-left: 3px solid var(--accent-gold); padding-left: 10px;">
-        Loading reference details...
-      </div>
-      <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="text-align: center; display: block; margin-top: 4px;">
-        View on Sunnah.com ↗
-      </a>
-    </div>
-  </dialog>
+@keyframes pulseEffect {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
 
-  <!-- Business Deal Voucher / Contact Modal -->
-  <dialog id="businessModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; width: 90%; max-width: 380px; box-shadow: var(--shadow-md); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;">
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-          <h3 id="bizModalTitle" style="font-size: 1.05rem; font-weight: 700; color: var(--primary-color);">Business Deal</h3>
-          <p id="bizModalSub" style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;"></p>
-        </div>
-        <button id="closeBizModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 4px 8px;">&times;</button>
-      </div>
+.pulsing-placeholder {
+  animation: pulseEffect 1.5s infinite ease-in-out;
+}
 
-      <div style="background-color: var(--accent-gold-bg); padding: 12px; border-radius: var(--radius-sm); border: 1px solid rgba(221, 186, 88, 0.4);">
-        <p style="font-size: 0.75rem; font-weight: 600; color: var(--primary-color); margin-bottom: 2px;">COMMUNITY DEAL:</p>
-        <p id="bizModalDeal" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);"></p>
-      </div>
+body {
+  background-color: var(--primary-color, #0f382c); /* Make body background match your signature green so any overscroll or top space is green */
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  padding: 0; /* Remove top/bottom body padding */
+  min-height: 100vh;
+}
 
-      <!-- In-store PIN redemption view -->
-      <div id="pinArea">
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">Show this screen to the cashier & enter the 4-digit PIN to redeem:</p>
-        <input type="password" id="cashierPin" maxlength="4" placeholder="••••" class="pin-input">
-        <button id="verifyPinBtn" class="action-btn">Confirm Redemption</button>
-      </div>
+.mobile-container {
+  width: 100%;
+  max-width: 414px;
+  background-color: var(--bg-color, #f5f2e9);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 20px 16px 40px 16px;
+}
 
-      <!-- Service Redirect WhatsApp View -->
-      <a id="whatsappBtn" href="#" target="_blank" rel="noopener noreferrer" class="action-btn" style="display: none; text-align: center;">
-        Message Vendor on WhatsApp 💬
-      </a>
-    </div>
-  </dialog>
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
 
-  <!-- Search & Categories Bottom Sheet -->
-  <dialog id="searchModal" style="background: var(--card-bg); color: var(--text-main); border: 1.5px solid var(--accent-gold); border-radius: 20px 20px 0 0; padding: 16px 16px 20px 16px; width: 100%; max-width: 480px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); margin: 0; max-height: 85dvh; overflow-y: auto; z-index: 9999; box-sizing: border-box;">
-    <style>
-      #searchModal {
-        top: auto !important;
-      }
-      #searchModal::backdrop {
-        background: transparent !important;
-        backdrop-filter: none !important;
-      }
-    </style>
-    <div style="display: flex; flex-direction: column; gap: 10px;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 1rem; font-weight: 700; color: var(--primary-color); margin: 0;">Search & Categories</h3>
-        <button id="closeSearchModalBtn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); outline: none; padding: 2px 6px;">&times;</button>
-      </div>
+/* 1. Hadith Card */
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
 
-      <!-- Search Bar -->
-      <div style="position: relative;">
-        <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); display: flex;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </span>
-        <input type="text" id="modalSearchInput" placeholder="Search businesses, deals..." style="width: 100%; padding: 8px 12px 8px 36px; border: 1.5px solid var(--accent-gold); border-radius: var(--radius-sm); background: rgba(0, 0, 0, 0.03); color: var(--text-main); font-size: 0.85rem; outline: none; box-sizing: border-box;">
-      </div>
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-      <!-- Categories Section -->
-      <div id="modalCategoriesSection" style="margin-top: 2px;">
-        <p style="font-size: 0.68rem; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; margin-bottom: 6px; text-transform: uppercase;">Explore Categories</p>
-        <div id="modalCategoriesGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-height: 220px; overflow-y: auto; padding-bottom: 4px;">
-          <!-- Dynamically populated category buttons -->
-        </div>
-      </div>
-    </div>
-  </dialog>
+.card-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--accent-gold);
+  flex-shrink: 0;
+}
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then((registration) => {
-        registration.update();
-        registration.addEventListener('updatefound', () => {
-          const newWorker = registration.installing;
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'activated') {
-              window.location.reload();
-            }
-          });
-        });
-      });
-    }
-  </script>
+.card-title-group {
+  flex: 1;
+  min-width: 0;
+}
 
-  <div class="mobile-container">
+.card-title-group h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  word-break: break-word;
+}
 
-    <!-- App Top Header Bar (Flushed to top) -->
-    <header class="app-header">
-      <div class="header-left">
-        <!-- Clickable Area for Menu Toggle (Includes Icon & Title) -->
-        <button id="menuToggleBtn" class="menu-icon-btn" aria-label="Open Navigation Menu" style="display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; padding: 0; text-align: left; width: auto;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-          
-          <!-- Branding -->
-          <div class="header-brand" style="display: flex; align-items: center; gap: 8px;">
-            <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
-            <span class="header-title">DailyBarakah SG</span>
-          </div>
-        </button>
-      </div>
+.card-title-group p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
 
-      <!-- Right-Aligned Profile / Account Button -->
-      <button id="headerProfileBtn" class="profile-icon-btn" aria-label="Vendor Portal / Profile" title="My Business Listing">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-      </button>
-    </header>
+.card-body {
+  font-size: 0.92rem;
+  color: var(--text-main);
+  line-height: 1.55;
+  font-style: italic;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent-gold);
+}
 
-    <!-- Side Drawer Navigation Overlay -->
-    <div id="navDrawerOverlay" class="drawer-overlay"></div>
-    <aside id="navDrawer" class="nav-drawer">
-      <div class="drawer-header">
-        <div class="header-brand">
-          <img src="/icon-192.png" alt="DailyBarakah Logo" class="header-logo">
-          <span class="header-title">DailyBarakah SG</span>
-        </div>
-        <button id="closeDrawerBtn" class="menu-icon-btn" aria-label="Close Navigation Menu">
-          &times;
-        </button>
-      </div>
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+}
 
-      <nav class="drawer-menu">
-        <!-- Clean Standard Items (No card background) -->
-        <a href="/about.html" class="drawer-item">
-          <span class="drawer-item-icon">ℹ️</span>
-          <div class="drawer-item-text">
-            <span class="drawer-item-title">About Us</span>
-            <span class="drawer-item-sub">Learn more about our community mission</span>
-          </div>
-        </a>
+.card-tag {
+  background-color: var(--accent-gold-bg);
+  color: var(--primary-color);
+  border: 1px solid rgba(221, 186, 88, 0.4);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
 
-        <a href="/support.html" class="drawer-item">
-          <span class="drawer-item-icon">🤝</span>
-          <div class="drawer-item-text">
-            <span class="drawer-item-title">Support Our Platform</span>
-            <span class="drawer-item-sub">Help sustain our vision & daily efforts</span>
-          </div>
-        </a>
+/* 2. Image Carousel */
+.carousel-section {
+  display: flex;
+  flex-direction: column;
+}
 
-        <!-- Pinned Bottom Gold CTA Button -->
-        <a href="/login.html" class="drawer-item drawer-cta">
-          <div class="drawer-item-text" style="text-align: center; width: 100%;">
-            <span class="drawer-item-title" style="font-size: 0.92rem; font-weight: 800;">Register / Login ✨</span>
-            <span class="drawer-item-sub" style="color: rgba(15, 56, 44, 0.85); font-weight: 600;">List and manage your business profile</span>
-          </div>
-        </a>
-      </nav>
-    </aside>
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
 
-    <!-- 1. HADITH OF THE DAY CARD -->
-    <section>
-      <h2 class="section-title">Hadith of the Day</h2>
-      <div class="card">
-        <div class="card-header">
-          <img id="hadith-avatar" class="card-avatar pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Quran Class">
-          <div class="card-title-group">
-            <h3 id="hadith-narrator">Loading wisdom...</h3>
-            <p>Daily Prophetic Wisdom</p>
-          </div>
-        </div>
-        <div class="card-body" id="hadith-text">
-          Loading today's Hadith...
-        </div>
-        <div class="card-footer">
-          <span class="card-tag" id="hadith-tag" style="cursor: pointer;" title="Click to view details">...</span>
-          <span id="update-status" style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer;" title="Tap for random Hadith">Updated Today</span>
-        </div>
-      </div>
-    </section>
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
 
-    <!-- 2. MASJID ANGULLIA ACTIVITIES CAROUSEL -->
-    <section class="carousel-section">
-      <h2 class="section-title">Masjid Angullia Activities</h2>
-      <div class="carousel-wrapper">
-        <div class="carousel-track" id="carouselTrack">
-          <!-- Initial Pulsing Loading State -->
-          <div class="carousel-slide">
-            <img class="pulsing-placeholder" src="https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM" alt="Loading...">
-            <div class="carousel-caption">Loading masjid info...</div>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-indicators" id="carouselIndicators">
-        <!-- Dynamically populated dots -->
-      </div>
-    </section>
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
 
-    <!-- 3. SUPPORT LOCAL MUSLIM BUSINESSES GRID SECTION -->
-    <section class="business-section" id="businessSection">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h2 class="section-title" style="margin: 0;">Support Local Muslim Businesses</h2>
-        <button id="headerSearchBtn" aria-label="Search Businesses" title="Search Businesses" style="background: none; border: none; padding: 6px; cursor: pointer; color: var(--primary-color); outline: none; display: flex; align-items: center; justify-content: center; opacity: 0.9; transition: opacity 0.2s ease;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-      </div>
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
 
-      <!-- Category Pills Container -->
-      <div class="filter-stacked" id="filterContainer">
-        <button id="searchToggleBtn" class="filter-btn search-pill" aria-label="Explore Categories" title="Explore Categories">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7"></rect>
-            <rect x="14" y="3" width="7" height="7"></rect>
-            <rect x="14" y="14" width="7" height="7"></rect>
-            <rect x="3" y="14" width="7" height="7"></rect>
-          </svg>
-        </button>
-        <button class="filter-btn active" data-cat="all">All Deals</button>
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
-        <!-- Shimmering Category Pill Placeholders -->
-        <div id="categorySkeletons" style="display: flex; gap: 8px; align-items: center; margin-left: 4px;">
-          <div class="skeleton-line" style="width: 80px; height: 32px; border-radius: 20px; margin: 0;"></div>
-          <div class="skeleton-line" style="width: 95px; height: 32px; border-radius: 20px; margin: 0;"></div>
-          <div class="skeleton-line" style="width: 70px; height: 32px; border-radius: 20px; margin: 0;"></div>
-        </div>
-      </div>
+.carousel-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 16px 12px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
 
-      <!-- Swipeable Category Viewport Container -->
-      <div class="category-swipe-viewport" id="categorySwipeViewport">
-        <div class="category-swipe-track" id="categorySwipeTrack">
-          <div class="category-page" id="prevCategoryPage"></div>
-          <div class="category-page" id="activeCategoryPage">
-            <div class="business-grid" id="businessGrid">
-              <!-- Rendered dynamically via script.js -->
-            </div>
-          </div>
-          <div class="category-page" id="nextCategoryPage"></div>
-        </div>
-      </div>
-      
-    </section>
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+}
 
-    <!-- FOOTER -->
-    <footer style="text-align: center; padding: 24px 16px; font-size: 0.75rem; color: #666; border-top: 1px solid rgba(0,0,0,0.08); margin-top: 35px; width: 100%;">
-      <p style="margin: 0; font-weight: 600; color: #0f382c;">DailyBarakah SG</p>
-      <p style="margin: 4px 0 0 0; line-height: 1.4;">
-        An independent community initiative powered by 
-        <a 
-          href="https://wa.me/6588469883?text=Assalaamualaikum%20CredoVend%2C%20I%20scanned%20the%20QR%20code%20at%20Masjid%20Angullia%20and%20would%20like%20to%20enquire%20about%20the%20following:" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          style="color: #0f382c; font-weight: 700; text-decoration: underline;"
-        >
-          CredoVend
-        </a>.
-      </p>
-      <p style="margin: 4px 0 0 0; line-height: 1.4; opacity: 0.85;">
-        Partnering with local masjids to spotlight activities and support Muslim-owned businesses.
-      </p>
-    </footer>
-    
-  </div>
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #cbd5e1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
 
-  <script src="/script.js" defer></script>
+.dot.active {
+  background-color: var(--accent-gold);
+  width: 22px;
+  border-radius: 4px;
+}
+
+/* 3. SUPPORT LOCAL MUSLIM BUSINESSES */
+.business-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Balanced Sheer Glass Category Bar */
+.filter-stacked {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   
-  <!-- Floating Back to Top / Section Button -->
-  <button id="backToTopBtn" onclick="document.getElementById('businessSection').scrollIntoView({behavior: 'smooth', block: 'start'})" aria-label="Back to Business Section" title="Back to Businesses">
-    ↑
-  </button>
-</body>
-</html>
+  background-color: rgba(245, 242, 233, 0.35); 
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 10px 16px;
+  
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  
+  margin-left: -16px;
+  margin-right: -16px;
+  
+  border-bottom: 1px solid rgba(226, 219, 201, 0.3);
+}
+
+.filter-stacked::-webkit-scrollbar {
+  display: none;
+}
+
+/* Refined Pill Styling */
+.filter-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  background-color: var(--card-bg);
+  border: 1.5px solid var(--border-color);
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-btn:hover {
+  border-color: var(--accent-gold);
+  color: var(--text-main);
+}
+
+.filter-btn.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 3px 8px rgba(15, 56, 44, 0.2);
+}
+
+/* 2-Column Visual Grid */
+.business-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* 2-Column Visual Grid Card Base */
+.grid-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease;
+}
+
+.grid-card:hover {
+  transform: translateY(-4px); 
+  box-shadow: 0 10px 20px -3px rgba(12, 43, 34, 0.12), 0 4px 6px -2px rgba(12, 43, 34, 0.05);
+  border-color: rgba(221, 186, 88, 0.6);
+}
+
+.grid-card:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-banner {
+  width: 100%;
+  height: 105px;
+  object-fit: cover;
+  background-color: var(--border-color);
+}
+
+.grid-card-body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.vendor-details {
+  margin-bottom: 8px;
+}
+
+.vendor-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 2px;
+  line-height: 1.25;
+}
+
+.vendor-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.35;
+  min-height: 1.95rem;
+}
+
+.deal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(15, 56, 44, 0.08);
+  color: var(--primary-color, #0f382c);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: none;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.action-btn {
+  width: 100%;
+  background-color: var(--primary-color, #0f382c);
+  color: #ffffff;
+  border: 1.5px solid var(--accent-gold, #ddba58);
+  padding: 8px 0;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  box-sizing: border-box;
+  margin-top: 6px;
+  box-shadow: 0 2px 6px rgba(15, 56, 44, 0.15);
+}
+
+.action-btn:hover,
+.action-btn:active {
+  background-color: var(--accent-gold, #ddba58);
+  color: var(--primary-color, #0f382c);
+  border-color: var(--primary-color, #0f382c);
+}
+
+.grid-featured-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: var(--accent-gold);
+  color: var(--primary-color);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: bold;
+  z-index: 2;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ffffff;
+}
+
+.grid-card.featured-card {
+  border: 1.5px solid var(--accent-gold, #ddba58);
+  background: linear-gradient(135deg, #ffffff 0%, #fffdf0 100%);
+  box-shadow: 0 4px 14px rgba(221, 186, 88, 0.35);
+}
+
+.grid-card.featured-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px -4px rgba(15, 56, 44, 0.2);
+  border-color: var(--accent-gold);
+}
+
+.grid-card.featured-card:active {
+  transform: translateY(0);
+}
+
+dialog::backdrop {
+  background-color: rgba(12, 43, 34, 0.4);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.pin-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.2rem;
+  letter-spacing: 6px;
+  text-align: center;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  margin: 10px 0;
+  outline: none;
+}
+
+.pin-input:focus {
+  border-color: var(--primary-color);
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-img, .skeleton-line {
+  background: linear-gradient(90deg, #e2dbc9 25%, #f5f2e9 50%, #e2dbc9 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+.skeleton-img {
+  width: 100%;
+  height: 105px;
+}
+
+.skeleton-line {
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.skeleton-line.title { width: 80%; height: 14px; }
+.skeleton-line.sub { width: 60%; }
+.skeleton-line.badge { width: 50%; height: 18px; margin-top: 4px; }
+.skeleton-line.btn { width: 100%; height: 32px; margin-top: 8px; border-radius: var(--radius-sm); }
+
+.coupon-ticket {
+  position: relative;
+  background: linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%);
+  border: 1.5px solid var(--accent-gold, #c29a38);
+  border-radius: var(--radius-md, 12px);
+  padding: 14px 18px;
+  margin: 12px 0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.coupon-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.coupon-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #000000;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.coupon-deal-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #000000;
+  line-height: 1.25;
+  margin: 2px 0 0 0;
+}
+
+.action-btn-primary {
+  width: 100%;
+  background-color: var(--primary-color, #0f382c);
+  color: #ffffff;
+  border: 1.5px solid var(--accent-gold, #ddba58);
+  padding: 12px 0;
+  border-radius: var(--radius-md, 12px);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.action-btn-primary:active {
+  transform: scale(0.98);
+}
+
+#bizSub {
+  color: #2c3e35;
+  font-weight: 500;
+}
+
+.social-btn {
+  flex: 1;
+  height: 38px;
+  background-color: var(--card-bg);
+  color: var(--primary-color);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.social-btn:hover {
+  border-color: var(--accent-gold);
+  background-color: var(--accent-gold-bg);
+}
+
+.share-btn {
+  background: transparent;
+  color: var(--primary-color);
+  border: none;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: opacity 0.2s ease;
+}
+
+.share-btn:hover,
+.share-btn:active {
+  opacity: 0.7;
+  background: transparent;
+  border: none;
+}
+
+.minimal-icon-btn {
+  background: transparent;
+  color: var(--primary-color);
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.minimal-icon-btn:hover,
+.minimal-icon-btn:active {
+  opacity: 0.6;
+}
+
+@keyframes ctaPulseGlow {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  }
+  20% {
+    transform: scale(1.03);
+    box-shadow: 0 0 16px rgba(221, 186, 88, 0.85);
+  }
+  40% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  }
+  60% {
+    transform: scale(1.03);
+    box-shadow: 0 0 16px rgba(221, 186, 88, 0.85);
+  }
+  80% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(15, 56, 44, 0.2);
+  }
+}
+
+.cta-pulse-active {
+  animation: ctaPulseGlow 2.8s ease-in-out forwards !important;
+}
+
+/* Subtle gold border for offer/deal badges inside Featured Cards only */
+.featured-card .deal-badge {
+  border: 1px solid var(--accent-gold, #ddba58);
+  box-shadow: 0 1px 3px rgba(221, 186, 88, 0.15);
+}
+
+/* Floating Back to Top Button */
+#backToTopBtn {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  width: 42px;
+  height: 42px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border: 1.5px solid var(--accent-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(12, 43, 34, 0.25);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease, background-color 0.2s ease;
+  z-index: 999;
+}
+
+#backToTopBtn:hover,
+#backToTopBtn:active {
+  background-color: var(--accent-gold);
+  color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+/* Swipeable Category Container - Bleed Layout */
+.category-swipe-viewport {
+  width: calc(100% + 32px);
+  margin-left: -16px;
+  margin-right: -16px;
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-y;
+}
+
+.category-swipe-track {
+  display: flex;
+  width: 300%;
+  transform: translateX(-33.333%);
+  will-change: transform;
+}
+
+.category-page {
+  width: 33.333%;
+  flex-shrink: 0;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* Smooth snapping animation class */
+.category-swipe-track.animating {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Minimalist Search Pill Styling */
+.search-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  cursor: pointer;
+  background-color: var(--card-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: 20px;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.search-pill:hover,
+.search-pill.active {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: rgba(15, 56, 44, 0.05);
+}
+
+/* Expanding Inline Search Box Container */
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.search-input-wrapper.open {
+  max-width: 200px;
+  opacity: 1;
+}
+
+/* Clear text box styling so text is fully visible */
+.search-input-field {
+  width: 100%;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  border: 1.5px solid var(--primary-color);
+  border-radius: 20px;
+  background: var(--card-bg);
+  color: var(--text-main);
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure the app header starts instantly at the very top */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 12px 16px; /* Adjust top padding to sit nicely under status bar */
+  margin: 0 -16px 16px -16px; /* Negative horizontal margins make it stretch edge-to-edge of the container */
+  background-color: var(--primary-color, #0f382c);
+  border-bottom: 1px solid rgba(221, 186, 88, 0.3);
+  /* Pushes top margin up by -20px to completely neutralize the container top padding on index.html */
+  margin-top: -20px;
+  margin-left: -16px;
+  margin-right: -16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(12, 43, 34, 0.15);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Signature Gold Menu Icon Button */
+.menu-icon-btn {
+  background: none;
+  border: none;
+  color: var(--accent-gold, #ddba58); /* Signature Gold Icon */
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: opacity 0.2s ease;
+}
+
+.menu-icon-btn:active {
+  opacity: 0.7;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-logo {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-gold, #ddba58);
+  object-fit: cover;
+}
+
+/* Signature White Title Text */
+.header-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff; /* Signature White */
+  letter-spacing: -0.01em;
+}
+
+/* Side Drawer Overlay Backdrop */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(12, 43, 34, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Drawer Container Flex Setup */
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  max-width: 80vw;
+  height: 100%;
+  background-color: var(--primary-color, #0f382c);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
+  z-index: 10001;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(221, 186, 88, 0.3);
+}
+
+.drawer-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 12px;
+  flex: 1; /* Fills remaining height to allow pushing CTA to bottom */
+}
+
+/* Clean Standard Items - Subtle & Borderless */
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: #ffffff;
+  transition: opacity 0.15s ease;
+  background-color: transparent; /* Removes card box */
+  border: none; /* Removes button outline */
+}
+
+.drawer-item:hover,
+.drawer-item:active {
+  opacity: 0.8;
+}
+
+.drawer-item-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.drawer-item-sub {
+  font-size: 0.72rem;
+  color: #cbd5e1;
+}
+
+/* Pinned Signature Gold CTA Button at the Bottom */
+.drawer-item.drawer-cta {
+  margin-top: auto; /* Magic line that locks it to the bottom of the drawer */
+  background: var(--accent-gold, #ddba58); /* Signature Gold Fill */
+  border: 1.5px solid var(--accent-gold, #ddba58);
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.drawer-item.drawer-cta:active {
+  transform: scale(0.98);
+}
+
+.drawer-item.drawer-cta .drawer-item-title {
+  color: var(--primary-color, #0f382c); /* Dark Green Text for contrast on Gold */
+  font-weight: 800;
+}
+
+/* Multi-Step Registration Container & Steps */
+.form-step {
+  display: none !important; /* Forces non-active steps to hide */
+}
+
+.form-step.active {
+  display: block !important; /* Displays only the active step */
+}
+
+/* Multi-Step Registration Progress Bar */
+.step-progress-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 24px 0;
+  padding: 0 16px; /* Constrains progress bar within card padding */
+}
+
+/* Grey Background Line connecting nodes */
+.step-progress-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 36px;
+  right: 36px;
+  height: 2px;
+  background-color: var(--border-color);
+  z-index: 1;
+}
+
+/* Green Active Fill Line (Contrained strictly between first and last node) */
+.step-progress-bar {
+  position: absolute;
+  top: 15px;
+  left: 36px;
+  height: 2px;
+  background-color: var(--primary-color);
+  width: 0%;
+  max-width: calc(100% - 72px); /* Ensures it never shoots past node 3 */
+  transition: width 0.3s ease;
+  z-index: 2;
+}
+
+.step-node {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.node-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--card-bg);
+  border: 2px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+/* Active Node Circle (Current Step) */
+.step-node.active .node-circle {
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+/* Reached/Completed Node Circle (Gold) */
+.step-node.completed .node-circle {
+  border-color: var(--accent-gold);
+  background-color: var(--accent-gold);
+  color: var(--primary-color);
+}
+
+.node-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.step-node.active .node-label {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+/* Clean Back Button (No Underline) */
+.action-btn-text {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 4px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.action-btn-text:hover {
+  color: var(--primary-color);
+}
+
+/* Profile Icon Base - Neutral / Standard White Outline (Logged Out) */
+.profile-icon-btn {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.profile-icon-btn:hover,
+.profile-icon-btn:active {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Logged-In Active State (Signature Gold Fill & Border Only) */
+.profile-icon-btn.logged-in {
+  background-color: var(--accent-gold, #ddba58); /* Signature Gold Fill */
+  border: 2px solid var(--accent-gold, #ddba58);
+  color: var(--primary-color, #0f382c); /* Dark Green Icon Inside */
+  box-shadow: 0 0 10px rgba(221, 186, 88, 0.5);
+}
+
+.profile-icon-btn.logged-in:hover {
+  transform: scale(1.05);
+}
