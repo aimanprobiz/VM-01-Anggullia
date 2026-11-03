@@ -58,15 +58,17 @@
         Manage your business listing details, update Ummah deals, and edit contact links.
       </p>
 
-<!-- SELECT LISTING WITH SIGNATURE GREEN PILL DROPDOWN & ADD BUSINESS BUTTON -->
+<!-- SELECT LISTING WITH SIGNATURE GREEN PILL DROPDOWN & ADD BUSINESS ICON -->
 <div id="businessSelectorContainer" style="display: none; margin-top: 50px; margin-bottom: 20px; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;">
   <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
     Listing:
   </span>
   <select id="businessSelector" style="padding: 6px 14px; font-size: 0.82rem; font-weight: 700; border: 1.5px solid var(--primary-color); border-radius: 20px; background: #ffffff; color: var(--primary-color); outline: none; cursor: pointer;">
   </select>
-  <button type="button" id="addNewListingPromptBtn" style="background: none; border: none; padding: 0; font-size: 0.82rem; font-weight: 700; color: var(--primary-color); cursor: pointer; text-decoration: none; outline: none;">
-    + add listing
+  
+  <!-- Replaced text '+ add listing' with a sleek Lucide icon button -->
+  <button type="button" id="addNewListingPromptBtn" class="add-listing-icon-btn" aria-label="Add New Listing" title="Add New Listing">
+    <i data-lucide="plus-circle" class="add-listing-lucide-icon"></i>
   </button>
 </div>
 
