@@ -589,6 +589,18 @@ function switchCategory(newIndex) {
   renderCurrentCategoryView();
 }
 
+// Helper to check if a phone number is actually valid (not empty and not just a country code)
+function isValidPhoneNumber(phone) {
+  if (!phone) return false;
+  const cleaned = phone.trim();
+  const digitsOnly = cleaned.replace(/\D/g, '');
+  // If total digits are 4 or fewer (e.g., just "+65"), it's not a real phone number
+  if (digitsOnly.length <= 4) {
+    return false;
+  }
+  return true;
+}
+
 function initSwipeGestures() {
   const viewport = document.getElementById('categorySwipeViewport');
   const track = document.getElementById('categorySwipeTrack');
