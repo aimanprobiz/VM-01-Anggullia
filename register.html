@@ -237,16 +237,19 @@
 
       </form>
 
-      <!-- UNIVERSAL EXAMPLE PREVIEW LINK -->
+<!-- UNIVERSAL EXAMPLE PREVIEW LINK -->
       <div id="exampleTriggerBox" style="text-align: center; margin-top: 18px; padding-top: 12px; border-top: 1px dashed var(--border-color);">
-        <button type="button" id="openExampleBtn" class="action-btn-text" style="color: var(--primary-color); font-weight: 700; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px;">
-          👁️ See sample listing
+        <button type="button" id="openExampleBtn" class="action-btn-text" style="color: var(--primary-color); font-weight: 700; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px; background: none; border: none; cursor: pointer;">
+          <i data-lucide="eye" style="width: 16px; height: 16px; stroke-width: 2.2;"></i>
+          <span>See sample listing</span>
         </button>
       </div>
 
-      <!-- SUCCESS CONFIRMATION STATE -->
+<!-- SUCCESS CONFIRMATION STATE -->
       <div id="successState" style="display: none; text-align: center; padding: 20px 10px;">
-        <div style="font-size: 3rem; margin-bottom: 10px;">⏳</div>
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(15, 56, 44, 0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px auto;">
+          <i data-lucide="hourglass" style="width: 32px; height: 32px; stroke: var(--primary-color, #0f382c); stroke-width: 2;"></i>
+        </div>
         <h3 style="color: var(--primary-color); font-size: 1.2rem; font-weight: 800; margin-bottom: 8px;">Alhamdulillah, Submission Received!</h3>
         <p style="color: var(--text-main); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">
           Jazakallahu khair for listing your business with DailyBarakah SG. Your application has been successfully submitted and is currently <strong>pending admin approval</strong>. We will review your details and publish your profile to the community shortly, Insha'Allah!
@@ -478,6 +481,7 @@
           document.getElementById('exampleTriggerBox').style.display = 'none';
           document.querySelector('.step-progress-wrapper').style.display = 'none';
           document.getElementById('successState').style.display = 'block';
+          lucide.createIcons(); // <--- Re-renders icons inside newly revealed elements!
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           alert('Error: ' + (result.error || 'Failed to submit listing.'));
