@@ -202,6 +202,17 @@
   </div>
 
   <script>
+    // Helper to check if a phone number is actually valid (not empty and not just a country code)
+    function isValidPhoneNumber(phone) {
+      if (!phone) return false;
+      const cleaned = phone.trim();
+      const digitsOnly = cleaned.replace(/\D/g, '');
+      if (digitsOnly.length <= 4) {
+        return false;
+      }
+      return true;
+    }
+
     async function loadBusinessDetail() {
       const params = new URLSearchParams(window.location.search);
       const rawSlug = params.get('slug');
@@ -210,53 +221,49 @@
         const el = document.getElementById(id);
         if (el) el[property] = value;
       };
-// --- Interactive Deal Box Toast Logic ---
-const dealBox = document.getElementById('dealBox');
-const ctaToast = document.getElementById('ctaToast');
 
-if (dealBox) {
-  dealBox.style.cursor = 'pointer';
+      // --- Interactive Deal Box Toast Logic ---
+      const dealBox = document.getElementById('dealBox');
+      const ctaToast = document.getElementById('ctaToast');
 
-  dealBox.addEventListener('click', () => {
-    // 1. Check if there's an active CTA button (Claim, Code, or WhatsApp)
-    const activeCta = document.querySelector('#redemptionArea button[style*="flex"], #redemptionArea a[style*="flex"]');
-    const toastSpan = ctaToast ? ctaToast.querySelector('span') : null;
+      if (dealBox) {
+        dealBox.style.cursor = 'pointer';
 
-    if (activeCta) {
-      // --- HAS ACTIVE OFFER ---
-      if (toastSpan) {
-        toastSpan.textContent = 'Tap the button to claim this deal!';
+        dealBox.addEventListener('click', () => {
+          const activeCta = document.querySelector('#redemptionArea button[style*="flex"], #redemptionArea a[style*="flex"]');
+          const toastSpan = ctaToast ? ctaToast.querySelector('span') : null;
+
+          if (activeCta) {
+            if (toastSpan) {
+              toastSpan.textContent = 'Tap the button to claim this deal!';
+            }
+
+            activeCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            activeCta.classList.remove('cta-pulse-active');
+            void activeCta.offsetWidth; 
+            activeCta.classList.add('cta-pulse-active');
+
+            setTimeout(() => {
+              activeCta.classList.remove('cta-pulse-active');
+            }, 2800);
+
+          } else {
+            if (toastSpan) {
+              toastSpan.textContent = 'No active offer available for this listing';
+            }
+          }
+
+          if (ctaToast) {
+            ctaToast.style.opacity = '1';
+            ctaToast.style.transform = 'translate(-50%, -50%) scale(1)';
+
+            setTimeout(() => {
+              ctaToast.style.opacity = '0';
+              ctaToast.style.transform = 'translate(-50%, -50%) scale(0.92)';
+            }, 2800);
+          }
+        });
       }
-
-      // Smooth scroll to CTA button & trigger pulse
-      activeCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      activeCta.classList.remove('cta-pulse-active');
-      void activeCta.offsetWidth; // Force CSS reflow
-      activeCta.classList.add('cta-pulse-active');
-
-      setTimeout(() => {
-        activeCta.classList.remove('cta-pulse-active');
-      }, 2800);
-
-    } else {
-      // --- NO ACTIVE OFFER (NONE) ---
-      if (toastSpan) {
-        toastSpan.textContent = 'No active offer available for this listing';
-      }
-    }
-
-    // 2. Show the toast notification for 2.8 seconds
-    if (ctaToast) {
-      ctaToast.style.opacity = '1';
-      ctaToast.style.transform = 'translate(-50%, -50%) scale(1)';
-
-      setTimeout(() => {
-        ctaToast.style.opacity = '0';
-        ctaToast.style.transform = 'translate(-50%, -50%) scale(0.92)';
-      }, 2800);
-    }
-  });
-}
       
       // --- Copy Link Logic ---
       const copyLinkBtn = document.getElementById('copyLinkBtn');
@@ -341,21 +348,21 @@ if (dealBox) {
         subEl.classList.remove('skeleton-line', 'sub');
         subEl.style.minHeight = 'auto';
 
-        // --- UPDATED TICKET LOGIC (DEFAULTS TO "NONE" IF EMPTY) ---
+        // --- UPDATED TICKET LOGIC ---
         const rawDeal = biz.Deal || biz.deal || '';
         const bizDealText = rawDeal.trim() !== '' ? rawDeal : '-';
         
         const dealEl = document.getElementById('bizDeal');
-        const dealBox = document.getElementById('dealBox');
-        const couponTagEl = dealBox ? dealBox.querySelector('.coupon-tag') : null;
+        const dealBoxContainer = document.getElementById('dealBox');
+        const couponTagEl = dealBoxContainer ? dealBoxContainer.querySelector('.coupon-tag') : null;
 
-        if (dealBox) {
-          dealBox.style.display = 'block';
+        if (dealBoxContainer) {
+          dealBoxContainer.style.display = 'block';
           if (couponTagEl) couponTagEl.textContent = 'UMMAH SPECIAL:';
           dealEl.textContent = bizDealText.toUpperCase();
           
-          dealBox.style.background = 'linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%)';
-          dealBox.style.borderColor = 'var(--accent-gold, #c29a38)';
+          dealBoxContainer.style.background = 'linear-gradient(135deg, #fffdf2 0%, #fef5d9 100%)';
+          dealBoxContainer.style.borderColor = 'var(--accent-gold, #c29a38)';
         }
 
         const descEl = document.getElementById('bizDescription');
@@ -382,7 +389,7 @@ if (dealBox) {
         if (openCodeModalBtn) openCodeModalBtn.style.display = 'none';
         if (whatsappBtn) whatsappBtn.style.display = 'none';
         
-const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim();
+        const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim();
 
         if (actionType === 'claim') {
           if (openRedeemModalBtn) openRedeemModalBtn.style.display = 'flex';
@@ -415,36 +422,42 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
 
         } else if (actionType === 'enquire') {
           if (whatsappBtn) {
-            whatsappBtn.style.display = 'flex';
-            const refCode = `DB-${bizSlugVal.toUpperCase()}`;
-            const rawMessage = `Assalaamualaikum! I came across ${bizName} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${bizDealText}". Let me know how to proceed, jazakallahu khair!`;
             const phoneNum = biz.Phone || biz.phone || '';
-            const whatsappUrl = `https://wa.me/${phoneNum}?text=${encodeURIComponent(rawMessage)}`;
             
-            whatsappBtn.href = whatsappUrl;
+            // GUARDED WITH VALIDATION CHECK
+            if (isValidPhoneNumber(phoneNum)) {
+              whatsappBtn.style.display = 'flex';
+              const cleanDigits = phoneNum.replace(/\D/g, '');
+              const refCode = `DB-${bizSlugVal.toUpperCase()}`;
+              const rawMessage = `Assalaamualaikum! I came across ${bizName} on DailyBarakah SG (Ref: ${refCode}) and would love to claim the Ummah Special: "${bizDealText}". Let me know how to proceed, jazakallahu khair!`;
+              const whatsappUrl = `https://wa.me/${cleanDigits}?text=${encodeURIComponent(rawMessage)}`;
+              
+              whatsappBtn.href = whatsappUrl;
 
-            whatsappBtn.addEventListener('click', (e) => {
-              e.preventDefault();
+              whatsappBtn.addEventListener('click', (e) => {
+                e.preventDefault();
 
-              const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'whatsapp' });
+                const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'whatsapp' });
 
-              if (navigator.sendBeacon) {
-                navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
-              } else {
-                fetch('/api/redeem', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: trackingPayload,
-                  keepalive: true
-                }).catch(() => {});
-              }
+                if (navigator.sendBeacon) {
+                  navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+                } else {
+                  fetch('/api/redeem', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: trackingPayload,
+                    keepalive: true
+                  }).catch(() => {});
+                }
 
-              window.location.href = whatsappUrl;
-            });
+                window.location.href = whatsappUrl;
+              });
+            } else {
+              whatsappBtn.style.display = 'none'; // Hidden completely if phone is blank or just +65
+            }
           }
 
         } else {
-          // --- PLAIN TEXT FOR NO ACTIVE OFFER (Triggered when blank or empty) ---
           if (openRedeemModalBtn) openRedeemModalBtn.style.display = 'none';
           if (openCodeModalBtn) openCodeModalBtn.style.display = 'none';
           if (whatsappBtn) whatsappBtn.style.display = 'none';
@@ -457,6 +470,7 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
             `;
           }
         }
+
         const redeemModal = document.getElementById('redeemModal');
         const cashierPinInput = document.getElementById('cashierPin');
         let currentPin = '';
@@ -552,9 +566,11 @@ const actionType = (biz.ActionType || biz.actiontype || '').toLowerCase().trim()
         const tiktokUrl = biz.TikTokURL || biz.tiktokurl || biz.TikTok || '';
         const phoneNum = biz.Phone || biz.phone || '';
 
-        // General WhatsApp enquiry message for the social media icon row
-const generalWaMessage = `Assalaamualaikum! I found ${bizName} on DailyBarakah SG and would like to enquire about your business.`;
-const generalWaUrl = phoneNum ? `https://wa.me/${phoneNum}?text=${encodeURIComponent(generalWaMessage)}` : '';
+        // GUARDED GENERAL WHATSAPP URL CONSTRUCTION
+        const generalWaMessage = `Assalaamualaikum! I found ${bizName} on DailyBarakah SG and would like to enquire about your business.`;
+        const generalWaUrl = isValidPhoneNumber(phoneNum) 
+          ? `https://wa.me/${phoneNum.replace(/\D/g, '')}?text=${encodeURIComponent(generalWaMessage)}` 
+          : '';
 
         const socialToast = document.getElementById('socialToast');
         const socialToastMsg = document.getElementById('socialToastMsg');
@@ -575,85 +591,83 @@ const generalWaUrl = phoneNum ? `https://wa.me/${phoneNum}?text=${encodeURICompo
           }, 2500);
         }
 
-function setupLinkButton(btnId, targetUrl, platformName, actionKey) {
-  const btn = document.getElementById(btnId);
-  if (!btn) return;
+        function setupLinkButton(btnId, targetUrl, platformName, actionKey) {
+          const btn = document.getElementById(btnId);
+          if (!btn) return;
 
-  if (targetUrl) {
-    btn.href = targetUrl.startsWith('http') ? targetUrl : `https://${targetUrl}`;
-    btn.style.opacity = '1';
+          if (targetUrl) {
+            btn.href = targetUrl.startsWith('http') ? targetUrl : `https://${targetUrl}`;
+            btn.style.opacity = '1';
 
-    // Track click event to Airtable before navigating
-    btn.addEventListener('click', () => {
-      const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: actionKey });
+            btn.addEventListener('click', () => {
+              const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: actionKey });
 
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
-      } else {
-        fetch('/api/redeem', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: trackingPayload,
-          keepalive: true
-        }).catch(() => {});
-      }
-    });
+              if (navigator.sendBeacon) {
+                navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+              } else {
+                fetch('/api/redeem', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: trackingPayload,
+                  keepalive: true
+                }).catch(() => {});
+              }
+            });
 
-  } else {
-    btn.href = 'javascript:void(0)';
-    btn.removeAttribute('target'); 
-    btn.style.opacity = '0.5'; 
+          } else {
+            btn.href = 'javascript:void(0)';
+            btn.removeAttribute('target'); 
+            btn.style.opacity = '0.5'; 
 
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      showSocialToast(`No ${platformName} link available for this business`);
-    });
-  }
-}
-
-// Pass action keys matching the API handler:
-setupLinkButton('socialWebsite', webUrl, 'website', 'website');
-setupLinkButton('socialInstagram', igUrl, 'Instagram', 'instagram');
-setupLinkButton('socialTiktok', tiktokUrl, 'TikTok', 'tiktok');
-setupLinkButton('socialWhatsapp', generalWaUrl, 'WhatsApp', 'social_whatsapp');
-
-// --- Report Inactive Business Logic ---
-const reportBtn = document.getElementById('reportInactiveBtn');
-const reportWhatsappBtn = document.getElementById('reportWhatsappBtn');
-
-const adminPhone = "6588469883"; // Replace with your admin WhatsApp number if different
-const refCode = `DB-${bizSlugVal.toUpperCase()}`;
-const prefilledReportMsg = `Assalaamualaikum Admin, I would like to report the business *${bizName}* (Ref: ${refCode}) for the following issue:`;
-
-if (reportWhatsappBtn) {
-  reportWhatsappBtn.href = `https://wa.me/${adminPhone}?text=${encodeURIComponent(prefilledReportMsg)}`;
-}
-
-if (reportBtn) {
-  reportBtn.addEventListener('click', async () => {
-    const confirmReport = confirm(`Are you sure you want to report ${bizName} as inactive or closed?\n\nThis will notify the administrator.`);
-    
-if (confirmReport) {
-          try {
-            const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'report' });
-            
-            if (navigator.sendBeacon) {
-              navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
-            } else {
-              await fetch('/api/redeem', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: trackingPayload
-              });
-            }
-
-            alert('✓ Thank you! The business has been flagged for review.');
-          } catch (err) {
-            alert('Failed to submit report. Please try again later.');
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              showSocialToast(`No ${platformName} link available for this business`);
+            });
           }
         }
-      });
-    }
+
+        setupLinkButton('socialWebsite', webUrl, 'website', 'website');
+        setupLinkButton('socialInstagram', igUrl, 'Instagram', 'instagram');
+        setupLinkButton('socialTiktok', tiktokUrl, 'TikTok', 'tiktok');
+        setupLinkButton('socialWhatsapp', generalWaUrl, 'WhatsApp', 'social_whatsapp');
+
+        // --- Report Inactive Business Logic ---
+        const reportBtn = document.getElementById('reportInactiveBtn');
+        const reportWhatsappBtn = document.getElementById('reportWhatsappBtn');
+
+        const adminPhone = "6588469883"; 
+        const refCode = `DB-${bizSlugVal.toUpperCase()}`;
+        const prefilledReportMsg = `Assalaamualaikum Admin, I would like to report the business *${bizName}* (Ref: ${refCode}) for the following issue:`;
+
+        if (reportWhatsappBtn) {
+          reportWhatsappBtn.href = `https://wa.me/${adminPhone}?text=${encodeURIComponent(prefilledReportMsg)}`;
+        }
+
+        if (reportBtn) {
+          reportBtn.addEventListener('click', async () => {
+            const confirmReport = confirm(`Are you sure you want to report ${bizName} as inactive or closed?\n\nThis will notify the administrator.`);
+            
+            if (confirmReport) {
+              try {
+                const trackingPayload = JSON.stringify({ slug: bizSlugVal, action: 'report' });
+                
+                if (navigator.sendBeacon) {
+                  navigator.sendBeacon('/api/redeem', new Blob([trackingPayload], { type: 'application/json' }));
+                } else {
+                  await fetch('/api/redeem', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: trackingPayload
+                  });
+                }
+
+                alert('✓ Thank you! The business has been flagged for review.');
+              } catch (err) {
+                alert('Failed to submit report. Please try again later.');
+              }
+            }
+          });
+        }
 
       } catch (error) {
         console.error('Error loading business details:', error);
