@@ -120,7 +120,7 @@
                   <option value="+673">🇧🇳 +673 (BN)</option>
                   <option value="+66">🇹🇭 +66 (TH)</option>
                   <option value="+63">🇵🇭 +63 (PH)</option>
-                  <option value="+93">🇦🇫 +93 (AF)</option>
+                  <option value="+93">🇦ف +93 (AF)</option>
                   <option value="+355">🇦🇱 +355 (AL)</option>
                   <option value="+213">🇩🇿 +213 (DZ)</option>
                   <option value="+54">🇦🇷 +54 (AR)</option>
@@ -237,7 +237,7 @@
 
       </form>
 
-<!-- UNIVERSAL EXAMPLE PREVIEW LINK -->
+      <!-- UNIVERSAL EXAMPLE PREVIEW LINK -->
       <div id="exampleTriggerBox" style="text-align: center; margin-top: 18px; padding-top: 12px; border-top: 1px dashed var(--border-color);">
         <button type="button" id="openExampleBtn" class="action-btn-text" style="color: var(--primary-color); font-weight: 700; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 5px; background: none; border: none; cursor: pointer;">
           <i data-lucide="eye" style="width: 16px; height: 16px; stroke-width: 2.2;"></i>
@@ -245,7 +245,7 @@
         </button>
       </div>
 
-<!-- SUCCESS CONFIRMATION STATE -->
+      <!-- SUCCESS CONFIRMATION STATE -->
       <div id="successState" style="display: none; text-align: center; padding: 20px 10px;">
         <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(15, 56, 44, 0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px auto;">
           <i data-lucide="hourglass" style="width: 32px; height: 32px; stroke: var(--primary-color, #0f382c); stroke-width: 2;"></i>
@@ -289,6 +289,9 @@
 
     </div>
   </dialog>
+
+  <!-- LUCIDE ICONS CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <script>
     let currentStep = 1;
@@ -496,6 +499,7 @@
     });
 
     loadDynamicCategories();
+    lucide.createIcons(); // Render icons on page load!
   </script>
 </body>
 </html>
