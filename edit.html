@@ -151,10 +151,35 @@
               <textarea id="bizDesc" rows="4" required placeholder="Tell the community about your business story and offerings..." class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none; resize: none; overflow: hidden; line-height: 1.4;" disabled></textarea>
             </div>
 
-            <div>
-              <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">Banner Image URL <span style="font-weight: normal; color: var(--text-muted);">(Optional)</span></label>
-              <input type="url" id="bizImage" placeholder="https://imgur.com/... or image link" class="shimmer-placeholder" style="width: 100%; padding: 10px; font-size: 0.88rem; border: 1.5px solid var(--border-color); border-radius: var(--radius-sm); outline: none;" disabled>
-            </div>
+<div>
+  <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 4px;">
+    Banner Image <span style="font-weight: normal; color: var(--text-muted);">(Upload photo or logo)</span>
+  </label>
+
+  <!-- Hidden File Input -->
+  <input type="file" id="imageFileInput" accept="image/*" style="display: none;">
+
+  <!-- Hidden Field to keep image URL flow intact -->
+  <input type="hidden" id="bizImage">
+
+  <!-- Interactive Tap/Dropzone Box -->
+  <div id="imageDropzone" style="border: 2px dashed var(--border-color); border-radius: var(--radius-sm); padding: 16px; text-align: center; background: #faf9f5; cursor: pointer; transition: all 0.2s ease;">
+    
+    <!-- Initial Placeholder State -->
+    <div id="dropzonePlaceholder" style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+      <i data-lucide="upload-cloud" style="width: 28px; height: 28px; stroke: var(--primary-color); stroke-width: 2;"></i>
+      <span style="font-size: 0.82rem; font-weight: 700; color: var(--primary-color);">Tap to choose a photo</span>
+      <span style="font-size: 0.72rem; color: var(--text-muted);">PNG, JPG, or WEBP (Max 5MB)</span>
+    </div>
+
+    <!-- Live Upload Preview State -->
+    <div id="dropzonePreview" style="display: none; position: relative;">
+      <img id="previewImg" src="" alt="Selected Preview" style="width: 100%; height: 120px; object-fit: cover; border-radius: var(--radius-sm);">
+      <button type="button" id="removeImgBtn" style="position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 26px; height: 26px; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Remove Image">&times;</button>
+    </div>
+
+  </div>
+</div>
 
             <div style="margin-top: 8px;">
               <button type="submit" class="action-btn-primary save-btn" style="width: 100%; padding: 12px; opacity: 0.6;" disabled>Save Profile Changes</button>
@@ -320,9 +345,84 @@
       </div>
     </div>
   </dialog>
-  <!-- Lucide Icons Library -->
+<!-- Lucide Icons Library -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
+    // --- Image Dropzone & Preview Logic for Edit Page ---
+    const fileInput = document.getElementById('imageFileInput');
+    const dropzone = document.getElementById('imageDropzone');
+    const placeholder = document.getElementById('dropzonePlaceholder');
+    const previewWrapper = document.getElementById('dropzonePreview');
+    const previewImg = document.getElementById('previewImg');
+    const removeBtn = document.getElementById('removeImgBtn');
+    const bizImageHidden = document.getElementById('bizImage');
+
+    let selectedFile = null;
+
+    if (dropzone && fileInput) {
+      dropzone.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+          alert('File size exceeds 5MB limit. Please select a smaller photo.');
+          fileInput.value = '';
+          return;
+        }
+
+        selectedFile = file;
+
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          previewImg.src = evt.target.result;
+          placeholder.style.display = 'none';
+          previewWrapper.style.display = 'block';
+
+          // Sync with live card preview banner above!
+          const cardBanner = document.getElementById('previewCardBanner');
+          if (cardBanner) cardBanner.src = evt.target.result;
+          
+          // Store base64 or file preview in hidden field
+          if (bizImageHidden) bizImageHidden.value = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      if (removeBtn) {
+        removeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectedFile = null;
+          fileInput.value = '';
+          bizImageHidden.value = '';
+          previewImg.src = '';
+          previewWrapper.style.display = 'none';
+          placeholder.style.display = 'flex';
+        });
+      }
+    }
+
+    // Helper to pre-populate existing image URL when business details load
+    function setExistingImagePreview(url) {
+      if (url) {
+        bizImageHidden.value = url;
+        previewImg.src = url;
+        placeholder.style.display = 'none';
+        previewWrapper.style.display = 'block';
+        
+        const cardBanner = document.getElementById('previewCardBanner');
+        if (cardBanner) cardBanner.src = url;
+      } else {
+        bizImageHidden.value = '';
+        previewImg.src = '';
+        previewWrapper.style.display = 'none';
+        placeholder.style.display = 'flex';
+      }
+    }
+    
     let recordId = null;
     let currentToken = null;
     let userBusinessesList = [];
@@ -704,20 +804,15 @@
       }
     }
 
-    // Live Form Input Synchronizers
+    // Live Form Input Synchronizers (Business Name only)
     document.getElementById('bizName').addEventListener('input', (e) => {
       const cardName = document.getElementById('previewCardName');
       if (cardName) cardName.textContent = e.target.value.trim() || 'Business Name';
     });
 
-    document.getElementById('bizImage').addEventListener('input', (e) => {
-      const cardBanner = document.getElementById('previewCardBanner');
-      if (cardBanner) cardBanner.src = e.target.value.trim() || 'https://lh3.googleusercontent.com/d/1MBk6pIwDCG0NH9bh9lD7EY9kAp4IQiNM';
-    });
-
     // Remove shimmering state & enable form fields once loaded
     function removeFormShimmer() {
-      const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'bizImage', 'bizCountryCode', 'customCountryCode', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'affiliateYes', 'affiliateNo'];
+      const fields = ['bizName', 'bizSub', 'bizCategory', 'bizDesc', 'imageDropzone', 'bizCountryCode', 'customCountryCode', 'bizPhone', 'bizWebsite', 'bizInstagram', 'bizTiktok', 'affiliateYes', 'affiliateNo'];
       fields.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -765,7 +860,7 @@
         document.getElementById('bizDesc').value = data.description || '';
         autoResizeTextarea(); // Dynamically resize height to fit loaded text without scrolling!
         
-        document.getElementById('bizImage').value = data.imageUrl || '';
+        setExistingImagePreview(data.imageUrl || '');
         setParsedPhoneNumber(data.phone || ''); // Parses and sets the country code and phone number!
         document.getElementById('bizWebsite').value = data.websiteUrl || '';
         document.getElementById('bizInstagram').value = data.instagramUrl || '';
