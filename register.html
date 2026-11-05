@@ -526,12 +526,42 @@
       }
     }
 
-    const registerForm = document.getElementById('registerForm');
+const registerForm = document.getElementById('registerForm');
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const submitBtn = document.getElementById('submitBtn');
-      submitBtn.textContent = 'Submitting...';
+      submitBtn.textContent = 'Uploading photo & submitting...';
       submitBtn.disabled = true;
+
+      let finalImageUrl = document.getElementById('bizImage').value;
+
+      // 1. If a local file was selected in the dropzone, upload it to /api/upload first!
+      if (selectedFile) {
+        try {
+          const base64Data = await convertFileToBase64(selectedFile);
+          const uploadRes = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fileData: base64Data })
+          });
+          
+          const uploadResult = await uploadRes.json();
+          if (uploadResult.success && uploadResult.url) {
+            finalImageUrl = uploadResult.url; // Use the hosted Cloudinary URL!
+          } else {
+            alert('Image upload failed: ' + (uploadResult.error || 'Unknown error'));
+            submitBtn.textContent = 'Submit Listing for Review';
+            submitBtn.disabled = false;
+            return;
+          }
+        } catch (err) {
+          console.error('Photo upload error:', err);
+          alert('Network error while uploading photo.');
+          submitBtn.textContent = 'Submit Listing for Review';
+          submitBtn.disabled = false;
+          return;
+        }
+      }
 
       const selectedAffiliate = document.querySelector('input[name="affiliateInterest"]:checked');
 
@@ -540,11 +570,11 @@
         subtitle: document.getElementById('bizSub').value,
         category: document.getElementById('bizCategory').value,
         description: document.getElementById('bizDesc').value,
-        phone: getFullPhoneNumber(), // Uses the combined country code + number!
+        phone: getFullPhoneNumber(),
         websiteUrl: document.getElementById('bizWebsite').value,
         instagramUrl: document.getElementById('bizInstagram').value,
         tiktokUrl: document.getElementById('bizTiktok').value,
-        imageUrl: document.getElementById('bizImage').value,
+        imageUrl: finalImageUrl, // Sends the Cloudinary hosted URL to Airtable!
         ownerEmail: document.getElementById('ownerEmail').value,
         affiliateInterest: selectedAffiliate ? selectedAffiliate.value : 'No'
       };
@@ -563,7 +593,7 @@
           document.getElementById('exampleTriggerBox').style.display = 'none';
           document.querySelector('.step-progress-wrapper').style.display = 'none';
           document.getElementById('successState').style.display = 'block';
-          lucide.createIcons(); // <--- Re-renders icons inside newly revealed elements!
+          lucide.createIcons();
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           alert('Error: ' + (result.error || 'Failed to submit listing.'));
@@ -576,6 +606,16 @@
         submitBtn.disabled = false;
       }
     });
+
+    // Helper to convert file to base64
+    function convertFileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
 
     loadDynamicCategories();
     lucide.createIcons(); // Render icons on page load!
