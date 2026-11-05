@@ -929,9 +929,9 @@
             });
             return;
           }
-        } catch (err) {
+} catch (err) {
           console.error('Photo upload error:', err);
-          alert('Network error while uploading photo.');
+          alert('Upload Debug Error: ' + err.message);
           saveButtons.forEach(btn => {
             btn.textContent = 'Save Profile Changes';
             btn.disabled = false;
