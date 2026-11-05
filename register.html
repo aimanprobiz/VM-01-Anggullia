@@ -554,11 +554,11 @@ const registerForm = document.getElementById('registerForm');
             submitBtn.disabled = false;
             return;
           }
-        } catch (err) {
-          console.error('Photo upload error:', err);
-          alert('Network error while uploading photo.');
-          submitBtn.textContent = 'Submit Listing for Review';
-          submitBtn.disabled = false;
+} catch (err) {
+        console.error('Photo upload error:', err);
+        alert('Register Upload Error: ' + err.message);
+        submitBtn.textContent = 'Submit Listing for Review';
+        submitBtn.disabled = false;
           return;
         }
       }
