@@ -966,10 +966,11 @@
 
         const result = await response.json();
 
-        if (response.ok && result.success) {
+if (response.ok && result.success) {
           alert('✓ Alhamdulillah! Your listing changes have been updated successfully.');
         } else {
-          alert('Error: ' + (result.error || 'Failed to update profile.'));
+          console.error('Airtable Update Error Details:', result.details);
+          alert('Error: ' + (result.error || 'Failed to update profile.') + '\n\nDetails: ' + JSON.stringify(result.details || {}));
         }
       } catch (err) {
         alert('Network error. Please try again later.');
