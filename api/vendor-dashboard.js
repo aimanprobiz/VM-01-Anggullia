@@ -4,40 +4,56 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { token } = req.query || {};
+  const { token } = req.query;
 
-  if (!token) {
-    return res.status(400).json({ error: 'Missing security edit token.' });
+  if (!token || !token.trim()) {
+    return res.status(400).json({ error: 'Edit token is required.' });
   }
 
-  const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-  const TABLE_NAME = 'Businesses';
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
-    return res.status(500).json({ error: 'Airtable credentials not configured on Vercel.' });
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return res.status(500).json({ error: 'Supabase credentials not configured properly.' });
   }
 
   try {
-    const filter = encodeURIComponent(`{EditToken}='${token.trim()}'`);
-    const queryUrl = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}?filterByFormula=${filter}`;
-
-    const response = await fetch(queryUrl, {
-      headers: { 'Authorization': `Bearer ${AIRTABLE_PAT}` }
-    });
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/businesses?edit_token=eq.${encodeURIComponent(token.trim())}&select=*`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
 
     const data = await response.json();
 
-    if (!response.ok || !data.records || data.records.length === 0) {
-      return res.status(404).json({ error: 'Invalid or expired edit token.' });
+    if (!response.ok || !data || data.length === 0) {
+      return res.status(404).json({ error: 'Invalid or expired session token.' });
     }
 
-    const record = data.records[0];
+    const b = data[0];
+
+    const stats = {
+      whatsappClicks: b.whatsapp_clicks || 0,
+      codeClicks: b.code_clicks || 0,
+      codeCopies: b.code_copies || 0,
+      websiteClicks: b.website_clicks || 0,
+      instagramClicks: b.instagram_clicks || 0,
+      tiktokClicks: b.tiktok_clicks || 0,
+      socialWhatsappClicks: b.social_whatsapp_clicks || 0,
+      redemptionsCount: b.redemptions_count || 0
+    };
 
     return res.status(200).json({
-      success: true,
-      id: record.id,
-      fields: record.fields
+      name: b.name || '',
+      subtitle: b.subtitle || '',
+      category: b.category || '',
+      imageUrl: b.image_url || '',
+      status: b.status || 'Pending',
+      stats: stats
     });
 
   } catch (error) {

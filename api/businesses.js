@@ -1,47 +1,52 @@
 // api/businesses.js
 export default async function handler(req, res) {
-  // 1. Cache response on Vercel Edge for fast performance & lower Airtable API usage
   res.setHeader('Cache-Control', 's-maxage=15, stale-while-revalidate=86400');
 
-  const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
-    return res.status(500).json({ error: 'Airtable credentials are not configured' });
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return res.status(500).json({ error: 'Supabase credentials are not configured' });
   }
 
   try {
-    let allRecords = [];
-    let offset = '';
-
-    // 2. Loop through all pages until every active business is fetched
-    do {
-      const url = new URL(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Businesses`);
-      
-      // Filter only records where Status is 'Active'
-      url.searchParams.set('filterByFormula', "{Status} = 'Active'");
-
-      if (offset) url.searchParams.set('offset', offset);
-
-      const response = await fetch(url.toString(), {
-        headers: { Authorization: `Bearer ${AIRTABLE_PAT}` }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data from Airtable');
+    // Fetch only active businesses from Supabase
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/businesses?status=eq.Active&select=*`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
       }
+    );
 
-      const data = await response.json();
-      allRecords = allRecords.concat(data.records || []);
-      
-      // If there are more than 100 items, Airtable returns an 'offset' token for the next page
-      offset = data.offset || '';
-    } while (offset);
+    if (!response.ok) {
+      throw new Error('Failed to fetch data from Supabase');
+    }
 
-    // 3. Clean and return the list
-    const businesses = allRecords.map(record => ({
+    const data = await response.json();
+
+    // Map Postgres columns to camelCase / uppercase keys that your frontend expects
+    const businesses = data.map(record => ({
       id: record.id,
-      ...record.fields
+      Name: record.name,
+      SubTitle: record.subtitle,
+      Category: record.category,
+      Description: record.description,
+      Phone: record.phone,
+      WebsiteURL: record.website_url,
+      InstagramURL: record.instagram_url,
+      TikTokURL: record.tiktok_url,
+      ImageURL: record.image_url,
+      OwnerEmail: record.owner_email,
+      Status: record.status,
+      Slug: record.slug || (record.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      Deal: record.deal || '',
+      IsFeatured: record.is_featured || false,
+      PIN: record.pin || '1234',
+      PromoCode: record.promo_code || '',
+      ActionType: record.action_type || 'claim'
     }));
 
     return res.status(200).json(businesses);

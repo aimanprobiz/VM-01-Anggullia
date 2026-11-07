@@ -1,35 +1,38 @@
+// api/cards.js
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
 
-  const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
-  const BASE_ID = process.env.AIRTABLE_BASE_ID;
-  const TABLE_NAME = 'Cards';
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return res.status(500).json({ error: 'Supabase credentials are not configured' });
+  }
 
   try {
     const response = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?sort[0][field]=Order&sort[0][direction]=asc`,
+      `${SUPABASE_URL}/rest/v1/cards?select=*&order=display_order.asc`,
       {
         headers: {
-          Authorization: `Bearer ${AIRTABLE_PAT}`,
-        },
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
       }
     );
-    
+
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json({ airtableError: data });
+      return res.status(response.status).json({ supabaseError: data });
     }
 
-    const cards = data.records.map((record) => {
-      const attachments = record.fields.Images;
-      return {
-        id: record.id,
-        imageUrl: attachments && attachments[0] ? attachments[0].url : '',
-        Title: record.fields.Title || '',
-        url: record.fields.Links || '', // <-- Updated to match your Airtable column name 'Links'
-      };
-    });
+    // Map Postgres snake_case columns back to what your frontend script expects
+    const cards = data.map((record) => ({
+      id: record.id,
+      imageUrl: record.image_url || '',
+      Title: record.title || '',
+      url: record.links || '',
+    }));
 
     return res.status(200).json(cards);
   } catch (error) {

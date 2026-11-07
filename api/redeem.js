@@ -1,88 +1,93 @@
+// api/redeem.js
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { slug, action } = req.body || {};
+  const { businessId, actionType } = req.body || {};
 
-  if (!slug) {
-    return res.status(400).json({ error: 'Missing business slug' });
+  if (!businessId || !actionType) {
+    return res.status(400).json({ error: 'Missing businessId or actionType' });
   }
 
-  // 1. Sanitize slug input to safely handle special characters & quotes
-  const cleanSlug = String(slug).replace(/['"\\]/g, '').trim().toLowerCase();
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  const AIRTABLE_PAT = process.env.AIRTABLE_PAT || process.env.AIRTABLE_API_KEY; 
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || process.env.AIRTAB_BASE_ID || process.env.AIRTABLE_BASE; 
-  const TABLE_NAME = 'Businesses';
-
-  if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
-    return res.status(500).json({ error: 'Environment variables not configured properly in Vercel' });
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return res.status(500).json({ error: 'Supabase credentials not configured properly.' });
   }
 
   try {
-    // 2. Use case-insensitive formula matching with clean input
-    const filter = encodeURIComponent(`LOWER({Slug})='${cleanSlug}'`);
-    const queryUrl = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}?filterByFormula=${filter}`;
-
-    const queryResponse = await fetch(queryUrl, {
-      headers: { 'Authorization': `Bearer ${AIRTABLE_PAT}` }
-    });
-
-    const queryData = await queryResponse.json();
-
-    if (!queryResponse.ok || !queryData.records || queryData.records.length === 0) {
-      return res.status(404).json({ error: `Business record not found for slug: ${cleanSlug}` });
-    }
-
-    const record = queryData.records[0];
-    const recordId = record.id;
-    
-    // 3. Clean action mapping
-    const actionMap = {
-      whatsapp: 'WhatsAppClicks',
-      code: 'CodeClicks',
-      copy: 'CodeCopies',
-      website: 'WebsiteClicks',
-      instagram: 'InstagramClicks',
-      tiktok: 'TikTokClicks',
-      social_whatsapp: 'SocialWhatsAppClicks',
-      claim: 'RedemptionsCount',
-      report: 'ReportCount' // <-- Add this new mapping
-    };
-
-    const fieldToUpdate = actionMap[action] || 'RedemptionsCount';
-    const currentCount = Number(record.fields[fieldToUpdate] || 0);
-    const newCount = currentCount + 1;
-
-    const updateResponse = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${recordId}`,
+    // 1. Fetch current counter values
+    const getRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/businesses?id=eq.${businessId}&select=*`,
       {
-        method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${AIRTABLE_PAT}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          fields: {
-            [fieldToUpdate]: newCount
-          }
-        })
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
       }
     );
 
-    const updateData = await updateResponse.json();
-
-    if (!updateResponse.ok) {
-      return res.status(500).json({ error: 'Failed to update Airtable record', details: updateData });
+    const getData = await getRes.json();
+    if (!getRes.ok || !getData || getData.length === 0) {
+      return res.status(404).json({ error: 'Business not found' });
     }
 
-    return res.status(200).json({
-      success: true,
-      action: action || 'claim',
-      fieldUpdated: fieldToUpdate,
-      count: newCount
-    });
+    const b = getData[0];
+    const updateData = {};
+
+    // 2. Increment the appropriate counter based on actionType
+    switch (actionType) {
+      case 'whatsapp':
+        updateData.whatsapp_clicks = (b.whatsapp_clicks || 0) + 1;
+        break;
+      case 'code':
+        updateData.code_clicks = (b.code_clicks || 0) + 1;
+        break;
+      case 'copy':
+        updateData.code_copies = (b.code_copies || 0) + 1;
+        break;
+      case 'website':
+        updateData.website_clicks = (b.website_clicks || 0) + 1;
+        break;
+      case 'instagram':
+        updateData.instagram_clicks = (b.instagram_clicks || 0) + 1;
+        break;
+      case 'tiktok':
+        updateData.tiktok_clicks = (b.tiktok_clicks || 0) + 1;
+        break;
+      case 'social_whatsapp':
+        updateData.social_whatsapp_clicks = (b.social_whatsapp_clicks || 0) + 1;
+        break;
+      case 'redemption':
+        updateData.redemptions_count = (b.redemptions_count || 0) + 1;
+        break;
+      default:
+        return res.status(400).json({ error: 'Invalid actionType' });
+    }
+
+    // 3. Save incremented counters back to Supabase
+    const patchRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/businesses?id=eq.${businessId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(updateData)
+      }
+    );
+
+    if (!patchRes.ok) {
+      return res.status(500).json({ error: 'Failed to update analytics counter' });
+    }
+
+    return res.status(200).json({ success: true });
+
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

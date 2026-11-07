@@ -5,7 +5,6 @@ export default async function handler(req, res) {
   }
 
   const {
-    recordId,
     token,
     name,
     subtitle,
@@ -19,76 +18,60 @@ export default async function handler(req, res) {
     affiliateInterest
   } = req.body || {};
 
-  if (!recordId || !token) {
-    return res.status(400).json({ error: 'Missing record ID or security token.' });
+  if (!token || !token.trim()) {
+    return res.status(400).json({ error: 'Authentication token is required.' });
   }
 
-  // Removed `!category` so it's no longer compulsory during edits
-  if (!name) {
-    return res.status(400).json({ error: 'Business Name is required.' });
-  }
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  const AIRTABLE_PAT = process.env.AIRTABLE_PAT || process.env.AIRTABLE_API_KEY;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || process.env.AIRTAB_BASE_ID || process.env.AIRTABLE_BASE;
-  const TABLE_NAME = 'Businesses';
-
-  if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
-    return res.status(500).json({ error: 'Airtable credentials not configured properly.' });
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return res.status(500).json({ error: 'Supabase credentials not configured properly.' });
   }
 
   try {
-    // 1. Verify token matches recordId before updating for security
-    const checkRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${recordId}`, {
-      headers: { Authorization: `Bearer ${AIRTABLE_PAT}` }
-    });
+    const fieldsToUpdate = {};
+    if (name !== undefined) fieldsToUpdate.name = name.trim();
+    if (subtitle !== undefined) fieldsToUpdate.subtitle = subtitle.trim();
+    if (category !== undefined) fieldsToUpdate.category = category.trim();
+    if (description !== undefined) fieldsToUpdate.description = description.trim();
+    if (phone !== undefined) fieldsToUpdate.phone = phone.trim();
+    if (websiteUrl !== undefined) fieldsToUpdate.website_url = websiteUrl.trim();
+    if (instagramUrl !== undefined) fieldsToUpdate.instagram_url = instagramUrl.trim();
+    if (tiktokUrl !== undefined) fieldsToUpdate.tiktok_url = tiktokUrl.trim();
+    if (imageUrl !== undefined) fieldsToUpdate.image_url = imageUrl.trim();
     
-    const checkData = await checkRes.json();
-    if (!checkRes.ok || !checkData.fields || checkData.fields.EditToken !== token) {
-      return res.status(403).json({ error: 'Unauthorized edit request.' });
+    if (affiliateInterest !== undefined) {
+      fieldsToUpdate.affiliate_interest = (affiliateInterest === 'Yes') ? 'Yes - Interested' : 'No - Standard Listing';
     }
 
-    // 2. Map incoming interest selection to exact Airtable Single Select options
-    const formattedAffiliateInterest = (affiliateInterest === 'Yes') ? 'Yes - Interested' : 'No - Standard Listing';
-
-    // 3. Prepare field updates with exact Airtable casing
-    const fieldsToUpdate = {
-      Name: name.trim(),
-      SubTitle: subtitle ? subtitle.trim() : '',
-      Description: description ? description.trim() : '',
-      Phone: phone ? phone.trim() : '',
-      WebsiteURL: websiteUrl ? websiteUrl.trim() : '',
-      InstagramURL: instagramUrl ? instagramUrl.trim() : '',
-      TikTokURL: tiktokUrl ? tiktokUrl.trim() : '',
-      ImageURL: imageUrl ? imageUrl.trim() : '',
-      "Affiliate Interest": formattedAffiliateInterest
-    };
-
-    // Conditionally include or clear Category if provided/blank
-    if (category && category.trim()) {
-      fieldsToUpdate.Category = category.trim();
-    } else {
-      fieldsToUpdate.Category = null; 
+    if (name !== undefined) {
+      fieldsToUpdate.slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
 
-    // 4. Update row in Airtable
-    const updateRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${recordId}`, {
-      method: 'PATCH',
-      headers: {
-        Authorization: `Bearer ${AIRTABLE_PAT}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ fields: fieldsToUpdate })
-    });
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/businesses?edit_token=eq.${encodeURIComponent(token.trim())}`,
+      {
+        method: 'PATCH',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify(fieldsToUpdate)
+      }
+    );
 
-    const updateData = await updateRes.json();
+    const data = await response.json();
 
-    if (!updateRes.ok) {
-      return res.status(500).json({ error: 'Failed to record update in Airtable.', details: updateData });
+    if (!response.ok || !data || data.length === 0) {
+      return res.status(404).json({ error: 'Failed to update business or invalid token.' });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Business profile updated successfully!'
+      message: 'Business listing updated successfully!'
     });
 
   } catch (error) {

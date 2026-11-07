@@ -18,58 +18,55 @@ export default async function handler(req, res) {
     affiliateInterest
   } = req.body || {};
 
-  // 1. Removed `!category` so it's no longer compulsory
   if (!name || !ownerEmail) {
     return res.status(400).json({ error: 'Missing required fields (Business Name or Owner Email).' });
   }
 
-  const AIRTABLE_PAT = process.env.AIRTABLE_PAT || process.env.AIRTABLE_API_KEY; 
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || process.env.AIRTAB_BASE_ID || process.env.AIRTABLE_BASE; 
-  const TABLE_NAME = 'Businesses';
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!AIRTABLE_PAT || !AIRTABLE_BASE_ID) {
-    return res.status(500).json({ error: 'Airtable credentials not configured properly in Vercel' });
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return res.status(500).json({ error: 'Supabase credentials not configured properly in Vercel' });
   }
 
   try {
     const editToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
-
-    // Map incoming interest selection to exact Airtable Single Select options
     const formattedAffiliateInterest = (affiliateInterest === 'Yes') ? 'Yes - Interested' : 'No - Standard Listing';
+    const generatedSlug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-    // Build payload object matching exact Airtable field names (Only required fields here)
     const fieldsToSave = {
-      Name: name.trim(),
-      OwnerEmail: ownerEmail.trim().toLowerCase(),
-      Status: 'Pending',
-      EditToken: editToken,
-      "Affiliate Interest": formattedAffiliateInterest
+      name: name.trim(),
+      owner_email: ownerEmail.trim().toLowerCase(),
+      status: 'Pending',
+      edit_token: editToken,
+      affiliate_interest: formattedAffiliateInterest,
+      slug: generatedSlug
     };
 
-    // 2. Conditionally append category along with other optional fields
-    if (category && category.trim()) fieldsToSave.Category = category.trim();
-    if (subtitle && subtitle.trim()) fieldsToSave.SubTitle = subtitle.trim();
-    if (description && description.trim()) fieldsToSave.Description = description.trim();
-    if (phone && phone.trim()) fieldsToSave.Phone = phone.trim();
-    if (websiteUrl && websiteUrl.trim()) fieldsToSave.WebsiteURL = websiteUrl.trim();
-    if (instagramUrl && instagramUrl.trim()) fieldsToSave.InstagramURL = instagramUrl.trim();
-    if (tiktokUrl && tiktokUrl.trim()) fieldsToSave.TikTokURL = tiktokUrl.trim();
-    if (imageUrl && imageUrl.trim()) fieldsToSave.ImageURL = imageUrl.trim();
+    if (category && category.trim()) fieldsToSave.category = category.trim();
+    if (subtitle && subtitle.trim()) fieldsToSave.subtitle = subtitle.trim();
+    if (description && description.trim()) fieldsToSave.description = description.trim();
+    if (phone && phone.trim()) fieldsToSave.phone = phone.trim();
+    if (websiteUrl && websiteUrl.trim()) fieldsToSave.website_url = websiteUrl.trim();
+    if (instagramUrl && instagramUrl.trim()) fieldsToSave.instagram_url = instagramUrl.trim();
+    if (tiktokUrl && tiktokUrl.trim()) fieldsToSave.tiktok_url = tiktokUrl.trim();
+    if (imageUrl && imageUrl.trim()) fieldsToSave.image_url = imageUrl.trim();
 
-    // Send payload to Airtable
-    const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/businesses`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${AIRTABLE_PAT}`,
-        'Content-Type': 'application/json'
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
       },
-      body: JSON.stringify({ fields: fieldsToSave })
+      body: JSON.stringify(fieldsToSave)
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(500).json({ error: 'Failed to create business record in Airtable', details: data });
+      return res.status(500).json({ error: 'Failed to create business record in Supabase', details: data });
     }
 
     return res.status(200).json({
