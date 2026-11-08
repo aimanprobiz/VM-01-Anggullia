@@ -14,13 +14,12 @@ export default async function handler(req, res) {
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_KEY) {
-    return res.status(500).json({ error: 'Supabase credentials not configured.' });
+    return res.status(500).json({ error: 'Supabase credentials missing.' });
   }
 
   try {
     const cleanToken = token.trim();
 
-    // Query Business record by EditToken
     const response = await fetch(
       `${SUPABASE_URL}/rest/v1/Businesses?EditToken=eq.${encodeURIComponent(cleanToken)}&select=*`,
       {
@@ -33,18 +32,19 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    if (!response.ok || !data || data.length === 0) {
+    if (!response.ok || !Array.isArray(data) || data.length === 0) {
       return res.status(404).json({ error: 'Invalid or expired edit session.' });
     }
 
     const rec = data[0];
+    const recId = rec.id || rec.ID || '';
     const ownerEmail = (rec.OwnerEmail || rec.owner_email || '').trim().toLowerCase();
 
     let allBusinesses = [];
     if (ownerEmail) {
       try {
         const allRes = await fetch(
-          `${SUPABASE_URL}/rest/v1/Businesses?OwnerEmail=eq.${encodeURIComponent(ownerEmail)}&select=id,Name,EditToken`,
+          `${SUPABASE_URL}/rest/v1/Businesses?OwnerEmail=eq.${encodeURIComponent(ownerEmail)}&select=*`,
           {
             headers: {
               apikey: SUPABASE_KEY,
@@ -55,13 +55,12 @@ export default async function handler(req, res) {
         const allData = await allRes.json();
         if (allRes.ok && Array.isArray(allData)) {
           allBusinesses = allData.map(r => ({
-            id: r.id,
+            id: r.id || r.ID || '',
             name: r.Name || r.name || 'Unnamed Business',
             token: r.EditToken || r.edit_token || ''
           })).filter(b => b.token);
         }
       } catch (e) {
-        // Fallback silently if fetching other businesses fails
         allBusinesses = [];
       }
     }
@@ -69,21 +68,45 @@ export default async function handler(req, res) {
     const rawAffiliate = String(rec.AffiliateInterest || rec.affiliate_interest || 'No');
     const formattedAffiliate = rawAffiliate.toLowerCase().startsWith('yes') ? 'Yes' : 'No';
 
+    const bizNameVal = rec.Name || rec.name || '';
+    const bizSubVal = rec.Subtitle || rec.subtitle || '';
+    const bizCatVal = rec.Category || rec.category || '';
+    const bizDescVal = rec.Description || rec.description || '';
+    const bizPhoneVal = rec.Phone || rec.phone || '';
+    const bizWebVal = rec.WebsiteUrl || rec.website_url || '';
+    const bizIgVal = rec.InstagramUrl || rec.instagram_url || '';
+    const bizTtVal = rec.TiktokUrl || rec.tiktok_url || '';
+    const bizImgVal = rec.ImageUrl || rec.image_url || '';
+    const bizSlugVal = rec.Slug || rec.slug || '';
+    const bizStatusVal = rec.Status || rec.status || 'Active';
+
     return res.status(200).json({
-      recordId: rec.id,
-      name: rec.Name || rec.name || '',
-      subtitle: rec.Subtitle || rec.subtitle || '',
-      category: rec.Category || rec.category || '',
-      description: rec.Description || rec.description || '',
-      phone: rec.Phone || rec.phone || '',
-      websiteUrl: rec.WebsiteUrl || rec.website_url || '',
-      instagramUrl: rec.InstagramUrl || rec.instagram_url || '',
-      tiktokUrl: rec.TiktokUrl || rec.tiktok_url || '',
-      imageUrl: rec.ImageUrl || rec.image_url || '',
-      ownerEmail: rec.OwnerEmail || rec.owner_email || '',
-      slug: rec.Slug || rec.slug || '',
-      status: rec.Status || rec.status || 'Pending',
+      recordId: recId,
+      id: recId,
+      name: bizNameVal,
+      subtitle: bizSubVal,
+      category: bizCatVal,
+      description: bizDescVal,
+      phone: bizPhoneVal,
+      websiteUrl: bizWebVal,
+      instagramUrl: bizIgVal,
+      tiktokUrl: bizTtVal,
+      imageUrl: bizImgVal,
+      ownerEmail: ownerEmail,
+      slug: bizSlugVal,
+      status: bizStatusVal,
       affiliateInterest: formattedAffiliate,
+      bizName: bizNameVal,
+      bizSub: bizSubVal,
+      bizCategory: bizCatVal,
+      bizDesc: bizDescVal,
+      bizPhone: bizPhoneVal,
+      bizWebsite: bizWebVal,
+      bizInstagram: bizIgVal,
+      bizTiktok: bizTtVal,
+      bizImage: bizImgVal,
+      bizSlug: bizSlugVal,
+      Status: bizStatusVal,
       allBusinesses: allBusinesses
     });
 
