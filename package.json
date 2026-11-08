@@ -2,6 +2,7 @@
   "name": "dailybarakah-sg",
   "version": "1.0.0",
   "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
     "cloudinary": "^1.41.3"
   }
 }
