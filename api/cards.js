@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-  'https://qswifsqfyufdjhumwze.supabase.co',
+  'https://qswifsfqyufdjhunvwze.supabase.co',
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
