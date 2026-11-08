@@ -1,25 +1,16 @@
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  'https://qswifsqfyufdjhumwze.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
 export default async function handler(req, res) {
   try {
-    const SUPABASE_URL = "https://qswifsqfyufdjhumwze.supabase.co";
-    const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const { data, error } = await supabase.from('cards').select('*');
 
-    if (!SUPABASE_KEY) {
-      return res.status(200).json({ records: [], error: "Missing SUPABASE_SERVICE_ROLE_KEY" });
-    }
-
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/cards?select=*`, {
-      method: 'GET',
-      headers: {
-        'apikey': SUPABASE_KEY.trim(),
-        'Authorization': `Bearer ${SUPABASE_KEY.trim()}`,
-        'Content-Type': 'application/json'
-      }
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(200).json({ records: [], supabaseError: data });
+    if (error) {
+      return res.status(200).json({ records: [], supabaseError: error });
     }
 
     const records = Array.isArray(data) ? data.map((item, index) => ({
