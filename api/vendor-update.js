@@ -10,44 +10,42 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing token or update fields.' });
   }
 
-  const AIRTABLE_PAT = process.env.AIRTABLE_PAT;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-  const TABLE_NAME = 'Businesses';
+  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://qswifsfqyufdjhunvwze.supabase.co';
+  const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!SUPABASE_KEY) {
+    return res.status(500).json({ error: 'Supabase credentials missing.' });
+  }
 
   try {
-    // 1. Verify token first
-    const filter = encodeURIComponent(`{EditToken}='${token.trim()}'`);
-    const queryUrl = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}?filterByFormula=${filter}`;
+    const cleanToken = token.trim();
 
-    const queryResponse = await fetch(queryUrl, {
-      headers: { 'Authorization': `Bearer ${AIRTABLE_PAT}` }
-    });
+    // Map camelCase frontend keys to snake_case Supabase columns if needed
+    const mappedFields = {};
+    if (fieldsToUpdate.Name !== undefined) mappedFields.name = fieldsToUpdate.Name;
+    if (fieldsToUpdate.SubTitle !== undefined) mappedFields.subtitle = fieldsToUpdate.SubTitle;
+    if (fieldsToUpdate.Deal !== undefined) mappedFields.deal = fieldsToUpdate.Deal;
+    if (fieldsToUpdate.Description !== undefined) mappedFields.description = fieldsToUpdate.Description;
+    if (fieldsToUpdate.ImageURL !== undefined) mappedFields.image_url = fieldsToUpdate.ImageURL;
 
-    const queryData = await queryResponse.json();
-
-    if (!queryResponse.ok || !queryData.records || queryData.records.length === 0) {
-      return res.status(404).json({ error: 'Unauthorized: Invalid token.' });
-    }
-
-    const recordId = queryData.records[0].id;
-
-    // 2. Perform update
-    const updateResponse = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${recordId}`,
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/businesses?edit_token=eq.${encodeURIComponent(cleanToken)}`,
       {
         method: 'PATCH',
         headers: {
-          'Authorization': `Bearer ${AIRTABLE_PAT}`,
-          'Content-Type': 'application/json'
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
         },
-        body: JSON.stringify({ fields: fieldsToUpdate })
+        body: JSON.stringify(mappedFields)
       }
     );
 
-    const updateData = await updateResponse.json();
+    const data = await response.json();
 
-    if (!updateResponse.ok) {
-      return res.status(500).json({ error: 'Failed to update Airtable record', details: updateData });
+    if (!response.ok) {
+      return res.status(500).json({ error: 'Failed to update record in Supabase', details: data });
     }
 
     return res.status(200).json({ success: true, message: 'Profile updated successfully!' });

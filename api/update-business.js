@@ -4,13 +4,26 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { recordId, token, name, subtitle, category, description, phone, websiteUrl, instagramUrl, tiktokUrl, imageUrl, affiliateInterest } = req.body || {};
+  const {
+    recordId,
+    token,
+    name,
+    subtitle,
+    category,
+    description,
+    phone,
+    websiteUrl,
+    instagramUrl,
+    tiktokUrl,
+    imageUrl,
+    affiliateInterest
+  } = req.body || {};
 
-  if (!recordId && !token) {
-    return res.status(400).json({ error: 'Record ID or token is required.' });
+  if ((!recordId && !token) || !name) {
+    return res.status(400).json({ error: 'Missing required fields (Record ID/Token or Business Name).' });
   }
 
-  const SUPABASE_URL = 'https://qswifsfqyufdjhunvwze.supabase.co';
+  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://qswifsfqyufdjhunvwze.supabase.co';
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_KEY) {
@@ -18,42 +31,53 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Build update payload matching your exact capitalized Supabase column names
-    const updateData = {};
-    if (name !== undefined) updateData.Name = name;
-    if (subtitle !== undefined) updateData.Subtitle = subtitle;
-    if (category !== undefined) updateData.Category = category;
-    if (description !== undefined) updateData.Description = description;
-    if (phone !== undefined) updateData.Phone = phone;
-    if (websiteUrl !== undefined) updateData.WebsiteUrl = websiteUrl;
-    if (instagramUrl !== undefined) updateData.InstagramUrl = instagramUrl;
-    if (tiktokUrl !== undefined) updateData.TiktokUrl = tiktokUrl;
-    if (imageUrl !== undefined) updateData.ImageUrl = imageUrl;
-    if (affiliateInterest !== undefined) updateData.AffiliateInterest = affiliateInterest;
+    const formattedAffiliateInterest = (affiliateInterest === 'Yes') ? 'Yes - Interested' : 'No - Standard Listing';
+    const generatedSlug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-    let queryParam = recordId ? `id=eq.${encodeURIComponent(recordId)}` : `EditToken=eq.${encodeURIComponent(token)}`;
+    const fieldsToUpdate = {
+      name: name.trim(),
+      slug: generatedSlug,
+      affiliate_interest: formattedAffiliateInterest
+    };
 
-    const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/Businesses?${queryParam}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer': 'return=representation'
-        },
-        body: JSON.stringify(updateData)
-      }
-    );
+    if (category !== undefined) fieldsToUpdate.category = category.trim();
+    if (subtitle !== undefined) fieldsToUpdate.subtitle = subtitle.trim();
+    if (description !== undefined) fieldsToUpdate.description = description.trim();
+    if (phone !== undefined) fieldsToUpdate.phone = phone.trim();
+    if (websiteUrl !== undefined) fieldsToUpdate.website_url = websiteUrl.trim();
+    if (instagramUrl !== undefined) fieldsToUpdate.instagram_url = instagramUrl.trim();
+    if (tiktokUrl !== undefined) fieldsToUpdate.tiktok_url = tiktokUrl.trim();
+    if (imageUrl !== undefined) fieldsToUpdate.image_url = imageUrl.trim();
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      return res.status(500).json({ error: 'Failed to update database record.', details: result });
+    // Query condition: match by record ID or edit_token
+    let queryParam = '';
+    if (recordId) {
+      queryParam = `id=eq.${encodeURIComponent(recordId)}`;
+    } else {
+      queryParam = `edit_token=eq.${encodeURIComponent(token.trim())}`;
     }
 
-    return res.status(200).json({ success: true, data: result });
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/businesses?${queryParam}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(fieldsToUpdate)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(500).json({ error: 'Failed to update business in Supabase', details: data });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Listing updated successfully!'
+    });
 
   } catch (error) {
     return res.status(500).json({ error: error.message });
