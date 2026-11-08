@@ -10,18 +10,20 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Email is required.' });
   }
 
-  const SUPABASE_URL = process.env.SUPABASE_URL;
+  // Hardcode correct Supabase URL to prevent environment variable configuration bugs
+  const SUPABASE_URL = 'https://qswifsfqyufdjhunvwze.supabase.co';
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
-    return res.status(500).json({ error: 'Supabase credentials not configured properly.' });
+  if (!SUPABASE_KEY) {
+    return res.status(500).json({ error: 'Supabase service role key not configured.' });
   }
 
   try {
     const cleanEmail = email.trim().toLowerCase();
 
+    // Query using the exact capitalized column name "OwnerEmail"
     const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/businesses?owner_email=eq.${encodeURIComponent(cleanEmail)}&select=name,edit_token`,
+      `${SUPABASE_URL}/rest/v1/Businesses?OwnerEmail=eq.${encodeURIComponent(cleanEmail)}&select=Name,EditToken`,
       {
         headers: {
           apikey: SUPABASE_KEY,
@@ -35,9 +37,6 @@ export default async function handler(req, res) {
     if (!response.ok || !data || data.length === 0) {
       return res.status(404).json({ error: 'No businesses found registered with this email.' });
     }
-
-    // Here you can integrate your email service provider (like Resend) 
-    // to dispatch the edit/dashboard links containing each business's edit_token.
 
     return res.status(200).json({
       success: true,
