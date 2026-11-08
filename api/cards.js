@@ -10,29 +10,29 @@ export default async function handler(req, res) {
     const { data, error } = await supabase.from('Cards').select('*');
 
     if (error) {
-      return res.status(200).json({ records: [], supabaseError: error });
+      return res.status(200).json([]);
     }
 
-    const records = (data || []).map((item, index) => {
-      const fields = {};
-      Object.keys(item).forEach(key => {
-        fields[key] = item[key];
-        fields[key.toLowerCase()] = item[key];
-      });
+    // Normalize records to match script.js expectations (imageUrl, Title, url)
+    const cards = (data || []).map((item) => {
+      // Handle image extraction from Airtable-style string or direct column
+      let imgUrl = item.Images || item.images || item.Image || '';
+      if (typeof imgUrl === 'string' && imgUrl.includes('(')) {
+        const match = imgUrl.match(/\(([^)]+)\)/);
+        if (match) imgUrl = match[1];
+      }
 
       return {
-        id: String(item.id || item.ID || index + 1),
-        fields: {
-          ...fields,
-          Title: item.Title || item.title || '',
-          Partner: item.Partner || item.partner || '',
-          Images: item.Images || item.images || item.Image || ''
-        }
+        id: String(item.id || item.ID || ''),
+        Partner: item.Partner || item.partner || '',
+        Title: item.Title || item.title || '',
+        imageUrl: imgUrl.trim(),
+        url: item.Links || item.links || item.URL || ''
       };
     });
 
-    return res.status(200).json({ records });
+    return res.status(200).json(cards);
   } catch (err) {
-    return res.status(200).json({ records: [], caughtError: err.message });
+    return res.status(200).json([]);
   }
 }
