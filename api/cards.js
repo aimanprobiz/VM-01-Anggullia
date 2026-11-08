@@ -7,15 +7,17 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
   try {
-    const { data, error } = await supabase.from('Cards').select('*');
+    // Fetch and sort explicitly by the Order column
+    const { data, error } = await supabase
+      .from('Cards')
+      .select('*')
+      .order('Order', { ascending: true });
 
     if (error) {
       return res.status(200).json([]);
     }
 
-    // Normalize records to match script.js expectations (imageUrl, Title, url)
     const cards = (data || []).map((item) => {
-      // Handle image extraction from Airtable-style string or direct column
       let imgUrl = item.Images || item.images || item.Image || '';
       if (typeof imgUrl === 'string' && imgUrl.includes('(')) {
         const match = imgUrl.match(/\(([^)]+)\)/);
