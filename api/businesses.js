@@ -10,35 +10,30 @@ export default async function handler(req, res) {
     const { data, error } = await supabase.from('Businesses').select('*');
 
     if (error) {
-      return res.status(200).json({ records: [], supabaseError: error });
+      return res.status(200).json([]);
     }
 
-    const records = (data || []).map((item, index) => {
-      // Standardize fields to ensure front-end receives expected object format
-      const fields = {};
-      Object.keys(item).forEach(key => {
-        fields[key] = item[key];
-        // Also provide lowercase property alias just in case script.js references them in lowercase
-        fields[key.toLowerCase()] = item[key];
-      });
-
-      return {
+    // Filter for Active businesses and normalize fields
+    const activeBusinesses = (data || [])
+      .filter(item => {
+        const status = item.Status || item.status || 'Active';
+        return status.toLowerCase() === 'active';
+      })
+      .map((item, index) => ({
         id: String(item.id || item.ID || index + 1),
-        fields: {
-          ...fields,
-          // Ensure essential UI fields exist
-          Name: item.Name || item.name || '',
-          Category: item.Category || item.category || 'General',
-          Status: item.Status || item.status || 'Active',
-          ImageURL: item.ImageURL || item.imageurl || item.Image || '',
-          SubTitle: item.SubTitle || item.subtitle || '',
-          Deal: item.Deal || item.deal || ''
-        }
-      };
-    });
+        Name: item.Name || item.name || '',
+        Category: item.Category || item.category || 'General',
+        ImageURL: item.ImageURL || item.imageurl || item.Image || '',
+        SubTitle: item.SubTitle || item.subtitle || '',
+        Deal: item.Deal || item.deal || '',
+        Slug: item.Slug || item.slug || '',
+        Description: item.Description || item.description || '',
+        IsFeatured: item.IsFeatured || item.isfeatured || false,
+        Status: 'Active'
+      }));
 
-    return res.status(200).json({ records });
+    return res.status(200).json(activeBusinesses);
   } catch (err) {
-    return res.status(200).json({ records: [], caughtError: err.message });
+    return res.status(200).json([]);
   }
 }
