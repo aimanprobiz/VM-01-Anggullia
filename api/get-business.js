@@ -14,13 +14,15 @@ export default async function handler(req, res) {
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_KEY) {
-    return res.status(500).json({ error: 'Supabase service role key not configured.' });
+    return res.status(500).json({ error: 'Supabase credentials not configured.' });
   }
 
   try {
-    // Query using exact capitalized column name "EditToken"
+    const cleanToken = token.trim();
+
+    // Query Business record by EditToken
     const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/Businesses?EditToken=eq.${encodeURIComponent(token.trim())}&select=*`,
+      `${SUPABASE_URL}/rest/v1/Businesses?EditToken=eq.${encodeURIComponent(cleanToken)}&select=*`,
       {
         headers: {
           apikey: SUPABASE_KEY,
@@ -35,52 +37,57 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: 'Invalid or expired edit session.' });
     }
 
-    const currentRecord = data[0];
-    const ownerEmail = (currentRecord.OwnerEmail || '').trim().toLowerCase();
+    const rec = data[0];
+    const ownerEmail = (rec.OwnerEmail || rec.owner_email || '').trim().toLowerCase();
 
     let allBusinesses = [];
     if (ownerEmail) {
-      const allRes = await fetch(
-        `${SUPABASE_URL}/rest/v1/Businesses?OwnerEmail=eq.${encodeURIComponent(ownerEmail)}&select=id,Name,EditToken`,
-        {
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`
+      try {
+        const allRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/Businesses?OwnerEmail=eq.${encodeURIComponent(ownerEmail)}&select=id,Name,EditToken`,
+          {
+            headers: {
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`
+            }
           }
+        );
+        const allData = await allRes.json();
+        if (allRes.ok && Array.isArray(allData)) {
+          allBusinesses = allData.map(r => ({
+            id: r.id,
+            name: r.Name || r.name || 'Unnamed Business',
+            token: r.EditToken || r.edit_token || ''
+          })).filter(b => b.token);
         }
-      );
-      const allData = await allRes.json();
-      if (allRes.ok && allData) {
-        allBusinesses = allData.map(r => ({
-          id: r.id,
-          name: r.Name || 'Unnamed Business',
-          token: r.EditToken
-        })).filter(b => b.token);
+      } catch (e) {
+        // Fallback silently if fetching other businesses fails
+        allBusinesses = [];
       }
     }
 
-    let rawAffiliate = currentRecord.AffiliateInterest || 'No';
-    let formattedAffiliate = rawAffiliate.toLowerCase().startsWith('yes') ? 'Yes' : 'No';
+    const rawAffiliate = String(rec.AffiliateInterest || rec.affiliate_interest || 'No');
+    const formattedAffiliate = rawAffiliate.toLowerCase().startsWith('yes') ? 'Yes' : 'No';
 
     return res.status(200).json({
-      recordId: currentRecord.id,
-      name: currentRecord.Name || '',
-      subtitle: currentRecord.Subtitle || '',
-      category: currentRecord.Category || '',
-      description: currentRecord.Description || '',
-      phone: currentRecord.Phone || '',
-      websiteUrl: currentRecord.WebsiteUrl || '',
-      instagramUrl: currentRecord.InstagramUrl || '',
-      tiktokUrl: currentRecord.TiktokUrl || '',
-      imageUrl: currentRecord.ImageUrl || '',
-      ownerEmail: currentRecord.OwnerEmail || '',
-      slug: currentRecord.Slug || '',
-      status: currentRecord.Status || 'Pending',
+      recordId: rec.id,
+      name: rec.Name || rec.name || '',
+      subtitle: rec.Subtitle || rec.subtitle || '',
+      category: rec.Category || rec.category || '',
+      description: rec.Description || rec.description || '',
+      phone: rec.Phone || rec.phone || '',
+      websiteUrl: rec.WebsiteUrl || rec.website_url || '',
+      instagramUrl: rec.InstagramUrl || rec.instagram_url || '',
+      tiktokUrl: rec.TiktokUrl || rec.tiktok_url || '',
+      imageUrl: rec.ImageUrl || rec.image_url || '',
+      ownerEmail: rec.OwnerEmail || rec.owner_email || '',
+      slug: rec.Slug || rec.slug || '',
+      status: rec.Status || rec.status || 'Pending',
       affiliateInterest: formattedAffiliate,
       allBusinesses: allBusinesses
     });
 
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message || 'Internal server error' });
   }
 }
