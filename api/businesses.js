@@ -12,10 +12,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/businesses?select=*`, {
+    const baseUrl = SUPABASE_URL.replace(/\/$/, '');
+    const response = await fetch(`${baseUrl}/rest/v1/businesses?select=*`, {
       headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
       }
     });
 
@@ -24,8 +25,12 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: data.message || 'Failed to fetch businesses' });
     }
 
-    // Match Airtable's expected format for the frontend
-    return res.status(200).json({ records: data });
+    const formattedRecords = data.map(item => ({
+      id: item.id,
+      fields: item
+    }));
+
+    return res.status(200).json({ records: formattedRecords });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
