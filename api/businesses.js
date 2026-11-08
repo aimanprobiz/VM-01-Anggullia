@@ -7,7 +7,7 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
   try {
-    const { data, error } = await supabase.from('businesses').select('*');
+    const { data, error } = await supabase.from('Businesses').select('*');
 
     if (error) {
       return res.status(200).json({ records: [], supabaseError: error });
