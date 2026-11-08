@@ -13,10 +13,23 @@ export default async function handler(req, res) {
       return res.status(200).json({ records: [], supabaseError: error });
     }
 
-    const records = Array.isArray(data) ? data.map((item, index) => ({
-      id: String(item.id || item.ID || index + 1),
-      fields: item
-    })) : [];
+    const records = (data || []).map((item, index) => {
+      const fields = {};
+      Object.keys(item).forEach(key => {
+        fields[key] = item[key];
+        fields[key.toLowerCase()] = item[key];
+      });
+
+      return {
+        id: String(item.id || item.ID || index + 1),
+        fields: {
+          ...fields,
+          Title: item.Title || item.title || '',
+          Partner: item.Partner || item.partner || '',
+          Images: item.Images || item.images || item.Image || ''
+        }
+      };
+    });
 
     return res.status(200).json({ records });
   } catch (err) {
