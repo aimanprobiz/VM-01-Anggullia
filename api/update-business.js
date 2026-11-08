@@ -4,75 +4,56 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const {
-    token,
-    name,
-    subtitle,
-    category,
-    description,
-    phone,
-    websiteUrl,
-    instagramUrl,
-    tiktokUrl,
-    imageUrl,
-    affiliateInterest
-  } = req.body || {};
+  const { recordId, token, name, subtitle, category, description, phone, websiteUrl, instagramUrl, tiktokUrl, imageUrl, affiliateInterest } = req.body || {};
 
-  if (!token || !token.trim()) {
-    return res.status(400).json({ error: 'Authentication token is required.' });
+  if (!recordId && !token) {
+    return res.status(400).json({ error: 'Record ID or token is required.' });
   }
 
-  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_URL = 'https://qswifsfqyufdjhunvwze.supabase.co';
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
-    return res.status(500).json({ error: 'Supabase credentials not configured properly.' });
+  if (!SUPABASE_KEY) {
+    return res.status(500).json({ error: 'Supabase credentials missing.' });
   }
 
   try {
-    const fieldsToUpdate = {};
-    if (name !== undefined) fieldsToUpdate.name = name.trim();
-    if (subtitle !== undefined) fieldsToUpdate.subtitle = subtitle.trim();
-    if (category !== undefined) fieldsToUpdate.category = category.trim();
-    if (description !== undefined) fieldsToUpdate.description = description.trim();
-    if (phone !== undefined) fieldsToUpdate.phone = phone.trim();
-    if (websiteUrl !== undefined) fieldsToUpdate.website_url = websiteUrl.trim();
-    if (instagramUrl !== undefined) fieldsToUpdate.instagram_url = instagramUrl.trim();
-    if (tiktokUrl !== undefined) fieldsToUpdate.tiktok_url = tiktokUrl.trim();
-    if (imageUrl !== undefined) fieldsToUpdate.image_url = imageUrl.trim();
-    
-    if (affiliateInterest !== undefined) {
-      fieldsToUpdate.affiliate_interest = (affiliateInterest === 'Yes') ? 'Yes - Interested' : 'No - Standard Listing';
-    }
+    // Build update payload matching your exact capitalized Supabase column names
+    const updateData = {};
+    if (name !== undefined) updateData.Name = name;
+    if (subtitle !== undefined) updateData.Subtitle = subtitle;
+    if (category !== undefined) updateData.Category = category;
+    if (description !== undefined) updateData.Description = description;
+    if (phone !== undefined) updateData.Phone = phone;
+    if (websiteUrl !== undefined) updateData.WebsiteUrl = websiteUrl;
+    if (instagramUrl !== undefined) updateData.InstagramUrl = instagramUrl;
+    if (tiktokUrl !== undefined) updateData.TiktokUrl = tiktokUrl;
+    if (imageUrl !== undefined) updateData.ImageUrl = imageUrl;
+    if (affiliateInterest !== undefined) updateData.AffiliateInterest = affiliateInterest;
 
-    if (name !== undefined) {
-      fieldsToUpdate.slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    }
+    let queryParam = recordId ? `id=eq.${encodeURIComponent(recordId)}` : `EditToken=eq.${encodeURIComponent(token)}`;
 
     const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/businesses?edit_token=eq.${encodeURIComponent(token.trim())}`,
+      `${SUPABASE_URL}/rest/v1/Businesses?${queryParam}`,
       {
         method: 'PATCH',
         headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: `Bearer ${SUPABASE_KEY}`,
           'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
           'Prefer': 'return=representation'
         },
-        body: JSON.stringify(fieldsToUpdate)
+        body: JSON.stringify(updateData)
       }
     );
 
-    const data = await response.json();
+    const result = await response.json();
 
-    if (!response.ok || !data || data.length === 0) {
-      return res.status(404).json({ error: 'Failed to update business or invalid token.' });
+    if (!response.ok) {
+      return res.status(500).json({ error: 'Failed to update database record.', details: result });
     }
 
-    return res.status(200).json({
-      success: true,
-      message: 'Business listing updated successfully!'
-    });
+    return res.status(200).json({ success: true, data: result });
 
   } catch (error) {
     return res.status(500).json({ error: error.message });
