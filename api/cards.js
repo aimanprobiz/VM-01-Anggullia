@@ -22,8 +22,8 @@ export default async function handler(req, res) {
       return res.status(200).json({ records: [], supabaseError: data });
     }
 
-    const records = Array.isArray(data) ? data.map(item => ({
-      id: String(item.id || ''),
+    const records = Array.isArray(data) ? data.map((item, index) => ({
+      id: String(item.id || item.ID || index + 1),
       fields: item
     })) : [];
 
