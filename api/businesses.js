@@ -8,26 +8,23 @@ export default async function handler(req, res) {
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_KEY) {
-    return res.status(500).json({ error: 'Supabase environment variables missing on Vercel.' });
+    return res.status(500).json({ error: 'Supabase credentials missing.' });
   }
 
   try {
-    const url = `${SUPABASE_URL.replace(/\/$/, '')}/rest/v1/businesses?select=*`;
-    const response = await fetch(url, {
-      method: 'GET',
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/businesses?select=*`, {
       headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json'
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`
       }
     });
 
     const data = await response.json();
-
     if (!response.ok) {
-      return res.status(response.status).json({ error: data.message || 'Error fetching businesses from Supabase' });
+      return res.status(500).json({ error: data.message || 'Failed to fetch businesses' });
     }
 
+    // Match Airtable's expected format for the frontend
     return res.status(200).json({ records: data });
   } catch (error) {
     return res.status(500).json({ error: error.message });
