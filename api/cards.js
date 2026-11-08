@@ -1,4 +1,3 @@
-// api/cards.js
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -24,25 +23,22 @@ export default async function handler(req, res) {
       }
     });
 
-    const responseText = await response.text();
-    let data;
-    try {
-      data = JSON.parse(responseText);
-    } catch (e) {
-      return res.status(500).json({ error: 'Invalid JSON response from Supabase', raw: responseText });
-    }
+    const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: data.message || 'Supabase error', details: data });
+      return res.status(response.status).json({ 
+        error: data.message || data.hint || 'Supabase error fetching cards',
+        details: data 
+      });
     }
 
-    const formattedRecords = Array.isArray(data) ? data.map(item => ({
+    const records = Array.isArray(data) ? data.map(item => ({
       id: item.id,
       fields: item
     })) : [];
 
-    return res.status(200).json({ records: formattedRecords });
+    return res.status(200).json({ records });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message || 'Server error' });
   }
 }
