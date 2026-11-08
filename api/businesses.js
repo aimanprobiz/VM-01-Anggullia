@@ -8,27 +8,38 @@ export default async function handler(req, res) {
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_URL || !SUPABASE_KEY) {
-    return res.status(500).json({ error: 'Supabase credentials missing.' });
+    return res.status(500).json({ error: 'Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY' });
   }
 
   try {
-    const baseUrl = SUPABASE_URL.replace(/\/$/, '');
-    const response = await fetch(`${baseUrl}/rest/v1/businesses?select=*`, {
+    const cleanUrl = SUPABASE_URL.trim().replace(/\/$/, '');
+    const cleanKey = SUPABASE_KEY.trim();
+
+    const response = await fetch(`${cleanUrl}/rest/v1/businesses?select=*`, {
+      method: 'GET',
       headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
+        'apikey': cleanKey,
+        'Authorization': `Bearer ${cleanKey}`,
+        'Content-Type': 'application/json'
       }
     });
 
-    const data = await response.json();
-    if (!response.ok) {
-      return res.status(500).json({ error: data.message || 'Failed to fetch businesses' });
+    const responseText = await response.text();
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      return res.status(500).json({ error: 'Invalid JSON response from Supabase', raw: responseText });
     }
 
-    const formattedRecords = data.map(item => ({
+    if (!response.ok) {
+      return res.status(response.status).json({ error: data.message || 'Supabase error', details: data });
+    }
+
+    const formattedRecords = Array.isArray(data) ? data.map(item => ({
       id: item.id,
       fields: item
-    }));
+    })) : [];
 
     return res.status(200).json({ records: formattedRecords });
   } catch (error) {
