@@ -20,7 +20,6 @@ export default async function handler(req, res) {
   try {
     const cleanToken = token.trim();
 
-    // Query using lowercase snake_case column edit_token
     const response = await fetch(
       `${SUPABASE_URL}/rest/v1/businesses?edit_token=eq.${encodeURIComponent(cleanToken)}&select=*`,
       {
@@ -31,7 +30,13 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+    const textData = await response.text();
+    let data;
+    try {
+      data = JSON.parse(textData);
+    } catch (e) {
+      return res.status(500).json({ success: false, error: 'Invalid JSON response from database: ' + textData });
+    }
 
     if (!response.ok || !Array.isArray(data) || data.length === 0) {
       return res.status(404).json({ success: false, error: 'Invalid or expired edit session.' });
