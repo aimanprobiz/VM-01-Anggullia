@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'Debug Error: Edit token is missing from the request URL.' });
   }
 
-  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://qswifsfqyufdjhunvwze.supabase.co';
+  const SUPABASE_URL = 'https://qswifsfqyufdjhunvwze.supabase.co';
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_KEY) {
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   try {
     const cleanToken = token.trim();
 
-    // Query Supabase using native fetch
+    // Query Supabase using native fetch with hardcoded URL
     const response = await fetch(
       `${SUPABASE_URL}/rest/v1/Businesses?EditToken=eq.${encodeURIComponent(cleanToken)}&select=*`,
       {
@@ -103,6 +103,6 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    return res.status(500).json({ success: false, error: `Server Exception: ${err.message}` });
+    return res.status(500).json({ success: false, error: `Server Fetch Exception: ${err.message}` });
   }
 }
