@@ -480,7 +480,7 @@
     }
 
     // Helper to parse saved Airtable phone (+6588469883) back into dropdown & input
-    function setParsedPhoneNumber(savedPhone) {
+function setParsedPhoneNumber(savedPhone) {
       const codeSelect = document.getElementById('bizCountryCode');
       const customInput = document.getElementById('customCountryCode');
       const phoneInput = document.getElementById('bizPhone');
@@ -493,7 +493,7 @@
         return;
       }
 
-      let cleanPhone = savedPhone.trim();
+      let cleanPhone = String(savedPhone).trim(); // Coerced safely to string
       const optionValues = Array.from(codeSelect.options).map(opt => opt.value).filter(v => v !== 'CUSTOM');
       
       let matchedCode = '+65';
