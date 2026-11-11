@@ -1,6 +1,4 @@
 // api/get-business.js
-import { createClient } from '@supabase/supabase-js';
-
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ success: false, error: 'Method not allowed: Expected GET request.' });
@@ -12,7 +10,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'Debug Error: Edit token is missing from the request URL.' });
   }
 
-  const SUPABASE_URL = 'https://qswifsfqyufdjhunvwze.supabase.co';
+  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://qswifsfqyufdjhunvwze.supabase.co';
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_KEY) {
@@ -20,21 +18,33 @@ export default async function handler(req, res) {
   }
 
   try {
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     const cleanToken = token.trim();
 
-    // Query using exact capitalized table 'Businesses' and column 'EditToken'
-    const { data, error } = await supabase
-      .from('Businesses')
-      .select('*')
-      .eq('EditToken', cleanToken);
+    // Query Supabase using native fetch
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/Businesses?EditToken=eq.${encodeURIComponent(cleanToken)}&select=*`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
 
-    if (error) {
-      console.error('Supabase query error:', error);
-      return res.status(500).json({ success: false, error: `Database Error: ${error.message}` });
+    const textData = await response.text();
+    let data;
+    try {
+      data = JSON.parse(textData);
+    } catch (e) {
+      return res.status(500).json({ success: false, error: `Database JSON Parse Error: ${textData}` });
     }
 
-    if (!data || data.length === 0) {
+    if (!response.ok) {
+      return res.status(500).json({ success: false, error: `Supabase Error: ${data.message || JSON.stringify(data)}` });
+    }
+
+    if (!Array.isArray(data) || data.length === 0) {
       return res.status(404).json({ success: false, error: `Debug Error: No business record found matching token: "${cleanToken}".` });
     }
 
@@ -45,17 +55,27 @@ export default async function handler(req, res) {
     // Fetch all associated businesses if owner email exists
     let allBusinesses = [];
     if (ownerEmail) {
-      const { data: allData, error: allError } = await supabase
-        .from('Businesses')
-        .select('*')
-        .eq('OwnerEmail', ownerEmail);
-
-      if (!allError && allData) {
-        allBusinesses = allData.map(r => ({
-          id: r.id || r.ID || '',
-          name: r.Name || r.name || 'Unnamed Business',
-          token: r.EditToken || r.edit_token || ''
-        })).filter(b => b.token);
+      try {
+        const allRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/Businesses?OwnerEmail=eq.${encodeURIComponent(ownerEmail)}&select=*`,
+          {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        const allData = await allRes.json();
+        if (allRes.ok && Array.isArray(allData)) {
+          allBusinesses = allData.map(r => ({
+            id: r.id || r.ID || '',
+            name: r.Name || r.name || 'Unnamed Business',
+            token: r.EditToken || r.edit_token || ''
+          })).filter(b => b.token);
+        }
+      } catch (e) {
+        allBusinesses = [];
       }
     }
 
@@ -83,7 +103,6 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error('Unexpected server exception in get-business:', err);
     return res.status(500).json({ success: false, error: `Server Exception: ${err.message}` });
   }
 }
