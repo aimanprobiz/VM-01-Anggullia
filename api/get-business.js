@@ -16,7 +16,6 @@ export default async function handler(req, res) {
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_KEY) {
-    console.error('SUPABASE_SERVICE_ROLE_KEY is missing in Vercel environment variables.');
     return res.status(500).json({ success: false, error: 'Debug Error: SUPABASE_SERVICE_ROLE_KEY environment variable is not configured on Vercel.' });
   }
 
@@ -24,9 +23,9 @@ export default async function handler(req, res) {
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     const cleanToken = token.trim();
 
-    // 1. Query Supabase for the business matching the edit token
+    // Query Supabase using 'Businesses' (capital B) to match your database schema
     const { data, error } = await supabase
-      .from('businesses')
+      .from('Businesses')
       .select('*')
       .eq('edit_token', cleanToken);
 
@@ -43,11 +42,11 @@ export default async function handler(req, res) {
     const recId = rec.id || rec.ID || '';
     const ownerEmail = (rec.owner_email || rec.OwnerEmail || '').trim().toLowerCase();
 
-    // 2. Fetch all associated businesses if owner email exists
+    // Fetch all associated businesses if owner email exists
     let allBusinesses = [];
     if (ownerEmail) {
       const { data: allData, error: allError } = await supabase
-        .from('businesses')
+        .from('Businesses')
         .select('*')
         .eq('owner_email', ownerEmail);
 
