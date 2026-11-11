@@ -1,27 +1,28 @@
 // api/get-business.js
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
   const { token } = req.query;
 
   if (!token || !token.trim()) {
-    return res.status(400).json({ error: 'Edit token is required.' });
+    return res.status(400).json({ success: false, error: 'Edit token is required.' });
   }
 
-  const SUPABASE_URL = 'https://qswifsfqyufdjhunvwze.supabase.co';
+  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://qswifsfqyufdjhunvwze.supabase.co';
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_KEY) {
-    return res.status(500).json({ error: 'Supabase credentials missing.' });
+    return res.status(500).json({ success: false, error: 'Supabase service role key missing.' });
   }
 
   try {
     const cleanToken = token.trim();
 
+    // Query using lowercase snake_case column edit_token
     const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/Businesses?EditToken=eq.${encodeURIComponent(cleanToken)}&select=*`,
+      `${SUPABASE_URL}/rest/v1/businesses?edit_token=eq.${encodeURIComponent(cleanToken)}&select=*`,
       {
         headers: {
           apikey: SUPABASE_KEY,
@@ -33,18 +34,18 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok || !Array.isArray(data) || data.length === 0) {
-      return res.status(404).json({ error: 'Invalid or expired edit session.' });
+      return res.status(404).json({ success: false, error: 'Invalid or expired edit session.' });
     }
 
     const rec = data[0];
     const recId = rec.id || rec.ID || '';
-    const ownerEmail = (rec.OwnerEmail || rec.owner_email || '').trim().toLowerCase();
+    const ownerEmail = (rec.owner_email || rec.OwnerEmail || '').trim().toLowerCase();
 
     let allBusinesses = [];
     if (ownerEmail) {
       try {
         const allRes = await fetch(
-          `${SUPABASE_URL}/rest/v1/Businesses?OwnerEmail=eq.${encodeURIComponent(ownerEmail)}&select=*`,
+          `${SUPABASE_URL}/rest/v1/businesses?owner_email=eq.${encodeURIComponent(ownerEmail)}&select=*`,
           {
             headers: {
               apikey: SUPABASE_KEY,
@@ -56,8 +57,8 @@ export default async function handler(req, res) {
         if (allRes.ok && Array.isArray(allData)) {
           allBusinesses = allData.map(r => ({
             id: r.id || r.ID || '',
-            name: r.Name || r.name || 'Unnamed Business',
-            token: r.EditToken || r.edit_token || ''
+            name: r.name || r.Name || 'Unnamed Business',
+            token: r.edit_token || r.EditToken || ''
           })).filter(b => b.token);
         }
       } catch (e) {
@@ -65,52 +66,30 @@ export default async function handler(req, res) {
       }
     }
 
-    const rawAffiliate = String(rec.AffiliateInterest || rec.affiliate_interest || 'No');
+    const rawAffiliate = String(rec.affiliate_interest || rec.AffiliateInterest || 'No');
     const formattedAffiliate = rawAffiliate.toLowerCase().startsWith('yes') ? 'Yes' : 'No';
 
-    const bizNameVal = rec.Name || rec.name || '';
-    const bizSubVal = rec.Subtitle || rec.subtitle || '';
-    const bizCatVal = rec.Category || rec.category || '';
-    const bizDescVal = rec.Description || rec.description || '';
-    const bizPhoneVal = rec.Phone || rec.phone || '';
-    const bizWebVal = rec.WebsiteUrl || rec.website_url || '';
-    const bizIgVal = rec.InstagramUrl || rec.instagram_url || '';
-    const bizTtVal = rec.TiktokUrl || rec.tiktok_url || '';
-    const bizImgVal = rec.ImageUrl || rec.image_url || '';
-    const bizSlugVal = rec.Slug || rec.slug || '';
-    const bizStatusVal = rec.Status || rec.status || 'Active';
-
     return res.status(200).json({
+      success: true,
       recordId: recId,
       id: recId,
-      name: bizNameVal,
-      subtitle: bizSubVal,
-      category: bizCatVal,
-      description: bizDescVal,
-      phone: bizPhoneVal,
-      websiteUrl: bizWebVal,
-      instagramUrl: bizIgVal,
-      tiktokUrl: bizTtVal,
-      imageUrl: bizImgVal,
+      name: rec.name || rec.Name || '',
+      subtitle: rec.subtitle || rec.Subtitle || '',
+      category: rec.category || rec.Category || '',
+      description: rec.description || rec.Description || '',
+      phone: rec.phone || rec.Phone || '',
+      websiteUrl: rec.website_url || rec.WebsiteUrl || '',
+      instagramUrl: rec.instagram_url || rec.InstagramUrl || '',
+      tiktokUrl: rec.tiktok_url || rec.TiktokUrl || '',
+      imageUrl: rec.image_url || rec.ImageUrl || '',
       ownerEmail: ownerEmail,
-      slug: bizSlugVal,
-      status: bizStatusVal,
+      slug: rec.slug || rec.Slug || '',
+      status: rec.status || rec.Status || 'Active',
       affiliateInterest: formattedAffiliate,
-      bizName: bizNameVal,
-      bizSub: bizSubVal,
-      bizCategory: bizCatVal,
-      bizDesc: bizDescVal,
-      bizPhone: bizPhoneVal,
-      bizWebsite: bizWebVal,
-      bizInstagram: bizIgVal,
-      bizTiktok: bizTtVal,
-      bizImage: bizImgVal,
-      bizSlug: bizSlugVal,
-      Status: bizStatusVal,
       allBusinesses: allBusinesses
     });
 
   } catch (error) {
-    return res.status(500).json({ error: error.message || 'Internal server error' });
+    return res.status(500).json({ success: false, error: error.message || 'Internal server error' });
   }
 }
