@@ -1,73 +1,62 @@
 // api/get-business.js
+import { createClient } from '@supabase/supabase-js';
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
-    return res.status(405).json({ success: false, error: 'Method not allowed' });
+    return res.status(405).json({ success: false, error: 'Method not allowed: Expected GET request.' });
   }
 
   const { token } = req.query;
 
   if (!token || !token.trim()) {
-    return res.status(400).json({ success: false, error: 'Edit token is required.' });
+    return res.status(400).json({ success: false, error: 'Debug Error: Edit token is missing from the request URL.' });
   }
 
-  const SUPABASE_URL = process.env.SUPABASE_URL || 'https://qswifsfqyufdjhunvwze.supabase.co';
+  const SUPABASE_URL = 'https://qswifsfqyufdjhunvwze.supabase.co';
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!SUPABASE_KEY) {
-    return res.status(500).json({ success: false, error: 'Supabase service role key missing.' });
+    console.error('SUPABASE_SERVICE_ROLE_KEY is missing in Vercel environment variables.');
+    return res.status(500).json({ success: false, error: 'Debug Error: SUPABASE_SERVICE_ROLE_KEY environment variable is not configured on Vercel.' });
   }
 
   try {
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     const cleanToken = token.trim();
 
-    const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/businesses?edit_token=eq.${encodeURIComponent(cleanToken)}&select=*`,
-      {
-        headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: `Bearer ${SUPABASE_KEY}`
-        }
-      }
-    );
+    // 1. Query Supabase for the business matching the edit token
+    const { data, error } = await supabase
+      .from('businesses')
+      .select('*')
+      .eq('edit_token', cleanToken);
 
-    const textData = await response.text();
-    let data;
-    try {
-      data = JSON.parse(textData);
-    } catch (e) {
-      return res.status(500).json({ success: false, error: 'Invalid JSON response from database: ' + textData });
+    if (error) {
+      console.error('Supabase query error:', error);
+      return res.status(500).json({ success: false, error: `Database Error: ${error.message}` });
     }
 
-    if (!response.ok || !Array.isArray(data) || data.length === 0) {
-      return res.status(404).json({ success: false, error: 'Invalid or expired edit session.' });
+    if (!data || data.length === 0) {
+      return res.status(404).json({ success: false, error: `Debug Error: No business record found matching token: "${cleanToken}".` });
     }
 
     const rec = data[0];
     const recId = rec.id || rec.ID || '';
     const ownerEmail = (rec.owner_email || rec.OwnerEmail || '').trim().toLowerCase();
 
+    // 2. Fetch all associated businesses if owner email exists
     let allBusinesses = [];
     if (ownerEmail) {
-      try {
-        const allRes = await fetch(
-          `${SUPABASE_URL}/rest/v1/businesses?owner_email=eq.${encodeURIComponent(ownerEmail)}&select=*`,
-          {
-            headers: {
-              apikey: SUPABASE_KEY,
-              Authorization: `Bearer ${SUPABASE_KEY}`
-            }
-          }
-        );
-        const allData = await allRes.json();
-        if (allRes.ok && Array.isArray(allData)) {
-          allBusinesses = allData.map(r => ({
-            id: r.id || r.ID || '',
-            name: r.name || r.Name || 'Unnamed Business',
-            token: r.edit_token || r.EditToken || ''
-          })).filter(b => b.token);
-        }
-      } catch (e) {
-        allBusinesses = [];
+      const { data: allData, error: allError } = await supabase
+        .from('businesses')
+        .select('*')
+        .eq('owner_email', ownerEmail);
+
+      if (!allError && allData) {
+        allBusinesses = allData.map(r => ({
+          id: r.id || r.ID || '',
+          name: r.name || r.Name || 'Unnamed Business',
+          token: r.edit_token || r.EditToken || ''
+        })).filter(b => b.token);
       }
     }
 
@@ -94,7 +83,8 @@ export default async function handler(req, res) {
       allBusinesses: allBusinesses
     });
 
-  } catch (error) {
-    return res.status(500).json({ success: false, error: error.message || 'Internal server error' });
+  } catch (err) {
+    console.error('Unexpected server exception in get-business:', err);
+    return res.status(500).json({ success: false, error: `Server Exception: ${err.message}` });
   }
 }
