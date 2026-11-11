@@ -23,11 +23,11 @@ export default async function handler(req, res) {
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     const cleanToken = token.trim();
 
-    // Query Supabase using 'Businesses' (capital B) to match your database schema
+    // Query using exact capitalized table 'Businesses' and column 'EditToken'
     const { data, error } = await supabase
       .from('Businesses')
       .select('*')
-      .eq('edit_token', cleanToken);
+      .eq('EditToken', cleanToken);
 
     if (error) {
       console.error('Supabase query error:', error);
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
 
     const rec = data[0];
     const recId = rec.id || rec.ID || '';
-    const ownerEmail = (rec.owner_email || rec.OwnerEmail || '').trim().toLowerCase();
+    const ownerEmail = (rec.OwnerEmail || rec.owner_email || '').trim().toLowerCase();
 
     // Fetch all associated businesses if owner email exists
     let allBusinesses = [];
@@ -48,36 +48,36 @@ export default async function handler(req, res) {
       const { data: allData, error: allError } = await supabase
         .from('Businesses')
         .select('*')
-        .eq('owner_email', ownerEmail);
+        .eq('OwnerEmail', ownerEmail);
 
       if (!allError && allData) {
         allBusinesses = allData.map(r => ({
           id: r.id || r.ID || '',
-          name: r.name || r.Name || 'Unnamed Business',
-          token: r.edit_token || r.EditToken || ''
+          name: r.Name || r.name || 'Unnamed Business',
+          token: r.EditToken || r.edit_token || ''
         })).filter(b => b.token);
       }
     }
 
-    const rawAffiliate = String(rec.affiliate_interest || rec.AffiliateInterest || 'No');
+    const rawAffiliate = String(rec.AffiliateInterest || rec.affiliate_interest || 'No');
     const formattedAffiliate = rawAffiliate.toLowerCase().startsWith('yes') ? 'Yes' : 'No';
 
     return res.status(200).json({
       success: true,
       recordId: recId,
       id: recId,
-      name: rec.name || rec.Name || '',
-      subtitle: rec.subtitle || rec.Subtitle || '',
-      category: rec.category || rec.Category || '',
-      description: rec.description || rec.Description || '',
-      phone: rec.phone || rec.Phone || '',
-      websiteUrl: rec.website_url || rec.WebsiteUrl || '',
-      instagramUrl: rec.instagram_url || rec.InstagramUrl || '',
-      tiktokUrl: rec.tiktok_url || rec.TiktokUrl || '',
-      imageUrl: rec.image_url || rec.ImageUrl || '',
+      name: rec.Name || rec.name || '',
+      subtitle: rec.Subtitle || rec.subtitle || '',
+      category: rec.Category || rec.category || '',
+      description: rec.Description || rec.description || '',
+      phone: rec.Phone || rec.phone || '',
+      websiteUrl: rec.WebsiteUrl || rec.website_url || '',
+      instagramUrl: rec.InstagramUrl || rec.instagram_url || '',
+      tiktokUrl: rec.TiktokUrl || rec.tiktok_url || '',
+      imageUrl: rec.ImageURL || rec.ImageUrl || rec.image_url || '',
       ownerEmail: ownerEmail,
-      slug: rec.slug || rec.Slug || '',
-      status: rec.status || rec.Status || 'Active',
+      slug: rec.Slug || rec.slug || '',
+      status: rec.Status || rec.status || 'Active',
       affiliateInterest: formattedAffiliate,
       allBusinesses: allBusinesses
     });
