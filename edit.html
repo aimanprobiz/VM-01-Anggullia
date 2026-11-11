@@ -845,7 +845,6 @@ async function loadBusinessDetails() {
         }
 
         recordId = data.recordId;
-        // ... rest of your loading code ...
 
         // SAVE SESSION FOR PROFILE ICON RING (script.js)
         if (data.ownerEmail) localStorage.setItem('vendorEmail', data.ownerEmail);
@@ -896,7 +895,7 @@ async function loadBusinessDetails() {
         }
 
       } catch (err) {
-        alert('Error connecting to server.');
+        alert(err.message || 'Error connecting to server.');
       }
     }
 
