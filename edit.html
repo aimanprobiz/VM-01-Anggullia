@@ -827,22 +827,25 @@
       });
     }
 
-    // 5. Load Business Data by Token & Persist Global Navigation Session
-    async function loadBusinessDetails() {
+async function loadBusinessDetails() {
       try {
         const response = await fetch(`/api/get-business?token=${encodeURIComponent(currentToken)}`);
-        const data = await response.json();
+        
+        // Read response as text first to inspect what the server actually sent
+        const responseText = await response.text();
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (e) {
+          throw new Error("Server returned non-JSON response: " + responseText);
+        }
 
-        if (!response.ok || !data.recordId) {
-          alert(data.error || 'Failed to load listing. Your edit link may be invalid.');
-          localStorage.removeItem('db_vendor_token');
-          localStorage.removeItem('vendorEmail');
-          localStorage.removeItem('vendorSlug');
-          window.location.href = '/login.html';
-          return;
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || 'Failed to load listing.');
         }
 
         recordId = data.recordId;
+        // ... rest of your loading code ...
 
         // SAVE SESSION FOR PROFILE ICON RING (script.js)
         if (data.ownerEmail) localStorage.setItem('vendorEmail', data.ownerEmail);
